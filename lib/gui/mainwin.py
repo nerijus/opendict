@@ -58,6 +58,7 @@ import dicttype
 import plaindict
 
 _ = wxGetTranslation
+titleTemplate = "OpenDict - %s"
 
 class HtmlWindow(wxHtmlWindow):
 
@@ -849,7 +850,7 @@ For more information visit project's homepage on
          self.entry.Disable()
          name = os.path.split(dialog.GetPaths()[0])[1]
          self.SetStatusText(_("Loading \"%s\"...") % name)
-         self.SetTitle("%s - OpenDict" % name)
+         self.SetTitle(titleTemplate % name)
          try:
             self.timerLoad.Start(self.delay)
             self.load = Process(SlowoParser, dialog.GetPaths()[0],
@@ -874,7 +875,7 @@ For more information visit project's homepage on
          self.entry.Disable()
          name = os.path.split(dialog.GetPaths()[0])[1]
          self.SetStatusText(_("Loading \"%s\"...") % name)
-         self.SetTitle("%s - OpenDict" % name)
+         self.SetTitle(titleTemplate % name)
          try:
             self.timerLoad.Start(self.delay)
             self.load = Process(MovaParser, dialog.GetPaths()[0], self)
@@ -898,7 +899,7 @@ For more information visit project's homepage on
          self.entry.Disable()
          #self.buttonStop.Enable(1)
          name = os.path.split(dialog.GetPaths()[0])[1]
-         self.SetTitle("%s - OpenDict" % name)
+         self.SetTitle(titleTemplate % name)
          self.SetStatusText(_("Loading \"%s\"...") % name)
 
          try:
@@ -929,7 +930,7 @@ For more information visit project's homepage on
             basename = name.replace(".dict.dz", "")
          else:
             basename = name.replace(".dict", "")
-         self.SetTitle("%s - OpenDict" % basename)
+         self.SetTitle(titleTemplate % basename)
 
          self.SetStatusText(_("Loading \"%s\"...") % name)
          # do we need this try/except? I think it does nothing
@@ -1166,7 +1167,7 @@ For more information visit project's homepage on
       
       self.activeDictionary.start()
       self.checkIfNeedsList()
-      self.SetTitle("%s - OpenDict" % dictInstance.getName())
+      self.SetTitle(titleTemplate % dictInstance.getName())
       self.SetStatusText(_(enc.toWX("Dictionary \"%s\" loaded" \
                                     % dictInstance.getName())))
 
@@ -1182,7 +1183,7 @@ For more information visit project's homepage on
       self.activeDictionary = self.app.dictionaries.get(name)
       self.checkIfNeedsList()
       debugLog(INFO, "Dictionary instance: %s" % self.activeDictionary)
-      self.SetTitle("%s - OpenDict" % name) # FIXME: use template
+      self.SetTitle(titleTemplate % name)
       self.entry.Enable(1)
       self.SetStatusText("Done") # TODO: Set something more useful
       self.htmlWin.SetPage("")
@@ -1192,7 +1193,7 @@ For more information visit project's homepage on
    # FIXME: deprecated, update!
    def loadRegister(self, name):
 
-      self.SetTitle("%s - OpenDict" % name) # TODO: should be set after loading
+      self.SetTitle(titleTemplate % name) # TODO: should be set after loading
       item = self.app.config.registers[name]
       self.dictName = name
       self.entry.Disable()
@@ -1224,7 +1225,7 @@ For more information visit project's homepage on
    def loadGroup(self, name):
       raise Exception, "mainwin.py:loadGroup() is deprecated"
       print "INFO Loading '%s'..." % name
-      self.SetTitle("%s - OpenDict" % name)
+      self.SetTitle(titleTemplate % name)
 
       self.entry.Disable()
       self.timerLoad.Start(self.delay)

@@ -457,6 +457,11 @@ class DictEditorWindow(wxFrame):
 
         vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
 
+        self.SetIcon(wxIcon(os.path.join(info.GLOBAL_HOME,
+                                        "pixmaps",
+                                        "icon-24x24.png"),
+                            wxBITMAP_TYPE_PNG))
+
         self.SetSizer(vboxMain)
         #self.Fit()
 

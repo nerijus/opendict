@@ -95,6 +95,11 @@ class PluginManagerWindow(wxFrame):
 
       vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
 
+      self.SetIcon(wxIcon(os.path.join(info.GLOBAL_HOME,
+                                       "pixmaps",
+                                       "icon-24x24.png"),
+                          wxBITMAP_TYPE_PNG))
+
       self.SetSizer(vboxMain)
 
       self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onPageChanged)
