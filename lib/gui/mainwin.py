@@ -131,7 +131,7 @@ class MainWindow(wxFrame):
       #menuFile.Append(idPreview, _("Print Preview"), "")
 
       idFind = wx.NewId()
-      menuFile.Append(idFind, _("Lookup Up\tCtrl-U"),
+      menuFile.Append(idFind, _("Look Up\tCtrl-U"),
                       _("Lookup up word in the dictionary"))
       
       menuFile.AppendSeparator()
@@ -420,7 +420,7 @@ class MainWindow(wxFrame):
             self.app.config.get('defaultDict')))
 
 
-      self.SetMinSize((370, 160))
+      self.SetMinSize((320, 160))
 
 
       #

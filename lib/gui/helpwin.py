@@ -63,10 +63,10 @@ class LicenseWindow(wxFrame):
       scBox = wxBoxSizer(wxVERTICAL)
       scBox.Add(htmlWin, 1, wxALL | wxEXPAND, 1)
       scWinAbout.SetSizer(scBox)
-      vbox.Add(scWinAbout, 1, wxALL | wxEXPAND, 2)
+      vbox.Add(scWinAbout, 1, wxALL | wxEXPAND, 5)
 
       self.buttonClose = wxButton(self, 2002, _("Close"))
-      vbox.Add(self.buttonClose, 0, wxALL | wxALIGN_RIGHT, 4)
+      vbox.Add(self.buttonClose, 0, wxALL | wxALIGN_RIGHT, 5)
 
       self.SetSizer(vbox)
 
