@@ -167,8 +167,9 @@ class AboutWindow(wxDialog):
       about = _("""OpenDict %s
 Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 
-Multiplatform free dictionary program for wide
-range of translations.""") % __version__
+Multiplatform free dictionary program.
+
+Home page: http://opendict.sourceforge.net""") % __version__
 
       vbox.Add(wxStaticText(self, -1, about), 1,
                wxALL, 5)
