@@ -108,6 +108,9 @@ class OpenDictApp(wxApp):
                                                        "locale"))
       self.l.Init(wxLANGUAGE_DEFAULT)
       self.l.AddCatalog("opendict")
+
+      # Data cache instance
+      self.cache = {}
       
       # Dictionaries container
       # Mapping: name -> object

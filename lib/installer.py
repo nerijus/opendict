@@ -126,13 +126,15 @@ class Installer:
         except:
             # Can this happen?
             self.mainWin.SetStatusText(_("Error: Installation failed"))
-            status = 1
             tranceback.print_exc()
 
-        self.mainWin.SetStatusText(_("Dictionary successfully installed"))
+        title = _("Dictionary installed")
+        msg = _("Dictionary successfully installed. You can choose it " \
+                "from \"Dictionaries\" menu now.")
+        errorwin.showInfoMessage(title, msg)
+        #self.mainWin.SetStatusText(_("Dictionary successfully installed"))
 
 
-# ===========================================================================
 
 def installPlainDictionary(filePath):
     """Install plain dictionary and return directory path"""

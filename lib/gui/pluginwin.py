@@ -19,7 +19,7 @@
 #
 
 from wxPython.wx import *
-import  wx.lib.mixins.listctrl  as  listmix
+import wx.lib.mixins.listctrl as listmix
 import wx
 
 from shutil import rmtree
@@ -39,8 +39,8 @@ from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 _ = wxGetTranslation
 
-#_addOnsListURL = 'file:///home/mjoc/opendict-add-ons.xml'
-_addOnsListURL = 'http://files.akl.lt/~mjoc/opendict-add-ons.xml'
+_addOnsListURL = 'file:///home/mjoc/opendict-add-ons.xml'
+#_addOnsListURL = 'http://files.akl.lt/~mjoc/opendict-add-ons.xml'
 
 
 class DictListCtrl(wx.ListCtrl):
@@ -66,7 +66,7 @@ class PluginManagerWindow(wxFrame):
       vboxMain = wxBoxSizer(wxVERTICAL)
 
       self.installedDictionaries = {}
-      self.availDictionaries = {}
+      self.availDictionaries = self.app.cache.get('addons') or {}
       installed = True
 
       for dictName in self.app.dictionaries.keys():
@@ -198,7 +198,6 @@ class PluginManagerWindow(wxFrame):
        self.buttonInstall.Disable()
        hboxButtons.Add(self.buttonInstall, 0, wxALL | wxALIGN_RIGHT, 2)
 
-
        vboxAvailable.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
        
        panelAvailable.SetSizer(vboxAvailable)
@@ -210,34 +209,24 @@ class PluginManagerWindow(wxFrame):
        self.availableList.InsertColumn(0, _("Name"))
        self.availableList.InsertColumn(1, _("Size"))
 
-       #item = wxListItem()
-       #item.m_mask = wx.LIST_MASK_TEXT | wxLIST_MASK_FORMAT
-       #item.m_format = wx.LIST_FORMAT_RIGHT
-       #item.m_text = _("Size")
-
-       #self.availableList.InsertColumnInfo(1, item)
+       addons = self.app.cache.get('addons')
+       if not addons:
+           addons = {}
        
-       size = 100
-       
-       dictNames = self.availDictionaries.keys()
+       dictNames = addons.keys()
        dictNames.sort()
        
        for dictionary in dictNames:
-           installed = self.availDictionaries.get(dictionary)
-           
            index = self.availableList.InsertStringItem(0, dictionary)
-           
-           sizeString = "%d KB"
+           sizeString = "%d KB" % addons.get(dictionary).getSize()
                
            self.availableList.SetStringItem(index, 1,
-                                            sizeString % size)
-           size += 1000
-           
+                                            sizeString)
            self.availableList.SetItemData(index, index+1)
 
 
        # Keep wide if list is empty yet
-       if self.availDictionaries:
+       if addons:
            self.availableList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
            self.availableList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
        else:
@@ -485,11 +474,14 @@ class PluginManagerWindow(wxFrame):
        progressDialog.Update(0)
 
        try:
+           systemLog(INFO, "Opening %s..." % _addOnsListURL)
            up = urllib2.urlopen(_addOnsListURL)
            dataChunks = []
            count = 0
            percents = 0
            fileSize = up.info().getheader('Content-length')
+
+           systemLog(INFO, "Reading file...")
            
            while keepGoing and count < fileSize:
                percents = int(float(count) / float(fileSize) * 100)
@@ -506,7 +498,8 @@ class PluginManagerWindow(wxFrame):
                chunk = up.read(1024)
                dataChunks.append(chunk)
                count += len(chunk)
-           
+
+           systemLog(INFO, "Closing connection...")
            up.close()
            
            xmlData = ''.join(dataChunks)
@@ -524,6 +517,12 @@ class PluginManagerWindow(wxFrame):
        if hasattr(self, "addons"):
            del self.addons
        self.addons = xmltools.parseAddOns(xmlData)
+
+       app = wxGetApp()
+       if app.cache.has_key("addons"):
+           del app.cache["addons"]
+       app.cache["addons"] = self.addons
+       
        self.setAvailDicts(self.addons)
       
 
