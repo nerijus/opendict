@@ -338,24 +338,13 @@ class MainWindow(wxFrame):
 
       # Stop threads
       # TODO: how thread can be killed?
-      #bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "stop.xpm"),
-      #               wxBITMAP_TYPE_XPM)
-      #self.buttonStop = wxBitmapButton(self, 155, bmp, (16, 16),
-      #                                 style=wxNO_BORDER)
-      #self.buttonStop.SetToolTipString(_("Stop"))
-      #self.buttonStop.Disable()
-      #hboxToolbar.Add(self.buttonStop, 0, wxALL | wxCENTER, 1)
-      #self.buttonStop.Hide()
-
-      #bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "add.xpm"),
-      #               wxBITMAP_TYPE_XPM)
-      #self.buttonAdd = wxBitmapButton(self, 5004, bmp, (16, 16),
-      #                                 style=wxNO_BORDER)
-      #self.buttonAdd.SetToolTipString(_("Add current word to \"My Words\""))
-      #hboxToolbar.Add(self.buttonAdd, 0, wxALL | wxCENTER, 1)
-      
-      # List toggle bitmap button
-      # If word list isn't hidden for this dict, else...
+      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "stop.png"),
+                     wxBITMAP_TYPE_PNG)
+      self.buttonStop = wxBitmapButton(self, 155, bmp, (16, 16),
+                                       style=wxNO_BORDER)
+      self.buttonStop.SetToolTipString(_("Stop searching"))
+      self.buttonStop.Disable()
+      hboxToolbar.Add(self.buttonStop, 0, wxALL | wxCENTER, 1)
 
       # Word list is hidden by default
       self.wlHidden = True
@@ -646,6 +635,7 @@ For more information visit project's homepage on
             self.buttonBack.Enable(1)
          self.buttonForward.Disable()
          self.entry.SetFocus()
+         self.buttonStop.Disable()
 
 
    # FIXME: Deprecated
@@ -661,7 +651,7 @@ For more information visit project's homepage on
          if self.activeDictionary == None:
             self.onCloseDict(None)
             self.load = None
-            #self.buttonStop.Disable()
+
             self.entry.Enable(1)
             self.entry.SetFocus()
             self.SetStatusText(_("Error: failed to load"))
@@ -724,7 +714,7 @@ For more information visit project's homepage on
       self.timerSearch.Stop()
       self.search = None # should be killed here
 
-      #self.buttonStop.Enable(1)
+      self.buttonStop.Enable(1)
       self.entry.Disable()
       self.timerSearch.Start(self.delay)
 
@@ -734,6 +724,7 @@ For more information visit project's homepage on
 
 
    def onBack(self, event):
+      
       self.buttonForward.Enable(1)
       self.htmlWin.SetPage(self.history.back())
       if not self.history.canBack():
@@ -741,6 +732,7 @@ For more information visit project's homepage on
 
 
    def onForward(self, event):
+      
       self.buttonBack.Enable(1)
       self.htmlWin.SetPage(self.history.forward())
       if not self.history.canForward():
@@ -748,7 +740,7 @@ For more information visit project's homepage on
 
 
    def onStop(self, event):
-      #self.buttonStop.Disable()
+
       self.entry.Enable(1)
       self.SetStatusText(_("Stopped"))
       self.timerSearch.Stop()
@@ -760,7 +752,11 @@ For more information visit project's homepage on
 
       if self.load:
          self.load.stop()
-         self.laod = None
+         self.load = None
+
+      wxEndBusyCursor()
+      self.buttonStop.Disable()
+      
 
    def onClean(self, event):
       self.entry.SetValue("")
@@ -1333,7 +1329,6 @@ For more information visit project's homepage on
 
       aboutWindow = AboutWindow(self, -1,
                                 _("About"),
-                                #size=(300, 200),
                                 style=wxDEFAULT_DIALOG_STYLE)
       aboutWindow.CentreOnScreen()
       aboutWindow.Show(True)
@@ -1344,7 +1339,7 @@ For more information visit project's homepage on
 
       self.__searchedBySelecting = 1
       self.SetStatusText(_("Searching..."))
-      #self.buttonStop.Enable(1)
+      self.buttonStop.Enable(1)
       self.timerSearch.Start(self.delay)
       word = event.GetString()
       self.entry.SetValue(word)
