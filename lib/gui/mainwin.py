@@ -987,7 +987,7 @@ For more information visit project's homepage on
       try:
          self.pmWindow = PluginManagerWindow(self, -1,
                                              _("Manage Dictionaries"),
-                                             size=(500, 600),
+                                             size=(500, 500),
                                              style=wxDEFAULT_FRAME_STYLE)
          self.pmWindow.CentreOnScreen()
          self.pmWindow.Show(True)

@@ -51,6 +51,8 @@ class PluginManagerWindow(wxFrame):
       wxFrame.__init__(self, parent, id, title, pos, size, style)
 
       self.app = wxGetApp()
+      self.currentInstalledItemSelection = -1
+      self.currentAvailItemSelection = -1
 
       vboxMain = wxBoxSizer(wxVERTICAL)
 
@@ -64,13 +66,17 @@ class PluginManagerWindow(wxFrame):
           self.allDictionaries[xxx] = not installed
 
 
+      tabbedPanel = wx.Notebook(self, -1)
+
       # Add 'installed' panel
-      panelInstalled = self._makeInstalledPanel()
-      vboxMain.Add(panelInstalled, 1, wxALL | wxEXPAND, 2)
+      panelInstalled = self._makeInstalledPanel(tabbedPanel)
+      tabbedPanel.AddPage(panelInstalled, "Installed")
 
       # Add 'available' panel
-      panelAvailable = self._makeAvailablePanel()
-      vboxMain.Add(panelAvailable, 1, wxALL | wxEXPAND, 2)
+      panelAvailable = self._makeAvailablePanel(tabbedPanel)
+      tabbedPanel.AddPage(panelAvailable, "Available")
+
+      vboxMain.Add(tabbedPanel, 1, wxALL | wxEXPAND, 2)
 
       # Add info panel
       panelInfo = self._makeInfoPanel()
@@ -84,29 +90,23 @@ class PluginManagerWindow(wxFrame):
       vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
 
       self.SetSizer(vboxMain)
-      
-      self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onAvailableSelected,
-                self.availableList)
+
+      self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onPageChanged)
       
       EVT_BUTTON(self, 161, self.onInstall)
       EVT_BUTTON(self, 162, self.onRemove)
       EVT_BUTTON(self, 163, self.onClose)
 
 
-   def _makeInstalledPanel(self):
+   def _makeInstalledPanel(self, tabbedPanel):
        """Creates panel with for controlling installed dictionaries"""
        
        #
        # Boxes
        # 
-       panelInstalled = wxPanel(self, -1)
+       panelInstalled = wxPanel(tabbedPanel, -1)
        vboxInstalled = wxBoxSizer(wxVERTICAL)
-       vboxInstalledBox = wxBoxSizer(wxVERTICAL)
-       sbSizerInstalled = wxStaticBoxSizer(\
-          wxStaticBox(panelInstalled, -1, 
-                      _("Installed Dictionaries")),
-          wxVERTICAL)
-       
+
        #
        # Installed list
        #
@@ -114,9 +114,9 @@ class PluginManagerWindow(wxFrame):
        self.installedList = DictListCtrl(panelInstalled, idDictList,
                                          style=wx.LC_REPORT
                                          | wx.LC_SINGLE_SEL
-                                         | wx.LC_NO_HEADER
+                                         #| wx.LC_NO_HEADER
                                          | wx.SUNKEN_BORDER)
-       vboxInstalledBox.Add(self.installedList, 1, wxALL | wxEXPAND, 1)
+       vboxInstalled.Add(self.installedList, 1, wxALL | wxEXPAND, 1)
        
        #
        # "Remove" button
@@ -124,21 +124,15 @@ class PluginManagerWindow(wxFrame):
        idRemove = wx.NewId()
        self.buttonRemove = wxButton(panelInstalled, idRemove, "Remove")
        self.buttonRemove.Disable()
-       vboxInstalledBox.Add(self.buttonRemove, 0, wxALL | wxALIGN_RIGHT, 2)
+       vboxInstalled.Add(self.buttonRemove, 0, wxALL | wxALIGN_RIGHT, 2)
        
-       sbSizerInstalled.Add(vboxInstalledBox, 1, wxALL | wxEXPAND, 0)
        panelInstalled.SetSizer(vboxInstalled)
        vboxInstalled.Fit(panelInstalled)
-       
-       vboxInstalled.Add(sbSizerInstalled, 1, wxALL | wxEXPAND, 0)
        
        #
        # Make columns
        #
        self.installedList.InsertColumn(0, "Dictionary Name")
-       self.installedList.InsertColumn(1, "Size")
-       
-       #size = 100
        
        dictNames = self.allDictionaries.keys()
        dictNames.sort()
@@ -150,34 +144,10 @@ class PluginManagerWindow(wxFrame):
            
            index = self.installedList.InsertStringItem(0, dictionary)
            
-           #sizeString = "(%d KB)"
-           
-           #if not installed:
-           #    sizeString = "%d KB"
-               
-           #self.installedList.SetStringItem(index, 1,
-           #                                 sizeString % size)
-           #size += 100
-           
-
-           #status = None
-           #if installed:
-           #    status = "Installed"
-           #else:
-           #    status = "Not installed"
-         
-           #self.installedList.SetStringItem(index, 2, status)
            self.installedList.SetItemData(index, index+1)
-           
-           #if installed:
-           #item = self.installedList.GetItem(index)
-           #item.SetTextColour(wx.BLUE)
-           #self.installedList.SetItem(item)
 
-               
-       self.installedList.SetColumnWidth(0, 375)
-       #self.installedList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
-       #self.installedList.SetColumnWidth(2, wx.LIST_AUTOSIZE)
+       # This should be called after updating list
+       self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
 
        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onInstalledSelected,
                  self.installedList)
@@ -185,20 +155,15 @@ class PluginManagerWindow(wxFrame):
        return panelInstalled
 
 
-   def _makeAvailablePanel(self):
+   def _makeAvailablePanel(self, tabbedPanel):
        """Creates panel with for controlling installed dictionaries"""
        
        #
        # Boxes
        # 
-       panelAvailable = wxPanel(self, -1)
+       panelAvailable = wxPanel(tabbedPanel, -1)
        vboxAvailable = wxBoxSizer(wxVERTICAL)
-       vboxAvailableBox = wxBoxSizer(wxVERTICAL)
-       sbSizerAvailable = wxStaticBoxSizer(\
-          wxStaticBox(panelAvailable, -1, 
-                      _("Available Dictionaries")),
-          wxVERTICAL)
-       
+
        #
        # Installed list
        #
@@ -206,9 +171,9 @@ class PluginManagerWindow(wxFrame):
        self.availableList = DictListCtrl(panelAvailable, idAvailList,
                                          style=wx.LC_REPORT
                                          | wx.LC_SINGLE_SEL
-                                         | wx.LC_NO_HEADER
+                                         #| wx.LC_NO_HEADER
                                          | wx.SUNKEN_BORDER)
-       vboxAvailableBox.Add(self.availableList, 1, wxALL | wxEXPAND, 1)
+       vboxAvailable.Add(self.availableList, 1, wxALL | wxEXPAND, 1)
 
 
        # Horizontal box for buttons
@@ -231,13 +196,10 @@ class PluginManagerWindow(wxFrame):
        hboxButtons.Add(self.buttonInstall, 0, wxALL | wxALIGN_RIGHT, 2)
 
 
-       vboxAvailableBox.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
+       vboxAvailable.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
        
-       sbSizerAvailable.Add(vboxAvailableBox, 1, wxALL | wxEXPAND, 0)
        panelAvailable.SetSizer(vboxAvailable)
        vboxAvailable.Fit(panelAvailable)
-       
-       vboxAvailable.Add(sbSizerAvailable, 1, wxALL | wxEXPAND, 0)
        
        #
        # Make columns
@@ -248,9 +210,8 @@ class PluginManagerWindow(wxFrame):
        item.m_mask = wx.LIST_MASK_TEXT | wxLIST_MASK_FORMAT
        item.m_format = wx.LIST_FORMAT_RIGHT
        item.m_text = _("Size")
-       #self.installedList.InsertColumn(1, "Size")
+
        self.availableList.InsertColumnInfo(1, item)
-       #self.availableList.InsertColumnInfo(1, _("Size Of Download"))
        
        size = 100
        
@@ -271,16 +232,10 @@ class PluginManagerWindow(wxFrame):
            size += 1000
            
            self.availableList.SetItemData(index, index+1)
-           
-           #if installed:
-           #    item = self.availableList.GetItem(index)
-           #    item.SetTextColour(wx.BLUE)
-           #    self.availableList.SetItem(item)
 
-               
-       self.availableList.SetColumnWidth(0, 390)
+
+       self.availableList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
        self.availableList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
-       #self.availableList.SetColumnWidth(2, wx.LIST_AUTOSIZE)
 
        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onAvailableSelected,
                  self.availableList)
@@ -339,6 +294,21 @@ class PluginManagerWindow(wxFrame):
        vboxInfo.Fit(panelInfo)
 
        return panelInfo
+
+
+   def onPageChanged(self, event):
+
+       _pageInstalled = 0
+       _pageAvail = 1
+
+       sel = event.GetSelection()
+
+       if sel == _pageInstalled:
+           print "Showing info about installed item %d" \
+                 % self.currentInstalledItemSelection
+       elif sel == _pageAvail:
+           print "Showing info about avail item %d" \
+                 % self.currentAvailItemSelection
        
 
    def GetListCtrl(self):
@@ -346,7 +316,7 @@ class PluginManagerWindow(wxFrame):
 
 
    def onInstalledSelected(self, event):
-      #plugin = self.app.config.plugins[event.GetString()]
+
       self.currentInstalledItemSelection = event.m_itemIndex
       self.buttonRemove.Enable(1)
 

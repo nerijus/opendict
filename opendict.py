@@ -61,6 +61,8 @@ class OpenDictApp(wxApp):
 
       _ = wxGetTranslation
 
+      _start = time.time()
+
       if wxPython.__version__.split('.') < ['2', '5']:
          from gui import errorwin
 
@@ -119,6 +121,8 @@ class OpenDictApp(wxApp):
       
       # FIXME: Avoid this
       self.config.window = self.window
+
+      print "DEBUG Loaded in %f seconds" % (time.time() - _start)
       
       self.window.Show(True)
 
