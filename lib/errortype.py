@@ -97,7 +97,7 @@ class ErrorInvalidEncoding(ErrorType):
 
     shortMessage = u"Invalid encoding"
     longMessage = u"Selected encoding is not correct for " \
-                  "this dictionary. Please select another from Edit -> " \
+                  "this dictionary. Please select another from Edit > " \
                   "Character Encoding menu"
 
 

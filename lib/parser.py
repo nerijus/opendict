@@ -714,7 +714,6 @@ class DictParser(plaindict.PlainDictionary):
       """Set encoding"""
 
       self.encoding = encoding
-      #pass
    
 
    def getEncoding(self):
@@ -741,7 +740,6 @@ class DictParser(plaindict.PlainDictionary):
    def _getTranslation(self, word):
       """Return word and translation code without formatting
       full HTML document"""
-
 
       translations = self.dict.getdef(word)
 
@@ -790,13 +788,8 @@ class DictParser(plaindict.PlainDictionary):
 
       result = meta.SearchResult()
 
-      try:
-         word_lowered = word.lower().encode(self.getEncoding())
-      except:
-         result.setError(errortype.INVALID_ENCODING)
-         return result
+      word_lowered = word.lower()
       
-
       if self.definitions is None:
          self.definitions = self.dict.getdeflist()
          self.definitions.sort()

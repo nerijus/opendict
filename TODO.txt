@@ -5,37 +5,10 @@ Status:
   * -- not finished
   ? -- needs to be discussed
 
-[ ] <Base>: Make "Stop" button kill the process
-[ ] <Base>: Full unicode support
-[ ] <Feature>: Ability to have new window or new tab to open another dictionary
-[ ] <Parsers>: Write own DICT parser that doesn't store all the file in memory
-[ ] <Parsers>: Rewrite TMX parser not to store all file in memory
-[ ] <Base, GUI>: Ability to change plugin options. Plugin Manager has
-    tabed panel: "About" and "Options".
-[ ] New plugins and registers system for external dictionaries
-[ ] <DictEditor> Cannot edit dictionary if it is a registered one.
 
-[ ] Make DictConnction show alternative word list (FUTURE)
-
----------------
-
-[x] 1. Finish with parser classes to implement meta.Dictionary
-[ ] 2. Unify dictionary load
-[ ] 3. Make dictionary to be created at start, and after button press only
-few pointers assigned (no need to launch new thread).
-[ ] Make message dialog class to show errors
-[ ] All the dictionaries must be kept in one data structure.
-    Example: dictionaries {name: object}
-[ ] Unify dictionary types
-
-[ ] Rename plugin.xml to about.xml
-[ ] Add "plugin" attribute to about.xml base tag
-
-FUTURE [ ] Let DICT connection be handled as a dictionary and be kept
+[ ] Let DICT connection be handled as a dictionary and be kept
 in Dictionaries menu. Let it have user defined names. Make "Manage
 DICT Connections" for that.
 
-Future [ ] Ability to merge dictionaries in editor
+[ ] Ability to merge dictionaries in editor
 
-[ ] Save changes to dictionary configuration when settings (like font
-encoding) changes.

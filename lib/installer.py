@@ -91,6 +91,7 @@ class Installer:
         """Install dictionary"""
 
         extention = os.path.splitext(filePath)[1][1:]
+        succeeded = False
  
         try:
             if extention.lower() in dicttype.PLUGIN.getFileExtentions():
@@ -102,6 +103,8 @@ class Installer:
                         else:
                             dictionary = plaindict._loadPlainDictionary(directory)
                         self.mainWin.addDictionary(dictionary)
+                        succeeded = True
+                        
                 except Exception, e:
                     traceback.print_exc()
                     errorwin.showErrorMessage(_("Installation failed"),
@@ -115,6 +118,7 @@ class Installer:
                     if directory:
                         dictionary = plaindict._loadPlainDictionary(directory)
                         self.mainWin.addDictionary(dictionary)
+                        succeeded = True
                 except Exception, e:
                     traceback.print_exc()
                     errorwin.showErrorMessage(_("Installation Error"),
@@ -126,11 +130,11 @@ class Installer:
             self.mainWin.SetStatusText(_("Error: Installation failed"))
             tranceback.print_exc()
 
-        title = _("Dictionary installed")
-        msg = _("Dictionary successfully installed. You can choose it " \
-                "from \"Dictionaries\" menu now.")
-        errorwin.showInfoMessage(title, msg)
-        #self.mainWin.SetStatusText(_("Dictionary successfully installed"))
+        if succeeded:
+            title = _("Dictionary installed")
+            msg = _("Dictionary successfully installed. You can choose it " \
+                    "from \"Dictionaries\" menu now.")
+            errorwin.showInfoMessage(title, msg)
 
 
 
@@ -289,6 +293,38 @@ def _installNormalPlugin(filePath):
         raise Exception, _("This dictionary already installed. " \
                            "If you want to upgrade it, please remove " \
                            "old version first.")
+
+    installFile = os.path.join(topDirectory, 'install.py')
+    
+    if installFile in zipFile.namelist():
+        print "Starting custom install"
+
+        data = zipFile.read(installFile)
+
+        try:
+            struct = {}
+            exec data in struct
+        except Exception, e:
+            title = _("Installation Error")
+            msg = _("Installation tool for this dictionary failed to start. " \
+                    "Please report this problem to developers.")
+            errorwin.showErrorMessage(title, msg)
+            return
+
+        install = struct.get('install')
+        if not install:
+            title = _("Installation Error")
+            msg = _("Installation tool for this dictionary failed to start. " \
+                    "Please report this problem to developers.")
+            errorwin.showErrorMessage(title, msg)
+            return
+
+        if not install(info.GLOBAL_HOME, info.LOCAL_HOME):
+            title = _("Installation Aborted")
+            msg = _("Dictionary installation has been aborted.")
+            errorwin.showErrorMessage(title, msg)
+            return
+        
 
     # Install
     try:

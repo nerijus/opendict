@@ -564,6 +564,7 @@ class MainWindow(wxFrame):
 
          self.SetStatusText("")
          self.entry.Enable(1)
+         self.buttonStop.Disable()
          self.search = None
 
          # Check status code
