@@ -1,4 +1,4 @@
-#
+
 # OpenDict
 # Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 #
@@ -126,7 +126,6 @@ class PluginManagerWindow(wxFrame):
        self.installedList = DictListCtrl(panelInstalled, idDictList,
                                          style=wx.LC_REPORT
                                          | wx.LC_SINGLE_SEL
-                                         #| wx.LC_NO_HEADER
                                          | wx.SUNKEN_BORDER)
        vboxInstalled.Add(self.installedList, 1, wxALL | wxEXPAND, 1)
 
@@ -299,9 +298,9 @@ class PluginManagerWindow(wxFrame):
        vboxInfoBox.Add(grid, 1, wxALL | wxEXPAND, 1)
        vboxInfoBox.Add(self.textAbout, 0, wxALL | wxEXPAND, 1)
        
-       sbSizerInfo.Add(vboxInfoBox, 1, wxALL | wxEXPAND, 0)
+       sbSizerInfo.Add(vboxInfoBox, 1, wxALL | wxEXPAND, 5)
        
-       vboxInfo.Add(sbSizerInfo, 1, wxALL | wxEXPAND, 0)
+       vboxInfo.Add(sbSizerInfo, 1, wxALL | wxEXPAND, 5)
 
        panelInfo.SetSizer(vboxInfo)
        vboxInfo.Fit(panelInfo)
@@ -608,7 +607,8 @@ class PluginManagerWindow(wxFrame):
            self.mainWin.menuDict.Delete(idDictMenuItem)
 
        parent = self.GetParent()
-       if dictName == parent.activeDictionary.getName():
+       if parent.activeDictionary \
+              and dictName == parent.activeDictionary.getName():
            parent.onCloseDict(None)
                
        self.buttonRemove.Disable()
@@ -686,6 +686,12 @@ class PluginManagerWindow(wxFrame):
            return
 
        md5sum = util.getMD5Sum(localPath)
+       print md5sum
+       print dictInfo.getChecksum()
+
+       #
+       # Check checksum
+       #
        if md5sum != dictInfo.getChecksum():
            title = _("File is damaged")
            msg = _("Downloaded file is damaged and cannot be installed. " \
@@ -693,13 +699,39 @@ class PluginManagerWindow(wxFrame):
            errorwin.showErrorMessage(title, msg)
            return
 
+       #
+       # Remove old version if exists
+       #
+       if dictInfo.getName() in self.app.dictionaries.keys():
+           try:
+               dictInstance = self.app.dictionaries.get(dictInfo.getName())
+               if dictInstance.getType() == dicttype.PLUGIN:
+                   installer.removePluginDictionary(dictInstance)
+               else:
+                   installer.removePlainDictionary(dictInstance)
+
+           except Exception, e:
+               traceback.print_exc()
+               title = _("Error")
+               msg = _("Unable to remove old version of \"%s\". " \
+                       "Error occured: \"<i>%s</i>\". New version " \
+                       "cannot be installed without removing old one." \
+                       % (dictInstance.getName(), e))
+               errorwin.showErrorMessage(title, msg)
+               return
+       
+       #
+       # Install
+       #
        try:
            inst = installer.Installer(self.mainWin, self.app.config)
            inst.install(localPath)
-           
-           index = self.installedList.InsertStringItem(0, dictInfo.getName())
-           self.installedList.SetItemData(index, index+1)
-           self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+
+           if self.installedList.FindItem(0, dictInfo.getName()) > -1:
+               index = self.installedList.InsertStringItem(0,
+                                                           dictInfo.getName())
+               self.installedList.SetItemData(index, index+1)
+               self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
            
        except Exception, e:
            traceback.print_exc()

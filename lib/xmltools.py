@@ -42,31 +42,45 @@ class RegisterConfigGenerator:
 
         doc = xml.dom.minidom.Document()
 
-        registerElement = doc.createElement("plain-dictionary")
+        registerElement = doc.createElement('plain-dictionary')
         doc.appendChild(registerElement)
 
         # Format element
-        formatElement = doc.createElement("format")
+        formatElement = doc.createElement('format')
         registerElement.appendChild(formatElement)
         formatElement.appendChild(doc.createTextNode(args.get('format')))
 
         # Name element
-        nameElement = doc.createElement("name")
+        nameElement = doc.createElement('name')
         registerElement.appendChild(nameElement)
         nameElement.appendChild(doc.createTextNode(args.get('name')))
 
+        # Version element
+        versionElement = doc.createElement('version')
+        registerElement.appendChild(versionElement)
+        versionElement.appendChild(doc.createTextNode(args.get('version') or ''))
+
+        # Authors element
+        authorsElement = doc.createElement('authors')
+        registerElement.appendChild(authorsElement)
+        for author in (args.get('authors') or []):
+            authorElement = doc.createElement('author')
+            authorsElement.appendChild(authorElement)
+            authorElement.setAttribute('name', author.get('name'))
+            authorElement.setAttribute('email', author.get('email'))
+
         # Path element
-        pathElement = doc.createElement("path")
+        pathElement = doc.createElement('path')
         registerElement.appendChild(pathElement)
         pathElement.appendChild(doc.createTextNode(args.get('path')))
 
         # MD5 element
-        md5Element = doc.createElement("md5")
+        md5Element = doc.createElement('md5')
         registerElement.appendChild(md5Element)
         md5Element.appendChild(doc.createTextNode(args.get('md5')))
 
         # Encoding element
-        encodingElement = doc.createElement("encoding")
+        encodingElement = doc.createElement('encoding')
         registerElement.appendChild(encodingElement)
         encodingElement.appendChild(doc.createTextNode(args.get('encoding')))
 
@@ -100,6 +114,8 @@ class RegisterConfigParser:
         doc = xml.dom.minidom.parseString(xmlData)
         name = None
         format = None
+        version = None
+        authors = []
         path = None
         md5 = None
         encoding = None
@@ -123,6 +139,14 @@ class RegisterConfigParser:
             for node in pathElement.childNodes:
                 path = node.data
 
+        for versionElement in registerElement.getElementsByTagName('version'):
+            for node in versionElement.childNodes:
+                version = node.data.strip()
+
+        for authorElement in registerElement.getElementsByTagName('author'):
+            authors.append({'name': authorElement.getAttribute('name'),
+                            'email': authorElement.getAttribute('email')})
+
         for md5Element in registerElement.getElementsByTagName('md5'):
             for node in md5Element.childNodes:
                 md5 = node.data
@@ -140,6 +164,8 @@ class RegisterConfigParser:
         result = {}
         result['name'] = name
         result['format'] = format
+        result['version'] = version
+        result['authors'] = authors
         result['path'] = path
         result['md5'] = md5
         result['encoding'] = encoding
@@ -362,7 +388,7 @@ class AddOnsParser:
             for sizeElement in addonElement.getElementsByTagName('size'):
                 size = long(_textData(sizeElement))
                 
-            for sumElement in addonElement.getElementsByTagName('checksum'):
+            for sumElement in addonElement.getElementsByTagName('md5'):
                 checksum = _textData(sumElement)
 
 

@@ -38,6 +38,8 @@ class PlainDictInfo:
     def __init__(self, directory):
         """Store configuration data"""
 
+        raise Exception, "PlainDictInfo is deprecated"
+
         self.config = xmltools.parsePlainDictConfig(\
                 os.path.join(directory,
                              info.__PLAIN_DICT_CONFIG_DIR,
@@ -47,6 +49,8 @@ class PlainDictInfo:
 
         self.name = config.get('name')
         self.formatString = config.get('format')
+        self.version = config.get('version')
+        self.author = config.get('author')
         self.path = config.get('path')
         self.checksum = config.get('md5')
         self.encoding = config.get('encoding')
@@ -62,6 +66,18 @@ class PlainDictInfo:
         """Return name"""
 
         return self.name
+
+
+    def getVersion(self):
+        """Return version number"""
+
+        return self.version
+
+
+    def getAuthor(self):
+        """Return author"""
+
+        return self.author
 
 
     def getPath(self):
@@ -120,6 +136,8 @@ class PlainDictionary(meta.Dictionary):
     """Plain dictionary class"""
 
     licenceFile = None
+    version = None
+    authors = []
     
 
     def getConfigDir(self):
@@ -180,6 +198,30 @@ class PlainDictionary(meta.Dictionary):
         return None
 
 
+    def setVersion(self, version):
+        """Set version number"""
+
+        self.version = version
+
+
+    def getVersion(self):
+        """Return version number"""
+
+        return self.version
+
+
+    def setAuthors(self, authors):
+        """Set author"""
+
+        self.authors = authors
+
+
+    def getAuthors(self):
+        """Return author"""
+
+        return self.authors
+
+
 def _loadPlainDictionary(directory):
     """Load one dictionary and returns dictionary object"""
 
@@ -222,6 +264,8 @@ def _loadPlainDictionary(directory):
         dictionary = Parser(filePath)
         dictionary.setEncoding(config.get('encoding'))
         dictionary.setName(config.get('name'))
+        dictionary.setVersion(config.get('version'))
+        dictionary.setAuthors(config.get('authors'))
         dictionary.setChecksum(config.get('md5'))
         dictionary.setLicenceFile(config.get('licence'))
 
@@ -367,6 +411,8 @@ def savePlainConfiguration(dictionary):
 
     doc = xmltools.generatePlainDictConfig(name=dictionary.getName(),
                                            format=dictionary.getType().getIdName(),
+                                           version=dictionary.getVersion(),
+                                           authors=dictionary.getAuthors(),
                                            path=dictionary.getPath(),
                                            md5=md5sum,
                                            encoding=dictionary.getEncoding())

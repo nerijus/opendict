@@ -234,13 +234,16 @@ class DictionaryPlugin(meta.Dictionary):
     def getLicence(self):
         """Return licence text (HTML format required)"""
 
-        try:
-            fd = open(os.path.join(self.getPath(), self.info.licenceFile))
-            data = fd.read()
-            fd.close()
-        except Exception, e:
-            systemLog(ERROR, "Unable to read licence file: %s" % e)
-            data = 'Error: <i>Licence file not found</i>'
+        if self.info.licenceFile:
+            try:
+                fd = open(os.path.join(self.getPath(), self.info.licenceFile))
+                data = fd.read()
+                fd.close()
+            except Exception, e:
+                systemLog(ERROR, "Unable to read licence file: %s" % e)
+                data = 'Error: <i>Licence file not found</i>'
+        else:
+            data = ''
 
         return data
         

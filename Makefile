@@ -15,8 +15,8 @@ install:
 	chmod ugo+r /usr/share/locale/lt/LC_MESSAGES/opendict.mo
 	cp opendict.py $(HOME)
 	chmod ugo+rx $(HOME)/opendict.py
-	cp copying.txt $(HOME)
-	chmod ugo+r $(HOME)/copying.txt
+	cp copying.html $(HOME)
+	chmod ugo+r $(HOME)/copying.html
 	ln -sf $(HOME)/opendict.py /usr/bin/opendict
 	chmod ugo+rx /usr/bin/opendict
 	cp misc/opendict.desktop /usr/share/applications/

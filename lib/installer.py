@@ -79,10 +79,6 @@ class Installer:
                 extMapping[ext.lower()] = t
 
         if not extention.lower() in extMapping.keys():
-            #print "ERROR Unable to recognise %s format" % filePath
-            #window = DictAddWindow(self.mainWin, fileName, filePath)
-            #window.CentreOnScreen()
-            #window.Show(True)
             title = _("Recognition Error")
             msg = _("File %s is not supported by OpenDict" % fileName)
             errorwin.showErrorMessage(title, msg)
@@ -105,7 +101,6 @@ class Installer:
                             dictionary = newplugin._loadDictionaryPlugin(directory)
                         else:
                             dictionary = plaindict._loadPlainDictionary(directory)
-                        #print "Installed dict:", dictionary
                         self.mainWin.addDictionary(dictionary)
                 except Exception, e:
                     traceback.print_exc()
@@ -119,7 +114,6 @@ class Installer:
                     directory = installPlainDictionary(filePath)
                     if directory:
                         dictionary = plaindict._loadPlainDictionary(directory)
-                        #print "Installed dict:", dictionary
                         self.mainWin.addDictionary(dictionary)
                 except Exception, e:
                     traceback.print_exc()
@@ -199,6 +193,8 @@ def installPlainDictionary(filePath):
     # Write configuration
     doc = xmltools.generatePlainDictConfig(name=dictionaryName,
                                            format=dictFormat,
+                                           version=None,
+                                           authors={},
                                            path=filePath,
                                            md5=md5sum,
                                            encoding='UTF-8')

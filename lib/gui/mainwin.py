@@ -1055,14 +1055,16 @@ class MainWindow(wxFrame):
       app = wxGetApp()
       app.dictionaries[dictInstance.getName()] = dictInstance
       unid = util.generateUniqueID()
-      app.config.ids[unid] = dictInstance.getName()
-      
-      item = wxMenuItem(self.menuDict,
-                        unid,
-                        dictInstance.getName())
-      EVT_MENU(self, unid, self.onDefault)
 
-      self.menuDict.InsertItem(self.menuDict.GetMenuItemCount()-2, item)
+      # Insert new menu item only if no same named dictionary exists
+      if not dictInstance.getName() in app.config.ids.values():
+         app.config.ids[unid] = dictInstance.getName()
+         item = wxMenuItem(self.menuDict,
+                           unid,
+                           dictInstance.getName())
+         EVT_MENU(self, unid, self.onDefault)
+         
+         self.menuDict.InsertItem(self.menuDict.GetMenuItemCount()-2, item)
 
 
    def loadDictionary(self, dictInstance):
