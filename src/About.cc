@@ -21,7 +21,7 @@
 #include "images/logo.xpm"
 
 About::About(wxFrame* window)
-  : wxDialog(window, -1, _T("About"))
+  : wxDialog(window, -1, wxString(_T("About")))
 {
   wxString msg;
   msg.Printf(_T("OpenDict 0.1\n")
