@@ -25,9 +25,16 @@ import traceback
 import string
 import time
 
-from wxPython.wx import *
-import wx
-import wxPython
+try:
+    from wxPython.wx import *
+    import wx
+    import wxPython
+except ImportError:
+    print >> sys.stderr, "**"
+    print >> sys.stderr, "** Error: wxPython library not found"
+    print >> sys.stderr, "** Please install wxPython 2.5 or newer to run OpenDict"
+    print >> sys.stderr, "**"
+    sys.exit(1)
 
 if sys.platform == "win32":
    # MS Windows user
