@@ -514,7 +514,8 @@ class MainWindow(wxFrame):
          title = _("Invalid Dictionaries")
          msg = _("The following dictionaries are invalid and cannot be " \
                  "loaded:\n\n%s\n\nThis may be because of critical changes "\
-                 "in OpenDict architecture. Remove listed directories by " \
+                 "in OpenDict architecture. Update these dictionaries or " \
+                 "remove listed directories by " \
                  "hand to avoid this message in the future" \
                  % '\n'.join(self.app.invalidDictionaries))
          from lib.gui import errorwin
@@ -601,9 +602,8 @@ class MainWindow(wxFrame):
          # If dictionary (plugin) does not use NOT_FOUND notification,
          # check for translation and show it manually
          #
-         translation = result.getTranslation()
-         if not translation:
-            self.setStatusText(errortype.NOT_FOUND.getMessage())
+         if not result.getTranslation():
+            self.SetStatusText(errortype.NOT_FOUND.getMessage())
             
 
          try:
@@ -651,12 +651,15 @@ class MainWindow(wxFrame):
                self.SetStatusText(_("1 word matches"))
             elif matches > 1:
                self.SetStatusText(_("%d words match") % matches)
+         else:
+            self.SetStatusText(_("Done"))
 
          if self.history.canBack():
             self.buttonBack.Enable(1)
          self.buttonForward.Disable()
          self.entry.SetFocus()
          self.buttonStop.Disable()
+         wxEndBusyCursor()
 
 
    def onTimerClipboard(self, event):
