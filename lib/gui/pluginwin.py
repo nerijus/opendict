@@ -128,6 +128,16 @@ class PluginManagerWindow(wxFrame):
                                          #| wx.LC_NO_HEADER
                                          | wx.SUNKEN_BORDER)
        vboxInstalled.Add(self.installedList, 1, wxALL | wxEXPAND, 1)
+
+       hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
+       
+       #
+       # "Install from file" button
+       #
+       idInstallFile = wx.NewId()
+       self.buttonInstallFile = wxButton(panelInstalled, idInstallFile, 
+                                         "Install From File")
+       hboxButtons.Add(self.buttonInstallFile, 0, wxALL | wxALIGN_RIGHT, 2)
        
        #
        # "Remove" button
@@ -135,7 +145,9 @@ class PluginManagerWindow(wxFrame):
        idRemove = wx.NewId()
        self.buttonRemove = wxButton(panelInstalled, idRemove, "Remove")
        self.buttonRemove.Disable()
-       vboxInstalled.Add(self.buttonRemove, 0, wxALL | wxALIGN_RIGHT, 2)
+       hboxButtons.Add(self.buttonRemove, 0, wxALL | wxALIGN_RIGHT, 2)
+       
+       vboxInstalled.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 2)
        
        panelInstalled.SetSizer(vboxInstalled)
        vboxInstalled.Fit(panelInstalled)
@@ -154,6 +166,7 @@ class PluginManagerWindow(wxFrame):
                  self.installedList)
 
        self.Bind(wx.EVT_BUTTON, self.onRemove, self.buttonRemove)
+       self.Bind(wx.EVT_BUTTON, self.onInstallFile, self.buttonInstallFile)
 
        return panelInstalled
 
@@ -555,6 +568,13 @@ class PluginManagerWindow(wxFrame):
            return
 
        self._fetchAddon(dictInfo)
+
+
+   def onInstallFile(self, event):
+      """Install dictionary from file"""
+      
+      inst = installer.Installer(self, self.app.config)
+      inst.showGUI()
 
 
    def onRemove(self, event):

@@ -251,7 +251,7 @@ class MainWindow(wxFrame):
       self.menuDict.AppendSeparator()
 
       idAddDict = wx.NewId()
-      self.menuDict.Append(idAddDict, _("&Add New Dictionary"))
+      self.menuDict.Append(idAddDict, _("&Install Dictionary From File"))
       
       menuBar.Append(self.menuDict, _("&Dictionaries"))
 

@@ -80,9 +80,13 @@ class Installer:
 
         if not extention.lower() in extMapping.keys():
             #print "ERROR Unable to recognise %s format" % filePath
-            window = DictAddWindow(self.mainWin, fileName, filePath)
-            window.CentreOnScreen()
-            window.Show(True)
+            #window = DictAddWindow(self.mainWin, fileName, filePath)
+            #window.CentreOnScreen()
+            #window.Show(True)
+            title = _("Recognition Error")
+            msg = _("File %s is not supported by OpenDict" % fileName)
+            errorwin.showErrorMessage(title, msg)
+            return
         else:
             self.install(filePath)
 
@@ -157,7 +161,8 @@ def installPlainDictionary(filePath):
 
     # Check existance
     if os.path.exists(dictDir):
-        raise Exception, _("Dictionary '%s' already exists") % dictionaryName
+        raise Exception, _("Dictionary \"%s\" is already installed") \
+            % dictionaryName
     
     extention = os.path.splitext(fileName)[1][1:]
     dictType = None
