@@ -405,14 +405,19 @@ class MovaParser(plaindict.PlainDictionary):
 
       _start = time.time()
 
-      word_lowered = word.lower().encode(self.getEncoding())
+      word_lowered = word.lower()
+
+      encodedIndex = {}
+      for literal in self.index:
+         encodedIndex[literal.encode(self.getEncoding())] = \
+                      self.index.get(literal)
 
       #
       # Seek to the beginning of the block
       #
       position = 0L
-      if word_lowered[:2] in self.index.keys():
-         position = self.index[word_lowered[:2]]
+      if word_lowered[:2] in encodedIndex.keys():
+         position = encodedIndex[word_lowered[:2]]
 
       debugLog(DEBUG, "Index: %s->%d" % (word_lowered[:2], position))
       debugLog(DEBUG, "MovaParser: Seeking to %d" % position)
