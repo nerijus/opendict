@@ -728,7 +728,7 @@ class MainWindow(wxFrame):
       self.SetStatusText(_("Searching..."))
 
       self.timerSearch.Stop()
-      self.search = None # should be killed here
+      self.search = None
 
       self.buttonStop.Enable(1)
       self.entry.Disable()
@@ -738,7 +738,7 @@ class MainWindow(wxFrame):
       try:
          word = word.encode(self.activeDictionary.getEncoding())
       except Exception, e:
-         # FIXME: Cope duplication
+         # FIXME: Code duplicates
          self.buttonStop.Disable()
          self.entry.Enable(True)
          self.timerSearch.Stop()

@@ -337,6 +337,10 @@ class DictEditorWindow(wxFrame):
         self.buttonSave = wxButton(self, 6005, _("Save"))
         self.buttonSave.SetToolTipString(_("Save words to file"))
         self.controlButtons.append(self.buttonSave)
+
+        self.buttonSaveAs = wxButton(self, 6006, _("Save As..."))
+        self.buttonSaveAs.SetToolTipString(_("Save with a different file name"))
+        self.controlButtons.append(self.buttonSaveAs)
         
         for button in self.controlButtons:
             button.Disable()
@@ -393,6 +397,7 @@ class DictEditorWindow(wxFrame):
         EVT_BUTTON(self, 6003, self.onSearch)
         EVT_BUTTON(self, 6004, self.onSort)
         EVT_BUTTON(self, 6005, self.onSave)
+        EVT_BUTTON(self, 6006, self.onSaveAs)
         EVT_BUTTON(self, 6031, self.onOpen)
         EVT_BUTTON(self, 6032, self.onClose)
         EVT_CLOSE(self, self.onClose)
@@ -461,17 +466,39 @@ class DictEditorWindow(wxFrame):
         self.checkAllButtons()
 
 
+    def onSaveAs(self, event):
+
+        self.onSave(None)
+
+
     def onSave(self, event):
 
         self.SetStatusText("")
         self.cAction = "save"
 
-        if not self.savedOnce:
-            dialog = wx.FileDialog(self, message=_("Save file"),
+        wildCard = "Slowo dictionaries (*.dwa)|*.dwa"
+        default = 'Untitled-dictionary.dwa'
+
+        if not self.savedOnce or not event:
+            dialog = wx.FileDialog(self,
+                                   wildcard=wildCard,
+                                   defaultFile=default,
+                                   message=_("Save file"),
                                    style=wx.SAVE | wx.CHANGE_DIR)
             if dialog.ShowModal() == wx.ID_OK:
                 self.filePath = dialog.GetPaths()[0]
-            
+            else:
+                return
+
+        if os.path.isdir(self.filePath):
+            if self.filePath.endswith('..'):
+                self.filePath = self.filePath[:-2]
+
+            self.filePath += default
+
+        if not self.filePath.endswith('.dwa'):
+            self.filePath += '.dwa'
+
         self.editor.save(self.filePath)
         self.setChanged(False)
         self.name = os.path.basename(self.filePath)
@@ -549,6 +576,8 @@ class DictEditorWindow(wxFrame):
         self.checkRemoveButton()
         self.checkSortButton()
         self.checkSaveButton()
+
+        self.buttonSaveAs.Enable(True)
         
 
     def onOpen(self, event):
