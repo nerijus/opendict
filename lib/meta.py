@@ -107,6 +107,12 @@ class Dictionary:
         return None
 
 
+    def getSize(self):
+        """Return size in kylobites"""
+
+        return None
+
+
     def getAuthors(self):
         """Return list of authors"""
 

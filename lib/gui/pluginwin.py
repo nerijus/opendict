@@ -26,14 +26,14 @@ from shutil import rmtree
 import os
 import traceback
 
-from misc import printError
 from gui import errorwin
 import installer
 import dicttype
 import enc
-
-#import group
 import misc
+import xmltools
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+
 
 _ = wxGetTranslation
 
@@ -42,8 +42,6 @@ class DictListCtrl(wx.ListCtrl):
     def __init__(self, parent, ID, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=0):
         wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
-        #listmix.ListCtrlAutoWidthMixin.__init__(self)
-
         
 
 class PluginManagerWindow(wxFrame):
@@ -135,22 +133,12 @@ class PluginManagerWindow(wxFrame):
        #
        # Make columns
        #
-       self.installedList.InsertColumn(0, "Dictionary Name")
+       self.installedList.InsertColumn(0, "Name")
        
        dictNames = self.installedDictionaries.keys()
        dictNames.sort()
        
-       print dictNames
-       
-       for dictionary in dictNames:
-           installed = self.installedDictionaries.get(dictionary)
-           
-           index = self.installedList.InsertStringItem(0, dictionary)
-           
-           self.installedList.SetItemData(index, index+1)
-
-       # This should be called after updating list
-       self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+       self.setInstalledDicts(dictNames)
 
        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onInstalledSelected,
                  self.installedList)
@@ -209,7 +197,7 @@ class PluginManagerWindow(wxFrame):
        #
        # Make columns
        #
-       self.availableList.InsertColumn(0, _("Dictionary Name"))
+       self.availableList.InsertColumn(0, _("Name"))
 
        item = wxListItem()
        item.m_mask = wx.LIST_MASK_TEXT | wxLIST_MASK_FORMAT
@@ -222,8 +210,6 @@ class PluginManagerWindow(wxFrame):
        
        dictNames = self.availDictionaries.keys()
        dictNames.sort()
-       
-       print dictNames
        
        for dictionary in dictNames:
            installed = self.availDictionaries.get(dictionary)
@@ -317,8 +303,6 @@ class PluginManagerWindow(wxFrame):
        sel = event.GetSelection()
 
        if sel == _pageInstalled:
-           print "Showing info about installed item %d" \
-                 % self.currentInstalledItemSelection
            if self.currentInstalledItemSelection == -1:
                self.clearInfo()
                self.disableInfo()
@@ -326,8 +310,6 @@ class PluginManagerWindow(wxFrame):
                self.enableInfo()
                self.showInstalledInfo()
        elif sel == _pageAvail:
-           print "Showing info about avail item %d" \
-                 % self.currentAvailItemSelection
            if self.currentAvailItemSelection == -1:
                self.clearInfo()
                self.disableInfo()
@@ -350,8 +332,9 @@ class PluginManagerWindow(wxFrame):
 
        dictName = self.installedList.GetItemText(\
           self.currentInstalledItemSelection)
-       
-       self.showInfo(dictName)
+
+       dictInstance = self.app.dictionaries.get(dictName)
+       self.showInfo(dictInstance)
 
 
    def showAvailableInfo(self):
@@ -360,13 +343,18 @@ class PluginManagerWindow(wxFrame):
        dictName = self.availableList.GetItemText(\
           self.currentAvailItemSelection)
 
-       self.showInfo(dictName)
-       
-       
-   def showInfo(self, dictName):        
-       """Show information about dictionary"""
 
-       dictInstance = self.app.dictionaries.get(dictName)
+       dictInstance = self.addons.get(dictName)
+
+       if not dictInstance:
+           systemLog(ERROR, "BUG: add-on %s not found by name" % dictName)
+           return
+           
+       self.showInfo(dictInstance)
+       
+       
+   def showInfo(self, dictInstance):        
+       """Show information about dictionary"""
        
        self.stName.Enable(1)
        self.stVersion.Enable(1)
@@ -407,9 +395,8 @@ class PluginManagerWindow(wxFrame):
    def onAvailableSelected(self, event):
 
       self.currentAvailItemSelection = event.m_itemIndex
-      print self.availableList.GetItemText(self.currentAvailItemSelection)
       self.buttonInstall.Enable(1)
-      self.enableInfo()
+      self.showAvailableInfo()
 
 
    def clearInfo(self):
@@ -439,24 +426,61 @@ class PluginManagerWindow(wxFrame):
        self.textAbout.Enable(1)
 
 
+   def setInstalledDicts(self, dictNames):
+       """Clear the list of installed dictionaries and set new items"""
+       
+       for dictionary in dictNames:
+           index = self.installedList.InsertStringItem(0, dictionary)
+           
+           self.installedList.SetItemData(index, index+1)
+
+       self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+
+
+   def setAvailDicts(self, addons):
+       """Clear the list of available dictionaries and set
+       new items"""
+
+       # TODO: Clear list
+       self.availableList.DeleteAllItems()
+
+       names = addons.keys()
+       names.sort()
+       for name in names:
+           addon = addons.get(name)
+           index = self.availableList.InsertStringItem(0, addon.getName())
+           self.availableList.SetStringItem(index, 1,
+                                            str(addon.getSize())+" KB")
+           self.availableList.SetItemData(index, index+1)
+
+       self.availableList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+
+
    def onUpdate(self, event):
        """Update dictionaries list"""
 
-       print "Update"
+       fd = open('/home/mjoc/opendict-add-ons.xml')
+       xmlData = fd.read()
+       fd.close()
+
+       if hasattr(self, "addons"):
+           del self.addons
+       self.addons = xmltools.parseAddOns(xmlData)
+       self.setAvailDicts(self.addons)
       
 
    def onInstall(self, event):
        """Install button pressed"""
 
-       print "Install %s" % self.installedList.GetItemText(\
+       print "Install %s" % self.availableList.GetItemText(\
            self.currentAvailItemSelection)
 
 
    def onRemove(self, event):
        """Remove button pressed"""
 
-       print "Remove %s" % self.installedList.GetItemText(\
-           self.currentInstalledItemSelection)
+       systemLog(INFO, "Removing %s" % self.installedList.GetItemText(\
+           self.currentInstalledItemSelection))
 
        dictName = self.installedList.GetItemText(\
            self.currentInstalledItemSelection)

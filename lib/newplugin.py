@@ -61,6 +61,12 @@ class PluginInfo:
         
         doc = xml.dom.minidom.parseString(self.xmlData)
 
+        pluginElement = doc.getElementsByTagName('plugin')[0]
+        pluginType = pluginElement.getAttribute('type')
+
+        if pluginType != 'dictionary':
+            raise Exception, "Plugin is not dictionary plugin"
+
         # Get name
         for nameElement in doc.getElementsByTagName('name'):
             for node in nameElement.childNodes:

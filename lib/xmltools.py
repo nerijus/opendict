@@ -22,6 +22,18 @@ import xml.dom.minidom
 import xml.dom.ext
 import xml.sax.saxutils # need this?
 
+import meta
+
+
+def _textData(element):
+    """Return text data from given XML element"""
+
+    text = ''
+    for node in element.childNodes:
+        text = node.data
+
+    return text
+
 
 class RegisterConfigGenerator:
     """Class for generating register configuration files"""
@@ -211,6 +223,151 @@ def parseIndexFile(indexPath):
     return index
 
 
+class AddOnsParser:
+    """Parse add-ons file"""
+
+    class EmptyDictionary(meta.Dictionary):
+        """Empty dictionary for representing add-on information"""
+
+        name = None
+        version = None
+        size = None
+        authors = []
+        location = None
+        desc = None
+        atype = None
+
+        def setType(self, t):
+
+            self.atype = t
+
+
+        def getType(self):
+
+            return self.atype
+        
+
+        def setName(self, name):
+
+            self.name = name
+
+
+        def getName(self):
+
+            return self.name
+
+
+        def setVersion(self, version):
+
+            self.version = version
+
+
+        def getVersion(self):
+
+            return self.version
+
+
+        def setSize(self, size):
+
+            self.size = size
+
+
+        def getSize(self):
+
+            return self.size
+
+
+        def addAuthor(self, author):
+
+            self.authors.append(author)
+
+
+        def getAuthors(self):
+
+            return self.authors
+
+
+        def setLocation(self, location):
+
+            self.location = location
+
+
+        def getLocaltion(self):
+
+            return self.location
+
+
+        def setDescription(self, desc):
+
+            self.desc = desc
+
+
+        def getDescription(self):
+
+            return self.desc
+        
+
+    def parse(self, xmlData):
+        """Parse XML data and return name->info dictionary object"""
+
+        doc = xml.dom.minidom.parseString(xmlData)
+
+        addons = {}
+
+        for addonElement in doc.getElementsByTagName('add-on'):
+            name = None
+            version = None
+            authors = []
+            description = None
+            size = None
+            url = None
+
+            addonType = addonElement.getAttribute('type')
+
+            for nameElement in addonElement.getElementsByTagName('name'):
+                name = _textData(nameElement)
+
+            for versionElement in addonElement.getElementsByTagName('version'):
+                version = _textData(versionElement)
+
+            for authorElement in addonElement.getElementsByTagName('author'):
+                authors.append({'name': authorElement.getAttribute('name'),
+                                'email': authorElement.getAttribute('email')})
+                
+            for descElement \
+                    in addonElement.getElementsByTagName('description'):
+                description = _textData(descElement)
+
+            for urlElement in addonElement.getElementsByTagName('url'):
+                url = _textData(urlElement)
+
+            for sizeElement in addonElement.getElementsByTagName('size'):
+                size = long(_textData(sizeElement))
+
+
+            emptyDict = self.EmptyDictionary()
+            emptyDict.setName(name)
+            emptyDict.setVersion(version)
+            emptyDict.authors = [] # To forget an old reference
+            for author in authors:
+                emptyDict.addAuthor(author)
+            emptyDict.setDescription(description)
+            emptyDict.setLocation(url)
+            emptyDict.setSize(size)
+
+            addons[name] = emptyDict
+
+        return addons
+
+
+def parseAddOns(xmlData):
+    """Wrap add-ons data parsing"""
+
+    parser = AddOnsParser()
+    result = parser.parse(xmlData)
+    return result
+
+
 if __name__ == "__main__":
     #print generatePlainDictConfig(name='Test', format='Nonsense',
     #                             path='/home/mjoc/xxx/',
@@ -220,4 +377,10 @@ if __name__ == "__main__":
     #print parsePlainDictConfig('/home/mjoc/config.xml')
 
     #print generateIndexFile({'a': 3, 'b': 100})
-    print parseIndexFile('/home/mjoc/test.xml')
+    #print parseIndexFile('/home/mjoc/test.xml')
+
+    fd = open('/home/mjoc/opendict-add-ons.xml')
+    xmlData = fd.read()
+    print parseAddOns(xmlData)
+    fd.close()
+    

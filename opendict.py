@@ -63,7 +63,7 @@ class OpenDictApp(wxApp):
       from gui import errorwin
       title = _("Warning")
       msg = _("This OpenDict version is for developer use only")
-      errorwin.showInfoMessage(title, msg)
+      #errorwin.showInfoMessage(title, msg)
 
       _start = time.time()
 
