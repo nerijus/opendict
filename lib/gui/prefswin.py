@@ -22,6 +22,7 @@ from wxPython.wx import *
 
 from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 from lib.misc import encodings
+from lib import enc
 
 _ = wxGetTranslation
 

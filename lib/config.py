@@ -73,6 +73,9 @@ class Configuration:
       self.set('dictServer', 'dict.org')
       self.set('dictServerPort', '2628')
 
+      self.set('repository-list',
+               'http://opendict.sf.net/Repository/Data/opendict-add-ons.xml')
+
 
    def get(self, name):
       """Return property value"""

@@ -40,9 +40,6 @@ from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 _ = wxGetTranslation
 
-# Location of add-ons list file
-_addOnsListURL = 'http://opendict.sf.net/Repository/Data/opendict-add-ons.xml'
-
 
 class DictListCtrl(wx.ListCtrl):
     def __init__(self, parent, ID, pos=wx.DefaultPosition,
@@ -362,7 +359,7 @@ class PluginManagerWindow(wxFrame):
        dictInstance = self.addons.get(dictName)
 
        if not dictInstance:
-           systemLog(ERROR, "BUG: add-on %s not found by name" % dictName)
+           systemLog(ERROR, "BUG: add-on '%s' not found by name" % dictName)
            return
            
        self.showInfo(dictInstance)
@@ -490,7 +487,7 @@ class PluginManagerWindow(wxFrame):
        """Update dictionaries list"""
 
        title = _("Downloading List")
-       downloader = util.DownloadThread(_addOnsListURL)
+       downloader = util.DownloadThread(self.app.config.get('repository-list'))
 
        progressDialog = wx.ProgressDialog(title,
                                           '',
@@ -502,7 +499,8 @@ class PluginManagerWindow(wxFrame):
        error = None
 
        try:
-           systemLog(INFO, "Opening %s..." % _addOnsListURL)
+           systemLog(INFO, "Opening %s..." % \
+                     self.app.config.get('repository-list'))
            downloader.start()
            xmlData = ''
            
@@ -524,7 +522,7 @@ class PluginManagerWindow(wxFrame):
            traceback.print_exc()
            progressDialog.Destroy()
            error = _("Unable to download list from %s: %s" \
-                     % (_addOnsListURL, e))
+                     % (self.app.config.get('repository-list'), e))
 
        if not error:
            error = downloader.getErrorMessage()

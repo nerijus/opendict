@@ -137,7 +137,7 @@ class MainWindow(wxFrame):
       menuFile.AppendSeparator()
 
       idCloseDict = wx.NewId()
-      menuFile.Append(idCloseDict, _("&Close\tCtrl-W"),
+      menuFile.Append(idCloseDict, _("&Close Dictionary\tCtrl-W"),
                       _("Close opened dicitonary"))
 
       idExit = wx.NewId()
@@ -515,8 +515,8 @@ class MainWindow(wxFrame):
          msg = _("The following dictionaries are invalid and cannot be " \
                  "loaded:\n\n%s\n\nThis may be because of critical changes "\
                  "in OpenDict architecture. Update these dictionaries or " \
-                 "remove listed directories by " \
-                 "hand to avoid this message in the future" \
+                 "remove listed directories " \
+                 "manually to avoid this message in the future." \
                  % '\n'.join(self.app.invalidDictionaries))
          from lib.gui import errorwin
          errorwin.showErrorMessage(title, msg)
