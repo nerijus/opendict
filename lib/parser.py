@@ -268,10 +268,19 @@ class MovaParser(meta.Dictionary):
       """Initialize"""
 
       self.filePath = filePath
-
       self.needsList = True
-      self.encoding = None
+
       self.name = os.path.splitext(os.path.basename(filePath))[0]
+
+      # Additional variables
+      self.encoding = None
+      self.checkSum = ""
+      self.index = None
+      
+
+      # If this is True when closing, the new configuration will be
+      # written to disk
+      self.confChanged = False
 
 
    def start(self):
@@ -281,20 +290,53 @@ class MovaParser(meta.Dictionary):
       self.fd = open(self.filePath)
 
       # TODO: Will be indexed
-      self.data = self.fd.readlines()
-      print "%d lines read" % len(self.data)
+      #self.data = self.fd.readlines()
+      #print "%d lines read" % len(self.data)
       
 
    def stop(self):
       """Close file handle"""
 
-      print "DEBUG Closing file..."
-      self.fd.close()
+      try:
+         print "DEBUG Closing file..."
+         self.fd.close()
+      except:
+         pass
+         
+
+   def setIndex(self, index):
+      """Set index table"""
+
+      self.index = index
+
+
+   def getPath(self):
+      """Return full file path"""
+
+      return self.filePath
+
+
+   def setChecksum(self, newSum, first=False):
+      """Set checksum. Used after chekcsum change"""
+
+      self.checksum = newSum
+
+      # If checksum is set not for the first time, remember to
+      # update configuration
+      if not first:
+         self.configChanged = True
+
+
+   def getChecksum(self):
+      """Return checksum"""
+
+      return self.checksum
       
 
    def getType(self):
       """Return dictionary type"""
 
+      import dicttype
       return dicttype.MOVA
 
 
@@ -308,6 +350,7 @@ class MovaParser(meta.Dictionary):
       """Set encoding"""
 
       self.encoding = encoding
+      self.configChanged = True
 
 
    def getEncoding(self):
@@ -322,70 +365,35 @@ class MovaParser(meta.Dictionary):
       return self.needsList
 
 
+   def _appendTranslation(self, html, orig, trans):
+      """Appends HTML strings to list"""
+
+      tdBackground = "#e6f1e9"
+
+      html.append("<table width=\"100%\"><tr>")
+      html.append("<td bgcolor=\"%s\">" % tdBackground)
+      html.append("<b>%s</b></td></tr>" % orig)
+      html.append("<tr><td>")
+      html.append("<p>%s</p>" % trans)
+      html.append("</td></tr></table>")
+      
+
    def search(self, word):
       """Lookup word"""
 
       word_lowered = word.lower().encode(self.getEncoding())
-      print "Word type:", type(word_lowered)
-##       index = word_lowered[:2]
 
-##       pos = 0
-##       if self.hash.has_key(l) == 0:
-##          if len(word) == 1:
-##             keys = self.hash.keys()
-##             keys.sort()
-##             for k in keys:
-##                try:
-##                    if k[0] == l:
-##                        pos = self.hash[k]
-##                        self.fd.seek(pos)
-##                        break
-##                except:
-##                    misc.printError()
-##                    return ("", [], 6)
-##          else:
-##             return ("", [], 1)
+      #
+      # Seek to the beginning of the block
+      #
+      position = 0L
+      if word_lowered[:2] in self.index.keys():
+         position = self.index[word_lowered[:2]]
 
-##       else:
-##          pos = self.hash[l]
-##          self.fd.seek(pos)
+      print "DEBUG Index: %s->%d" % (word_lowered[:2], position)
 
-
-##       keys = self.hash.keys()
-##       keys.sort()
-##       end = pos
-
-##       if len(l) == 1:
-##          i = 0
-##          #for k in keys:
-##             #print "k type: ", type(k)
-            
-##             #print type(k), type(l)
-##             #if info.__unicode__:
-##             #    try:
-##             #        if k[0].decode(self.window.encoding) == l:
-##             #            i = keys.index(k)
-##             #    except:
-##             #        return ("", [], 6)
-
-##          if i < len(keys) - 1:
-##             end = self.hash[keys[i+1]]
-##          else:
-##             end = -1
-##       else:
-##          if keys.index(l) != len(keys) - 1:
-##             end = self.hash[keys[keys.index(l)+1]]
-##          else:
-##             end = -1
-
-##       if end > -1:
-##          data = self.fd.read(end-pos).split("\n")
-##       else:
-##          data = self.fd.read().split("\n")
-
-      #data = data[binarySearchIndex(data, word):]
-
-      
+      print "DEBUG MovaParser: Seeking to %d" % position
+      self.fd.seek(position)
 
       html = []
 
@@ -400,49 +408,57 @@ class MovaParser(meta.Dictionary):
 
       result = meta.SearchResult()
 
-      for line in self.data:
-         #print line
+      # DEBUG
+      _linesRead = 0
 
-         #print "Encoding in %s" % self.getEncoding()
+      for line in self.fd.xreadlines():
+         _linesRead += 1
+         #print "DEBUG Line:", line
+         line = line.strip()
+         try:
+            orig, trans = line.split("  ", 1)
+         except:
+            continue
+
+         #if orig > word_lowered:
+         #   break
+         #if orig[:1] > word_lowered[:1]:
+         #   break
          
-         #try:
-         #   line = unicode(line, self.getEncoding())
-         #except Exception, e:
-         #   print "ERROR %s" % e
-         #   result.setError(errortype.INVALID_ENCODING)
-         #   return result
-              
-         if line.lower().startswith(word_lowered):
-            orig = line.split("  ")[0].strip()
-            if not orig.lower().startswith(word_lowered):
-               continue
+         if line.lower().startswith(word_lowered):   
             
-            if not found:
+            if not orig.lower().startswith(word_lowered):
+               break
+            
+            if orig.lower() == word_lowered and not found:
                found = True
-               html.append("<table width=\"100%\"><tr>")
-               html.append("<td bgcolor=\"#e6f1e9\">")
-               html.append("<b>%s</b></td></tr>" % orig)
-               trans = '&nbsp;&nbsp;'.join(line.split("  ")[1:]).strip()
-               html.append("<tr><td>")
-               html.append("&nbsp;"*4 + "%s<p>" % trans)
-               html.append("</td></tr></table>")
-
+               self._appendTranslation(html, orig, trans)               
+               
             words.append(orig)
+            if len(words) == 1:
+               suggestedWord = orig
+               suggestedTrans = trans
+         elif len(words):
+            break
+
+      print "%d lines scanned" % _linesRead
+      
+      if not found:
+         if words:
+            self._appendTranslation(html, suggestedWord, suggestedTrans)
+         else:
+            result.setError(errortype.NOT_FOUND)
 
       html.append("</font></body></html>")
 
-      print html
-
       try:
-         trans = "".join(html)
+         translation = "".join(html)
       except:
-         trans = ""
+         result.setError(errortype.INVALID_ENCOFING)
+         translation = ""
       
-      result.setTranslation(trans)
+      result.setTranslation(translation)
       result.setWordList(words)
-      
-      if not found:
-         result.setError(errortype.NOT_FOUND)
 
       return result
          

@@ -117,3 +117,9 @@ DICT = TypeDict()
 
 # Supported types tuple
 supportedTypes = (PLUGIN, SLOWO, MOVA, TMX, DICT)
+
+# Plain dictionary types (data file)
+plainTypes = (SLOWO, MOVA, TMX, DICT)
+
+# Types for which index table is made
+indexableTypes = (SLOWO, MOVA)

@@ -26,6 +26,7 @@ from wxPython.wx import *
 from wxPython.html import *
 import os
 import cStringIO
+import traceback
 
 #from info import info.GLOBAL_HOME, info.LOCAL_HOME, __version__
 import info
@@ -56,6 +57,8 @@ import util
 import meta
 import enc
 import errortype
+import dicttype
+import plaindict
 
 _ = wxGetTranslation
 
@@ -90,7 +93,7 @@ class MainWindow(wxFrame):
       self.dictName = ""
       #self.encoding = self.app.config.defaultEnc
       self.activeDictionary = None
-      self.list = []
+      self.words = []
       self.delay = 10 # miliseconds
       
       self.lastInstalledDictName = None
@@ -598,6 +601,10 @@ For more information visit project's homepage on
          # Check status code
          if result.getError() != errortype.OK:
             print "ERROR Error:", result.getError()
+            
+            self.htmlWin.SetPage("")
+            self.wordList.Clear()
+
             if result.getError() == errortype.INTERNAL_ERROR:
                errorwin.showErrorMessage(result.getError().getMessage(),
                                          result.getError().getLongMessage())
@@ -606,6 +613,7 @@ For more information visit project's homepage on
                self.entry.Enable(1)
                self.entry.SetFocus()
                misc.printError()
+               
             return
 
          try:
@@ -613,7 +621,7 @@ For more information visit project's homepage on
                                    self.activeDictionary.getEncoding())
          except:
             title = _(errortype.INVALID_ENCODING.getMessage())
-            msg = _("Translation cannot be decoded using selected " \
+            msg = _("Translation cannot be displayed using selected " \
                     "encoding %s. Please try another encoding from " \
                     "View > Character Encoding menu." % self.app.config.encoding)
             self.SetStatusText(title)
@@ -639,7 +647,8 @@ For more information visit project's homepage on
                wordsPreparedForWX = map(enc.toWX, wordsInUnicode)
                
                self.wordList.InsertItems(wordsPreparedForWX, 0)
-               self.list = wordsPreparedForWX
+               #self.wordList.SetSelection(0)
+               self.words = wordsPreparedForWX
 
          if not self.__searchedBySelecting:
             matches = self.wordList.GetCount()
@@ -920,7 +929,9 @@ For more information visit project's homepage on
 
       dialog.Destroy()
 
+
    def onOpenDictConn(self, event):
+      
       window = DictConnWindow(self, -1,
                               _("Connect to DICT server"),
                               style=wxDEFAULT_FRAME_STYLE)
@@ -929,6 +940,7 @@ For more information visit project's homepage on
 
 
    def onCloseDict(self, event):
+      """Clear widgets and set messages"""
 
       # If there was a registered dict, set it's default encoding
       try:
@@ -943,8 +955,11 @@ For more information visit project's homepage on
       self.wordList.Clear()
       self.htmlWin.SetPage("")
       self.SetTitle("OpenDict")
-      self.list = []
-      self.dict = None
+      self.words = []
+
+      if self.activeDictionary:
+         self.activeDictionary.stop()
+         self.activeDictionary = None
       #self.encoding = self.app.config.defaultEnc
       self.checkEncMenuItem(self.app.config.encoding)
 
@@ -1100,13 +1115,57 @@ For more information visit project's homepage on
 
       self.onCloseDict(None)
       self.activeDictionary = dictInstance
+
+      if dictInstance.getType() in dicttype.indexableTypes:
+         if plaindict.indexShouldBeMade(dictInstance):
+            # Notify about indexing
+            from gui import errorwin
+            title = _("Dictionary Index")
+            msg = _("This is the first time you use this dictionary or it " \
+                    "has been changed on disk since last indexing. " \
+                    "Indexing is used to make search more efficient. " \
+                    "The dictionary will be indexed now. It can take a few " \
+                    "seconds or more depending on the size of the " \
+                    "dictionary. "
+                    "Press OK to continue...")
+            errorwin.showInfoMessage(title, msg)
+
+            # Make index
+            try:
+               plaindict.makeIndex(dictInstance)
+            except Exception, e:
+               traceback.print_exc()
+               title = _("Index Creation Error")
+               msg = _("Error occured while indexing file. " \
+                       "This may be because of currently selected " \
+                       "character encoding %s is not correct for this " \
+                       "dictionary. Try selecting " \
+                       "another encoding from View > Character Encoding " \
+                       "menu" % self.app.config.encoding)
+
+               from gui import errorwin
+               errorwin.showErrorMessage(title, msg)
+               return
+
+         # Load index
+         try:
+            index = plaindict.loadIndex(dictInstance)
+            self.activeDictionary.setIndex(index)
+            print "Index loaded:", index
+         except Exception, e:
+            traceback.print_exc()
+            title = _("Error")
+            msg = _("Unable to load dictionary index table. " \
+                    "Got error: %s" % e)
+            from gui import errorwin
+            errorwin.showErrorMessage(title, msg)
+            return
+      
       self.activeDictionary.start()
-      #self.wordList.Clear()
       self.checkIfNeedsList()
       self.SetTitle("%s - OpenDict" % dictInstance.getName())
       self.SetStatusText(_(enc.toWX("Dictionary \"%s\" loaded" \
                                     % dictInstance.getName())))
-      #self.htmlWin.SetPage("")
       
 
    def loadPlugin(self, name):
@@ -1347,7 +1406,7 @@ For more information visit project's homepage on
                                                  _("Word List")), 
                                      wxVERTICAL)
       self.wordList = wxListBox(self.panelList, 154, wxPoint(-1, -1),
-                                wxSize(-1, -1), self.list, wxLB_SINGLE)
+                                wxSize(-1, -1), self.words, wxLB_SINGLE)
       sbSizerList.Add(self.wordList, 1, wxALL | wxEXPAND, 0)
       self.panelList.SetSizer(sbSizerList)
       self.panelList.SetAutoLayout(true)

@@ -26,9 +26,59 @@ import os
 import traceback
 
 import info
+import util
 import xmltools
 import dicttype
 
+
+class PlainDictInfo:
+    """Plain dictionary configuration"""
+
+    def __init__(self, directory):
+        """Store configuration data"""
+
+        self.config = xmltools.parsePlainDictConfig(\
+                os.path.join(directory,
+                             info.__PLAIN_DICT_CONFIG_DIR,
+                             'config.xml'))
+
+        self.name = config.get('name')
+        self.formatString = config.get('format')
+        self.path = config.get('path')
+        self.checksum = config.get('md5')
+        self.encoding = config.get('encoding')
+
+
+    def getFormatString(self):
+        """Return format name"""
+
+        return self.formatString
+
+
+    def getName(self):
+        """Return name"""
+
+        return self.name
+
+
+    def getPath(self):
+        """Return full file path"""
+
+        return self.path
+
+
+    def getChecksum(self):
+        """Return checksum"""
+
+        return self.checksum
+
+
+    def getEncoding(self):
+        """Return encoding"""
+
+        return self.encoding
+
+    
 
 def _loadPlainDictionary(directory):
     """Load one dictionary and returns dictionary object"""
@@ -51,6 +101,7 @@ def _loadPlainDictionary(directory):
 
         dictionary = Parser(config.get('path'))
         dictionary.setEncoding(config.get('encoding'))
+        dictionary.setChecksum(config.get('md5'), True)
         
     except Exception, e:
         traceback.print_exc()
@@ -90,5 +141,122 @@ def loadPlainDictionaries():
     return dictionaries
 
 
+
+def indexShouldBeMade(dictionary):
+    """Check if index exists and is up to date.
+
+    Return True if dictionary must be indexed.
+    """
+
+    filePath = dictionary.getPath()
+    fileName = os.path.basename(filePath)
+
+    print "File name:", fileName
+
+    dictLocalHome = os.path.join(info.LOCAL_HOME,
+                                 info.PLAIN_DICT_DIR,
+                                 fileName)
+
+    dictGlobalHome = os.path.join(info.GLOBAL_HOME,
+                                  info.PLAIN_DICT_DIR,
+                                  fileName)
+
+    print dictLocalHome
+    print dictGlobalHome
+
+    if not os.path.exists(os.path.join(dictGlobalHome, 'data', 'index.xml')) \
+           and not os.path.exists(os.path.join(dictLocalHome, 'data', 'index.xml')):
+        return True
+
+    print "Old checksum:", dictionary.getChecksum()
+    newChecksum = util.getMD5Sum(filePath)
+    print "New checksum:", newChecksum
+
+    return dictionary.getChecksum() != newChecksum
+
+
+
+def makeIndex(dictionary):
+    """Index dictionary"""
+
+    filePath = dictionary.getPath()
+    fd = open(filePath)
+
+    index = {}
+    count = 0L
+    
+    for line in fd:
+        #print "%s -- %d" % (repr(line), len(line))
+        literal = unicode(line[:2].lower(), dictionary.getEncoding())
+        #count += len(line)
+
+        #if len(start) == 0:
+        #    continue
+
+        if not literal in index.keys():
+            index[literal] = count
+
+        #print "%d += %d" % (count, len(line)-2)
+        count += len(line)
+
+
+    fileName = os.path.basename(filePath)
+
+    dictHome = os.path.join(info.LOCAL_HOME,
+                            info.PLAIN_DICT_DIR,
+                            fileName)
+
+
+    toUnicode = lambda s: unicode(s, dictionary.getEncoding())
+
+    #try:
+    #    map(toUnicode, index)
+
+    xmlData = xmltools.generateIndexFile(index)
+    print type(xmlData)
+
+    fd = open(os.path.join(dictHome, 'data', 'index.xml'), 'w')
+    fd.write(xmlData)
+    fd.close()
+    
+    #print index
+    
+    #keys = index.keys()
+    #keys.sort()
+    #for k in keys:
+    #    print "'%s' -> %d" % (k, index[k])
+    
+
+def loadIndex(dictionary):
+    """Load index table"""
+
+    fileName = os.path.basename(dictionary.getPath())
+
+    dictLocalIndex = os.path.join(info.LOCAL_HOME,
+                                 info.PLAIN_DICT_DIR,
+                                 fileName, 'data', 'index.xml')
+    
+    dictGlobalIndex = os.path.join(info.LOCAL_HOME,
+                                 info.PLAIN_DICT_DIR,
+                                 fileName, 'data', 'index.xml')
+
+    index = None
+
+    if os.path.exists(dictLocalIndex):
+        index = xmltools.parseIndexFile(dictLocalIndex)
+    elif os.path.exists(dictGlobalIndex):
+        index = xmltoos.parserIndexFile(dictGlobalIndex)
+
+    if not index:
+        raise Exception, "Index for %s does not exist" % dictionary.getName()
+
+    return index
+        
+
 if __name__ == "__main__":
-    print loadPlainDictionaries()
+    #print loadPlainDictionaries()
+    class D:
+        def getPath(self):
+            return "/home/mjoc/test.mova"
+        
+    print makeIndex(D())

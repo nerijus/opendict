@@ -130,12 +130,77 @@ def parsePlainDictConfig(configPath):
     data = parser.parse(xmlData)
 
     return data
+
+
+
+class IndexFileGenerator:
+    """Class for generating register configuration files"""
+
+    def generate(self, index):
+        """Generate config XML object"""
+
+        doc = xml.dom.minidom.Document()
+
+        indexElement = doc.createElement("index")
+        doc.appendChild(indexElement)
+
+        for data, pos in index.items():
+            startElement = doc.createElement("element")
+            startElement.setAttribute("literal", data)
+            startElement.setAttribute("position", str(pos))
+            indexElement.appendChild(startElement)
+
+        return doc
     
 
-if __name__ == "__main__":
-    print generatePlainDictConfig(name='Test', format='Nonsense',
-                                 path='/home/mjoc/xxx/',
-                                 md5='34kj34lk5j3lkj345',
-                                 encoding='UTF-8')
 
-    print parsePlainDictConfig('/home/mjoc/config.xml')
+def generateIndexFile(index):
+    """Generate index data and return XML string"""
+
+    generator = IndexFileGenerator()
+    doc = generator.generate(index)
+    xmlData = doc.toxml()
+
+    return xmlData
+
+
+
+class IndexFileParser:
+    """Parse register configuration"""
+
+    def parse(self, xmlData):
+        """Parse XML data"""
+
+        doc = xml.dom.minidom.parseString(xmlData)
+        index = {}
+
+        indexElement = doc.getElementsByTagName('index')[0]
+
+        for element in indexElement.getElementsByTagName('element'):
+            index[element.getAttribute("literal")] = long(element.getAttribute("position"))
+
+        return index
+
+
+def parseIndexFile(indexPath):
+    """Parse configuration file and return data dictionary"""
+
+    parser = IndexFileParser()
+    fd = open(indexPath)
+    xmlData = fd.read()
+    fd.close()
+    index = parser.parse(xmlData)
+
+    return index
+
+
+if __name__ == "__main__":
+    #print generatePlainDictConfig(name='Test', format='Nonsense',
+    #                             path='/home/mjoc/xxx/',
+    #                             md5='34kj34lk5j3lkj345',
+    #                             encoding='UTF-8')
+    #
+    #print parsePlainDictConfig('/home/mjoc/config.xml')
+
+    #print generateIndexFile({'a': 3, 'b': 100})
+    print parseIndexFile('/home/mjoc/test.xml')
