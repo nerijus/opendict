@@ -59,7 +59,7 @@ class HtmlWindow(wxHtmlWindow):
 
    def OnLinkClicked(self, linkinfo):
       #self.base_OnLinkClicked(linkinfo)
-      print "LinkInfo: searching for '%s'" % linkinfo.GetHref()
+      print "DEBUG LinkInfo: searching for '%s'" % linkinfo.GetHref()
       #print linkinfo.GetTarget()
       wxBeginBusyCursor()
       parent = self.GetParent().GetParent().GetParent()
@@ -94,7 +94,7 @@ class MainWindow(wxFrame):
       try: 
           self.myWords.read()
       except Exception, e:
-          print "Warning: Unable to read mywords.txt file"
+          print "INFO Warning: Unable to read mywords.txt file"
 
 
       # GUI instances
@@ -200,17 +200,12 @@ class MainWindow(wxFrame):
       keys = self.app.config.plugins.keys()
       keys.sort()
       for name in keys:
-         print type(name), name
-         #print "Name:", name
-
          try:
             name = name.decode('UTF-8')
          except Exception, e:
             print "ERROR Dictionary names must be in UTF-8 ('%s' failed)" \
                   % (name)
 
-         print type(name), name
-         
          try:
             item = wxMenuItem(self.menuDict,
                               self.app.config.ids[name],
@@ -243,11 +238,6 @@ class MainWindow(wxFrame):
       
       self.menuDict.Append(112, _("&Add New Dictionary"))
       
-      #menuDictAdd = wxMenu()
-      #menuDictAdd.Append(112, _("&Register from file..."))
-      #menuDictAdd.Append(113, _("&Install plugin..."))
-      #self.menuDict.AppendMenu(114, _("Add new dictionary"), menuDictAdd)
-
       menuBar.Append(self.menuDict, _("&Dictionaries"))
 
       menuTools = wxMenu()
@@ -257,11 +247,6 @@ class MainWindow(wxFrame):
       # FIXME: Remove group classes and files
       #menuTools.Append(122, _("Manage Groups...\tCtrl-G"),
       #                _("Edit groups of dictionaries"))
-                      
-      #menuTools.Append(110, _("Plugin manager...\tCtrl-M"),
-      #                _("Edit plugins"))
-      #menuTools.Append(120, _("File Register...\tCtrl-R"),
-      #                _("Edit file registers"))
                       
       menuTools.AppendSeparator()
       menuTools.Append(123, _("Connect to DICT Server..."),
@@ -283,7 +268,6 @@ class MainWindow(wxFrame):
       menuBar.Append(menuTools, _("Tools"))
 
       menuHelp = wxMenu()
-      #menuHelp.Append(115, _("&Manual\tCtrl-H"))
       menuHelp.Append(117, _("&License"))
       menuHelp.Append(116, _("&About\tCtrl-A"))
 
@@ -299,24 +283,9 @@ class MainWindow(wxFrame):
                               wxSize(-1, -1), [], wxCB_DROPDOWN)
       hboxToolbar.Add(self.entry, 1, wxALL | wxCENTER, 1)
 
-      # Search bitmap button
-      #bmp = wxBitmap(os.path.join(home, "pixmaps", "search.xpm"),
-      #               wxBITMAP_TYPE_XPM)
-      #self.buttonSearch = wxBitmapButton(self, 150, bmp, (16, 16),
-      #                                   style=wxNO_BORDER)
-      #self.buttonSearch = wxButton(self, 150, _("Search"))
       self.buttonSearch = wxButton(self, wx.ID_FIND)
       self.buttonSearch.SetToolTipString(_("Look up word"))
       hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
-      
-      # Clear bitmap button
-      #bmp = wxBitmap(os.path.join(home, "pixmaps", "clear5.xpm"),
-      #bmp = wxBitmap(os.path.join(home, "pixmaps", "clear.xpm"),
-      #               wxBITMAP_TYPE_XPM)
-      #buttonClean = wxBitmapButton(self, 151, bmp, (16, 16),
-      #                             style=wxNO_BORDER)
-      #buttonClean.SetToolTipString(_("Clear search entry"))
-      #hboxToolbar.Add(buttonClean, 0, wxALL | wxCENTER, 1)
       
       # Back button
       bmp = wxBitmap(os.path.join(home, "pixmaps", "left.png"),
@@ -386,16 +355,11 @@ class MainWindow(wxFrame):
       self.panelHtml.SetAutoLayout(true)
       sbSizerHtml.Fit(self.panelHtml)
 
-      #if not self.wordListHidden():
       self.splitter.SplitVertically(self.panelList, self.panelHtml,
                                     self.app.config.sashPos)
          
       self.splitter.SetMinimumPaneSize(90)
       self.splitter.SetSashSize(5)
-
-      #if self.dict != None:
-      #   if self.dict.needsList == 0:
-      #      self.hideWordList()
 
       if not self.dict:
          self.hideWordList()
@@ -418,11 +382,9 @@ class MainWindow(wxFrame):
          try:
             self.SetStatusText(_("Loading \"%s\"...") % self.app.config.dict)
             if self.app.config.plugins.has_key(self.app.config.dict):
-               #print "%s found in plugins, loading..." % self.app.config.dict
                self.loadPlugin(self.app.config.dict)
 
             elif self.app.config.registers.has_key(self.app.config.dict):
-               #print "%s found in registers, loading..." % self.app.config.dict
                self.loadRegister(self.app.config.dict)
 
             elif self.app.config.groups.has_key(self.app.config.dict):
@@ -430,7 +392,7 @@ class MainWindow(wxFrame):
 
          except Exception, e:
             self.SetStatusText(_("Error: failed to load \"%s\"") % self.app.config.dict)
-            print "Exception:", e
+            print "ERROR Exception:", e
             self.onCloseDict(None)
 
       # FIMXE: MS Windows doesn't want to show XPM pixmaps in the title bar
@@ -444,13 +406,6 @@ class MainWindow(wxFrame):
          self.SetIcon(wxIcon(os.path.join(home, "pixmaps", "icon.xpm"),
                              wxBITMAP_TYPE_XPM))
 
-
-      # If there is no dictionary, give user a tip what to do
-      #if len(self.app.config.plugins) == 0 \
-      #   and len(self.app.config.registers) == 0:
-      #   self.SetStatusText(_("To add a dictionary, go to \"Dictionaries->Add new\" menu"))
-      #elif self.app.config.dict == "":
-      #   self.SetStatusText(_("Choose a dictionary from \"Dictionaries\" menu"))
 
       # Events
       EVT_MENU(self, 101, self.onOpenSlowo)
@@ -563,7 +518,7 @@ For more information visit project's homepage on
             self.entry.Append(word)
 
          if result[2]:
-            print "Errno:", result[2]
+            print "ERROR Error:", result[2]
             self.SetStatusText(_(misc.errors[result[2]]))
             self.entry.Enable(1)
             self.entry.SetFocus()
@@ -610,26 +565,25 @@ For more information visit project's homepage on
                enc = info.__enc__
                self.htmlWin.SetPage(self.htmlCode.decode(enc))
                self.history.add(self.htmlCode.decode(enc))
-               print "Setting page (encoded in %s)" % enc
+               print "DEBUG Setting page (encoded in %s)" % enc
          else:
-            print "Setting unicode page"
+            print "DEBUG Setting unicode page"
             try:
                self.htmlWin.SetPage(self.htmlCode)
 
                self.history.add(self.htmlCode)
             except:
-               print "Failed to encode '%s'... to %s, iso-8859-1 used" \
+               print "ERROR Failed to encode '%s'... to %s, iso-8859-1 used" \
                      % (self.htmlCode[:10], self.encoding)
                misc.printError()
                self.htmlWin.SetPage(self.htmlCode.encode("iso-8859-1", "replace"))
                self.history.add(self.htmlCode.encode("iso-8859-1", "replace"))
-               #self.SetStatusText(_("Error: failed to encode in %s") % self.encoding)
          
          if not self.wordListHidden():
             if not self.__searchedBySelecting:
                self.wordList.Clear()
 
-               print "Appending list..."
+               print "INFO Appending list..."
                self.wordList.InsertItems(result[1], 0)
                self.list = result[1]
 
@@ -678,14 +632,14 @@ For more information visit project's homepage on
                # This is a register, hash table must be loaded
                if self.app.config.registers[self.dict.name][1] \
                       not in ['dz', 'dict']:
-                  print "Loading hash table..."
+                  print "INFO Loading hash table..."
                   try:
                      if os.path.exists(os.path.join(uhome, "register", self.dict.name+".hash")):
                         self.dict.hash = self.app.reg.loadHashTable(os.path.join(uhome, "register", self.dict.name+".hash"))
                      else:
                         self.dict.hash = self.app.reg.loadHashTable(os.path.join(home, "register", self.dict.name+".hash"))
                   except:
-                     print "Failed to load index table"
+                     print "ERROR Failed to load index table"
                      self.SetStatusText(_("Error: failed to load index table"))
                      misc.printError()
 
@@ -916,7 +870,6 @@ For more information visit project's homepage on
 
       # If there was a registered dict, set it's default encoding
       try:
-         print self.dict.name
          if self.dict.name in self.app.config.registers.keys():
             self.app.config.registers[self.dict.name][2] = self.encoding
       except:
@@ -997,14 +950,15 @@ For more information visit project's homepage on
       self.regWindow.CentreOnScreen()
       self.regWindow.Show(True)
 
+
    def onShowDictEditor(self, event):
-      print "Editor"
       editor = DictEditorWindow(self, -1, _("Dictionary Editor"),
                                      size=(-1, -1),
                                      style=wxDEFAULT_FRAME_STYLE)
       editor.CentreOnScreen()
       editor.Show(True)
 
+   # FIXME: Remove
    def onShowMyWordList(self, event):
       print "My words"
       if self.activeMyWordsWindow:
@@ -1032,20 +986,13 @@ For more information visit project's homepage on
          
 
    def onDefault(self, event):
-      print "MainWindow: menu item selected, id:", event.GetId()
+      print "DEBUG MainWindow: menu item selected, id:", event.GetId()
 
       id = event.GetId()
       if 200 <= id < 500:
          self.onCloseDict(None)
          name = self.app.config.ids.keys()[self.app.config.ids.values().index(id)]
          try:
-            try:
-               #print "MainWindow: Loading \"%s\"..." % name
-               pass
-            except Exception, p:
-               print p
-               print "MainWindow: Loading selected dictionary..."
-               
             self.SetStatusText(_("Loading \"%s\"...") % name)
             #self.buttonStop.Enable(1)
             if 200 <= id < 300:
@@ -1101,7 +1048,7 @@ For more information visit project's homepage on
       self.SetTitle("%s - OpenDict" % name)
 
    def loadRegister(self, name):
-      print "Loading '%s'..." % name
+      print "INFO Loading '%s'..." % name
 
       self.SetTitle("%s - OpenDict" % name)
       item = self.app.config.registers[name]
@@ -1131,7 +1078,7 @@ For more information visit project's homepage on
       self.checkEncMenuItem(self.encoding)
 
    def loadGroup(self, name):
-      print "Loading '%s'..." % name
+      print "INFO Loading '%s'..." % name
       self.SetTitle("%s - OpenDict" % name)
 
       self.entry.Disable()

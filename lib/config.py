@@ -44,7 +44,7 @@ class Configuration:
       self.useListWithGroups = 1
 
       self.dict = ""
-      self.winSize = (700, 500)
+      self.winSize = (600, 450)
       self.winPos = (-1, -1)
       self.sashPos = 160
 
@@ -61,7 +61,7 @@ class Configuration:
       self.defaultEnc = "utf-8"
       self.encoding = self.defaultEnc
       self.fontFace = "Fixed"
-      self.fontSize = "2"
+      self.fontSize = "1"
       
       self.dictServer = "dict.org"
       self.dictServerPort = "2628"
