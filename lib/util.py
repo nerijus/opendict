@@ -220,12 +220,11 @@ class DownloadThread:
 
         try:
             while not self.stopRequested and count < fileSize:
-                self.statusMessage = "Downloading data from %s" \
-                                     % (self.url)
                 bytes = self.up.read(1024)
                 count += len(bytes)
                 self.buffer += bytes
                 self.percents = int(float(count) / fileSize * 100)
+                self.statusMessage = "Downloading... %d%%" % self.percents
                 time.sleep(0.005) # To lower CPU usage
                 
             self.up.close()

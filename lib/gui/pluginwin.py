@@ -638,7 +638,7 @@ class PluginManagerWindow(wxFrame):
        localPath = os.path.join(downloadsDir,
                                 os.path.basename(dictInfo.getLocation()))
 
-       title = _("Downloading")
+       title = _("Downloading %s..." % dictInfo.getName())
 
        progressDialog = wx.ProgressDialog(title,
                                           '',
@@ -655,7 +655,7 @@ class PluginManagerWindow(wxFrame):
        try:
            fd = open(localPath, 'w')
            downloader.start()
-           
+
            while keepGoing and not downloader.finished():
                keepGoing = progressDialog.Update(downloader.getPercentage(),
                                                  downloader.getMessage())
@@ -738,7 +738,7 @@ class PluginManagerWindow(wxFrame):
            inst = installer.Installer(self.mainWin, self.app.config)
            inst.install(localPath)
 
-           if self.installedList.FindItem(0, dictInfo.getName()) > -1:
+           if self.installedList.FindItem(0, dictInfo.getName()) == -1:
                index = self.installedList.InsertStringItem(0,
                                                            dictInfo.getName())
                self.installedList.SetItemData(index, index+1)
@@ -751,3 +751,4 @@ class PluginManagerWindow(wxFrame):
                    % dictInfo.getName())
            errorwin.showErrorMessage(title, msg)
 
+       self.availableList.DeleteItem(self.currentAvailItemSelection)
