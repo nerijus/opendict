@@ -37,7 +37,7 @@ class LicenseWindow(wxFrame):
    """Licence window class"""
 
    def __init__(self, parent, id, title, pos=wxDefaultPosition,
-                size=wxDefaultSize, style=wxCENTRE): # centre!
+                size=wxDefaultSize, style=wxCENTRE):
       wxFrame.__init__(self, parent, id, title, pos, size, style)
 
       vbox = wxBoxSizer(wxVERTICAL)
@@ -156,11 +156,11 @@ class AboutWindow(wxDialog):
 
       titleLabel = wxStaticText(self, -1, title,
                                 style=wx.ALIGN_CENTER)
-      titleLabel.SetFont(wx.Font(18, wx.SWISS, wx.BOLD, wx.BOLD))
+      titleLabel.SetFont(wx.Font(18, wx.SWISS, wx.NORMAL, wx.BOLD))
       vbox.Add(titleLabel, 1, wxALL | wxALIGN_CENTER, 5)
 
       copyLabel = wxStaticText(self, -1, copy, style=wx.ALIGN_CENTER)
-      copyLabel.SetFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.NORMAL))
+      copyLabel.SetFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD))
       vbox.Add(copyLabel, 1, wxALL | wxALIGN_CENTER, 5)
 
       descLabel = wxStaticText(self, -1, desc, style=wx.ALIGN_CENTER)

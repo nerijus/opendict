@@ -654,7 +654,7 @@ class PluginManagerWindow(wxFrame):
        stopped = False
 
        try:
-           fd = open(localPath, 'w')
+           fd = open(localPath, 'wb')
            downloader.start()
 
            while keepGoing and not downloader.finished():

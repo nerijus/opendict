@@ -80,7 +80,7 @@ def getMD5Sum(filePath):
     """Return MD5 checksum for given file"""
 
 
-    fd = open(filePath)
+    fd = open(filePath, 'rb')
     data = fd.read()
     fd.close()
 

@@ -310,7 +310,7 @@ class MainWindow(wxFrame):
       #self.buttonSearch = wxButton(self, wx.ID_FIND)
       self.buttonSearch = wxButton(self, idFind, _("Search"))
       
-      hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
+      hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 2)
       
       # Back button
       bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "left.png"),
@@ -319,7 +319,7 @@ class MainWindow(wxFrame):
                                          style=wxNO_BORDER)
       self.buttonBack.SetToolTipString(_("History Back"))
       self.buttonBack.Disable()
-      hboxToolbar.Add(self.buttonBack, 0, wxALL | wxCENTER, 1)
+      hboxToolbar.Add(self.buttonBack, 0, wxALL | wxCENTER, 2)
 
       # Forward button
       bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "right.png"),
@@ -328,7 +328,7 @@ class MainWindow(wxFrame):
                                          style=wxNO_BORDER)
       self.buttonForward.SetToolTipString(_("History Forward"))
       self.buttonForward.Disable()
-      hboxToolbar.Add(self.buttonForward, 0, wxALL | wxCENTER, 1)
+      hboxToolbar.Add(self.buttonForward, 0, wxALL | wxCENTER, 2)
 
       # Stop threads
       # TODO: how thread can be killed?
@@ -338,7 +338,7 @@ class MainWindow(wxFrame):
                                        style=wxNO_BORDER)
       self.buttonStop.SetToolTipString(_("Stop searching"))
       self.buttonStop.Disable()
-      hboxToolbar.Add(self.buttonStop, 0, wxALL | wxCENTER, 1)
+      hboxToolbar.Add(self.buttonStop, 0, wxALL | wxCENTER, 2)
 
       # Word list is hidden by default
       self.wlHidden = True
@@ -347,7 +347,7 @@ class MainWindow(wxFrame):
                      wxBITMAP_TYPE_PNG)
       self.buttonHide = wxBitmapButton(self, 152, bmp, (24, 24),
                                        style=wxNO_BORDER)
-      hboxToolbar.Add(self.buttonHide, 0, wxALL | wxCENTER, 1)
+      hboxToolbar.Add(self.buttonHide, 0, wxALL | wxCENTER, 2)
 
       vboxMain.Add(hboxToolbar, 0, wxALL | wxEXPAND | wxGROW, 0)
 
