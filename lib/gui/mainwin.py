@@ -334,11 +334,7 @@ class MainWindow(wxFrame):
                               wxSize(-1, -1), [], wxCB_DROPDOWN)
       hboxToolbar.Add(self.entry, 1, wxALL | wxCENTER, 1)
 
-      if wxPython.__version__.split('.') < (2, 5):
-         self.buttonSearch = wxButton(self, 2012, _("Find"))
-      else:
-         self.buttonSearch = wxButton(self, wx.ID_FIND)
-      self.buttonSearch.SetToolTipString(_("Look up word"))
+      self.buttonSearch = wxButton(self, wx.ID_FIND)
       
       hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
       
@@ -504,10 +500,7 @@ class MainWindow(wxFrame):
       EVT_MENU(self, 116, self.onAbout)
 
       # Other events
-      if wxPython.__version__.split('.') < (2, 5):
-         EVT_BUTTON(self, 2012, self.onSearch)
-      else:
-         EVT_BUTTON(self, wx.ID_FIND, self.onSearch)
+      EVT_BUTTON(self, wx.ID_FIND, self.onSearch)
          
       EVT_BUTTON(self, 2010, self.onBack)
       EVT_BUTTON(self, 2011, self.onForward)

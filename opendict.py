@@ -61,7 +61,7 @@ class OpenDictApp(wxApp):
 
       _ = wxGetTranslation
 
-      if wxPython.__version__.split('.') < (2, 5):
+      if wxPython.__version__.split('.') < ['2', '5']:
          from gui import errorwin
 
          # Go away, wxPython 2.4!
