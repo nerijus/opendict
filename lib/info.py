@@ -27,7 +27,7 @@ import wxPython.wx
 _ = wxPython.wx.wxGetTranslation
 
 # OpenDict version
-__version__ = "0.5.6-pre4"
+__version__ = "0.5.7"
 
 # Unicode support
 if wxPython.wx.__version__[-1] == "u":

@@ -1,5 +1,5 @@
 # OpenDict
-# Copyright (c) 2003 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 # Copyright (c) 2003 Mantas Kriauciunas <mantas@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -345,12 +345,11 @@ def initPlugins(config):
    if os.path.exists(uhomePath):
       dirs = [os.path.join(uhomePath, file) for file in os.listdir(uhomePath) \
               if os.path.isdir(os.path.join(uhomePath, file))]
-      print dirs
+      #print dirs
    if os.path.exists(homePath):
-      dirs.extend([os.path.join(homePath, file) for file in os.listdir(homePath)\
-              if os.path.isdir(os.path.join(homePath, file))])
-      print dirs
-   print "Plugin Init: found plugins:", ", ".join(dirs)
+      dirs.extend([os.path.join(homePath, file) \
+                   for file in os.listdir(homePath)\
+                   if os.path.isdir(os.path.join(homePath, file))])
 
    for dir in dirs:
       try:

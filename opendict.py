@@ -19,13 +19,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA
 
-from wxPython.wx import *
-import wx
-
 import sys
 import os
 import traceback
 import string
+import time
+
+from wxPython.wx import *
+import wx
 
 if sys.platform == "win32":
    # MS Windows user
@@ -62,7 +63,7 @@ class OpenDictSplash(wx.SplashScreen):
       #bmp = wxBitmap(os.path.join(home, "pixmaps", "splash.jpg"),
       #               wxBITMAP_TYPE_JPEG)
       path = os.path.join(home, "pixmaps", "splash.png")
-      print "Image:", path
+      #print "Image:", path
       bmp = wx.Image(path,
                      wx.BITMAP_TYPE_PNG).ConvertToBitmap()
       wx.SplashScreen.__init__(self, bmp, wx.SPLASH_CENTRE_ON_SCREEN |
@@ -86,7 +87,7 @@ class OpenDictApp(wxApp):
       _ = wxGetTranslation
       
       try:
-         print "Unicode version:", info.__unicode__
+         print "DEBUG Unicode version:", info.__unicode__
          
          withSplash = False
          if "--splash" in sys.argv:
@@ -145,7 +146,7 @@ class OpenDictApp(wxApp):
      
             errWin.Show(true)
          except:
-            print "Unable to show window with the message above"
+            print "ERROR Unable to show window with the message above"
             msg = string.join(traceback.format_exception(
                   sys.exc_info()[0], sys.exc_info()[1],
                   sys.exc_info()[2]), "")
@@ -168,13 +169,12 @@ if __name__ == "__main__":
 
       sys.exit(0)
    
-   print "OpenDict %s\n" % __version__
-   print "HOME:", home
-   print "USER HOME:", uhome
+   print "INFO OpenDict %s\n" % __version__
+   print "INFO Global home:", home
+   print "INFO Local home:", uhome
 
-   print "STARTING..."
+   #print "STARTING..."
 
    openDictApp = OpenDictApp(0)
    openDictApp.MainLoop()
-
 
