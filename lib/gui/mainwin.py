@@ -480,7 +480,7 @@ class MainWindow(wxFrame):
   <li>To install new dictionary from the Internet, select
     <i><b>Manage Dictionaries</b></i>
     from <i><b>Tools</b></i> menu and choose <i><b>Available</b></i> tab.</li>
-  <li>To add new dictionary from file, select <i><b>Add New Dictionary</b></i>
+  <li>To install new dictionary from file, select <i><b>Add New Dictionary</b></i>
   from <i><b>Dictionaries</b></i> menu.
   </li>
 </ul>
