@@ -445,6 +445,9 @@ class PluginManagerWindow(wxFrame):
        """Clear the list of installed dictionaries and set new items"""
 
        self.installedList.DeleteAllItems()
+
+       dictNames.sort()
+       dictNames.reverse()
        
        for dictionary in dictNames:
            index = self.installedList.InsertStringItem(0, dictionary)          
@@ -465,6 +468,7 @@ class PluginManagerWindow(wxFrame):
 
        names = addons.keys()
        names.sort()
+       names.reverse()
 
        for name in names:
            addon = addons.get(name)
