@@ -1176,10 +1176,10 @@ class MainWindow(wxFrame):
 
 
    def changeEncoding(self, name):
-      self.app.config.encoding = misc.encodings[name]
+      self.app.config.set('encoding', misc.encodings[name])
 
       if self.activeDictionary:
-         self.activeDictionary.setEncoding(self.app.config.encoding)
+         self.activeDictionary.setEncoding(self.app.config.get('encoding'))
          systemLog(INFO, "Dictionary encoding set to %s" \
                % self.activeDictionary.getEncoding())
          
@@ -1189,7 +1189,7 @@ class MainWindow(wxFrame):
    def changeFontFace(self, name):
       """Save font face changes"""
       
-      self.app.config.fontFace = misc.fontFaces[name]
+      self.app.config.set('fontFace', misc.fontFaces[name])
       self.updateHtmlScreen()
 
 
@@ -1197,7 +1197,7 @@ class MainWindow(wxFrame):
       
       fontSize = int(name) * 10
       systemLog(INFO, "Setting font size %d" % fontSize)
-      self.app.config.fontSize = fontSize
+      self.app.config.set('fontSize', fontSize)
       self.updateHtmlScreen()
 
 
