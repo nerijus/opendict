@@ -1166,6 +1166,8 @@ For more information visit project's homepage on
       self.SetTitle("%s - OpenDict" % dictInstance.getName())
       self.SetStatusText(_(enc.toWX("Dictionary \"%s\" loaded" \
                                     % dictInstance.getName())))
+
+      self.entry.SetFocus()
       
 
    def loadPlugin(self, name):

@@ -1,7 +1,6 @@
-# -*- coding: iso-8859-1 -*-
-
+#
 # OpenDict
-# Copyright (c) 2003 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA
 #
-# Module: gui.dicteditorwin
 
 # TODO: not usable yet, needs some work with encodings, gui, etc.
 
