@@ -131,7 +131,8 @@ class MainWindow(wxFrame):
       #menuFile.Append(idPreview, _("Print Preview"), "")
 
       idFind = wx.NewId()
-      menuFile.Append(idFind, _("Search\tCtrl-S"), _("Lookup up word"))
+      menuFile.Append(idFind, _("Lookup Up\tCtrl-U"),
+                      _("Lookup up word in the dictionary"))
       
       menuFile.AppendSeparator()
 
@@ -309,18 +310,18 @@ class MainWindow(wxFrame):
       self.SetMenuBar(self.menuBar)
 
       # Search Bar
-      labelWord = wxStaticText(self, -1, _("Search for:"));
-      self.hboxToolbar.Add(labelWord, 0, wxALL | wxCENTER, 3)
+      labelWord = wxStaticText(self, -1, _("Word:"));
+      self.hboxToolbar.Add(labelWord, 0, wxALL | wxCENTER | wx.ALIGN_RIGHT, 5)
       
       self.entry = wxComboBox(self, 153, "", wxPoint(-1, -1),
                               wxSize(-1, -1), [], wxCB_DROPDOWN)
       self.hboxToolbar.Add(self.entry, 1, wxALL | wxCENTER, 1)
 
       #self.buttonSearch = wxButton(self, wx.ID_FIND)
-      self.buttonSearch = wxButton(self, idFind, _("Search"))
+      self.buttonSearch = wxButton(self, idFind, _("Look Up"))
       
-      self.hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 2)
-      
+      self.hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
+
       # Back button
       bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "left.png"),
                      wxBITMAP_TYPE_PNG)
@@ -328,7 +329,7 @@ class MainWindow(wxFrame):
                                          style=wxNO_BORDER)
       self.buttonBack.SetToolTipString(_("History Back"))
       self.buttonBack.Disable()
-      self.hboxToolbar.Add(self.buttonBack, 0, wxALL | wxCENTER, 2)
+      self.hboxToolbar.Add(self.buttonBack, 0, wxALL | wxCENTER, 1)
 
       # Forward button
       bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "right.png"),
@@ -337,7 +338,7 @@ class MainWindow(wxFrame):
                                          style=wxNO_BORDER)
       self.buttonForward.SetToolTipString(_("History Forward"))
       self.buttonForward.Disable()
-      self.hboxToolbar.Add(self.buttonForward, 0, wxALL | wxCENTER, 2)
+      self.hboxToolbar.Add(self.buttonForward, 0, wxALL | wxCENTER, 1)
 
       # Stop threads
       # TODO: how thread can be killed?
@@ -347,7 +348,7 @@ class MainWindow(wxFrame):
                                        style=wxNO_BORDER)
       self.buttonStop.SetToolTipString(_("Stop searching"))
       self.buttonStop.Disable()
-      self.hboxToolbar.Add(self.buttonStop, 0, wxALL | wxCENTER, 2)
+      self.hboxToolbar.Add(self.buttonStop, 0, wxALL | wxCENTER, 1)
 
       # Word list is hidden by default
       self.wlHidden = True
@@ -356,7 +357,7 @@ class MainWindow(wxFrame):
                      wxBITMAP_TYPE_PNG)
       self.buttonHide = wxBitmapButton(self, 152, bmp, (24, 24),
                                        style=wxNO_BORDER)
-      self.hboxToolbar.Add(self.buttonHide, 0, wxALL | wxCENTER, 2)
+      self.hboxToolbar.Add(self.buttonHide, 0, wxALL | wxCENTER, 1)
 
       vboxMain.Add(self.hboxToolbar, 0, wxALL | wxEXPAND | wxGROW, 0)
 
@@ -419,7 +420,7 @@ class MainWindow(wxFrame):
             self.app.config.get('defaultDict')))
 
 
-      self.SetMinSize((450, 200))
+      self.SetMinSize((370, 160))
 
 
       #
@@ -582,12 +583,22 @@ class MainWindow(wxFrame):
                errorwin.showErrorMessage(result.getError().getMessage(),
                                          result.getError().getLongMessage())
             else:
-               self.SetStatusText(_(result.getError().getMessage()))
+               self.SetStatusText(result.getError().getMessage())
                self.entry.Enable(1)
                self.entry.SetFocus()
                self.buttonStop.Disable()
                
             return
+
+
+         #
+         # If dictionary (plugin) does not use NOT_FOUND notification,
+         # check for translation and show it manually
+         #
+         translation = result.getTranslation()
+         if not translation:
+            self.setStatusText(errortype.NOT_FOUND.getMessage())
+            
 
          try:
             debugLog(DEBUG, "Decoding translation in %s" \
@@ -700,6 +711,7 @@ class MainWindow(wxFrame):
 
       if word == "":
          self.SetStatusText(_("Enter a word and try again"))
+         self.entry.SetFocus()
          return
 
       global lastLookupWord
