@@ -76,7 +76,7 @@ class OpenDictApp(wxApp):
       _start = time.time()
 
       if wxPython.__version__.split('.') < ['2', '5']:
-         from gui import errorwin
+         from lib.gui import errorwin
 
          # Go away, wxPython 2.4!
          title = _("wxPython Version Error")
