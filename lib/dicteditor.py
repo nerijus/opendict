@@ -105,7 +105,7 @@ class Editor:
                         comment = comment.strip()
 
                     translation.addTranslation(trans, comment)
-                    self.units.append(translation)
+                self.units.append(translation)
 
             fd.close()
 

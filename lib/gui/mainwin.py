@@ -1040,7 +1040,7 @@ For more information visit project's homepage on
 
    def onShowDictEditor(self, event):
       editor = DictEditorWindow(self, -1, _("Dictionary Editor"),
-                                     size=(-1, -1),
+                                     size=(400, 500),
                                      style=wxDEFAULT_FRAME_STYLE)
       editor.CentreOnScreen()
       editor.Show(True)

@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plugin SYSTEM "/usr/share/opendict/conf/plugin.dtd">
-<plugin>
-<name>Unicode plugin (ąčęėįšųū„“\ž)</name>
-<version>0.1</version>
-<authors>
-<author name="Martynas Jocius" email="mjoc@akl.lt" />
-</authors>
-<module lang="Python">sample.py</module>
-<encoding>UTF-8</encoding>
-<uses-word-list>True</uses-word-list>
-<opendict-version>0.5.8</opendict-version>
-<python-version>2.3</python-version>
-<platforms>
-<platform name="Linux" />
-<platform name="BSD" />
-<platform name="Windows" />
-</platforms>
-<description>
-This plugin only demonstrates new type OpenDict plugin facilities. And
-Unicode support too: ąčęėįšųū„“\ž.
-</description>
+<plugin type="dictionary">
+   <name>Unicode plugin (ąčęėįšųū„“\ž)</name>
+   <version>0.1</version>
+   <authors>
+      <author name="Martynas Jocius" email="mjoc@akl.lt" />
+   </authors>
+   <module lang="Python">sample.py</module>
+   <encoding>UTF-8</encoding>
+   <uses-word-list>True</uses-word-list>
+   <opendict-version>0.5.8</opendict-version>
+   <python-version>2.3</python-version>
+   <platforms>
+      <platform name="Linux" />
+      <platform name="BSD" />
+      <platform name="Windows" />
+   </platforms>
+   <description>
+   This plugin only demonstrates new type OpenDict plugin facilities. And
+   Unicode support too: ąčęėįšųū„“\ž.
+   </description>
 </plugin>

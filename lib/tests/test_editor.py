@@ -51,7 +51,7 @@ class TestEditor(unittest.TestCase):
         self.assertEquals(len(editor.getUnits()), 0)
         
         editor.load("data/sampledict.dwa")
-        self.assertEquals(len(editor.getUnits()), 8)
+        self.assertEquals(len(editor.getUnits()), 7)
 
 
     def test_save(self):

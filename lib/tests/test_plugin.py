@@ -46,15 +46,15 @@ class TestPluginInfo(unittest.TestCase):
         self.assertEquals(info.xmlData, xmlData)
 
 
-class TestPluginHandler(unittest.TestCase):
+class TestDictionaryPlugin(unittest.TestCase):
     """Test PluginHandler class"""
 
     def test_class(self):
         """__init__ should load plugin info and module"""
         
-        p = newplugin.PluginHandler(os.path.realpath('data/sampleplugin'))
+        p = newplugin.DictionaryPlugin(os.path.realpath('data/sampleplugin'))
 
-        self.assertEquals(p.__class__, newplugin.PluginHandler)
+        self.assertEquals(p.__class__, newplugin.DictionaryPlugin)
         self.assert_(p.info != None)
         self.assert_(p.dictionary != None)
         self.assert_(p.isValid() == True)
@@ -62,7 +62,7 @@ class TestPluginHandler(unittest.TestCase):
         self.assertEquals(len(p.dictionary.search('x').words), 20)
 
         self.assertRaises(newplugin.InvalidPluginException,
-                          newplugin.PluginHandler, 'blabla')
+                          newplugin.DictionaryPlugin, 'blabla')
                                         
 
 

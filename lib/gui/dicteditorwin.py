@@ -24,11 +24,12 @@ from wxPython.wx import *
 from wxPython.lib.rcsizer import RowColSizer
 import os
 import codecs
+import traceback
 
 from misc import encodings, printError
-#from info import __version__
 from parser import TMXParser
 import info
+import dicteditor
 
 _ = wxGetTranslation
 
@@ -311,7 +312,7 @@ class DictEditorWindow(wxFrame):
         vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
 
         self.SetSizer(vboxMain)
-        self.Fit()
+        #self.Fit()
 
         EVT_BUTTON(self, 6000, self.onAddWord)
         EVT_BUTTON(self, 6001, self.onEdit)
@@ -334,6 +335,7 @@ class DictEditorWindow(wxFrame):
         window.CentreOnScreen()
         window.Show(True)           
 
+
     def onEdit(self, event):
         self.SetStatusText("")
         
@@ -352,7 +354,7 @@ class DictEditorWindow(wxFrame):
         self.SetStatusText("")
         word = self.list.GetStringSelection()
         if word != "":
-            del self.parser.mapping[word]
+            #del self.parser.mapping[word]
             self.list.Delete(self.list.FindString(word))
 
 
@@ -362,7 +364,9 @@ class DictEditorWindow(wxFrame):
 
     def onSort(self, event):
         
-        words = self.parser.mapping.keys()
+        words = []
+        for unit in self.editor.getUnits():
+            words.append(unit.getWord())
         
         if len(words) == 0:
             self.SetStatusText(_("List is empty"))
@@ -382,105 +386,14 @@ class DictEditorWindow(wxFrame):
     def save(self, instance):
         instance.SetStatusText("")
         
-        if instance.saved == 0:
-            dialog = wxFileDialog(instance, _("Save new TMX dictionary"), "", "mydict.tmx",
-                                  style=wxSAVE | wxOVERWRITE_PROMPT)
-            if dialog.ShowModal() == wxID_OK:
-                instance.file = dialog.GetPaths()[0]
-                
-                if os.path.isdir(instance.file):
-                    print "DictEditor: user seems to be saving file to mydict.tmx"
-                    path = os.path.split(instance.file)[0]
-                    instance.file = path + os.path.sep + "mydict.tmx"
-                    instance.SetTitle("%s: %s" % (instance.priTitle, "mydict.tmx"))
-                else:
-                    instance.SetTitle("%s: %s" % (instance.priTitle,
-                                              os.path.split(instance.file)[1]))
-                
-                instance.saved = 1
-            else:
-                print "DictEditor: save canceled"
-                return 0
-
-        xml = []
-        
-        if info.__unicode__:
-            xml.append(u"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" \
-                   "<tmx version=\"1.1\">\n")
-        else:
-            xml.append("<?xml version=\"1.0\" encoding=\"%s\"?>\n" \
-                   "<tmx version=\"1.1\">\n" % info.__enc__)
-                   
-        xml.append(instance.tmxDictHeader(instance.parser))
-        xml.append("  <body>\n")
-
-        words = instance.parser.mapping.keys()
-        words.sort()
-
-        print "Words:", len(words)
-
-        for word in words:
-            xml.append("    <tu>\n")
-            xml.append("      <tuv lang=\"%s\">\n" \
-                       % instance.parser.header["srclang"])
-            xml.append("        <seg>%s</seg>\n" \
-                       % word.replace("<", "&lt;").replace(">", "&gt;"))
-            xml.append("      </tuv>\n")
-            xml.append("      <tuv lang=\"%s\">\n" % instance.parser.lang)
-            for seg in instance.parser.mapping[word]:
-                # FIXME: what's a bug???
-                xml.append("        <seg>%s</seg>\n" % seg)
-            xml.append("      </tuv>\n")
-            xml.append("    </tu>\n")
-
-        xml.append("  </body>\n" \
-                "</tmx>\n")
-        
-        fd = open(instance.file, "w")
-        
-        if info.__unicode__:
-            try:
-                
-                sw = codecs.lookup("utf-8")[3]
-                fd = sw(fd)
-                
-            except:
-                instance.SetStatusText(_("Can't save changes to %s") % instance.file)
-                printError()
-                
-                return 1
-                
-        fd.write("".join(xml))
-        fd.close()
-        instance.SetStatusText(_("Saved"))
-        self.changed = 0
-        
 
     def onCreate(self, event):
         self.list.Clear()
 
-        self.parser = TMXParser()
-        self.parser.header["o-tmf"] = "ABCTransMem"
-        self.parser.header["creationtool"] = "OpenDict"
-        self.parser.header["adminlang"] = "en-us"
-        self.parser.header["creationtoolversion"] = info.VERSION
-        self.parser.header["srclang"] = "UnknownSourceLang"
-        self.parser.lang = "UnknownTransLang"
-        self.parser.header["datatype"] = "PlainText"
-        self.parser.header["segtype"] = "sentence"
-        
-        self.name = _("Untitled")
-        self.SetTitle("%s: %s" % (self.priTitle, self.name))
-        
-        self.SetStatusText(_("Empty dictionary created"))
-        
-        for button in self.controlButtons:
-            button.Enable(1)
-        
-        self.saved = 0
-        self.changed = 0
 
     def onOpen(self, event):
+        print "DEBUG opening"
+        
         if self.parser and self.changed:
                 window = self.ConfirmExitWindow(self, -1, _("Exit confirmation"))
                 self.cAction = "open"
@@ -488,17 +401,24 @@ class DictEditorWindow(wxFrame):
                 window.Show(True)
         else:
             self.open()
+
         
     def open(self):
-        dialog = wxFileDialog(self, _("Choose TMX dictionary file"), "", "",
-                              "", wxOPEN|wxMULTIPLE)
+        self.editor = dicteditor.Editor()
+
+        wildCard = "Slowo dictionaries (*.dwa)|*.dwa|"
+        
+        dialog = wxFileDialog(self, message=_("Choose TMX dictionary file"),
+                              wildcard=wildCard, style=wxOPEN|wxMULTIPLE)
         if dialog.ShowModal() == wxID_OK:
             name = os.path.split(dialog.GetPaths()[0])[1]
             self.file = dialog.GetPaths()[0]
             self.name = os.path.split(self.file)[1]
+            
             try:
-                self.parser = TMXParser(self.file, None)
-            except:
+                self.editor.load(self.file)
+            except Exception, e:
+                traceback.print_exc()
                 self.SetStatusText(_("Error: failed to load \"%s\"") % \
                                    self.name)
                 return
@@ -506,19 +426,18 @@ class DictEditorWindow(wxFrame):
             self.SetTitle("%s: %s" % (self.priTitle, self.name))
             
             self.list.Clear()
-            words = self.parser.mapping.keys()
+            words = []
+            for unit in self.editor.getUnits():
+                words.append(unit.getWord())
             words.sort()
-            
-            self.list.InsertItems(words
-            , 0)
-            
-            for word in words:
-                print self.parser.mapping[word]
+
+            self.list.InsertItems(words, 0)
             
             for button in self.controlButtons:
                 button.Enable(1)
             
             self.SetStatusText(_("Dictionary loaded"))
+
             
     def onClose(self, event):
         
@@ -530,23 +449,3 @@ class DictEditorWindow(wxFrame):
         else:
             self.Destroy()
 
-    def tmxDictHeader(self, parser):
-
-        # New header
-        code = "  <header " \
-               "o-tmf=\"%s\" " \
-               "creationtool=\"%s\" " \
-               "creationtoolversion=\"%s\" " \
-               "adminlang=\"%s\" " \
-               "srclang=\"%s\" " \
-               "datatype=\"%s\" " \
-               "segtype=\"%s\" />\n" % \
-               (parser.header["o-tmf"],
-                parser.header["creationtool"],
-                parser.header["creationtoolversion"],
-                parser.header["adminlang"],
-                parser.header["srclang"],
-                parser.header["datatype"],
-                parser.header["segtype"])
-
-        return code
