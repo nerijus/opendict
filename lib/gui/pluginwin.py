@@ -756,6 +756,7 @@ class PluginManagerWindow(wxFrame):
            msg = _("Unable to install dictionary \"%s\"." \
                    % dictInfo.getName())
            errorwin.showErrorMessage(title, msg)
+           return
 
        self.availableList.DeleteItem(self.currentAvailItemSelection)
        del self.addons[dictInfo.getName()]
