@@ -1,0 +1,91 @@
+
+ cout<<"ALkonas %-1 :)\n";
+  sbar->SetStatusText("Sending request...");
+  wxString request = "http://alkonas.fotonija.lt/Word.asp?Zodis="+keyword;
+  cout<<"Request: `"<<request.c_str()<<endl;
+
+  wxString address = wxURL::ConvertToValidURI(keyword);
+  //url = new wxURL(address);
+  http = new wxHTTP()
+
+    /*
+  cout<<"URL path: "<<url->GetPath().c_str()<<endl;
+  cout<<"Protocoal name: "<<url->GetProtocolName().c_str()<<endl;
+  cout<<"Content-type: "<<url->GetProtocol().GetContentType().c_str()<<endl;
+
+  if (url->GetError() != wxURL_NOERR)
+    {
+      cout<<"URL error, baigiu\n";
+      sbar->SetStatusText("Can't make connection");
+      return "";
+    }
+
+ cout<<"Alkonas %0\n";
+ wxYield();
+  wxInputStream *istream = url->GetInputStream();
+
+ cout<<"Alkonas %0.5\n";
+    */
+
+
+ 
+ /*
+  if (istream->LastError() != wxStream_NOERROR)
+    {
+      cout<<"Erroras, baigiu\n";
+      return "";
+    }
+ */
+  /*
+  wxHTTP http;
+  wxInputStream* istream = http.GetInputStream(request);
+  */
+
+ cout<<"Alkonas %0.6\n";
+ 
+  if (! istream)
+    {
+      sbar->SetStatusText("Can't receive data");
+      cout<<"Nera istream\n";
+      return "";
+    }
+ 
+
+  cout<<"Alkonas %1\n";
+  sbar->SetStatusText("Receiving data...");
+  cout<<"Alkonas %2\n";
+  wxString result;
+
+  //while(istream->Eof() != TRUE)
+  //result = istream->GetC();
+  //istream->Read(result);
+  cout<<"Request: `"<<keyword.c_str()<<"', size: "<<istream->StreamSize()<<endl;
+  if (istream->StreamSize() >= 10000)
+    {
+      sbar->SetStatusText("Data stream is too large, aborted");
+      cout<<"Data stream is larger than 10000, it is "<<istream->StreamSize()<<endl;
+      return "";
+    }
+
+  /*
+  wxFileOutputStream out(wxString("out.html"));
+  if (! out.Ok())
+    {
+      cout<<"Negerai su file out\n";
+      return "";
+    }
+  istream->Read(out);
+  */
+  char* data = new char[istream->StreamSize()];
+  istream->Read(data, istream->StreamSize());
+  cout<<"Alkonas %3\n";
+  result = wxString(data);
+
+  delete istream;
+  delete data;
+
+ cout<<"Alkonas %4\n";
+  cout<<"Result: "<<result<<endl;
+ cout<<"Alkonas %5\n";
+  sbar->SetStatusText("");
+  return result;

@@ -1,0 +1,57 @@
+===============
+Open Dictionary
+===============
+
+Version 0.0.5 [Linux/Unix only]
+Developed and tested with wxGtk 2.2.7
+
+Project's homepage: http://opendict.sourceforge.net
+
+Compilation
+-----------
+
+Type `make'.
+
+
+You have to
+-----------
+
+Create 2 directories:
+$ mkdir ~/.opendict
+$ mkdir ~/.opendict/dictionaries
+
+Unzip a demonstrative dictionary file with GNU Zip and copy it:
+$ gunzip terminai.dwa.gz
+$ cp terminai.dwa ~/.opendict/dictionaries
+
+Copy (and edit or look at) your config file:
+$ copy opendictrc ~/.opendict/
+
+If you won't do that, Open Dictionary will catch file errors and create
+your directories, and will create config file there. But do nothing with
+terminai.dwa.gz file, so, if you compile and run a program, you'll see
+empty widgets.
+
+file "terminai.dwa" is used for a `slowo' dictionary of this program for
+testing (and using :).
+terminai.dwa -- English-Lithuanian terms dictionary from 
+http://www.lietuvybe.org/.
+
+
+Requirements
+------------
+
+You need wxWindows libraries (2.2.7) to compile and run this program. You 
+can find it at http://www.wxwindows.org.
+
+
+Platform
+--------
+
+This version (0.0.4) was made on Debian GNU/Linux and was tested only here. 
+The compatibility with Win32 and other platform will be made in the future.
+
+Have Fun!
+
+--
+Martynas Jocius <atthis@delfi.lt>
