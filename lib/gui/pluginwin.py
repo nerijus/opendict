@@ -213,6 +213,14 @@ class PluginManagerWindow(wxFrame):
 
        # Horizontal box for buttons
        hboxButtons = wxBoxSizer(wxHORIZONTAL)
+
+       #
+       # "Update" button
+       #
+       idUpdate = wx.NewId()
+       self.buttonUpdate = wxButton(panelAvailable, idUpdate,
+                                    _("Update List"))
+       hboxButtons.Add(self.buttonUpdate, 0, wxALL | wxALIGN_RIGHT, 2)
        
        #
        # "Install" button
@@ -222,13 +230,6 @@ class PluginManagerWindow(wxFrame):
        self.buttonInstall.Disable()
        hboxButtons.Add(self.buttonInstall, 0, wxALL | wxALIGN_RIGHT, 2)
 
-       #
-       # "Update" button
-       #
-       idUpdate = wx.NewId()
-       self.buttonUpdate = wxButton(panelAvailable, idInstall,
-                                    _("Update List"))
-       hboxButtons.Add(self.buttonUpdate, 0, wxALL | wxALIGN_RIGHT, 2)
 
        vboxAvailableBox.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
        
@@ -298,7 +299,7 @@ class PluginManagerWindow(wxFrame):
        vboxInfoBox = wxBoxSizer(wxVERTICAL)
        sbSizerInfo = wxStaticBoxSizer(\
           wxStaticBox(panelInfo, -1, 
-                      _("Information")),
+                      _("Information About Dictionary")),
           wxVERTICAL)
 
        grid = wxFlexGridSizer(3, 2, 1, 1)
@@ -311,17 +312,20 @@ class PluginManagerWindow(wxFrame):
        
        self.textAbout = wxTextCtrl(panelInfo, -1, size=(-1, 100),
                                    style=wxTE_MULTILINE | wxTE_READONLY)
-       
-       grid.Add(wxStaticText(panelInfo, -1, _("Name: ")),
-                0, wxALL)
+
+       self.stName = wxStaticText(panelInfo, -1, _("Name: "))
+       self.stName.Disable()
+       grid.Add(self.stName, 0, wxALL)
        grid.Add(self.labelName, 0, wxALL)
-       
-       grid.Add(wxStaticText(panelInfo, -1, _("Version: ")),
-                0, wxALL)
+
+       self.stVersion = wxStaticText(panelInfo, -1, _("Version: "))
+       self.stVersion.Disable()
+       grid.Add(self.stVersion, 0, wxALL)
        grid.Add(self.labelVersion, 0, wxALL)
-       
-       grid.Add(wxStaticText(panelInfo, -1, _("Author: ")),
-                0, wxALL)
+
+       self.stAuthor = wxStaticText(panelInfo, -1, _("Author: "))
+       self.stAuthor.Disable()
+       grid.Add(self.stAuthor, 0, wxALL)
        grid.Add(self.labelAuthor, 0, wxALL)
 
        vboxInfoBox.Add(grid, 1, wxALL | wxEXPAND, 1)
@@ -345,6 +349,10 @@ class PluginManagerWindow(wxFrame):
       #plugin = self.app.config.plugins[event.GetString()]
       self.currentInstalledItemSelection = event.m_itemIndex
       self.buttonRemove.Enable(1)
+
+      self.stName.Enable(1)
+      self.stVersion.Enable(1)
+      self.stAuthor.Enable(1)
 
       print self.installedList.GetItemText(self.currentInstalledItemSelection)
       
@@ -420,6 +428,10 @@ class PluginManagerWindow(wxFrame):
       print self.availableList.GetItemText(self.currentAvailItemSelection)
       #self.installedList.
       self.buttonInstall.Enable(1)
+
+      self.stName.Enable(1)
+      self.stVersion.Enable(1)
+      self.stAuthor.Enable(1)
       
 
    def onInstall(self, event):
