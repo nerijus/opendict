@@ -1,37 +1,45 @@
 # OpenDict Makefile
-# Copyright (c) 2003-2005 Martynas Jocius <mjoc at akl.lt>
+# 
 
-HOME=/usr/share/opendict
+DESTDIR     =
+bindir	    = /usr/bin
+datadir	    = /usr/share
+opendictdir = $(datadir)/opendict
 
 install:
-	mkdir -p $(HOME)
-	cp -r lib/ $(HOME)
-	chmod ugo+rx $(HOME)/lib
-	chmod ugo+rx $(HOME)/lib/*
-	cp -r pixmaps/ $(HOME)	
-	chmod ugo+rx $(HOME)/pixmaps
-	chmod ugo+rx $(HOME)/pixmaps/*
-	cp po/lt/opendict.mo /usr/share/locale/lt/LC_MESSAGES/
-	chmod ugo+r /usr/share/locale/lt/LC_MESSAGES/opendict.mo
-	cp opendict.py $(HOME)
-	chmod ugo+rx $(HOME)/opendict.py
-	cp copying.html $(HOME)
-	chmod ugo+r $(HOME)/copying.html
-	ln -sf $(HOME)/opendict.py /usr/bin/opendict
-	chmod ugo+rx /usr/bin/opendict
-	cp misc/opendict.desktop /usr/share/applications/
-	chmod ugo+r /usr/share/applications/opendict.desktop
+	mkdir -p $(DESTDIR)$(opendictdir)
+	cp -r lib/ $(DESTDIR)$(opendictdir)
+	chmod ugo+rx $(DESTDIR)$(opendictdir)/lib
+	chmod ugo+rx $(DESTDIR)$(opendictdir)/lib/*
+	cp -r pixmaps/ $(DESTDIR)$(opendictdir)	
+	chmod ugo+rx $(DESTDIR)$(opendictdir)/pixmaps
+	chmod ugo+rx $(DESTDIR)$(opendictdir)/pixmaps/*
+
+	$(MAKE) -C po install prefix=$(DESTDIR)
+
+	cp opendict.py $(DESTDIR)$(opendictdir)
+	chmod ugo+rx $(DESTDIR)$(opendictdir)/opendict.py
+	cp copying.html $(DESTDIR)$(opendictdir)
+	chmod ugo+r $(DESTDIR)$(opendictdir)/copying.html
+	ln -sf $(DESTDIR)$(opendictdir)/opendict.py $(DESTDIR)$(bindir)/opendict
+	chmod ugo+rx $(DESTDIR)$(bindir)/opendict
+	cp misc/opendict.desktop $(DESTDIR)$(datadir)/applications/
+	chmod ugo+r $(DESTDIR)$(datadir)/applications/opendict.desktop
 
 uninstall:
-	rm -rf $(HOME)/*.*
-	rm -rf $(HOME)/lib/
-	rm -rf $(HOME)/pixmaps/
-	rm -f /usr/bin/opendict
-	rm -f /usr/share/locale/lt/LC_MESSAGES/opendict.mo
-	rm -f /usr/share/applications/opendict.desktop
+	rm -rf $(DESTDIR)$(opendictdir)/*.*
+	rm -rf $(DESTDIR)$(opendictdir)/lib/
+	rm -rf $(DESTDIR)$(opendictdir)/pixmaps/
+	rm -f $(DESTDIR)$(bindir)/opendict
 
+	$(MAKE) -C po uninstall prefix=$(DESTDIR)
+
+	rm -f $(DESTDIR)$(datadir)/applications/opendict.desktop
+	
 clean:
 	for f in `find . -name '*.pyc'`; do rm $$f; done
 	for f in `find . -name '*.pyo'`; do rm $$f; done
 	for f in `find . -name '*.py~'`; do rm $$f; done
 	for f in `find . -name '*~'`; do rm $$f; done
+
+	$(MAKE) -C po clean
