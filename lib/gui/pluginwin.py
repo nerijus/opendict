@@ -442,6 +442,8 @@ class PluginManagerWindow(wxFrame):
 
    def setInstalledDicts(self, dictNames):
        """Clear the list of installed dictionaries and set new items"""
+
+       self.installedList.DeleteAllItems()
        
        for dictionary in dictNames:
            index = self.installedList.InsertStringItem(0, dictionary)          
@@ -568,8 +570,13 @@ class PluginManagerWindow(wxFrame):
    def onInstallFile(self, event):
       """Install dictionary from file"""
       
-      inst = installer.Installer(self, self.app.config)
+      inst = installer.Installer(self.mainWin, self.app.config)
       inst.showGUI()
+
+      dictNames = []
+      for name in self.app.dictionaries.keys():
+          dictNames.append(enc.toWX(name))
+      self.setInstalledDicts(dictNames)
 
 
    def onRemove(self, event):

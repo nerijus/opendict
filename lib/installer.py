@@ -101,8 +101,6 @@ class Installer:
                             dictionary = newplugin._loadDictionaryPlugin(directory)
                         else:
                             dictionary = plaindict._loadPlainDictionary(directory)
-                            print dictionary
-                            print directory
                         self.mainWin.addDictionary(dictionary)
                 except Exception, e:
                     traceback.print_exc()
