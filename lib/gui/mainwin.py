@@ -527,7 +527,7 @@ For more information visit project's homepage on
          #   self.entry.Append(word)
 
          # Check status code
-         if result.status != error.OK:
+         if result.status != errortype.OK:
             print "ERROR Error:", result.status
             self.SetStatusText(_(result.status.getMessage()))
             self.entry.Enable(1)

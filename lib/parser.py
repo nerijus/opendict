@@ -32,7 +32,7 @@ from extra import dictclient
 from extra import dictdlib
 import info
 import misc
-import error
+import errortype
 import meta
 
 
