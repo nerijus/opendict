@@ -27,6 +27,7 @@ import time
 
 from wxPython.wx import *
 import wx
+import wxPython
 
 if sys.platform == "win32":
    # MS Windows user
@@ -59,6 +60,23 @@ class OpenDictApp(wxApp):
    def OnInit(self):
 
       _ = wxGetTranslation
+
+      if wxPython.__version__.split('.') < (2, 5):
+         from gui import errorwin
+
+         # Go away, wxPython 2.4!
+         title = _("wxPython Version Error")
+         msg = _("wxPython %s is installed on this system.\n\n" \
+                 "OpenDict %s requires wxPython 2.5 to run smoothly. " \
+                 "wxPython 2.4\n" \
+                 "is not supported anymore because of huge number of " \
+                 "bugs.\n\n" \
+                 "Please get wxPython 2.5 from " \
+                 "http://www.wxpython.org/download.php" \
+                 % (wxPython.__version__, info.VERSION))
+         errorwin.showErrorMessage(title, msg)
+         return False
+      
       
       print "DEBUG Unicode version:", wx.USE_UNICODE
       

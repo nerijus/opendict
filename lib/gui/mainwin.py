@@ -24,6 +24,7 @@ Main window GUI module
 
 from wxPython.wx import *
 from wxPython.html import *
+import wxPython
 import os
 import cStringIO
 import traceback
@@ -333,8 +334,12 @@ class MainWindow(wxFrame):
                               wxSize(-1, -1), [], wxCB_DROPDOWN)
       hboxToolbar.Add(self.entry, 1, wxALL | wxCENTER, 1)
 
-      self.buttonSearch = wxButton(self, wx.ID_FIND)
+      if wxPython.__version__.split('.') < (2, 5):
+         self.buttonSearch = wxButton(self, 2012, _("Find"))
+      else:
+         self.buttonSearch = wxButton(self, wx.ID_FIND)
       self.buttonSearch.SetToolTipString(_("Look up word"))
+      
       hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
       
       # Back button
@@ -499,7 +504,11 @@ class MainWindow(wxFrame):
       EVT_MENU(self, 116, self.onAbout)
 
       # Other events
-      EVT_BUTTON(self, wx.ID_FIND, self.onSearch)
+      if wxPython.__version__.split('.') < (2, 5):
+         EVT_BUTTON(self, 2012, self.onSearch)
+      else:
+         EVT_BUTTON(self, wx.ID_FIND, self.onSearch)
+         
       EVT_BUTTON(self, 2010, self.onBack)
       EVT_BUTTON(self, 2011, self.onForward)
       EVT_BUTTON(self, 155, self.onStop)
