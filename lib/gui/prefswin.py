@@ -42,7 +42,7 @@ class PrefsWindow(wxDialog):
 
       grid = wxFlexGridSizer(2, 2, 1, 1)
 
-      grid.Add(wxStaticText(self, -1, _("Autoload dictionary: ")),
+      grid.Add(wxStaticText(self, -1, _("Default dictionary: ")),
                    0, wxALIGN_CENTER_VERTICAL)
 
       dictNames = self.app.dictionaries.keys()
@@ -82,23 +82,23 @@ class PrefsWindow(wxDialog):
                                   self.app.config.get('dictServerPort'))
       grid.Add(self.portEntry, 0, wxEXPAND)
       
-      vboxMain.Add(grid, 0, wxALL | wxEXPAND, 2)
+      vboxMain.Add(grid, 0, wxALL | wxEXPAND, 4)
 
       self.winSize = wxCheckBox(self, 1101, _("Save window size"))
       self.winSize.SetValue(bool(self.app.config.get('saveWindowSize')))
-      vboxMain.Add(self.winSize, 0, wxALL, 0)
+      vboxMain.Add(self.winSize, 0, wxALL, 3)
 
       self.winPos = wxCheckBox(self, 1102, _("Save window position"))
       self.winPos.SetValue(bool(self.app.config.get('saveWindowPos')))
-      vboxMain.Add(self.winPos, 0, wxALL, 0)
+      vboxMain.Add(self.winPos, 0, wxALL, 3)
 
       self.sashPos = wxCheckBox(self, 1103, _("Save sash position"))
       self.sashPos.SetValue(bool(self.app.config.get('saveSashPos')))
-      vboxMain.Add(self.sashPos, 0, wxALL, 0)
+      vboxMain.Add(self.sashPos, 0, wxALL, 3)
 
       self.listReg = wxCheckBox(self, 1106, _("Use word list with files"))
       self.listReg.SetValue(bool(self.app.config.get('useListWithRegs')))
-      vboxMain.Add(self.listReg, 0, wxALL, 0)
+      vboxMain.Add(self.listReg, 0, wxALL, 3)
 
       vboxMain.Add(wxStaticLine(self, -1), 0, wxALL | wxEXPAND, 5)
 
@@ -108,7 +108,7 @@ class PrefsWindow(wxDialog):
       self.buttonCancel = wxButton(self, 1105, _("Cancel"))
       hboxButtons.Add(self.buttonCancel, 0, wxALL | wxEXPAND, 1)
 
-      vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 2)
+      vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 4)
 
       self.SetSizer(vboxMain)
       self.Fit()

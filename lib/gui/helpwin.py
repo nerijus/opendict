@@ -67,7 +67,7 @@ class LicenseWindow(wxFrame):
       vbox.Add(scWinAbout, 1, wxALL | wxEXPAND, 2)
 
       self.buttonClose = wxButton(self, 2002, _("Close"))
-      vbox.Add(self.buttonClose, 0, wxALL | wxALIGN_RIGHT, 2)
+      vbox.Add(self.buttonClose, 0, wxALL | wxALIGN_RIGHT, 4)
 
       self.SetSizer(vbox)
 
