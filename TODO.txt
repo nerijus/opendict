@@ -20,3 +20,6 @@ Status:
     text is copied, and all if no selection
 [ ] <DictEditor> Cannot edit dictionary if it is a registered one.
 [ ] <Base> Add significant word list feature
+
+BUG [ ] When selecting a file, mask is damaged sometimes.
+
