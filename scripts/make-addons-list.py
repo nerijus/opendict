@@ -60,7 +60,7 @@ def parsePluginConfig(xmlData):
     result['name'] = name
     result['version'] = version
     result['authors'] = authors
-    result['desc'] = description
+    result['description'] = description
 
     return result
 
@@ -137,7 +137,7 @@ def generateElement(**args):
     descElement = doc.createElement('description')
     addonElement.appendChild(descElement)
     descElement.appendChild(doc.createTextNode(args.get('description') \
-                                               or ''))
+                                               or None))
 
     # MD5 element
     md5Element = doc.createElement('md5')
