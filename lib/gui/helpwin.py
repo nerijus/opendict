@@ -26,7 +26,6 @@ import wx
 import os
 import sys
 
-from info import home, __version__
 from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 import enc
 import info
@@ -143,12 +142,13 @@ class AboutWindow(wxDialog):
       hboxButtons = wxBoxSizer(wxHORIZONTAL)
       vbox = wxBoxSizer(wxVERTICAL)
 
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "icon-96x96.png"),
+      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME,
+                                  "pixmaps", "icon-96x96.png"),
                      wxBITMAP_TYPE_PNG)
       vbox.Add(wxStaticBitmap(self, -1, bmp, wxPoint(-1, -1)), 0, wxALL |
       wxCENTRE, 5)
 
-      title = _("OpenDict %s" % __version__)
+      title = _("OpenDict %s" % info.VERSION)
       copy = "Copyright %s 2003-2005 Martynas Jocius <mjoc@akl.lt>" % \
              unicode("\302\251", "UTF-8")
       desc = _("OpenDict is multiplatform dictionary.")

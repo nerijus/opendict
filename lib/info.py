@@ -41,27 +41,32 @@ PLUGIN_DICT_DIR = os.path.join(__DICT_DIR, __PLUGIN_DICT_DIR)
 GLOBAL_HOME = None
 LOCAL_HOME = None
       
-if sys.platform == "win32":
-   import _winreg
-   x = _winreg.ConnectRegistry(None, _winreg.HKEY_CURRENT_USER)
-   try:
-      y = _winreg.OpenKey(x, "SOFTWARE\OpenDict\Settings")
-      GLOBAL_HOME = _winreg.QueryValueEx(y, "Path")[0]
-   except:
-      GLOBAL_HOME = "C:\\Program Files\\OpenDict"
+## if sys.platform == "win32":
+##    import _winreg
+##    x = _winreg.ConnectRegistry(None, _winreg.HKEY_CURRENT_USER)
+##    try:
+##       y = _winreg.OpenKey(x, "SOFTWARE\OpenDict\Settings")
+##       GLOBAL_HOME = _winreg.QueryValueEx(y, "Path")[0]
+##    except:
+##       GLOBAL_HOME = "C:\\Program Files\\OpenDict"
       
+##    LOCAL_HOME = GLOBAL_HOME
+
+## else:
+##    if not os.path.exists(os.path.join(os.environ.get("HOME"),
+##                                       __OPENDICT_LOCAL_DIR)):
+##       os.mkdir(os.path.join(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR))
+      
+##    LOCAL_HOME = os.path.join(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR)
+##    GLOBAL_HOME = "/usr/share/opendict"
+
+GLOBAL_HOME = os.path.realpath(os.path.join(os.path.dirname(\
+    os.path.realpath(__file__)), '..'))
+
+if sys.platform == 'win32':
    LOCAL_HOME = GLOBAL_HOME
-
 else:
-   if not os.path.exists(os.path.join(os.environ.get("HOME"),
-                                      __OPENDICT_LOCAL_DIR)):
-      os.mkdir(os.path.join(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR))
-      
-   LOCAL_HOME = os.path.join(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR)
-   GLOBAL_HOME = "/usr/share/opendict"
+   LOCAL_HOME = os.path.join(os.environ.get('HOME', GLOBAL_HOME),
+                             __OPENDICT_LOCAL_DIR)
 
 
-# FIXME: Remove
-uhome = LOCAL_HOME
-home = GLOBAL_HOME
-__version__ = VERSION

@@ -46,20 +46,17 @@ except ImportError:
     print >> sys.stderr, "**"
     sys.exit(1)
 
-if sys.platform == "win32":
-   # MS Windows user
-   sys.path = [os.path.join(os.curdir, "lib")] + sys.path
-else:
-   # Unix-like system
-   sys.path.insert(0, "/usr/share/opendict/lib")
+#
+# Initial path
+#
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                'lib'))
 
 # OpenDict Modules
 import info
 from gui.mainwin import MainWindow
 from gui.errorwin import ErrorWindow
 from config import Configuration
-from register import Register
-from plugin import initPlugins, installPlugin
 from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 import misc
 import info
@@ -117,10 +114,6 @@ class OpenDictApp(wxApp):
                                                             'agreements.txt'))
       
       
-      # FIXME: check gui.pluginwin line 123, can't directly import
-      # plugin there.
-      self.installPlugin = installPlugin
-      
       
       # Load new-style plugins
       for plugin in newplugin.loadDictionaryPlugins():
@@ -132,9 +125,6 @@ class OpenDictApp(wxApp):
          self.config.ids[wx.NewId()] = plain.getName()
 
          
-      # TODO: Remove in the future
-      self.reg = Register()
-
       windowPos = (int(self.config.get('windowPosX')),
                                 int(self.config.get('windowPosY')))
       windowSize = (int(self.config.get('windowWidth')),

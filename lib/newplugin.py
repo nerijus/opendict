@@ -279,7 +279,7 @@ class DictionaryPlugin(meta.Dictionary):
         module =  __import__(moduleName)
         sys.path.remove(path)
 
-        instance = module.init(info.home)
+        instance = module.init(info.GLOBAL_HOME)
 
         return instance
 

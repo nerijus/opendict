@@ -32,7 +32,6 @@ import traceback
 import info
 from gui.dictconnwin import DictConnWindow
 from gui.pluginwin import PluginManagerWindow
-from gui.registerwin import FileRegistryWindow
 from gui.dicteditorwin import DictEditorWindow
 from gui.dictaddwin import DictAddWindow
 from gui.prefswin import PrefsWindow
@@ -48,7 +47,6 @@ from history import History
 from installer import Installer
 from extra.html2text import html2text
 from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-import plugin
 import misc
 import info
 import util

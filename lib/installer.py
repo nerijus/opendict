@@ -27,8 +27,6 @@ import traceback
 
 from gui.dictaddwin import DictAddWindow
 from gui import errorwin
-import plugin
-import register
 import misc
 import info
 import dicttype
