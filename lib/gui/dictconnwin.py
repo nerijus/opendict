@@ -26,11 +26,13 @@ from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 from parser import DictConnection
 from extra import dictclient
 from threads import Process
+from gui import errorwin
 import misc
 
 _ = wxGetTranslation
 
 CONNECTION_CHECK_INTERVAL = 400
+
 
 class DictConnWindow(wxFrame):
 
@@ -149,7 +151,11 @@ class DictConnWindow(wxFrame):
                self.update = Process(obj.getdbdescs)
             else:
                self.timerUpdateDB.Stop()
-               self.SetStatusText(_("Unable to connect"))
+               self.SetStatusText('')
+               title = _("Connection Error")
+               msg = _("Unable to connect to server")
+               errorwin.showErrorMessage(title, msg)
+
 
 
    def onTimerConnect(self, event):
@@ -161,7 +167,10 @@ class DictConnWindow(wxFrame):
             self.conn = self.connection()
             
             if self.conn == None:
-                self.SetStatusText(_("Unable to connect"))
+                self.SetStatusText('')
+                title = _("Connectio Error")
+                msg = _("Unable to connect to server")
+                errorwin.showErrorMessage(title, msg)
             else:
                 self.prepareForUsing()
             
