@@ -22,6 +22,7 @@ from wxPython.wx import *
 
 import os
 import zipfile
+import shutil
 
 from gui.dictaddwin import DictAddWindow
 from gui import errorwin
@@ -134,6 +135,8 @@ def installPlainDictionary(filePath):
     if not os.path.isfile(filePath):
         raise Exception, _("%s is not a file") % filePath
 
+    util.makeDirectories()
+
     fileName = os.path.basename(filePath)
     dictionaryName = os.path.splitext(fileName)[0]
 
@@ -206,6 +209,8 @@ def installDictionaryPlugin(filePath):
     # Check if it is ZIP archive
     if os.path.splitext(filePath)[1].lower()[1:] != "zip":
         raise Exception, _("%s is not OpenDict dictionary plugin" % filePath)
+
+    util.makeDirectories()
 
     zipFile = zipfile.ZipFile(filePath, 'r')
 

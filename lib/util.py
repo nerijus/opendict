@@ -20,7 +20,10 @@
 Utility functions
 """
 
+import os
 import md5
+
+import info
 
 
 class UniqueIdGenerator:
@@ -78,3 +81,50 @@ def getMD5Sum(filePath):
 
     return generator.hexdigest()
 
+
+def makeDirectories():
+    """Make needed directories if not exist"""
+
+    
+
+    plainDir = os.path.join(info.LOCAL_HOME,
+                            info.PLAIN_DICT_DIR)
+    pluginDir = os.path.join(info.LOCAL_HOME,
+                             info.PLUGIN_DICT_DIR)
+
+
+    if not os.path.exists(info.LOCAL_HOME):
+        try:
+            print "DEBUG %s does not exist, creating..." % info.LOCAL_HOME
+            os.mkdir(info.LOCAL_HOME)
+        except Exception, e:
+            print "ERROR Unable to create %s (%s)" % (info.LOCAL_HOME, e)
+
+    if not os.path.exists(os.path.join(info.LOCAL_HOME, info.__DICT_DIR)):
+        try:
+            print "DEBUG %s does not exist, creating..." \
+                  % os.path.join(info.LOCAL_HOME, info.__DICT_DIR)
+            os.mkdir(os.path.join(info.LOCAL_HOME, info.__DICT_DIR))
+        except Exception, e:
+            print "ERROR Unable to create %s (%s)" \
+                  % (os.path.join(info.LOCAL_HOME, info.__DICT_DIR), e)
+
+    if not os.path.exists(plainDir):
+        try:
+            print "DEBUG %s does not exist, creating..." % plainDir
+            os.mkdir(plainDir)
+        except Exception, e:
+            print "ERROR Unable to create %s (%s)" % (plainDir, e)
+
+    
+    if not os.path.exists(pluginDir):
+        try:
+            print "DEBUG %s does not exist, creating..." % pluginDir
+            os.mkdir(pluginDir)
+        except Exception, e:
+            print "ERROR Unable to create %s (%s)" % (pluginDir, e)
+
+
+if __name__ == "__main__":
+    makeDirectories()
+    
