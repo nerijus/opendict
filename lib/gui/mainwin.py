@@ -191,7 +191,7 @@ class MainWindow(wxFrame):
       for face in keys:
          self.menuFontFace.AppendRadioItem(2500+i, face, "")
          EVT_MENU(self, 2500+i, self.onDefault)
-         if self.app.config.fontFace == misc.fontFaces[face]:
+         if self.app.config.get('fontFace') == misc.fontFaces[face]:
             self.menuFontFace.FindItemById(2500+i).Check(1)
          i+=1
          
@@ -206,7 +206,7 @@ class MainWindow(wxFrame):
       for encoding in keys:
          self.menuEncodings.AppendRadioItem(2100+i , encoding, "")
          EVT_MENU(self, 2100+i, self.onDefault)
-         if self.app.config.encoding == misc.encodings[encoding]:
+         if self.app.config.get('encoding') == misc.encodings[encoding]:
             self.menuEncodings.FindItemById(2100+i).Check(1)
          i+=1
          
@@ -240,24 +240,6 @@ class MainWindow(wxFrame):
          except Exception, e:
             systemLog(ERROR, "Unable to create menu item for '%s' (%s)" \
                   % (name, e))
-
-      keys = self.app.config.registers.keys()
-      keys.sort()
-      for name in keys:
-         item = wxMenuItem(self.menuDict,
-                           self.app.config.ids[name],
-                           name)
-         EVT_MENU(self, self.app.config.ids[name], self.onDefault)
-         self.menuDict.AppendItem(item)
-
-      keys = self.app.config.groups.keys()
-      keys.sort()
-      for name in keys:
-         item = wxMenuItem(self.menuDict,
-                           self.app.config.ids[name],
-                           name)
-         self.menuDict.AppendItem(item)
-         EVT_MENU(self, self.app.config.ids[name], self.onDefault)
 
       self.menuDict.AppendSeparator()
 
@@ -375,7 +357,7 @@ class MainWindow(wxFrame):
       sbSizerHtml.Fit(self.panelHtml)
 
       self.splitter.SplitVertically(self.panelList, self.panelHtml,
-                                    self.app.config.sashPos)
+                                    int(self.app.config.get('sashPos')))
          
       self.splitter.SetMinimumPaneSize(90)
       self.splitter.SetSashSize(5)
@@ -483,46 +465,40 @@ class MainWindow(wxFrame):
 </head>
 <body>
 <h3>Welcome to OpenDict</h3>
-<p>
+<p><b>Short usage information:</b></p>
 <ul>
-<li>To start using dictionary, select one from <i><b>Dictionaries</b></i>
-menu.</li>
-<li>To add new dictionary from file, select <i><b>Add New Dictionary</b></i>
-from <i><b>Dictionaries</b></i> menu.</li>
-<li>To install new dictionary from the Internet, select
-<i><b>Manage Dictionaries</b></i>
-from <i><b>Tools</b></i> menu and choose <i><b>Available</b></i> tab.</li>
+  <li>To start using dictionary, select one from <i><b>Dictionaries</b></i>
+    menu.
+  </li>
+  <li>To install new dictionary from the Internet, select
+    <i><b>Manage Dictionaries</b></i>
+    from <i><b>Tools</b></i> menu and choose <i><b>Available</b></i> tab.</li>
+  <li>To add new dictionary from file, select <i><b>Add New Dictionary</b></i>
+  from <i><b>Dictionaries</b></i> menu.
+  </li>
 </ul>
-
 <p>
-For more information visit project's homepage on
-<i>http://sourceforge.net/projects/opendict</i>.
+  For more information visit project's homepage on
+  <i>http://sourceforge.net/projects/opendict</i>.
 </p>
 </body>
 </html>
 """)
 
-      # Set startup help message
-      #self.htmlWin.SetPage(self.htmlCode)
-
       self.updateHtmlScreen()
      
-
-   # Callback functions
 
    def onExit(self, event):
       
       self.onCloseDict(None)
-      misc.savePrefs(self)
-      self.app.config.writeConfigFile()
+      self.savePreferences()
       self.Close(True)
 
 
    def onCloseWindow(self, event):
       
       self.onCloseDict(None)
-      #misc.savePrefs(self)
-      #self.app.config.writeConfigFile()
+      self.savePreferences()
       self.Destroy()
 
 
@@ -1004,9 +980,8 @@ For more information visit project's homepage on
          self.prefsWindow.CentreOnScreen()
          self.prefsWindow.Show(True)
       except Exception, e:
+         traceback.print_exc()
          systemLog(ERROR, "Unable to show preferences window: %s" % e)
-         self.SetStatusText("Error occured, please contact developers (%s)" \
-                            % e)
          title = errortype.OPENDICT_BUG.getMessage()
          msg = errortype.OPENDICT_BUG.getLongMessage()
          errorwin.showErrorMessage(title, msg)
@@ -1209,22 +1184,22 @@ For more information visit project's homepage on
    def updateHtmlScreen(self):
       """Update HtmlWindow screen"""
 
-      self.htmlWin.SetFonts(self.app.config.fontFace, "Fixed",
-                            [self.app.config.fontSize]*5)
+      self.htmlWin.SetFonts(self.app.config.get('fontFace'), "Fixed",
+                            [int(self.app.config.get('fontSize'))]*5)
       self.htmlWin.SetPage(self.htmlCode)
 
 
    def onIncreaseFontSize(self, event):
       """Increase font size"""
 
-      self.app.config.fontSize += 2
+      self.app.config.set('fontSize', int(self.app.config.get('fontSize'))+2)
       self.updateHtmlScreen()
 
 
    def onDecreaseFontSize(self, event):
       """Decrease font size"""
 
-      self.app.config.fontSize -= 2
+      self.app.config.set('fontSize', int(self.app.config.get('fontSize'))-2)
       self.updateHtmlScreen()
 
 
@@ -1383,7 +1358,7 @@ For more information visit project's homepage on
       systemLog(DEBUG, "Showing word list...")
       self.createListPanel()
       self.splitter.SplitVertically(self.panelList, self.panelHtml)
-      self.splitter.SetSashPosition(self.app.config.sashPos)
+      self.splitter.SetSashPosition(int(self.app.config.get('sashPos')))
       self.wlHidden = False
 
       # And change the pixmap
@@ -1414,3 +1389,22 @@ For more information visit project's homepage on
          systemLog(ERROR, "Unable to preview translation (%s)" % e)
          self.SetStatusText(_("Page preview failed"))
          traceback.print_exc()
+
+
+   def savePreferences(self):
+      """Saves window preferences when exiting"""
+
+      if self.app.config.get('saveWindowSize'):
+         self.app.config.set('windowWidth', self.GetSize()[0])
+         self.app.config.set('windowHeight', self.GetSize()[1])
+      if self.app.config.get('saveWindowPos'):
+         self.app.config.set('windowPosX', self.GetPosition()[0])
+         self.app.config.set('windowPosY', self.GetPosition()[1])
+      if self.app.config.get('saveSashPos'):
+         self.app.config.set('sashPos', self.splitter.GetSashPosition())
+
+      try:
+         self.app.config.save()
+      except Exception, e:
+         systemLog(ERROR, "Unable to save configuration: %s" % e)
+         

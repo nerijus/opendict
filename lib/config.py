@@ -29,6 +29,7 @@ import group
 import info
 import util
 import parser
+import xmltools
 
 
 class Configuration:
@@ -38,44 +39,77 @@ class Configuration:
    def __init__(self):
       """Initialize default values"""
       
-      self.configFile = "opendict.conf"
+      self.filePath = os.path.join(info.LOCAL_HOME, "opendict.conf")
+      self.props = {}
 
       # TODO: Should not be here after removing register part from config
       import wxPython.wx
       self.app = wxPython.wx.wxGetApp()
-      
-      self.saveWinSize = 1
-      self.saveWinPos = 0
-      self.saveSashPos = 0
-      self.useListWithRegs = 1
-      self.useListWithGroups = 1
 
-      self.dict = ""
-      self.winSize = (600, 450)
-      self.winPos = (-1, -1)
-      self.sashPos = 160
+      #
+      # Default values
+      #
+      self.set('saveWindowSize', '1')
+      self.set('saveWindowPos', '0')
+      self.set('saveSashPos', '0')
+      self.set('useListWithRegs', '1')
+      self.set('useListWithGroups', '1')
 
+      self.set('defaultDict', '')
+      self.set('windowWidth', '600')
+      self.set('windowHeight', '450')
+      self.set('windowPosX', '-1')
+      self.set('windowPosY', '-1')
+      self.set('sashPos', '160')
+
+      # Internal variables
       self.window = None
-      self.plugins = {}
-      self.registers = {}
-      self.groups = {}
       self.ids = {}
 
       self.plugMenuIds = 200
       self.regMenuIds = 300
       self.groupMenuIds = 400
 
-      #self.defaultEncoding = "utf-8"
-      self.encoding = "UTF-8"
-      self.fontFace = "Fixed"
-      self.fontSize = 10
+      self.set('encoding', 'UTF-8')
+      self.set('fontFace', 'Fixed')
+      self.set('fontSize', '10')
       
-      self.dictServer = "dict.org"
-      self.dictServerPort = "2628"
+      self.set('dictServer', 'dict.org')
+      self.set('dictServerPort', '2628')
+
+
+   def get(self, name):
+      """Return property value"""
+
+      return self.props.get(name)
+
+
+   def set(self, name, value):
+      """Set property"""
+
+      self.props[name] = value
+
+
+
+   def load(self):
+      """Load configuration from file to memory"""
+
+      if os.path.exists(self.filePath):
+         self.props.update(xmltools.parseMainConfig(self.filePath))
+
+
+   def save(self):
+      """Write configuration to disk"""
+
+      doc = xmltools.generateMainConfig(self.props)
+      xmltools.writeConfig(doc, os.path.join(info.LOCAL_HOME,
+                                             self.filePath))
 
 
    # Deprecated
    def readConfigFile(self):
+      raise "Deprecated"
+   
       try:
          fd = open(os.path.join(uhome, self.configFile), "r")
          if info.__unicode__:
@@ -169,14 +203,17 @@ class Configuration:
 
       fd.close()
 
+
    def writeConfigFile(self):
+
+      raise "Deprecated"
 
       print "Writing new config file..."
       try:
          fd = open(os.path.join(uhome, self.configFile), "w")
-         if info.__unicode__:
-             sw = codecs.lookup("utf-8")[3]
-             fd = sw(fd)
+         #if info.__unicode__:
+         #    sw = codecs.lookup("utf-8")[3]
+         #    fd = sw(fd)
       except:
          print "Error: can't write config file"
          return 1
@@ -225,9 +262,11 @@ class Configuration:
       
       return 0
 
+
    def checkDir(self, dir):
       """Check if directory exists. Create one if not"""
 
+      raise "Deprecated"
+
       if not os.path.exists(os.path.join(uhome, dir)):
          os.mkdir(os.path.join(uhome, dir))
-

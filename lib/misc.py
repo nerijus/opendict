@@ -98,17 +98,18 @@ def getTraceback():
 def savePrefs(frame):
    """Saves window preferences when exiting"""
    
-   print "Saving window preferences"
    app = wxGetApp()
-   
-   if app.config.saveWinSize == 1:
-      app.config.winSize = frame.GetSize()
-   if app.config.saveWinPos == 1:
-      app.config.winPos = frame.GetPosition()
-      if app.config.winPos[0] == -1:
-         app.config.winPos[0] = 0
-   if app.config.saveSashPos == 1:
-      app.config.sashPos = frame.splitter.GetSashPosition()
+
+   if app.config.get('saveWinSize'):
+       app.config.set('windowWidth', frame.GetSize()[0])
+       app.config.set('windowHeight', frame.GetSize()[1])
+   if app.config.get('saveWindowPos'):
+       app.config.set('windowPosX', frame.GetPosition()[0])
+       app.config.set('windowPosY', frame.GetPosition()[1])
+   if app.config.get('saveSashPos'):
+       app.config.set('sashPos', frame.splitter.GetSashPosition())
+
+   self.app.config.save()
 
 
 def getFileSize(path):

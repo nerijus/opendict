@@ -384,6 +384,84 @@ def parseAddOns(xmlData):
     return result
 
 
+
+class MainConfigParser:
+    """Parse main configuration"""
+
+    def parse(self, xmlData):
+        """Parse XML data"""
+
+        doc = xml.dom.minidom.parseString(xmlData)
+        props = {}
+
+        configs = doc.getElementsByTagName('main-config')
+        if len(configs) == 0:
+            raise "Invalid configuration"
+
+        configElement = configs[0]
+        
+        for node in configElement.childNodes:
+            if not node.nodeType == node.ELEMENT_NODE:
+                continue
+            
+            for cnode in node.childNodes:
+                name = node.nodeName
+                value = cnode.data.strip()
+                props[name] = value
+
+        return props
+
+
+def parseMainConfig(configPath):
+    """Parse configuration file and return data dictionary"""
+
+    parser = MainConfigParser()
+    fd = open(configPath)
+    xmlData = fd.read()
+    fd.close()
+    data = parser.parse(xmlData)
+
+    return data
+
+
+
+class MainConfigGenerator:
+    """Class for generating main configuration file"""
+
+    def generate(self, props):
+        """Generate config XML object"""
+
+        doc = xml.dom.minidom.Document()
+
+        mainElement = doc.createElement("main-config")
+        doc.appendChild(mainElement)
+
+        for key, value in props.items():
+            elem = doc.createElement(key)
+            mainElement.appendChild(elem)
+            elem.appendChild(doc.createTextNode(unicode(str(value), 'UTF-8')))
+
+        return doc
+    
+
+def generateMainConfig(props):
+    """Generate configuration and return DOM object"""
+
+    generator = MainConfigGenerator()
+    doc = generator.generate(props)
+
+    return doc
+
+
+def writeConfig(doc, path):
+    """Write XML file"""
+
+    fd = open(path, 'w')
+    xml.dom.ext.PrettyPrint(doc, fd)
+    fd.close()
+
+
+
 if __name__ == "__main__":
     #print generatePlainDictConfig(name='Test', format='Nonsense',
     #                             path='/home/mjoc/xxx/',
@@ -395,8 +473,11 @@ if __name__ == "__main__":
     #print generateIndexFile({'a': 3, 'b': 100})
     #print parseIndexFile('/home/mjoc/test.xml')
 
-    fd = open('/home/mjoc/opendict-add-ons.xml')
-    xmlData = fd.read()
-    print parseAddOns(xmlData)
-    fd.close()
+    #fd = open('/home/mjoc/opendict-add-ons.xml')
+    #xmlData = fd.read()
+    #print parseAddOns(xmlData)
+    #fd.close()
     
+    doc = generateMainConfig({'vienas': 1, 'du': u'2'})
+    writeConfig(doc, '/home/mjoc/test.xml')
+    print parseMainConfig('/home/mjoc/test.xml')

@@ -117,7 +117,7 @@ class OpenDictApp(wxApp):
       self.dictionaries = {}
       
       self.config = Configuration()
-      self.config.readConfigFile()
+      self.config.load()
       
       
       # FIXME: check gui.pluginwin line 123, can't directly import
@@ -139,10 +139,15 @@ class OpenDictApp(wxApp):
          
       # TODO: Remove in the future
       self.reg = Register()
-      
+
+      windowPos = (int(self.config.get('windowPosX')),
+                                int(self.config.get('windowPosY')))
+      windowSize = (int(self.config.get('windowWidth')),
+                    int(self.config.get('windowHeight')))
+
       self.window = MainWindow(None, -1, "OpenDict",
-                               self.config.winPos,
-                               self.config.winSize,
+                               windowPos,
+                               windowSize,
                                style=wxDEFAULT_FRAME_STYLE)
       
       # FIXME: Avoid this

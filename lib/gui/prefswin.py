@@ -20,6 +20,7 @@
 
 from wxPython.wx import *
 
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 from misc import encodings, savePrefs
 
 _ = wxGetTranslation
@@ -43,26 +44,24 @@ class PrefsWindow(wxDialog):
       grid.Add(wxStaticText(self, -1, _("Autoload dictionary: ")),
                    0, wxALIGN_CENTER_VERTICAL)
 
-      list = []
-      list.extend(self.app.config.plugins.keys())
-      list.extend(self.app.config.registers.keys())
-      list.extend(self.app.config.groups.keys())
-      list.insert(0, "")
+      dictNames = self.app.dictionaries.keys()
+      dictNames.insert(0, "")
 
       try:
-         map(lambda s: unicode(s, 'UTF-8'), list)
+         map(enc.toWX, dictNames)
       except Exception, e:
-         print "ERROR Unable to decode titles to UTF-8 (%s)" % e
+         systemLog(ERROR, "Unable to decode titles to UTF-8 (%s)" % e)
       
-      self.dictChooser = wxComboBox(self, 1100, self.app.config.dict,
-                                   wxPoint(-1, -1),
-                                   wxSize(-1, -1), list, wxTE_READONLY)
+      self.dictChooser = wxComboBox(self, 1100,
+                                    self.app.config.get('defaultDict'),
+                                    wxPoint(-1, -1),
+                                    wxSize(-1, -1), dictNames, wxTE_READONLY)
       grid.Add(self.dictChooser, 0, wxEXPAND)
 
       grid.Add(wxStaticText(self, -1, _("Default encoding: ")),
                0, wxALIGN_CENTER_VERTICAL)
       self.encChooser = wxComboBox(self, 1108,
-                                  encodings.keys()[encodings.values().index(self.app.config.defaultEnc)],
+                                  encodings.keys()[encodings.values().index(self.app.config.get('encoding'))],
                                   wxPoint(-1, -1),
                                   wxSize(-1, -1), encodings.keys(),
                                   wxTE_READONLY)
@@ -72,30 +71,32 @@ class PrefsWindow(wxDialog):
       
       grid.Add(wxStaticText(self, -1, _("Default DICT server: ")),
                    0, wxALIGN_CENTER_VERTICAL)
-      self.serverEntry = wxTextCtrl(self, -1, self.app.config.dictServer)
+      self.serverEntry = wxTextCtrl(self, -1,
+                                    self.app.config.get('dictServer'))
       grid.Add(self.serverEntry, 0, wxEXPAND)
       
       grid.Add(wxStaticText(self, -1, _("Default DICT server port: ")),
                    0, wxALIGN_CENTER_VERTICAL)
-      self.portEntry = wxTextCtrl(self, -1, self.app.config.dictServerPort)
+      self.portEntry = wxTextCtrl(self, -1,
+                                  self.app.config.get('dictServerPort'))
       grid.Add(self.portEntry, 0, wxEXPAND)
       
       vboxMain.Add(grid, 0, wxALL | wxEXPAND, 2)
 
       self.winSize = wxCheckBox(self, 1101, _("Save window size"))
-      self.winSize.SetValue(self.app.config.saveWinSize)
+      self.winSize.SetValue(bool(self.app.config.get('saveWindowSize')))
       vboxMain.Add(self.winSize, 0, wxALL, 0)
 
       self.winPos = wxCheckBox(self, 1102, _("Save window position"))
-      self.winPos.SetValue(self.app.config.saveWinPos)
+      self.winPos.SetValue(bool(self.app.config.get('saveWindowPos')))
       vboxMain.Add(self.winPos, 0, wxALL, 0)
 
       self.sashPos = wxCheckBox(self, 1103, _("Save sash position"))
-      self.sashPos.SetValue(self.app.config.saveSashPos)
+      self.sashPos.SetValue(bool(self.app.config.get('saveSashPos')))
       vboxMain.Add(self.sashPos, 0, wxALL, 0)
 
       self.listReg = wxCheckBox(self, 1106, _("Use word list with files"))
-      self.listReg.SetValue(self.app.config.useListWithRegs)
+      self.listReg.SetValue(bool(self.app.config.get('useListWithRegs')))
       vboxMain.Add(self.listReg, 0, wxALL, 0)
 
       # FIXME: Remove groups
@@ -112,7 +113,7 @@ class PrefsWindow(wxDialog):
       self.buttonOK = wxButton(self, 1104, _("OK"))
       hboxButtons.Add(self.buttonOK, 1, wxALL | wxEXPAND, 1)
 
-      self.buttonCancel = wxButton(self, 1105, _("Close"))
+      self.buttonCancel = wxButton(self, 1105, _("Cancel"))
       hboxButtons.Add(self.buttonCancel, 1, wxALL | wxEXPAND, 1)
 
       vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
@@ -135,7 +136,7 @@ class PrefsWindow(wxDialog):
       """This method is invoked when checkbox for window size
       is clicked"""
       
-      print "WinSize:", event.Checked()
+      #print "WinSize:", event.Checked()
       if event.Checked() == 1:
          self.app.config.winSize = self.GetParent().GetSize()
          self.app.config.saveWinSize = 1
@@ -147,7 +148,7 @@ class PrefsWindow(wxDialog):
       """This method is invoked when checkbox for window position
       is clicked"""
       
-      print "WinPos:", event.Checked()
+      #print "WinPos:", event.Checked()
       if event.Checked() == 1:
          self.app.config.winPos = self.GetParent().GetPosition()
          self.app.config.saveWinPos = 1
@@ -159,7 +160,7 @@ class PrefsWindow(wxDialog):
       """This method is invoked when checkbox for sash position
       is clicked"""
       
-      print "Sash:", event.Checked()
+      #print "Sash:", event.Checked()
       if event.Checked() == 1:
          self.app.config.sashPos = self.GetParent().splitter.GetSashPosition()
          self.app.config.saveSashPos = 1
@@ -183,33 +184,47 @@ class PrefsWindow(wxDialog):
       
    def onSave(self, event):
       """Write new configuration to disk"""
-      
-      savePrefs(self.app.window)
-      self.app.config.writeConfigFile()
-      self.app.window.SetStatusText(_("Configuration saved"))
+
+      pass
+      #savePrefs(self.app.window)
+      #self.app.config.writeConfigFile()
+      #self.app.window.SetStatusText(_("Configuration saved"))
 
        
    def onOK(self, event):
       """Save configuration in the configuration object"""
       
-      self.app.config.dict = self.dictChooser.GetValue()
+      self.app.config.set('defaultDict', self.dictChooser.GetValue())
 
-      self.app.config.defaultEnc = encodings[self.encChooser.GetValue()]
-      if self.app.window.dict == None:
-         self.app.window.checkEncMenuItem(self.app.config.defaultEnc)
+      self.app.config.set('encoding', encodings[self.encChooser.GetValue()])
+      if self.app.window.activeDictionary == None:
+         self.app.window.checkEncMenuItem(self.app.config.get('encoding'))
       
-      self.app.config.dictServer = self.serverEntry.GetValue()
-      self.app.config.dictServerPort = self.portEntry.GetValue()
+      self.app.config.set('dictServer', self.serverEntry.GetValue())
+      self.app.config.set('dictServerPort', self.portEntry.GetValue())
 
-      self.app.config.saveWinSize = self.winSize.GetValue()
-      self.app.config.saveWinPos = self.winPos.GetValue()
-      self.app.config.saveSashPos = self.sashPos.GetValue()
-      self.app.config.useListWithRegs = self.listReg.GetValue()
+      self.app.config.set('saveWindowSize', self.winSize.GetValue())
+      self.app.config.set('saveWindowPos', self.winPos.GetValue())
+      self.app.config.set('saveSashPos', self.sashPos.GetValue())
+      self.app.config.set('useListWithRegs', self.listReg.GetValue())
+
+      frame = self.GetParent()
+      if self.app.config.get('saveWinSize'):
+         self.app.config.set('windowWidth', frame.GetSize()[0])
+         self.app.config.set('windowHeight', frame.GetSize()[1])
+      if self.app.config.get('saveWindowPos'):
+         self.app.config.set('windowPosX', frame.GetPosition()[0])
+         self.app.config.set('windowPosY', frame.GetPosition()[1])
+      if self.app.config.get('saveSashPos'):
+         self.app.config.set('sashPos', frame.splitter.GetSashPosition())
+
+      self.app.config.save()
+      
       #self.app.config.useListWithGroups = self.listGroup.GetValue()
       self.Destroy()
 
 
    def onCancel(self, event):
-      """Close dialog window"""
+      """Close dialog window discarding changes"""
       
       self.Destroy()
