@@ -17,9 +17,6 @@ Status:
 
 [ ] Make DictConnction show alternative word list (FUTURE)
 
-BUG [x] When selecting a file, mask is damaged sometimes.
-[x] Replace XPM files with PNG ones.
-
 ---------------
 
 [x] 1. Finish with parser classes to implement meta.Dictionary
@@ -31,6 +28,5 @@ few pointers assigned (no need to launch new thread).
     Example: dictionaries {name: object}
 [ ] Unify dictionary types
 
-Steps:
-1. Scan for plugins and add to list
-2. Scan for registers and add to list
+[ ] Rename plugin.xml to about.xml
+[ ] Add "plugin" attribute to about.xml base tag

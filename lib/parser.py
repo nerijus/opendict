@@ -36,6 +36,8 @@ import errortype
 import meta
 
 
+WORD_BG = "#cad1e5"
+
 # TODO:
 # 1. Remove wx from this module
 # 2. Add start() stop() methods to parser classes
@@ -368,10 +370,8 @@ class MovaParser(meta.Dictionary):
    def _appendTranslation(self, html, orig, trans):
       """Appends HTML strings to list"""
 
-      tdBackground = "#e6f1e9"
-
       html.append("<table width=\"100%\"><tr>")
-      html.append("<td bgcolor=\"%s\">" % tdBackground)
+      html.append("<td bgcolor=\"%s\">" % WORD_BG)
       html.append("<b>%s</b></td></tr>" % orig)
       html.append("<tr><td>")
       html.append("<p>%s</p>" % trans)
