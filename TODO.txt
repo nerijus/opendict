@@ -22,4 +22,4 @@ Status:
 [ ] <Base> Add significant word list feature
 
 BUG [ ] When selecting a file, mask is damaged sometimes.
-
+[ ] Replace XPM files with PNG ones.

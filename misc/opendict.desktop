@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Dictionary OpenDict
-Name[lt]=Žodynas „OpenDict“
+Name[lt]=Žodynas OpenDict
 Comment=Lookup words in a local or online dictionary 
 Comment[lt]=Ieškoti žodžių kompiuterio ar interneto žodyne
 Exec=/usr/bin/opendict

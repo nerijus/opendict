@@ -1,5 +1,5 @@
 # OpenDict Makefile
-# Copyright (c) 2003 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2005 Martynas Jocius <mjoc at akl.lt>
 
 HOME=/usr/share/opendict
 
@@ -17,11 +17,9 @@ install:
 	chmod ugo+rx $(HOME)/opendict.py
 	cp copying.txt $(HOME)
 	chmod ugo+r $(HOME)/copying.txt
-	
-	#ln -sf $(HOME)/opendict.py /usr/bin/opendict
-	cp run-opendict /usr/bin/opendict
+	ln -sf $(HOME)/opendict.py /usr/bin/opendict
+	#cp run-opendict /usr/bin/opendict
 	chmod ugo+rx /usr/bin/opendict
-	
 	cp misc/opendict.desktop /usr/share/applications/
 	chmod ugo+r /usr/share/applications/opendict.desktop
 
@@ -32,7 +30,7 @@ uninstall:
 	rm -f /usr/bin/opendict
 	rm -f /usr/share/locale/lt/LC_MESSAGES/opendict.mo
 	rm -f /usr/share/applications/opendict.desktop
-	
+
 clean:
 	for f in `find . -name '*.pyc'`; do rm $$f; done
 	for f in `find . -name '*.pyo'`; do rm $$f; done
