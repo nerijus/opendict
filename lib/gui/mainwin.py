@@ -60,20 +60,27 @@ import plaindict
 _ = wxGetTranslation
 titleTemplate = "OpenDict - %s"
 
+# Used to remember word when searching by entering text to the entry,
+# selecting one from the list or clicking a link.
+lastLookupWord = None
+
+
 class HtmlWindow(wxHtmlWindow):
 
    """Html control for showing transaltion and catching
    link-clicking"""
 
-   def OnLinkClicked(self, linkinfo):
-      
-      debugLog(DEBUG, "LinkInfo: searching for '%s'" % linkinfo.GetHref())
+   def OnLinkClicked(self, linkInfo):
+
+      global lastLookupWord
+      lastLookupWord = linkInfo.GetHref()
+      debugLog(DEBUG, "LinkInfo: searching for '%s'" % lastLookupWord)
       wxBeginBusyCursor()
       parent = self.GetParent().GetParent().GetParent()
       parent.SetStatusText(_("Searching..."))
       parent.timerSearch.Start(parent.delay)
       parent.search = Process(parent.activeDictionary.search,
-                              linkinfo.GetHref())
+                              lastLookupWord)
 
       
 
@@ -510,7 +517,9 @@ class MainWindow(wxFrame):
          wxEndBusyCursor()
          self.timerSearch.Stop()
          self.search.stop()
-         word = self.entry.GetValue()
+         #word = self.entry.GetValue()
+         global lastLookupWord
+         word = lastLookupWord
 
          if self.entry.FindString(word) == -1:
             self.entry.Append(word)
@@ -650,7 +659,6 @@ class MainWindow(wxFrame):
                # This is a register, hash table must be loaded
                if self.app.config.registers[self.activeDictionary.getName()][1] \
                       not in ['dz', 'dict']:
-                  print "INFO Loading hash table..."
                   try:
                      if os.path.exists(os.path.join(info.LOCAL_HOME,
                                                     "register",
@@ -673,15 +681,27 @@ class MainWindow(wxFrame):
 
    def onSearch(self, event):
       if self.activeDictionary == None:
-         self.SetStatusText(_("There is no opened dictionary"))
+         if len(self.app.dictionaries):
+            title = _("No dictionary activated")
+            msg = _("No dictionary activated. Please select one from "\
+                 "\"Dictionaries\" menu and try again.")
+         else:
+            title = _("No dictionaries installed")
+            msg = _("There is no dictionaries installed. You can " \
+                      "install one by selecting Tools > Manage " \
+                      "Dictionaries > Available")
+         #self.SetStatusText(_("No dictionary is opened"))
+         errorwin.showErrorMessage(title, msg)
          return
 
       word = self.entry.GetValue()
 
       if word == "":
-         self.SetStatusText(_("Enter a word"))
+         self.SetStatusText(_("Enter a word and try again"))
          return
-      
+
+      global lastLookupWord
+      lastLookupWord = word
       wxBeginBusyCursor()
 
       self.__searchedBySelecting = 0
@@ -1066,7 +1086,7 @@ class MainWindow(wxFrame):
                        "character encoding %s is not correct for this " \
                        "dictionary. Try selecting " \
                        "another encoding from View > Character Encoding " \
-                       "menu" % self.app.config.encoding)
+                       "menu" % self.app.config.get('encoding'))
 
                from gui import errorwin
                errorwin.showErrorMessage(title, msg)
@@ -1317,6 +1337,8 @@ class MainWindow(wxFrame):
       self.buttonStop.Enable(1)
       self.timerSearch.Start(self.delay)
       word = event.GetString()
+      global lastLookupWord
+      lastLookupWord = word
       self.entry.SetValue(word)
       word = enc.fromWX(word)
       word = word.encode(self.activeDictionary.getEncoding())

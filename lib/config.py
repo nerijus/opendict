@@ -40,7 +40,7 @@ class Configuration:
    def __init__(self):
       """Initialize default values"""
       
-      self.filePath = os.path.join(info.LOCAL_HOME, "opendict.conf")
+      self.filePath = os.path.join(info.LOCAL_HOME, "opendict.xml")
       self.props = {}
 
       # TODO: Should not be here after removing register part from config
