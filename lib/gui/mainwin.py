@@ -18,6 +18,10 @@
 #
 # Module: gui.mainwin
 
+"""
+Main window GUI module
+"""
+
 from wxPython.wx import *
 from wxPython.html import *
 import os
@@ -113,18 +117,25 @@ class MainWindow(wxFrame):
 
       menuFile = wxMenu()
       menuFileOpen = wxMenu()
-      menuFileOpen.Append(101, "Slowo", _("Slowo format (*.dwa)"))
-      menuFileOpen.Append(102, "Mova", _("Mova format (*.mova)"))
-      menuFileOpen.Append(103, "TMX", _("TMX format (*.tmx)"))
-      menuFileOpen.Append(104, "DICT", _("DICT format (for DICT protocol)"))
-      menuFile.AppendMenu(105, _("Load File"), menuFileOpen)
+      menuFileOpen.Append(101, "Slowo dictionary",
+                          _("Slowo dictionaries usually have 'dwa' extention"))
+      menuFileOpen.Append(102, "Mova dictionary",
+                          _("Mova dictionaries usually have 'mova' extention"))
+      menuFileOpen.Append(103, "TMX dictionary",
+                          _("TMX dictionaries usually have 'tmx' extention"))
+      menuFileOpen.Append(104, "DICT dictionary",
+                          _("DICT dictionaries usually have " \
+                            "'dict' or 'dz' extention"))
+      menuFile.AppendMenu(105, _("Load Dictionary From File"), menuFileOpen)
 
       menuFile.AppendSeparator()
       #menuFile.Append(2004, _("Print Translation"), "")
       #menuFile.Append(2006, _("Print Preview"), "")
       #menuFile.AppendSeparator()
-      menuFile.Append(106, _("&Close Dictionary"), "")
-      menuFile.Append(107, _("E&xit\tCtrl-X"), _("Exit program"))
+      menuFile.Append(106, _("&Close Dictionary\tCtrl-W"),
+                      _("Close opened dicitonary"))
+      menuFile.Append(107, _("E&xit\tCtrl-Q"),
+                      _("Exit program"))
 
       menuBar.Append(menuFile, _("&File"))
 
@@ -215,8 +226,10 @@ class MainWindow(wxFrame):
       menuTools = wxMenu()
       menuTools.Append(110, _("Manage Dictionaries...\tCtrl-M"),
                       _("Install or remove dictionaries, see the information"))
-      menuTools.Append(122, _("Manage Groups...\tCtrl-G"),
-                      _("Edit groups of dictionaries"))
+
+      # FIXME: Remove group classes and files
+      #menuTools.Append(122, _("Manage Groups...\tCtrl-G"),
+      #                _("Edit groups of dictionaries"))
                       
       #menuTools.Append(110, _("Plugin manager...\tCtrl-M"),
       #                _("Edit plugins"))
@@ -227,7 +240,7 @@ class MainWindow(wxFrame):
       menuTools.Append(123, _("Connect to DICT Server..."),
                           _("Open connection to DICT server"))
 
-      menuTools.AppendSeparator()
+      #menuTools.AppendSeparator()
       
       # Editor can't be used with non-unicode GUI, because unicode
       # string are used with TMX files.
@@ -236,8 +249,9 @@ class MainWindow(wxFrame):
           menuTools.Append(5002, _("Dictionaries Editor"),
                           _("Create and manage your own dictionaries"))  
 
-      menuTools.Append(5003, _("My Words\tCtrl-W"),
-                          _("Your significant words list"))
+      # FIXME: Remove atitinkamas classes
+      #menuTools.Append(5003, _("My Words\tCtrl-W"),
+      #                    _("Your significant words list"))
                            
       menuBar.Append(menuTools, _("Tools"))
 
@@ -399,9 +413,9 @@ class MainWindow(wxFrame):
 
 
       # If there is no dictionary, give user a tip what to do
-      if len(self.app.config.plugins) == 0 \
-         and len(self.app.config.registers) == 0:
-         self.SetStatusText(_("To add a dictionary, go to \"Dictionaries->Add new\" menu"))
+      #if len(self.app.config.plugins) == 0 \
+      #   and len(self.app.config.registers) == 0:
+      #   self.SetStatusText(_("To add a dictionary, go to \"Dictionaries->Add new\" menu"))
       #elif self.app.config.dict == "":
       #   self.SetStatusText(_("Choose a dictionary from \"Dictionaries\" menu"))
 
