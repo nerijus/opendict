@@ -110,24 +110,32 @@ class MainWindow(wxFrame):
       #
 
       menuFile = wxMenu()
-      menuFileOpen = wxMenu()
+##       menuFileOpen = wxMenu()
       
-      menuFileOpen.Append(101, "Slowo dictionary",
-                          _("Slowo dictionaries usually have 'dwa' extention"))
-      menuFileOpen.Append(102, "Mova dictionary",
-                          _("Mova dictionaries usually have 'mova' extention"))
-      menuFileOpen.Append(103, "TMX dictionary",
-                          _("TMX dictionaries usually have 'tmx' extention"))
-      menuFileOpen.Append(104, "DICT dictionary",
-                          _("DICT dictionaries usually have " \
-                            "'dict' or 'dz' extention"))
+##       menuFileOpen.Append(101, "Slowo dictionary",
+##                           _("Slowo dictionaries usually have 'dwa' extention"))
+##       menuFileOpen.Append(102, "Mova dictionary",
+##                           _("Mova dictionaries usually have 'mova' extention"))
+##       menuFileOpen.Append(103, "TMX dictionary",
+##                           _("TMX dictionaries usually have 'tmx' extention"))
+##       menuFileOpen.Append(104, "DICT dictionary",
+##                           _("DICT dictionaries usually have " \
+##                             "'dict' or 'dz' extention"))
 
-      menuFile.Append(2004, _("Print Translation"), "")
-      menuFile.Append(2006, _("Print Preview"), "")
+      idPrint = wx.NewId()
+      menuFile.Append(idPrint, _("Print Translation"), "")
+
+      idPreview = wx.NewId()
+      menuFile.Append(idPreview, _("Print Preview"), "")
+      
       menuFile.AppendSeparator()
-      menuFile.Append(106, _("&Close\tCtrl-W"),
+
+      idCloseDict = wx.NewId()
+      menuFile.Append(idCloseDict, _("&Close\tCtrl-W"),
                       _("Close opened dicitonary"))
-      menuFile.Append(107, _("E&xit\tCtrl-Q"),
+
+      idExit = wx.NewId()
+      menuFile.Append(idExit, _("E&xit\tCtrl-Q"),
                       _("Exit program"))
 
       menuBar.Append(menuFile, _("&File"))
@@ -137,21 +145,29 @@ class MainWindow(wxFrame):
       #
       # Clear functions
       #
-      menuEdit.Append(109, _("&Clear Search Entry\tCtrl-L"))
-      menuEdit.Append(121, _("Clear History"))
+      idClearEntry = wx.NewId()
+      menuEdit.Append(idClearEntry, _("&Clear Search Entry\tCtrl-L"))
+
+      idClearHistory = wx.NewId()
+      menuEdit.Append(idClearHistory, _("Clear History"))
 
       menuEdit.AppendSeparator()
 
       #
       # Clipboard functions
       #
-      menuEdit.Append(108, _("Copy\tCtrl-C"),
+      idCopy = wx.NewId()
+      menuEdit.Append(idCopy, _("Copy\tCtrl-C"),
                       _("Copy selected translation text"))
-      menuEdit.Append(2005, _("Paste\tCtrl-V"),
+
+      idPaste = wx.NewId()
+      menuEdit.Append(idPaste, _("Paste\tCtrl-V"),
                       _("Paste clipboard text into the search entry"))
       
       menuEdit.AppendSeparator()
-      menuEdit.Append(111, _("Preferences...\tCtrl-P"), _("Edit preferences"))
+
+      idPrefs = wx.NewId()
+      menuEdit.Append(idPrefs, _("Preferences...\tCtrl-P"), _("Edit preferences"))
 
       menuBar.Append(menuEdit, _("&Edit"))
 
@@ -441,20 +457,20 @@ class MainWindow(wxFrame):
       # TODO: New-style event definition
 
       # File menu events
-      EVT_MENU(self, 101, self.onOpenSlowo)
-      EVT_MENU(self, 102, self.onOpenMova)
-      EVT_MENU(self, 103, self.onOpenTMX)
-      EVT_MENU(self, 104, self.onOpenDictFile)
-      EVT_MENU(self, 2004, self.onPrint)
-      EVT_MENU(self, 2006, self.onPreview)
-      EVT_MENU(self, 106, self.onCloseDict)
-      EVT_MENU(self, 107, self.onExit)
+##       EVT_MENU(self, 101, self.onOpenSlowo)
+##       EVT_MENU(self, 102, self.onOpenMova)
+##       EVT_MENU(self, 103, self.onOpenTMX)
+##       EVT_MENU(self, 104, self.onOpenDictFile)
+      EVT_MENU(self, idPrint, self.onPrint)
+      EVT_MENU(self, idPreview, self.onPreview)
+      EVT_MENU(self, idCloseDict, self.onCloseDict)
+      EVT_MENU(self, idExit, self.onExit)
 
       # Edit menu events
-      EVT_MENU(self, 121, self.onClearHistory)
-      EVT_MENU(self, 108, self.onCopy)
-      EVT_MENU(self, 2005, self.onPaste)
-      EVT_MENU(self, 109, self.onClean)
+      EVT_MENU(self, idClearHistory, self.onClearHistory)
+      EVT_MENU(self, idCopy, self.onCopy)
+      EVT_MENU(self, idPaste, self.onPaste)
+      EVT_MENU(self, idClearEntry, self.onClean)
 
       # View menu events
       EVT_MENU(self, 2007, self.onIncreaseFontSize)
@@ -471,7 +487,7 @@ class MainWindow(wxFrame):
       EVT_MENU(self, 120, self.onShowFileRegistry)
       EVT_MENU(self, 5002, self.onShowDictEditor)
       #EVT_MENU(self, 5003, self.onShowMyWordList)
-      EVT_MENU(self, 111, self.onShowPrefsWindow)
+      EVT_MENU(self, idPrefs, self.onShowPrefsWindow)
 
       # Help menu events
       #EVT_MENU(self, 115, self.onManual)
