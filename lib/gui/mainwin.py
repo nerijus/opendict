@@ -1389,6 +1389,7 @@ class MainWindow(wxFrame):
       word = enc.fromWX(word)
       word = word.encode(self.activeDictionary.getEncoding())
       self.search = Process(self.activeDictionary.search, word)
+      wxBeginBusyCursor()
 
 
    def createListPanel(self):
