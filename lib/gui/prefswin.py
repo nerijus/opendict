@@ -46,6 +46,7 @@ class PrefsWindow(wxDialog):
                    0, wxALIGN_CENTER_VERTICAL)
 
       dictNames = self.app.dictionaries.keys()
+      dictNames.sort()
       dictNames.insert(0, "")
 
       try:
