@@ -112,7 +112,10 @@ class PluginManagerWindow(wxFrame):
        #
        idDictList = wx.NewId()
        self.installedList = DictListCtrl(panelInstalled, idDictList,
-                                         style=wx.LC_REPORT)# | wx.BORDER_SUNKEN)
+                                         style=wx.LC_REPORT
+                                         | wx.LC_SINGLE_SEL
+                                         | wx.LC_NO_HEADER
+                                         | wx.SUNKEN_BORDER)
        vboxInstalledBox.Add(self.installedList, 1, wxALL | wxEXPAND, 1)
        
        #
@@ -120,6 +123,7 @@ class PluginManagerWindow(wxFrame):
        #
        idRemove = wx.NewId()
        self.buttonRemove = wxButton(panelInstalled, idRemove, "Remove")
+       self.buttonRemove.Disable()
        vboxInstalledBox.Add(self.buttonRemove, 0, wxALL | wxALIGN_RIGHT, 2)
        
        sbSizerInstalled.Add(vboxInstalledBox, 1, wxALL | wxEXPAND, 0)
@@ -134,7 +138,7 @@ class PluginManagerWindow(wxFrame):
        self.installedList.InsertColumn(0, "Dictionary Name")
        self.installedList.InsertColumn(1, "Size")
        
-       size = 100
+       #size = 100
        
        dictNames = self.allDictionaries.keys()
        dictNames.sort()
@@ -146,14 +150,14 @@ class PluginManagerWindow(wxFrame):
            
            index = self.installedList.InsertStringItem(0, dictionary)
            
-           sizeString = "%d KB"
+           #sizeString = "(%d KB)"
            
            #if not installed:
            #    sizeString = "%d KB"
                
-           self.installedList.SetStringItem(index, 1,
-                                            sizeString % size)
-           size += 100
+           #self.installedList.SetStringItem(index, 1,
+           #                                 sizeString % size)
+           #size += 100
            
 
            #status = None
@@ -166,13 +170,13 @@ class PluginManagerWindow(wxFrame):
            self.installedList.SetItemData(index, index+1)
            
            #if installed:
-           item = self.installedList.GetItem(index)
-           item.SetTextColour(wx.BLUE)
-           self.installedList.SetItem(item)
+           #item = self.installedList.GetItem(index)
+           #item.SetTextColour(wx.BLUE)
+           #self.installedList.SetItem(item)
 
                
-       self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
-       self.installedList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+       self.installedList.SetColumnWidth(0, 375)
+       #self.installedList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
        #self.installedList.SetColumnWidth(2, wx.LIST_AUTOSIZE)
 
        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onInstalledSelected,
@@ -200,7 +204,10 @@ class PluginManagerWindow(wxFrame):
        #
        idAvailList = wx.NewId()
        self.availableList = DictListCtrl(panelAvailable, idAvailList,
-                                         style=wx.LC_REPORT)# | wx.BORDER_SUNKEN)
+                                         style=wx.LC_REPORT
+                                         | wx.LC_SINGLE_SEL
+                                         | wx.LC_NO_HEADER
+                                         | wx.SUNKEN_BORDER)
        vboxAvailableBox.Add(self.availableList, 1, wxALL | wxEXPAND, 1)
 
 
@@ -212,13 +219,15 @@ class PluginManagerWindow(wxFrame):
        #
        idInstall = wx.NewId()
        self.buttonInstall = wxButton(panelAvailable, idInstall, _("Install"))
+       self.buttonInstall.Disable()
        hboxButtons.Add(self.buttonInstall, 0, wxALL | wxALIGN_RIGHT, 2)
 
        #
        # "Update" button
        #
        idUpdate = wx.NewId()
-       self.buttonUpdate = wxButton(panelAvailable, idInstall, _("Update List"))
+       self.buttonUpdate = wxButton(panelAvailable, idInstall,
+                                    _("Update List"))
        hboxButtons.Add(self.buttonUpdate, 0, wxALL | wxALIGN_RIGHT, 2)
 
        vboxAvailableBox.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
@@ -233,7 +242,14 @@ class PluginManagerWindow(wxFrame):
        # Make columns
        #
        self.availableList.InsertColumn(0, _("Dictionary Name"))
-       self.availableList.InsertColumn(1, _("Size Of Download"))
+
+       item = wxListItem()
+       item.m_mask = wx.LIST_MASK_TEXT | wxLIST_MASK_FORMAT
+       item.m_format = wx.LIST_FORMAT_RIGHT
+       item.m_text = _("Size")
+       #self.installedList.InsertColumn(1, "Size")
+       self.availableList.InsertColumnInfo(1, item)
+       #self.availableList.InsertColumnInfo(1, _("Size Of Download"))
        
        size = 100
        
@@ -248,22 +264,11 @@ class PluginManagerWindow(wxFrame):
            index = self.availableList.InsertStringItem(0, dictionary)
            
            sizeString = "%d KB"
-           
-           #if not installed:
-           #    sizeString = "%d KB (to download)"
                
            self.availableList.SetStringItem(index, 1,
                                             sizeString % size)
-           size += 100
+           size += 1000
            
-
-           #status = None
-           #if installed:
-           #    status = "Installed"
-           #else:
-           #    status = "Not installed"
-         
-           #self.availableList.SetStringItem(index, 2, status)
            self.availableList.SetItemData(index, index+1)
            
            #if installed:
@@ -272,8 +277,8 @@ class PluginManagerWindow(wxFrame):
            #    self.availableList.SetItem(item)
 
                
-       self.availableList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
-       self.availableList.SetColumnWidth(1, 180)
+       self.availableList.SetColumnWidth(0, 390)
+       self.availableList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
        #self.availableList.SetColumnWidth(2, wx.LIST_AUTOSIZE)
 
        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onAvailableSelected,
@@ -338,9 +343,10 @@ class PluginManagerWindow(wxFrame):
 
    def onInstalledSelected(self, event):
       #plugin = self.app.config.plugins[event.GetString()]
-      self.currentItem = event.m_itemIndex
+      self.currentInstalledItemSelection = event.m_itemIndex
+      self.buttonRemove.Enable(1)
 
-      print self.installedList.GetItemText(self.currentItem)
+      print self.installedList.GetItemText(self.currentInstalledItemSelection)
       
 ##       name = event.GetString()
 ##       size = -1
@@ -410,8 +416,10 @@ class PluginManagerWindow(wxFrame):
 
    def onAvailableSelected(self, event):
 
-      self.currentItem = event.m_itemIndex
-      print self.availableList.GetItemText(self.currentItem)
+      self.currentAvailItemSelection = event.m_itemIndex
+      print self.availableList.GetItemText(self.currentAvailItemSelection)
+      #self.installedList.
+      self.buttonInstall.Enable(1)
       
 
    def onInstall(self, event):
