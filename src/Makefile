@@ -1,8 +1,9 @@
-# For debuging and not only
+WX_CONFIG_PATH=wx-config
+#WX_CONFIG_PATH=/usr/local/wxWindows.22/bin/wx-config
 
-CC = g++
-CFLAGS = $(shell wx-config --cflags) -g -Wall
-LIBS = $(shell wx-config --libs) -g -Wall
+CC = $(shell $(WX_CONFIG_PATH) --cxx)
+CFLAGS = $(shell $(WX_CONFIG_PATH) --cflags) -g -Wall
+LIBS = $(shell $(WX_CONFIG_PATH) --libs) -g -Wall
 
 all: opendict
 

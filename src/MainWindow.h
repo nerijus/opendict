@@ -20,10 +20,12 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
-#ifdef __GNUG__
-#pragma interface
-#pragma implementation
-#endif
+#if 0 //produces link errors "undefined reference to virtual table" with gcc>2.95
+ #ifdef __GNUG__
+ #pragma interface
+ #pragma implementation
+ #endif
+#endif //0
 
 #include "wx/wxprec.h"
 
@@ -99,7 +101,7 @@ class MainWindow: public wxFrame
       wxHtmlWinParser* html_parser;
       About* about;
 
-      DECLARE_EVENT_TABLE();
+      DECLARE_EVENT_TABLE()
 };
 
 enum 

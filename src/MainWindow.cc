@@ -114,7 +114,7 @@ MainWindow::MainWindow(const wxString& title,
     * Basic widgets
     */
 
-   wxString findw[] = {};
+//   wxString findw[] = {};
 
    find_entry = new wxTextCtrl(this,
 			       FIND_ENTER, "",
@@ -219,7 +219,7 @@ MainWindow::~MainWindow()
 }
 
 /*
- * Exit methon
+ * Exit method
  */
 void MainWindow::on_quit(wxCommandEvent& WXUNUSED(event))
 {

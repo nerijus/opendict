@@ -20,10 +20,12 @@
 #ifndef OPENDICT_H
 #define OPENDICT_H
 
-#ifdef __GNUG__
-#pragma interface
-#pragma implementation
-#endif
+#if 0 //produces link errors "undefined reference to virtual table" with gcc>2.95
+ #ifdef __GNUG__
+ #pragma interface
+ #pragma implementation
+ #endif
+#endif //0
 
 #include "wx/wxprec.h"
 
