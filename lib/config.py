@@ -47,11 +47,9 @@ class Configuration:
       #
       # Default values
       #
-      self.set('saveWindowSize', '1')
-      self.set('saveWindowPos', '1')
-      self.set('saveSashPos', '1')
-      self.set('useListWithRegs', '1')
-      self.set('useListWithGroups', '1')
+      self.set('saveWindowSize', 'True')
+      self.set('saveWindowPos', 'True')
+      self.set('saveSashPos', 'True')
 
       self.set('defaultDict', '')
       self.set('windowWidth', '600')

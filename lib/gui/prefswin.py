@@ -84,21 +84,17 @@ class PrefsWindow(wxDialog):
       
       vboxMain.Add(grid, 0, wxALL | wxEXPAND, 4)
 
-      self.winSize = wxCheckBox(self, 1101, _("Save window size"))
+      self.winSize = wxCheckBox(self, 1101, _("Save window size on exit"))
       self.winSize.SetValue(bool(self.app.config.get('saveWindowSize')))
       vboxMain.Add(self.winSize, 0, wxALL, 3)
 
-      self.winPos = wxCheckBox(self, 1102, _("Save window position"))
+      self.winPos = wxCheckBox(self, 1102, _("Save window position on exit"))
       self.winPos.SetValue(bool(self.app.config.get('saveWindowPos')))
       vboxMain.Add(self.winPos, 0, wxALL, 3)
 
-      self.sashPos = wxCheckBox(self, 1103, _("Save sash position"))
+      self.sashPos = wxCheckBox(self, 1103, _("Save sash position on exit"))
       self.sashPos.SetValue(bool(self.app.config.get('saveSashPos')))
       vboxMain.Add(self.sashPos, 0, wxALL, 3)
-
-      self.listReg = wxCheckBox(self, 1106, _("Use word list with files"))
-      self.listReg.SetValue(bool(self.app.config.get('useListWithRegs')))
-      vboxMain.Add(self.listReg, 0, wxALL, 3)
 
       vboxMain.Add(wxStaticLine(self, -1), 0, wxALL | wxEXPAND, 5)
 
@@ -117,8 +113,6 @@ class PrefsWindow(wxDialog):
       EVT_CHECKBOX(self, 1101, self.onSaveWinSizeClicked)
       EVT_CHECKBOX(self, 1102, self.onSaveWinPosClicked)
       EVT_CHECKBOX(self, 1103, self.onSaveSashPosClicked)
-      EVT_CHECKBOX(self, 1106, self.onUseListRegClicked)
-      EVT_CHECKBOX(self, 1107, self.onUseListGroupClicked)
       EVT_BUTTON(self, 1104, self.onOK)
       EVT_BUTTON(self, 1105, self.onCancel)
 
@@ -138,7 +132,6 @@ class PrefsWindow(wxDialog):
       """This method is invoked when checkbox for window position
       is clicked"""
       
-      #print "WinPos:", event.Checked()
       if event.Checked() == 1:
          self.app.config.winPos = self.GetParent().GetPosition()
          self.app.config.saveWinPos = 1
@@ -150,7 +143,6 @@ class PrefsWindow(wxDialog):
       """This method is invoked when checkbox for sash position
       is clicked"""
       
-      #print "Sash:", event.Checked()
       if event.Checked() == 1:
          self.app.config.sashPos = self.GetParent().splitter.GetSashPosition()
          self.app.config.saveSashPos = 1
@@ -158,20 +150,6 @@ class PrefsWindow(wxDialog):
          self.app.config.saveSashPos = 0
 
 
-   def onUseListRegClicked(self, event):
-      """This method is invoked when checkbox for list for files
-      is clicked"""
-      
-      self.app.config.useListWithRegs = event.Checked()
-
-
-   # FIXME: Must be removed
-   def onUseListGroupClicked(self, event):
-      """This method is invoked when checkbox for window size
-      is clicked"""
-      self.app.config.useListWithGroups = event.Checked()
-
-      
    def onOK(self, event):
       """Save configuration in the configuration object"""
       
@@ -187,7 +165,6 @@ class PrefsWindow(wxDialog):
       self.app.config.set('saveWindowSize', self.winSize.GetValue())
       self.app.config.set('saveWindowPos', self.winPos.GetValue())
       self.app.config.set('saveSashPos', self.sashPos.GetValue())
-      self.app.config.set('useListWithRegs', self.listReg.GetValue())
 
       frame = self.GetParent()
       if self.app.config.get('saveWinSize'):
