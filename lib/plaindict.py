@@ -165,7 +165,8 @@ def indexShouldBeMade(dictionary):
     print dictGlobalHome
 
     if not os.path.exists(os.path.join(dictGlobalHome, 'data', 'index.xml')) \
-           and not os.path.exists(os.path.join(dictLocalHome, 'data', 'index.xml')):
+           and not os.path.exists(os.path.join(dictLocalHome, 'data',
+                                               'index.xml')):
         return True
 
     print "Old checksum:", dictionary.getChecksum()
@@ -205,6 +206,7 @@ def makeIndex(dictionary):
 
     doc = xmltools.generateIndexFile(index)
     xmltools.writeIndexFile(doc, os.path.join(dictHome, 'data', 'index.xml'))
+
 
 
 def loadIndex(dictionary):

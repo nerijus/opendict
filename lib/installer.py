@@ -197,9 +197,6 @@ def installPlainDictionary(filePath):
                                                     'config.xml'))
 
 
-    print "DEBUG Indexing dictionary..."
-    plaindict.makeIndex(filePath)
-
     return dictDir
 
 
@@ -295,6 +292,36 @@ def installDictionaryPlugin(filePath):
     return os.path.join(info.LOCAL_HOME,
                         info.PLUGIN_DICT_DIR,
                         topDirectory)
+
+
+def removePlainDictionary(dictInstance):
+    """Remove dictionary configuration"""
+
+    filePath = dictInstance.getPath()
+    fileName = os.path.basename(filePath)
+
+    dictDir = os.path.join(info.LOCAL_HOME, info.PLAIN_DICT_DIR, fileName)
+
+    try:
+        print "DEBUG Removing %s..." % dictDir
+        shutil.rmtree(dictDir)
+    except Exception, e:
+        raise Exception, str(e)
+
+
+def removePluginDictionary(dictInstance):
+    """Remove plugin dictionary"""
+
+    filePath = dictInstance.getPath()
+    fileName = os.path.basename(filePath)
+
+    dictDir = os.path.join(info.LOCAL_HOME, info.PLUGIN_DICT_DIR, fileName)
+
+    try:
+        print "DEBUG Removing %s..." % dictDir
+        shutil.rmtree(dictDir)
+    except Exception, e:
+        raise Exception, str(e)
     
 
 if __name__ == "__main__":

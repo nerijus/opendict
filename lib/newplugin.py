@@ -131,6 +131,8 @@ class DictionaryPlugin(meta.Dictionary):
     def __init__(self, path):
         """Prepare plugin and plugin information objects"""
 
+        self.path = path
+
         try:
             self.info = self._loadInfo(path)
             print self.info
@@ -147,6 +149,7 @@ class DictionaryPlugin(meta.Dictionary):
     def getType(self):
         """Return dictionary type"""
 
+        import dicttype
         return dicttype.PLUGIN
 
 
@@ -154,6 +157,12 @@ class DictionaryPlugin(meta.Dictionary):
         """Return plugin name"""
 
         return self.info.name
+
+
+    def getPath(self):
+        """Return plugin location"""
+
+        return self.path
 
 
     def getVersion(self):
@@ -304,10 +313,10 @@ def loadDictionaryPlugins():
                                                     fileName))]
 
     if os.path.exists(globalPluginPath):
-        pluginDirs.extend([os.path.join(globalPluginPath, fileName) \
-                           for fileName in os.listdir(globalPluginPath)\
-                           if os.path.isdir(os.path.join(globalPluginPath,
-                                                         fileName))])
+        for fileName in os.listdir(globalPluginPath):
+            if os.path.isdir(os.path.join(globalPluginPath, fileName)) \
+               and not fileName in pluginDirs:
+                pluginDirs.append(fileName)
 
     plugins = []
 

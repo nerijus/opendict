@@ -22,7 +22,7 @@
 
 from wxPython.wx import *
 
-import plugin
+#import plugin
 import misc
 
 _ = wxGetTranslation

@@ -29,7 +29,7 @@ import traceback
 
 from info import home, uhome, __version__
 from misc import numVersion, printError
-from gui.pluginwin import PluginLicenseWindow
+#from gui.pluginwin import PluginLicenseWindow
 from gui import errorwin
 import info
 

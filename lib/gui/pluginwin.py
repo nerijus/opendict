@@ -21,11 +21,15 @@
 from wxPython.wx import *
 import  wx.lib.mixins.listctrl  as  listmix
 import wx
+
 from shutil import rmtree
 import os
+import traceback
 
 from misc import printError
 from gui import errorwin
+import installer
+import dicttype
 
 #import group
 import misc
@@ -51,20 +55,21 @@ class PluginManagerWindow(wxFrame):
       wxFrame.__init__(self, parent, id, title, pos, size, style)
 
       self.app = wxGetApp()
+      self.mainWin = parent
       self.currentInstalledItemSelection = -1
       self.currentAvailItemSelection = -1
 
       vboxMain = wxBoxSizer(wxVERTICAL)
 
-      self.allDictionaries = {}
+      self.installedDictionaries = {}
+      self.availDictionaries = {}
       installed = True
 
       for dictName in self.app.dictionaries.keys():
-          self.allDictionaries[dictName] = installed
+          self.installedDictionaries[dictName] = installed
 
-      for xxx in [u'Vienas pienas', u'Du kartu', u'Trys kas nors']:
-          self.allDictionaries[xxx] = not installed
-
+      #for xxx in [u'Vienas pienas', u'Du kartu', u'Trys kas nors']:
+      #    self.allDictionaries[xxx] = not installed
 
       tabbedPanel = wx.Notebook(self, -1)
 
@@ -134,13 +139,13 @@ class PluginManagerWindow(wxFrame):
        #
        self.installedList.InsertColumn(0, "Dictionary Name")
        
-       dictNames = self.allDictionaries.keys()
+       dictNames = self.installedDictionaries.keys()
        dictNames.sort()
        
        print dictNames
        
        for dictionary in dictNames:
-           installed = self.allDictionaries.get(dictionary)
+           installed = self.installedDictionaries.get(dictionary)
            
            index = self.installedList.InsertStringItem(0, dictionary)
            
@@ -151,6 +156,8 @@ class PluginManagerWindow(wxFrame):
 
        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onInstalledSelected,
                  self.installedList)
+
+       self.Bind(wx.EVT_BUTTON, self.onRemove, self.buttonRemove)
 
        return panelInstalled
 
@@ -215,13 +222,13 @@ class PluginManagerWindow(wxFrame):
        
        size = 100
        
-       dictNames = self.allDictionaries.keys()
+       dictNames = self.availDictionaries.keys()
        dictNames.sort()
        
        print dictNames
        
        for dictionary in dictNames:
-           installed = self.allDictionaries.get(dictionary)
+           installed = self.availDictionaries.get(dictionary)
            
            index = self.availableList.InsertStringItem(0, dictionary)
            
@@ -234,11 +241,19 @@ class PluginManagerWindow(wxFrame):
            self.availableList.SetItemData(index, index+1)
 
 
-       self.availableList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
-       self.availableList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+       # Keep wide if list is empty yet
+       if self.availDictionaries:
+           self.availableList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+           self.availableList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+       else:
+           self.availableList.SetColumnWidth(0, 200)
+           self.availableList.SetColumnWidth(1, 70)
 
        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onAvailableSelected,
                  self.availableList)
+
+       self.Bind(wx.EVT_BUTTON, self.onInstall, self.buttonInstall)
+       self.Bind(wx.EVT_BUTTON, self.onUpdate, self.buttonUpdate)
 
        return panelAvailable
 
@@ -306,9 +321,17 @@ class PluginManagerWindow(wxFrame):
        if sel == _pageInstalled:
            print "Showing info about installed item %d" \
                  % self.currentInstalledItemSelection
+           if self.currentInstalledItemSelection == -1:
+               self.disableInfo()
+           else:
+               self.enableInfo()
        elif sel == _pageAvail:
            print "Showing info about avail item %d" \
                  % self.currentAvailItemSelection
+           if self.currentAvailItemSelection == -1:
+               self.disableInfo()
+           else:
+               self.enableInfo()
        
 
    def GetListCtrl(self):
@@ -398,99 +421,76 @@ class PluginManagerWindow(wxFrame):
       print self.availableList.GetItemText(self.currentAvailItemSelection)
       #self.installedList.
       self.buttonInstall.Enable(1)
+      self.enableInfo()
 
-      self.stName.Enable(1)
-      self.stVersion.Enable(1)
-      self.stAuthor.Enable(1)
+
+   def disableInfo(self):
+       """Make info widgets inactive"""
+
+       self.stName.Disable()
+       self.stVersion.Disable()
+       self.stAuthor.Disable()
+       self.textAbout.Disable()
+
+
+   def enableInfo(self):
+       """Make info widgets active"""
+
+       self.stName.Enable(1)
+       self.stVersion.Enable(1)
+       self.stAuthor.Enable(1)
+       self.textAbout.Enable(1)
+
+
+   def onUpdate(self, event):
+       """Update dictionaries list"""
+
+       print "Update"
       
 
    def onInstall(self, event):
        """Install button pressed"""
-       
-       from installer import Installer # FIXME: bug with imports
-       installer = Installer(self.app.config.window, self.app.config)
-       installer.showGUI()
-       
-       if self.app.config.window.lastInstalledDictName != None:
-           self.pluginList.Append(self.app.config.window.lastInstalledDictName)
-           self.app.config.window.lastInstalledDictName = None
+
+       print "Install %s" % self.installedList.GetItemText(\
+           self.currentAvailItemSelection)
 
 
    def onRemove(self, event):
        """Remove button pressed"""
-       
-       self.app.window.onCloseDict(None)
-       item = self.pluginList.GetStringSelection()
-       pos = self.pluginList.GetSelection()
-       
-       if item in self.app.config.plugins.keys():
-           # This is a plugin
-           pluginDirPath = os.path.join(info.LOCAL_HOME,
-                                        info.__DICT_DIR,
-                                        info.__PLUGIN_DICT_DIR,
-                                        self.app.config.plugins[item].dir)
-           if os.path.exists(pluginDirPath):
-               try:
-                   rmtree(pluginDirPath)
-               except:
-                   self.app.window.SetStatusText(_("Error removing \"%s\"") % item)
-                   errDialog()
-                   printError()
-                   return
-           elif os.path.exists(os.path.join(info.GLOBAL_HOME,
-                                            info.__DICT_DIR,
-                                            info.__PLUGIN_DICT_DIR,
-                                            self.app.config.plugins[item].dir)):
-               try:
-                   rmtree(os.path.join(info.GLOBAL_HOME,
-                                       info.__DICT_DIR,
-                                       info.__PLUGIN_DICT_DIR,
-                                       self.app.config.plugins[item].dir))
-               except:
-                   self.app.window.SetStatusText(_("Error removing \"%s\"") % item)
-                   errDialog()
-                   printError()
-                   return
-          
-           del self.app.config.plugins[item]
-           
-       elif item in self.app.config.registers.keys():
-           # This is a register
-           if self.app.config.registers[item][1] != "Dict":
-               if os.path.exists(os.path.join(uhome, "register", item+".hash")):
-                   try:
-                       os.remove(os.path.join(uhome, "register", item+".hash"))
-                   except:
-                       self.app.window.SetStatusText(_("Error while deleting \"%s\"") \
-                                                     % (item+".hash"))
-                       return
-               elif os.path.exists(os.path.join(home, "register",
-                                                item+".hash")):
-                   try:
-                       os.remove(os.path.join(home, "register", item+".hash"))
-                   except:
-                       self.app.window.SetStatusText(_("Error while deleting \"%s\"") \
-                                                     % (item+".hash"))
-                   return
+
+       print "Remove %s" % self.installedList.GetItemText(\
+           self.currentInstalledItemSelection)
+
+       dictName = self.installedList.GetItemText(\
+           self.currentInstalledItemSelection)
+
+       dictInstance = self.app.dictionaries.get(dictName)
+
+       try:
+           if dictInstance.getType() == dicttype.PLUGIN:
+               removeDictionary = installer.removePluginDictionary
+           else:
+               removeDictionary = installer.removePlainDictionary
+
+           removeDictionary(dictInstance)
+       except Exception, e:
+           traceback.print_exc()
+           title = _("Error")
+           msg = _("Unable to remove dictionary '%s'" % dictName)
+           errorwin.showErrorMessage(title, msg)
+           return
+
+       self.installedList.DeleteItem(self.currentInstalledItemSelection)
+
+       idDictMenuItem = None
+       for iid, dictionary in self.app.config.ids.items():
+           if dictionary == dictName:
+               idDictMenuItem = iid
+
+       if idDictMenuItem is not None:
+           self.mainWin.menuDict.Delete(idDictMenuItem)
                
-           del self.app.config.registers[item]
-           
-       for list in self.app.config.groups.values():
-           names = group.filesToNames(list, self.app.config)
-           if item in names:
-               list.pop(names.index(item))
-               
-       del self.app.config.ids[item]
-       self.pluginList.Delete(pos)
-       
-       parent = self.GetParent()
-       parent.menuDict.Delete(parent.menuDict.FindItem(item))
-       self.labelName.SetLabel("")
-       self.labelVersion.SetLabel("")
-       self.labelAuthor.SetLabel("")
-       self.labelFormat.SetLabel("")
-       self.labelSize.SetLabel("")
-       self.textAbout.Clear()
+       self.buttonRemove.Disable()
        
 
    def onClose(self, event):

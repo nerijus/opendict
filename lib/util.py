@@ -65,7 +65,7 @@ class UniqueIdGenerator:
 def generateUniqueID():
     """Helper function for getting unique ID"""
 
-    gen = UniqueIdGenerator(0)
+    gen = UniqueIdGenerator(7000)
     return gen.getID()
 
 

@@ -213,15 +213,16 @@ class MainWindow(wxFrame):
 
       self.menuDict = wxMenu()
 
-      dictNames = self.app.dictionaries.keys()
+      dictNames = []
+      for dictionary in self.app.dictionaries.values():
+         dictNames.append(dictionary.getName())
       dictNames.sort()
+      
       for name in dictNames:
-         #print "Without trans: %s, %s" % (name, type(name))
          encoded = enc.toWX(name)
-         #print "With toWX: %s, %s" % (encoded, type(encoded))
-         #print self.app.config.ids[name]
+
          itemID = self.app.config.ids.keys()[\
-            self.app.config.ids.values().index(encoded)]
+            self.app.config.ids.values().index(name)]
 
          try:
             item = wxMenuItem(self.menuDict,
@@ -1262,8 +1263,9 @@ For more information visit project's homepage on
    def onNormalFontSize(self, event):
       """Set normal font size"""
 
+      # TODO: define somewhere else
       print "Normal"
-      self.app.config.fontSize = 12
+      self.app.config.fontSize = 10
       self.updateHtmlScreen()
 
 

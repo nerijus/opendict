@@ -103,12 +103,16 @@ class OpenDictApp(wxApp):
       
       # Load new-style plugins
       for plugin in newplugin.loadDictionaryPlugins():
+         print "DEBUG Loading '%s'..." % plugin.getName()
          self.dictionaries[plugin.getName()] = plugin
-         self.config.ids[util.generateUniqueID()] = plugin.getName()
+         self.config.ids[wx.NewId()] = plugin.getName()
 
       for plain in plaindict.loadPlainDictionaries():
+         print "DEBUG Loading '%s'..." % plain.getName()
          self.dictionaries[plain.getName()] = plain
-         self.config.ids[util.generateUniqueID()] = plain.getName()
+         self.config.ids[wx.NewId()] = plain.getName()
+
+      print self.config.ids
          
          
       # TODO: Remove in the future
