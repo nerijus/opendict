@@ -25,12 +25,12 @@
 
 #ifndef CHAR_VECTOR
 #define CHAR_VECTOR
-WX_DEFINE_ARRAY(char, CharVector);
+WX_DEFINE_ARRAY_INT(char, CharVector);
 #endif
 
 #ifndef LONG_VECTOR
 #define LONG_VECTOR
-WX_DEFINE_ARRAY(long, LongVector);
+WX_DEFINE_ARRAY_INT(long, LongVector);
 #endif
 
 class DictParser

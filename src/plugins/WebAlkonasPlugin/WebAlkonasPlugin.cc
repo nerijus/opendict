@@ -37,7 +37,7 @@ WebAlkonasPlugin::WebAlkonasPlugin(wxStatusBar* status_bar)
 
   found = false;
 
-  cout<<"WebAlkonasPlugin created\n";
+  wxLogDebug(_T("WebAlkonasPlugin created"));
 };
 
 /*
@@ -46,7 +46,7 @@ WebAlkonasPlugin::WebAlkonasPlugin(wxStatusBar* status_bar)
  */
 wxString WebAlkonasPlugin::find(const wxString &keyword)
 {
-  cout<<"Getting data stream...\n";
+  wxLogDebug(_T("Getting data stream..."));
   http = new wxHTTP();
   //url = new wxURL(wxURL::ConvertToValidURI(keyword));
   //if (url->GetProtocolName() == "http")
@@ -54,13 +54,13 @@ wxString WebAlkonasPlugin::find(const wxString &keyword)
   
   if (! http->Connect("127.0.0.1"))
     {
-      cout<<"Can't connect\n";
+      wxLogDebug(_T("Can't connect"));
       return "";
     }
   
 
   http->SetHeader("Content-type", "text/html");
-  cout<<"Header: "<<http->GetHeader("Content-type").c_str()<<endl;
+  wxLogDebug(_T("Header: %s"), http->GetHeader("Content-type").c_str());
   //cout<<"URL: "<<url->GetURL().c_str()<<endl;
   //cout<<"Protocol: "<<url->GetProtocolName().c_str()<<endl;
   //cout<<"Path: "<<url->GetPath().c_str()<<endl;
@@ -68,28 +68,28 @@ wxString WebAlkonasPlugin::find(const wxString &keyword)
 
   if (http->GetError() != wxPROTO_NOERR)
     {
-      cout<<"HTTP klaida\n";
+      wxLogDebug(_T("HTTP error"));
 
       switch(http->GetError())
 	{
 	case wxPROTO_NETERR:
 	  {
-	    cout<<"Network error\n";
+	    wxLogDebug(_T("Network error"));
 	    break;
 	  }
 	case wxPROTO_NOFILE:
 	  {
-	    cout<<"File doesn't exist\n";
+	    wxLogDebug(_T("File doesn't exist"));
 	    break;
 	  }
 	case wxPROTO_CONNERR:
 	  {
-	    cout<<"Connection error\n";
+	    wxLogDebug(_T("Connection error"));
 	    break;
 	  }
 	default:
 	  {
-	    cout<<"Unknown http error\n";
+	    wxLogDebug(_T("Unknown http error"));
 	    break;
 	  }
 	}
@@ -101,14 +101,14 @@ wxString WebAlkonasPlugin::find(const wxString &keyword)
 
   if (! stream)
     {
-      cout<<"Seems to be no stream...\n";
+      wxLogDebug(_T("Seems to be no stream..."));
       return "";
     }
 
-  cout<<"Size: "<<stream->GetSize()<<endl;
+  wxLogDebug(_T("Size: %u"), stream->GetSize());
   if (stream->GetSize() == (unsigned)-1)
     {
-      cout<<"Unknown stream's size\n";
+      wxLogDebug(_T("Unknown stream's size"));
       return "";
     }
 

@@ -24,6 +24,8 @@
 #include "wx/stream.h"
 #include "wx/wfstream.h"
 #include "wx/url.h"
+#include "wx/log.h"
+#include "wx/intl.h"
 
 #include "../../DictParser.h"
 #include <iostream>
@@ -32,7 +34,7 @@ class WebAlkonasPlugin: public DictParser
 {
    public:
       WebAlkonasPlugin(wxStatusBar*);
-      ~WebAlkonasPlugin() { cout<<"[+] WebAlkonasPlugin is dead\n"; };
+      ~WebAlkonasPlugin() { wxLogDebug(_T("[+] WebAlkonasPlugin is dead")); };
 
       wxString find(const wxString &);
       char dict_start_letter();

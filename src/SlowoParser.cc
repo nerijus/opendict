@@ -32,7 +32,7 @@ SlowoParser::SlowoParser(const wxString &fname,
 			 wxStatusBar* status_bar)
 {
    file_name = fname;
-   cout<<"SlowoParser(): file_name: "<<file_name.c_str()<<endl;
+   wxLogDebug(_T("SlowoParser(): file_name: %s"), file_name.c_str());
 
    if (enc.Length() != 0)
      default_encoding = enc;
@@ -47,7 +47,7 @@ SlowoParser::SlowoParser(const wxString &fname,
    bool success = file->Open(file_name);
    if (success == false)
    {
-      cerr<<"SlowoParser::SlowoParser(): Can't open "<<file_name.c_str()<<endl;
+      wxLogError(_("SlowoParser::SlowoParser(): Can't open %s"), file_name.c_str());
       exit(1);
    }
 
@@ -61,17 +61,17 @@ SlowoParser::SlowoParser(const wxString &fname,
    wxString translation;
    wxString tmp;
 
-   char c;
+   wxChar c;
    int lnumber = 1;
 
    int l_count = 1;
-   char l_char;
+   wxChar l_char;
 
    bool l_found = false;
 
    line = file->GetFirstLine();
    line = rem_space(line);
-   l_char = c = conv_to_upper(line[0]);
+   l_char = c = conv_to_upper(line[0u]);
    first_letter_array.Add(c);
    letter_starts_at_line_array.Add(lnumber);
    lnumber++;
@@ -98,16 +98,16 @@ SlowoParser::SlowoParser(const wxString &fname,
       
       if (l_found == false)
       {
-         if (isalnum(line[0]))
+         if (isalnum(line[0u]))
          {
-            first_letter = conv_to_upper(line[0]);
+            first_letter = conv_to_upper(line[0u]);
             l_found = true;
          }
       }
 
-      if (conv_to_upper(line[0]) != c)
+      if (conv_to_upper(line[0u]) != c)
       {
-         c = conv_to_upper(line[0]);
+         c = conv_to_upper(line[0u]);
          first_letter_array.Add(c);
          letter_starts_at_line_array.Add(lnumber);
 
@@ -130,7 +130,7 @@ SlowoParser::SlowoParser(const wxString &fname,
    }
 
    file->Close();
-   cout<<"done\n";
+   wxLogDebug(_T("done"));
 
    sbar->SetStatusText("");
 };
@@ -144,9 +144,9 @@ wxString SlowoParser::find(const wxString &keyword)
   wxString sbar_msg = "Searching... ";
   sbar->SetStatusText(sbar_msg);
 
-  cout<<"Searching for \""<<keyword.c_str()<<"\"... \n";
+  wxLogDebug(_T("Searching for \"%s\"... "), keyword.c_str());
 
-   char c = conv_to_upper(keyword[0]);
+   wxChar c = conv_to_upper(keyword[0]);
   
    long starts_at_line = (long)letter_starts_at_line_array.Item(first_letter_array.Index(c));
    
@@ -165,7 +165,7 @@ wxString SlowoParser::find(const wxString &keyword)
 
    if (success == false)
    {
-      cerr<<"SlowoParser::find(): Can't open "<<file_name<<endl;
+      wxLogError(_("SlowoParser::find(): Can't open %s"), file_name.c_str());
       exit(1);
    }
    
@@ -200,7 +200,7 @@ wxString SlowoParser::find(const wxString &keyword)
 
      line = rem_space(line);
 
-      if (conv_to_upper(line[0]) != c)
+      if (conv_to_upper(line[0u]) != c)
 	{
 	  searching = false; // Stop if word starts in another letter
 	  continue;
@@ -278,7 +278,7 @@ wxString SlowoParser::find(const wxString &keyword)
 /*
  * Returns the first letter to use when loading dictionary
  */
-char SlowoParser::dict_start_letter()
+wxChar SlowoParser::dict_start_letter()
 {
    return first_letter;
 }
@@ -317,7 +317,7 @@ wxString SlowoParser::rem_space(const wxString& bad_string)
  * toupper('c') == 'C'
  * toupper('7') != '7'
  */
-const char SlowoParser::conv_to_upper(const char& c)
+const wxChar SlowoParser::conv_to_upper(const wxChar& c)
 {
   if (isalpha(c))
     return toupper(c);

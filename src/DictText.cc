@@ -24,13 +24,13 @@
 #endif
 
 DictText::DictText(wxWindow *parent,
-                   wxWindowID id = -1,
-                   const wxString &value = "",
-                   const wxPoint &pos = wxDefaultPosition,
-                   const wxSize &size = wxDefaultSize,
-                   long style = 0,
-                   const wxValidator &validator = wxDefaultValidator,
-                   const wxString &name = "text")
+                   wxWindowID id,
+                   const wxString &value,
+                   const wxPoint &pos,
+                   const wxSize &size,
+                   long style,
+                   const wxValidator &validator,
+                   const wxString &name)
          : wxTextCtrl(parent, id, value, pos, size, style, validator, name)
 { }
 

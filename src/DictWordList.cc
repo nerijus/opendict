@@ -19,14 +19,14 @@
 
 #include "DictWordList.h"
 
-DictWordList::DictWordList(wxWindow *parent, wxWindowID id = -1,
-                           const wxPoint &pos = wxDefaultPosition,
-                           const wxSize &size = wxDefaultSize,
-                           const int n = 0,
-                           const wxString list[] = 0,
-                           long style = wxLB_ALWAYS_SB,
-                           const wxValidator &validator = wxDefaultValidator,
-                           const wxString &name = "list")
+DictWordList::DictWordList(wxWindow *parent, wxWindowID id,
+                           const wxPoint &pos,
+                           const wxSize &size,
+                           const int n,
+                           const wxString list[],
+                           long style,
+                           const wxValidator &validator,
+                           const wxString &name)
          : wxListBox(parent, id, pos, size, n, list, style, validator, name)
 { }
 

@@ -20,6 +20,8 @@
 #include <cctype>
 #include <iostream>
 #include "wx/textfile.h"
+#include "wx/log.h"
+#include "wx/intl.h"
 
 #include "MovaParser.h"
 
@@ -32,7 +34,7 @@ MovaParser::MovaParser(const wxString &fname,
 		       wxStatusBar* status_bar)
 {
    file_name = fname;
-   cout<<"MovaParser: file_name: "<<file_name.c_str()<<endl;
+   wxLogDebug(_T("MovaParser: file_name: %s"), file_name.c_str());
 
    if (enc.Length() != 0)
      default_encoding = enc;
@@ -46,7 +48,7 @@ MovaParser::MovaParser(const wxString &fname,
 
    if (file->Open(file_name) == false)
    {
-      cerr<<"MovaParser: can't open "<<file_name.c_str()<<endl;
+      wxLogError(_("MovaParser: can't open %s"), file_name.c_str());
       exit(1);
    }
 
@@ -70,7 +72,7 @@ MovaParser::MovaParser(const wxString &fname,
 
    line = file->GetFirstLine();
    line = rem_space(line);
-   l_char = c = conv_to_upper(line[0]);
+   l_char = c = conv_to_upper(line[0u]);
    first_letter_array.Add(c);
    letter_starts_at_line_array.Add(lnumber);
    lnumber++;
@@ -97,16 +99,16 @@ MovaParser::MovaParser(const wxString &fname,
       
       if (l_found == false)
       {
-         if (isalnum(line[0]))
+         if (isalnum(line[0u]))
          {
-            first_letter = conv_to_upper(line[0]);
+            first_letter = conv_to_upper(line[0u]);
             l_found = true;
          }
       }
 
-      if (conv_to_upper(line[0]) != c)
+      if (conv_to_upper(line[0u]) != c)
       {
-         c = conv_to_upper(line[0]);
+         c = conv_to_upper(line[0u]);
          first_letter_array.Add(c);
          letter_starts_at_line_array.Add(lnumber);
 
@@ -129,7 +131,7 @@ MovaParser::MovaParser(const wxString &fname,
    }
 
    file->Close();
-   cout<<"done\n";
+   wxLogDebug(_T("done"));
 
    sbar->SetStatusText("");
 };
@@ -143,7 +145,7 @@ wxString MovaParser::find(const wxString &keyword)
   wxString sbar_msg = "Searching... ";
   sbar->SetStatusText(sbar_msg);
 
-  cout<<"Searching for \""<<keyword.c_str()<<"\"... \n";
+  wxLogDebug(_T("Searching for \"%s\"..."), keyword.c_str());
 
    char c = conv_to_upper(keyword[0]);
   
@@ -164,7 +166,7 @@ wxString MovaParser::find(const wxString &keyword)
 
    if (success == false)
    {
-      cerr<<"MovaParser::find(): can't open "<<file_name<<endl;
+      wxLogError(_("MovaParser::find(): can't open %s"), file_name.c_str());
       exit(1);
    }
    
@@ -198,7 +200,7 @@ wxString MovaParser::find(const wxString &keyword)
 
      line = rem_space(line);
 
-      if (conv_to_upper(line[0]) != c)
+      if (conv_to_upper(line[0u]) != c)
 	{
 	  searching = false; // Stop if word starts in another letter
 	  continue;

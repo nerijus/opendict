@@ -2,7 +2,7 @@ WX_CONFIG_PATH=wx-config
 #WX_CONFIG_PATH=/usr/local/wxWindows.22/bin/wx-config
 
 CC = $(shell $(WX_CONFIG_PATH) --cxx)
-CFLAGS = $(shell $(WX_CONFIG_PATH) --cflags) -g -Wall
+CFLAGS = $(shell $(WX_CONFIG_PATH) --cxxflags) -g -Wall
 LIBS = $(shell $(WX_CONFIG_PATH) --libs) -g -Wall
 
 all: opendict

@@ -21,6 +21,8 @@
 #define MOVA_PARSER_H
 
 #include "wx/statusbr.h"
+#include "wx/log.h"
+#include "wx/intl.h"
 
 #include "DictParser.h"
 #include <iostream>
@@ -29,7 +31,7 @@ class MovaParser: public DictParser
 {
    public:
       MovaParser(const wxString &, const wxString&, wxStatusBar*);
-      ~MovaParser() { cout<<"[+] MovaParser is dead\n"; };
+      ~MovaParser() { wxLogDebug(_T("[+] MovaParser is dead")); };
 
       wxString find(const wxString &);
       char dict_start_letter();

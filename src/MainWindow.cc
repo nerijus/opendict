@@ -40,7 +40,7 @@ MainWindow::MainWindow(const wxString& title,
                        const wxSize& size)
    : wxFrame((wxFrame*)NULL, -1, title, pos, size)
 {
-   cout<<"Making the main window...";
+   wxLogDebug(_T("Making the main window..."));
 
 #if wxUSE_STATUSBAR
    CreateStatusBar(2);
@@ -188,7 +188,7 @@ MainWindow::MainWindow(const wxString& title,
    vbox->Fit(this);
    vbox->SetSizeHints(this);
 
-   cout<<" done\n"; // Making main window
+   wxLogDebug(_T(" done")); // Making main window
 }
 
 /*
@@ -225,7 +225,7 @@ void MainWindow::on_quit(wxCommandEvent& WXUNUSED(event))
 {
   Close(TRUE);
 
-  cout<<"Window closed\n";
+  wxLogDebug(_T("Window closed"));
 }
 
 /*
@@ -284,8 +284,8 @@ void MainWindow::on_change(wxCommandEvent& event)
 
   if (id >= 100 && id <= 100 + ENC)
     {
-      cout<<"Change font encoding to ";
-      cout<<font_encodings[id-100][0].c_str()<<endl;
+      wxLogDebug(_T("Change font encoding to %s"),
+                 font_encodings[id-100][0].c_str());
 
       wxString enc = font_encodings[id-100][0];
       this->default_encoding = enc;
@@ -321,12 +321,12 @@ void MainWindow::update_all_after_search(const wxString& word)
 {
   word_trans->SetPage(dict->find(word));
 
-  if (toupper(word[0]) != toupper(word_list->GetString(0)[0]))
-    update_words_list(word_list, dict, word[0]);
+  if (toupper(word[0u]) != toupper(word_list->GetString(0)[0u]))
+    update_words_list(word_list, dict, word[0u]);
 
   word_list->SetSelection(word_list->FindString(word));
 
-  update_letter_count_list(letter_list, dict, word[0]);
+  update_letter_count_list(letter_list, dict, word[0u]);
 }
 
 /*
@@ -345,7 +345,7 @@ void MainWindow::on_word_selected(wxCommandEvent& WXUNUSED(event))
 void MainWindow::on_letter_selected(wxCommandEvent& WXUNUSED(event))
 {
   wxBeginBusyCursor();
-  char c = this->letter_list->GetString(this->letter_list->GetSelection())[0];
+  char c = this->letter_list->GetString(this->letter_list->GetSelection())[0u];
   c = toupper(c);
 
   update_words_list(this->word_list, this->dict, c);
@@ -379,7 +379,7 @@ void MainWindow::open_slowo_dict(wxCommandEvent& WXUNUSED(event))
 
   wxBeginBusyCursor();
 
-  cout<<"Parsing new slowo dictionary...\n";
+  wxLogDebug(_T("Parsing new slowo dictionary..."));
  
   dict = new SlowoParser(file, default_encoding, status_bar);
 
@@ -389,7 +389,7 @@ void MainWindow::open_slowo_dict(wxCommandEvent& WXUNUSED(event))
   this->last_word = first_word;
 
   word_trans->SetPage(page);
-  update_words_list(word_list, dict, first_word[0]);
+  update_words_list(word_list, dict, first_word[0u]);
   set_letter_count_list(letter_list, dict);
 
   wxEndBusyCursor();
@@ -417,7 +417,7 @@ void MainWindow::open_mova_dict(wxCommandEvent& WXUNUSED(event))
 
   wxBeginBusyCursor();
 
-  cout<<"Parsing new mova dictionary...\n";
+  wxLogDebug(_T("Parsing new mova dictionary..."));
  
   dict = new MovaParser(file, default_encoding, status_bar);
 
@@ -427,7 +427,7 @@ void MainWindow::open_mova_dict(wxCommandEvent& WXUNUSED(event))
   this->last_word = first_word;
 
   word_trans->SetPage(page);
-  update_words_list(word_list, dict, first_word[0]);
+  update_words_list(word_list, dict, first_word[0u]);
   set_letter_count_list(letter_list, dict);
 
   wxEndBusyCursor();
@@ -471,7 +471,7 @@ void MainWindow::update_words_list(wxListBox* list,
 				   DictParser* dict, 
 				   char letter)
 {
-  cout<<"Updating words list for letter `"<<letter<<"'\n";
+  wxLogDebug(_T("Updating words list for letter `%c'"), letter);
   wxString item;
 
   list->Clear();
@@ -479,7 +479,7 @@ void MainWindow::update_words_list(wxListBox* list,
   for (unsigned int i=0; i<dict->get_words_list()->Count(); i++)
     {
       item = dict->get_words_list()->Item(i);
-      if (toupper(item[0]) == toupper(letter))
+      if (toupper(item[0u]) == toupper(letter))
       {
 	list->Append(item);
       }
@@ -511,7 +511,7 @@ void MainWindow::update_letter_count_list(wxComboBox* list,
 {
   for (unsigned int i=0; i<dict->get_letter_count()->Count(); i++)
     {
-      if (dict->get_letter_count()->Item(i)[0] == toupper(c))
+      if (dict->get_letter_count()->Item(i)[0u] == toupper(c))
 	{
 	  list->SetSelection(i);
 	  return;

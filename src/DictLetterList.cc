@@ -20,15 +20,15 @@
 #include "DictLetterList.h"
 
 DictLetterList::DictLetterList(wxWindow *parent,
-                               wxWindowID id = -1,
-                               const wxString &value = "",
-                               const wxPoint &pos = wxDefaultPosition,
-                               const wxSize &size = wxDefaultSize,
-                               int n = 0,
-                               const wxString letters[] = 0,
-                               long style = 0,
-                               const wxValidator &validator = wxDefaultValidator,
-                               const wxString &name = "letter")
+                               wxWindowID id,
+                               const wxString &value,
+                               const wxPoint &pos,
+                               const wxSize &size,
+                               int n,
+                               const wxString letters[],
+                               long style,
+                               const wxValidator &validator,
+                               const wxString &name)
          : wxComboBox(parent, id, value, pos, size, n, letters, 
                       style, validator, name)
 { }

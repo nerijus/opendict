@@ -21,6 +21,8 @@
 #define SLOWO_PARSER_H
 
 #include "wx/statusbr.h"
+#include "wx/log.h"
+#include "wx/intl.h"
 
 #include "DictParser.h"
 #include <iostream>
@@ -29,17 +31,17 @@ class SlowoParser: public DictParser
 {
    public:
       SlowoParser(const wxString &, const wxString&, wxStatusBar*);
-      ~SlowoParser() { cout<<"[+] SlowoParser dead\n"; };
+      ~SlowoParser() { wxLogDebug(_T("[+] SlowoParser dead")); };
 
       wxString find(const wxString &);
-      char dict_start_letter();
+      wxChar dict_start_letter();
       CharVector word_first_letter();
       LongVector letter_starts_at_line();
 
       wxArrayString* get_words_list();
       wxArrayString* get_letter_count();
 
-      const char conv_to_upper(const char&);
+      const wxChar conv_to_upper(const wxChar&);
 
       bool found;
       bool get_found() { return found; }
@@ -48,7 +50,7 @@ class SlowoParser: public DictParser
 
    private:
       wxString file_name;
-      char first_letter;
+      wxChar first_letter;
       wxString default_encoding;
 
       CharVector first_letter_array;
