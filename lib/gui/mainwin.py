@@ -226,9 +226,12 @@ class MainWindow(wxFrame):
       menuTools.AppendSeparator()
       menuTools.Append(123, _("Connect to DICT Server..."),
                           _("Open connection to DICT server"))
+
+      menuTools.AppendSeparator()
       
       # Editor can't be used with non-unicode GUI, because unicode
       # string are used with TMX files.
+
       if info.__unicode__:
           menuTools.Append(5002, _("Dictionaries Editor"),
                           _("Create and manage your own dictionaries"))  
@@ -347,6 +350,9 @@ class MainWindow(wxFrame):
          if self.dict.needsList == 0:
             self.hideWordList()
 
+      if not self.dict:
+         self.hideWordList()
+
       vboxMain.Add(self.splitter, 1, wxALL | wxGROW | wxEXPAND, 0)
 
       # Status bar
@@ -396,8 +402,8 @@ class MainWindow(wxFrame):
       if len(self.app.config.plugins) == 0 \
          and len(self.app.config.registers) == 0:
          self.SetStatusText(_("To add a dictionary, go to \"Dictionaries->Add new\" menu"))
-      elif self.app.config.dict == "":
-         self.SetStatusText(_("Choose a dictionary from \"Dictionaries\" menu"))
+      #elif self.app.config.dict == "":
+      #   self.SetStatusText(_("Choose a dictionary from \"Dictionaries\" menu"))
 
       # Events
       EVT_MENU(self, 101, self.onOpenSlowo)
@@ -437,6 +443,32 @@ class MainWindow(wxFrame):
       EVT_TIMER(self, 5000, self.onTimerSearch)
       EVT_TIMER(self, 5001, self.onTimerLoad)
       EVT_CLOSE(self, self.onCloseWindow)
+
+      # Prepare help message
+      helpMessage = _("""
+<html>
+<head>
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">
+</head>
+<body>
+<h3>Welcome to OpenDict</h3>
+<p>
+<ul>
+<li>To start using dictionary, select one from <i><b>Dictionaries</b></i>
+menu.</li>
+<li>To add new dictionary, select <i><b>Add New Dictionary</b></i> from <i><b>Dictionaries</b></i> menu.</li>
+</ul>
+
+<p>
+For more information visit project's homepage on
+<i>http://opendict.sourceforge.net</i>.
+</p>
+</body>
+</html>
+""")
+
+      # Set startup help message
+      self.htmlWin.SetPage(helpMessage)
      
 
    # Callbacks and other functions
@@ -834,6 +866,8 @@ class MainWindow(wxFrame):
       self.dict = None
       self.encoding = self.app.config.defaultEnc
       self.checkEncMenuItem(self.encoding)
+
+      self.SetStatusText(_("Choose a dictionary from \"Dictionaries\" menu"))
       #self.buttonStop.Disable()
 
    
