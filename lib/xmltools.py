@@ -240,7 +240,7 @@ def generateIndexFile(index):
 def writeIndexFile(doc, path):
     """Write XML file"""
 
-    fd = open(path, 'w')
+    fd = open(path, 'wb')
     xml.dom.ext.PrettyPrint(doc, fd)
     fd.close()
 
@@ -267,7 +267,7 @@ def parseIndexFile(indexPath):
     """Parse configuration file and return data dictionary"""
 
     parser = IndexFileParser()
-    fd = open(indexPath)
+    fd = open(indexPath, 'rb')
     xmlData = fd.read()
     fd.close()
     index = parser.parse(xmlData)

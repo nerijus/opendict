@@ -174,12 +174,12 @@ class AboutWindow(wxDialog):
       vbox.Add(wxStaticLine(self, -1), 0, wxALL | wxEXPAND, 5)
 
       self.buttonCredits = wxButton(self, 2004, _("Credits"))
-      hboxButtons.Add(self.buttonCredits, 1, wxALL | wxALIGN_LEFT, 3)
+      hboxButtons.Add(self.buttonCredits, 0, wxALL | wxALIGN_LEFT, 3)
       
       self.buttonOK = wxButton(self, 2003, _("Close"))
-      hboxButtons.Add(self.buttonOK, 1, wxALL | wxALIGN_RIGHT, 3)
+      hboxButtons.Add(self.buttonOK, 0, wxALL | wxALIGN_RIGHT, 3)
       
-      vbox.Add(hboxButtons, 0, wxALL | wxEXPAND, 5)
+      vbox.Add(hboxButtons, 0, wxALL | wxALIGN_CENTER, 5)
 
       self.SetSizer(vbox)
       vbox.Fit(self)
