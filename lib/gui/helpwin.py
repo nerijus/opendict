@@ -27,7 +27,9 @@ import os
 import sys
 
 from info import home, __version__
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 import enc
+import info
 
 _ = wxGetTranslation
 
@@ -41,19 +43,31 @@ class LicenseWindow(wxFrame):
 
       vbox = wxBoxSizer(wxVERTICAL)
 
-      # TODO: which is better: html or plain text?
+      #
+      # Read licence file
+      #
+      try:
+         fd = open(os.path.join(info.GLOBAL_HOME, 'copying.html'))
+         data = fd.read()
+         fd.close()
+      except Exception, e:
+         systemLog(ERROR, "Unable to read licence file: %s" % e)
+         data = "Error: <i>licence file not found</i>"
+
       scWinAbout = wxScrolledWindow(self, -1, wxPyDefaultPosition,
                                     wxSize(-1, -1))
-      text = wxTextCtrl(scWinAbout, -1,
-                        style=wxTE_MULTILINE | wxTE_READONLY)
-      text.write(open(os.path.join(home, "copying.txt")).read())
+
+      htmlWin = wxHtmlWindow(scWinAbout, -1, style=wxSUNKEN_BORDER)
+      htmlWin.SetFonts('Helvetica', 'Fixed', [10]*5)
+      htmlWin.SetPage(data)
+      
       scBox = wxBoxSizer(wxVERTICAL)
-      scBox.Add(text, 1, wxALL | wxEXPAND, 1)
+      scBox.Add(htmlWin, 1, wxALL | wxEXPAND, 1)
       scWinAbout.SetSizer(scBox)
       vbox.Add(scWinAbout, 1, wxALL | wxEXPAND, 2)
 
       self.buttonClose = wxButton(self, 2002, _("Close"))
-      vbox.Add(self.buttonClose, 0, wxALL | wxCENTRE, 2)
+      vbox.Add(self.buttonClose, 0, wxALL | wxALIGN_RIGHT, 2)
 
       self.SetSizer(vbox)
 
