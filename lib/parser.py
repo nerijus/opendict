@@ -24,6 +24,7 @@ import time
 import string
 import re
 import os
+import traceback
 import xml.parsers.expat
 from wxPython.wx import wxGetApp
 
@@ -45,23 +46,23 @@ WORD_BG = "#cad1e5"
 
 
 # TODO: Check algorithm
-def binarySearchIndex(data, word):
+## def binarySearchIndex(data, word):
 
-   sub = data
+##    sub = data
 
-   while len(sub) > 1:
-      index = len(sub) / 2
-      #w = re.findall("\<u\>(.*?)\<\/u\>", sub[index])[0]
-      w = sub[index]
-      c = cmp(w, word)
-      if c == -1:
-         sub = sub[index:]
-      elif c == 1:
-         sub = sub[:index]
-      else:
-         break
+##    while len(sub) > 1:
+##       index = len(sub) / 2
+##       #w = re.findall("\<u\>(.*?)\<\/u\>", sub[index])[0]
+##       w = sub[index]
+##       c = cmp(w, word)
+##       if c == -1:
+##          sub = sub[index:]
+##       elif c == 1:
+##          sub = sub[:index]
+##       else:
+##          break
 
-      return data.index(sub[0])
+##       return data.index(sub[0])
 
 
 class SlowoParser(meta.Dictionary):
@@ -77,8 +78,6 @@ class SlowoParser(meta.Dictionary):
       self.filePath = filePath
       self.needsList = True
       
-      self.fd = open(file)
-
       self.encoding = None
       self.name = os.path.splitext(os.path.basename(filePath))[0]
 
@@ -137,6 +136,7 @@ class SlowoParser(meta.Dictionary):
    def getType(self):
       """Return dictionary type"""
 
+      import dicttype
       return dicttype.SLOWO
 
 
@@ -165,150 +165,127 @@ class SlowoParser(meta.Dictionary):
       return self.needsList
 
 
+   def _appendTranslation(self, html, orig, trans):
+      """Appends HTML strings to list"""
+
+      html.append("<table width=\"100%\"><tr>")
+      html.append("<td bgcolor=\"%s\">" % WORD_BG)
+      html.append("<b>%s</b></td></tr>" % orig)
+      html.append("<tr><td>")
+      html.append("<p>%s</p>" % trans)
+      html.append("</td></tr></table>")
+      
+
    def search(self, word):
       """Lookup word"""
+
+      _start = time.time()
+
+      word_lowered = word.lower().encode(self.getEncoding())
+
+      #
+      # Seek to the beginning of the block
+      #
+      position = 0L
+      if word_lowered[:2] in self.index.keys():
+         position = self.index[word_lowered[:2]]
+
+      print "DEBUG Index: %s->%d" % (word_lowered[:2], position)
+      print "DEBUG SlowoParser: Seeking to %d" % position
       
-      errno = 0
-      word_lowered = word.lower()
-      self.time = time.time()
-      l = word_lowered[0:2]
+      self.fd.seek(position)
 
-      pos = 0
-      if self.hash.has_key(l) == 0:
-         if len(word_lowered) == 1:
-            keys = self.hash.keys()
-            keys.sort()
-            for k in keys:
-               try:
-                   if k[0] == l:
-                       pos = self.hash[k]
-                       self.fd.seek(pos)
-                       break
-               except:
-                   misc.printError()
-                   return ("", [], 6)
-         else:
-            return ("", [], 1)
+      html = []
 
-      else:
-         pos = self.hash[l]
-         self.fd.seek(pos)
+      html.append("<html><head>")
+      html.append("<meta http-equiv=\"Content-Type\" " \
+                  "content=\"text/html; charset=%s\">" \
+                  % str(self.getEncoding()))
+      html.append("<head><body>")
 
-      keys = self.hash.keys()
-      keys.sort()
-      end = pos
+      found = False
+      words = []
 
-      if len(l) == 1:
-         i = 0
-         for k in keys:
-            if k[0] == l:
-               i = keys.index(k)
+      result = meta.SearchResult()
 
-         if i < len(keys) - 1:
-            end = self.hash[keys[i+1]]
-         else:
-            end = -1
-      else:
-         if keys.index(l) != len(keys) - 1:
-            end = self.hash[keys[keys.index(l)+1]]
-         else:
-            end = -1
+      # DEBUG
+      _linesRead = 0
 
-      if end > -1:
-         data = self.fd.read(end-pos).split("\n")
-      else:
-         data = self.fd.read().split("\n")
-         
-      
+      for line in self.fd.xreadlines():
+         _linesRead += 1
+         line = line.strip()
+         try:
+            orig, end = line.split('=', 1)
+            orig = orig.strip()
+            chunks = end.split(';')
 
-      # Unused until we're sure that the dictionary is well-sorted
-      #data = data[binarySearchIndex(data, word):]
-
-      result = "<html><head>" \
-               "<meta http-equiv=\"Content-Type\" " \
-               "content=\"text/html; charset=%s\">" \
-               "</head><body>"
-               #"<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
-               #                                    self.window.app.config.fontFace,
-               #                                    self.window.app.config.fontSize)
-
-
-      found = 0
-      list = []
-      appended = 0
-      
-      for line in data:
-         #if info.__unicode__:
-             #try:
-             #    line = line.decode(self.window.encoding)
-             #except:
-             #    return ("", [], 6)
-         
-         if line.lower().find(word_lowered) > -1:
-            orig = line.split("=")[0].strip()
-            
-            if orig.lower().find(word_lowered) != 0:
-               continue
-            if found == 0:
-               found = 1
-               result += "<u><b>%s</b></u><br>" % orig
-               trans = line.split("=")[1].split("//")[0].split(";")
-               map(string.strip, trans)
-            
-               result += "<table><tr><td>"
-               result += "&nbsp;"*3+str("<br>"+"&nbsp;"*3).join(trans)
-               #result += string.join(trans, "<br>" + "&nbsp;"*4)
-               if line.find("//") > -1:
-                  comm = line.split("//")[1].split(";")[0].strip()
+            translation = ["<ul>"]
+            for chunk in chunks:
+               comment = []
+               trans = chunk.split('//')
                
-                  if len(comm) > 0:
-                     result += "<br>" + "&nbsp;"*4 + "<i>(%s)</i>" % comm
-                     
-               result += "</td></tr></table>"
+               if len(trans) > 1:
+                  comment = trans[1:]
 
-            # Gtk has list size limitation
-            if os.name == "posix":
-                if appended < 2000:
-                    list.append(orig)
-                    appended += 1
-            else:
-                list.append(orig)
+               trans = trans[:1]
+                  
+               trans = "".join(trans).strip()
+               comment = "".join(comment).strip()
+               
+               if len(trans) and len(comment) != 0:
+                  translation.append("<li>%s (<i>%s</i>)</li>" \
+                                     % (trans, comment))
+               elif len(trans):
+                  translation.append("<li>%s</li>" % trans)
 
-      result += "</font></body></html>"
+            translation.append("</ul>")
+
+            translation = "".join(translation)
+
+         except:
+            traceback.print_exc()
+            continue
+
+         if line.lower().startswith(word_lowered):   
+            
+            if not orig.lower().startswith(word_lowered):
+               break
+            
+            if orig.lower() == word_lowered and not found:
+               found = True
+               self._appendTranslation(html, orig, translation)               
+               
+            words.append(orig)
+            if len(words) == 1:
+               suggestedWord = orig
+               suggestedTrans = translation
+         elif len(words):
+            break
+
+      print "%d lines scanned" % _linesRead
       
-      #print result
-      #print type(result)
-      #print self.window.encoding
+      if not found:
+         if words:
+            self._appendTranslation(html, suggestedWord, suggestedTrans)
+         else:
+            result.setError(errortype.NOT_FOUND)
 
-      if found == 0:
-         errno = 1
+      html.append("</font></body></html>")
 
-      print "SlowoParser: Search took %s sec" % (time.time() - self.time)
+      try:
+         translation = "".join(html)
+      except:
+         result.setError(errortype.INVALID_ENCOFING)
+         translation = ""
+      
+      result.setTranslation(translation)
+      result.setWordList(words)
 
-      return (result, list, errno)
+      print "DEBUG SlowoParser: search took %f seconds" \
+            % (time.time() - _start)
 
+      return result
 
-   def makeHashTable(self):
-
-      print "Indexing..."
-      self.hash = {}
-
-      self.fd.seek(0)
-      line = self.fd.readline()
-      l = line[0:2].lower()
-      n = 0
-
-      self.hash[l] = n
-      n += len(line)
-
-      for line in self.fd.readlines():
-         l = line[0:2].lower()
-         if not self.hash.has_key(l):
-            self.hash[l] = n
-         n += len(line)
-
-      for l, p in self.hash.items():
-         print l, p
 
 
 class MovaParser(meta.Dictionary):
@@ -437,6 +414,8 @@ class MovaParser(meta.Dictionary):
    def search(self, word):
       """Lookup word"""
 
+      _start = time.time()
+
       word_lowered = word.lower().encode(self.getEncoding())
 
       #
@@ -516,29 +495,10 @@ class MovaParser(meta.Dictionary):
       result.setTranslation(translation)
       result.setWordList(words)
 
+      print "DEBUG MovaParser: Search took %f seconds" % (time.time() - _start)
+
       return result
-         
-      #print "Search took %s sec" % (time.time() - self.time)
 
-
-##    def makeHashTable(self):
-
-##       print "Indexing..."
-##       self.hash = {}
-
-##       self.fd.seek(0)
-##       line = self.fd.readline()
-##       l = line[0:2].lower()
-##       n = 0
-
-##       self.hash[l] = n
-##       n += len(line)
-
-##       for line in self.fd.readlines():
-##          l = line[0:2].lower()
-##          if not self.hash.has_key(l):
-##             self.hash[l] = n
-##          n += len(line)
 
 
 # TODO: Rewrite this one
