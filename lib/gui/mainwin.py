@@ -390,29 +390,7 @@ class MainWindow(wxFrame):
       self.search = None
       self.load = None
 
-      # TODO: Load default dictionary
-
-##       # Load default dictionary
-##       if self.app.config.dict != "":
-##          try:
-##             self.SetStatusText(_("Loading \"%s\"...") % self.app.config.dict)
-##             if self.app.config.plugins.has_key(self.app.config.dict):
-##                self.loadPlugin(self.app.config.dict)
-
-##             elif self.app.config.registers.has_key(self.app.config.dict):
-##                self.loadRegister(self.app.config.dict)
-
-##             elif self.app.config.groups.has_key(self.app.config.dict):
-##                self.loadGroup(self.app.config.dict)
-
-##          except Exception, e:
-##             self.SetStatusText(_("Error: failed to load \"%s\"") % self.app.config.dict)
-##             print "ERROR Exception:", e
-##             self.onCloseDict(None)
-
-      # FIMXE: MS Windows doesn't want to show XPM pixmaps in the title bar
-      wxInitAllImageHandlers()
-      
+      wxInitAllImageHandlers()      
       self.SetIcon(wxIcon(os.path.join(info.GLOBAL_HOME,
                                        "pixmaps",
                                        "icon-24x24.png"),
@@ -454,7 +432,6 @@ class MainWindow(wxFrame):
 
       # Tools menu events
       EVT_MENU(self, idDictServer, self.onOpenDictConn)
-      #EVT_MENU(self, 122, self.onShowGroupsWindow)
       EVT_MENU(self, idManageDict, self.onShowPluginManager)
       EVT_MENU(self, 5002, self.onShowDictEditor)
       EVT_MENU(self, idPrefs, self.onShowPrefsWindow)
@@ -464,7 +441,7 @@ class MainWindow(wxFrame):
       EVT_MENU(self, idAbout, self.onAbout)
 
       # Other events
-      EVT_BUTTON(self, idFind, self.onSearch)
+      self.Bind(wx.EVT_BUTTON, self.onSearch, self.buttonSearch)
       EVT_MENU(self, idFind, self.onSearch)
          
       EVT_BUTTON(self, 2010, self.onBack)
@@ -475,7 +452,6 @@ class MainWindow(wxFrame):
       EVT_TEXT_ENTER(self, 153, self.onSearch)
       EVT_LISTBOX(self, 154, self.onWordSelected)
       EVT_TIMER(self, 5000, self.onTimerSearch)
-      EVT_TIMER(self, 5001, self.onTimerLoad)
       EVT_CLOSE(self, self.onCloseWindow)
 
       # Prepare help message
@@ -506,6 +482,17 @@ class MainWindow(wxFrame):
          self.htmlCode = ""
 
       self.updateHtmlScreen()
+
+
+      if self.app.invalidDictionaries:
+         title = _("Invalid Dictionaries")
+         msg = _("The following dictionaries are invalid and cannot be " \
+                 "loaded:\n\n%s\n\nThis may be because of critical changes "\
+                 "in OpenDict archtecture. Remove listed directories by " \
+                 "hand to avoid this message in the future" \
+                 % '\n'.join(self.app.invalidDictionaries))
+         from lib.gui import errorwin
+         errorwin.showErrorMessage(title, msg)
      
 
    def onExit(self, event):
@@ -517,7 +504,6 @@ class MainWindow(wxFrame):
 
       self.onCloseDict(None)
       self.savePreferences()
-      #self.Close(True)
       self.Destroy()
 
 
@@ -638,62 +624,6 @@ class MainWindow(wxFrame):
          self.buttonStop.Disable()
 
 
-   # FIXME: Deprecated
-   def onTimerLoad(self, event):
-
-      raise Exception, "mainwin.py:onTimerLoad() is deprecated"
-      
-      if self.load != None and self.load.isDone():
-         self.timerLoad.Stop()
-         self.load.stop()
-
-         self.activeDictionary = self.load()
-         if self.activeDictionary == None:
-            self.onCloseDict(None)
-            self.load = None
-
-            self.entry.Enable(1)
-            self.entry.SetFocus()
-            self.SetStatusText(_("Error: failed to load"))
-            return
-
-         else:
-            self.SetStatusText(_("Dictionary \"%s\" loaded") % self.dictName)
-
-            if not hasattr(self.activeDictionary, "name"):
-               self.activeDictionary.getName = "unknown"
-
-            if self.activeDictionary.name not in self.app.config.registers.keys() + \
-               self.app.config.plugins.keys() + self.app.config.groups.keys():
-               try:
-                  self.activeDictionary.makeHashTable()
-               except:
-                  # Doesn't use it or is bad-written
-                  pass
-            elif self.activeDictionary.name in self.app.config.registers:
-               # This is a register, hash table must be loaded
-               if self.app.config.registers[self.activeDictionary.getName()][1] \
-                      not in ['dz', 'dict']:
-                  try:
-                     if os.path.exists(os.path.join(info.LOCAL_HOME,
-                                                    "register",
-                                                    self.activeDictionary.name+".hash")):
-                        self.dict.hash = self.app.reg.loadHashTable(os.path.join(info.LOCAL_HOME, "register", self.dict.name+".hash"))
-                     else:
-                        self.dict.hash = self.app.reg.loadHashTable(os.path.join(info.GLOBAL_HOME, "register", self.dict.name+".hash"))
-                  except:
-                     print "ERROR Failed to load index table"
-                     self.SetStatusText(_("Error: failed to load index table"))
-                     misc.printError()
-
-         self.checkIfNeedsList()
-         
-         self.load = None
-         #self.buttonStop.Disable()
-         self.entry.Enable(1)
-         self.entry.SetFocus()
-
-
    def onSearch(self, event):
       if self.activeDictionary == None:
          if len(self.app.dictionaries):
@@ -705,7 +635,7 @@ class MainWindow(wxFrame):
             msg = _("There is no dictionaries installed. You can " \
                       "install one by selecting Tools > Manage " \
                       "Dictionaries > Available")
-         #self.SetStatusText(_("No dictionary is opened"))
+
          errorwin.showErrorMessage(title, msg)
          return
 
@@ -796,113 +726,6 @@ class MainWindow(wxFrame):
       else:
             self.hideWordList()
 
-
-   def onOpenSlowo(self, event):
-
-      raise Exception, "mainwin.py:onOpenSlowo() is deprecated"
-      
-      dialog = wxFileDialog(self, _("Choose Slowo dictionary file"), "", "",
-                         "", wxOPEN|wxMULTIPLE)
-      if dialog.ShowModal() == wxID_OK:
-         self.onCloseDict(event)
-         self.entry.Disable()
-         name = os.path.split(dialog.GetPaths()[0])[1]
-         self.SetStatusText(_("Loading \"%s\"...") % name)
-         self.SetTitle(titleTemplate % name)
-         try:
-            self.timerLoad.Start(self.delay)
-            self.load = Process(SlowoParser, dialog.GetPaths()[0],
-                                self)
-            self.dictName = name
-            self.checkEncMenuItem(self.app.config.encoding)
-         except:
-            self.SetStatusText(_("Error: failed to open \"%s\"") % name)
-            self.onCloseDict(None)
-
-      dialog.Destroy()
-
-
-   def onOpenMova(self, event):
-
-      raise Exception, "mainwin.py:onOpenSlowo() is deprecated"
-      dialog = wxFileDialog(self, _("Choose Mova dictionary file"), "", "",
-                         "", wxOPEN|wxMULTIPLE)
-      if dialog.ShowModal() == wxID_OK:
-         self.onCloseDict(event)
-         self.entry.Disable()
-         name = os.path.split(dialog.GetPaths()[0])[1]
-         self.SetStatusText(_("Loading \"%s\"...") % name)
-         self.SetTitle(titleTemplate % name)
-         try:
-            self.timerLoad.Start(self.delay)
-            self.load = Process(MovaParser, dialog.GetPaths()[0], self)
-            self.dictName = name
-            #self.encoding = self.app.config.defaultEnc
-            self.checkEncMenuItem(self.app.config.encoding)
-         except:
-            self.SetStatusText(_("Error: failed to open \"%s\"") % name)
-            self.onCloseDict(None)
-
-      dialog.Destroy()
-
-   # TODO: write TMX parser
-   def onOpenTMX(self, event):
-
-      raise Exception, "mainwin.py:onOpenSlowo() is deprecated"
-      dialog = wxFileDialog(self, _("Choose TMX dictionary file"), "", "",
-                         "", wxOPEN|wxMULTIPLE)
-      if dialog.ShowModal() == wxID_OK:
-         self.onCloseDict(event)
-         self.entry.Disable()
-         #self.buttonStop.Enable(1)
-         name = os.path.split(dialog.GetPaths()[0])[1]
-         self.SetTitle(titleTemplate % name)
-         self.SetStatusText(_("Loading \"%s\"...") % name)
-
-         try:
-            #os.chdir(os.path.split(dialog.GetPaths()[0])[0])
-            self.timerLoad.Start(self.delay)
-            self.load = Process(TMXParser, dialog.GetPaths()[0], self)
-            self.dictName = name
-            #self.encoding = self.app.config.defaultEnc
-            self.checkEncMenuItem(self.app.config.encoding)
-         except:
-            self.SetStatusText(_("Error: failed to open \"%s\"") % name)
-            self.onCloseDict(None)
-
-      dialog.Destroy()
-
-
-   def onOpenDictFile(self, event):
-
-      raise Exception, "mainwin.py:onOpenSlowo() is deprecated"
-      dialog = wxFileDialog(self, _("Choose dictionary file"), "", "",
-                         "", wxOPEN|wxMULTIPLE)
-      if dialog.ShowModal() == wxID_OK:
-         self.onCloseDict(event)
-         self.entry.Disable()
-         name = os.path.split(dialog.GetPaths()[0])[1]
-         # dictlib supports both zipped and not zipped files?
-         if name.find(".dz"):
-            basename = name.replace(".dict.dz", "")
-         else:
-            basename = name.replace(".dict", "")
-         self.SetTitle(titleTemplate % basename)
-
-         self.SetStatusText(_("Loading \"%s\"...") % name)
-         # do we need this try/except? I think it does nothing
-         try:
-            os.chdir(os.path.split(dialog.GetPaths()[0])[0])
-            self.timerLoad.Start(self.delay)
-            self.load = Process(DictParser, basename, self)
-            self.dictName = name
-            #self.encoding = self.app.config.defaultEnc
-            self.checkEncMenuItem(self.app.config.encoding)
-         except:
-            self.SetStatusText(_("Error: failed to open \"%s\"") % name)
-            self.onCloseDict(None)
-
-      dialog.Destroy()
 
 
    def onOpenDictConn(self, event):
@@ -1084,7 +907,7 @@ class MainWindow(wxFrame):
       if licence \
              and not self.app.agreements.getAccepted(dictInstance.getPath()):
          if not miscwin.showLicenceAgreement(None, licence):
-            from gui import errorwin
+            from lib.gui import errorwin
             title = _("Licence Agreement Rejected")
             msg = _("You cannot use dictionary \"%s\" without accepting "\
                     "licence agreement" % dictInstance.getName())
@@ -1099,7 +922,7 @@ class MainWindow(wxFrame):
       if dictInstance.getType() in dicttype.indexableTypes:
          if plaindict.indexShouldBeMade(dictInstance):
             # Notify about indexing
-            from gui import errorwin
+            from lib.gui import errorwin
             title = _("Dictionary Index")
             msg = _("This is the first time you use this dictionary or it " \
                     "has been changed on disk since last indexing. " \
@@ -1126,7 +949,7 @@ class MainWindow(wxFrame):
                        "another encoding from View > Character Encoding " \
                        "menu" % self.app.config.get('encoding'))
 
-               from gui import errorwin
+               from lib.gui import errorwin
                errorwin.showErrorMessage(title, msg)
                return
 
@@ -1142,7 +965,7 @@ class MainWindow(wxFrame):
             title = _("Error")
             msg = _("Unable to load dictionary index table. " \
                     "Got error: %s" % e)
-            from gui import errorwin
+            from lib.gui import errorwin
             errorwin.showErrorMessage(title, msg)
             return
 
@@ -1208,19 +1031,6 @@ class MainWindow(wxFrame):
 
       self.app.config.encoding = item[2]
       self.checkEncMenuItem(self.app.config.encoding)
-
-
-   # FIXME: Deprecated
-   def loadGroup(self, name):
-      raise Exception, "mainwin.py:loadGroup() is deprecated"
-      print "INFO Loading '%s'..." % name
-      self.SetTitle(titleTemplate % name)
-
-      self.entry.Disable()
-      self.timerLoad.Start(self.delay)
-      dicts = self.app.config.groups[name]
-      self.load = Process(DictionaryGroup, dicts, self)
-      self.dictName = name
 
 
    def changeEncoding(self, name):

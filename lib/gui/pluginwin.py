@@ -450,7 +450,11 @@ class PluginManagerWindow(wxFrame):
            index = self.installedList.InsertStringItem(0, dictionary)          
            self.installedList.SetItemData(index, index+1)
 
-       self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+
+       if dictNames:
+           self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+       else:
+           self.installedList.SetColumnWidth(0, 200)
 
 
    def setAvailDicts(self, addons):

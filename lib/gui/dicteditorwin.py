@@ -566,7 +566,7 @@ class DictEditorWindow(wxFrame):
 
         
     def open(self):
-        wildCard = "Slowo dictionaries (*.dwa)|*.dwa|"
+        wildCard = "Slowo dictionaries (*.dwa)|*.dwa"
         
         dialog = wxFileDialog(self, message=_("Choose dictionary file"),
                               wildcard=wildCard, style=wxOPEN|wxMULTIPLE)

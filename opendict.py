@@ -105,6 +105,10 @@ class OpenDictApp(wxApp):
       # Dictionaries container
       # Mapping: name -> object
       self.dictionaries = {}
+
+      # Failed dictionaries.
+      # For error message that may be shown after creating main window
+      self.invalidDictionaries = []
       
       self.config = Configuration()
       self.config.load()
@@ -115,7 +119,7 @@ class OpenDictApp(wxApp):
       
       
       # Load new-style plugins
-      for plugin in newplugin.loadDictionaryPlugins():
+      for plugin in newplugin.loadDictionaryPlugins(self.invalidDictionaries):
          self.dictionaries[plugin.getName()] = plugin
          self.config.ids[wx.NewId()] = plugin.getName()
 
@@ -123,7 +127,7 @@ class OpenDictApp(wxApp):
          self.dictionaries[plain.getName()] = plain
          self.config.ids[wx.NewId()] = plain.getName()
 
-         
+
       windowPos = (int(self.config.get('windowPosX')),
                                 int(self.config.get('windowPosY')))
       windowSize = (int(self.config.get('windowWidth')),

@@ -321,7 +321,7 @@ def _loadDictionaryPlugin(directory):
     return plugin
 
 
-def loadDictionaryPlugins():
+def loadDictionaryPlugins(invalidDictionaries):
     """Load plugins. Returns list of PluginHandler objects"""
 
     pluginDirs = []
@@ -350,6 +350,8 @@ def loadDictionaryPlugins():
         plugin = _loadDictionaryPlugin(dirName)
         if plugin:
             plugins.append(plugin)
+        else:
+            invalidDictionaries.append(dirName)
 
     return plugins
 
