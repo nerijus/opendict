@@ -13,13 +13,8 @@ Status:
 [ ] <Parsers>: Rewrite TMX parser not to store all file in memory
 [ ] <Base, GUI>: Ability to change plugin options. Plugin Manager has
     tabed panel: "About" and "Options".
-[ ] When exiting new config file is written only if any changes in
-    preferences were done.
 [ ] New plugins and registers system for external dictionaries
-[ ] When copying text selected text with a button click, only selected
-    text is copied, and all if no selection
 [ ] <DictEditor> Cannot edit dictionary if it is a registered one.
-[ ] <Base> Add significant word list feature
 
 BUG [ ] When selecting a file, mask is damaged sometimes.
-[ ] Replace XPM files with PNG ones.
+[x] Replace XPM files with PNG ones.

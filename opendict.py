@@ -56,28 +56,8 @@ except:
       print "its top-level directory"
    sys.exit(1)
 
-class OpenDictSplash(wx.SplashScreen):
-   
-   def __init__(self):
-      wxInitAllImageHandlers()
-      #bmp = wxBitmap(os.path.join(home, "pixmaps", "splash.jpg"),
-      #               wxBITMAP_TYPE_JPEG)
-      path = os.path.join(home, "pixmaps", "splash.png")
-      #print "Image:", path
-      bmp = wx.Image(path,
-                     wx.BITMAP_TYPE_PNG).ConvertToBitmap()
-      wx.SplashScreen.__init__(self, bmp, wx.SPLASH_CENTRE_ON_SCREEN |
-                                       wx.SPLASH_TIMEOUT,
-                                       10000, None, -1)
-      self.Bind(wx.EVT_CLOSE, self.OnClose)
-
-   def OnClose(self, event):
-      self.Hide()
-      event.Skip()
-      
 
 class OpenDictApp(wxApp):
-
    """Top-level class of wxWindows application"""
 
    l = wxLocale()
@@ -89,12 +69,6 @@ class OpenDictApp(wxApp):
       try:
          print "DEBUG Unicode version:", info.__unicode__
          
-         withSplash = False
-         if "--splash" in sys.argv:
-            splash = OpenDictSplash()
-            splash.Show()
-            withSplash = True
-          
          # Init gettext support
          wxLocale_AddCatalogLookupPathPrefix(os.path.join(home, "locale"))
          self.l.Init(wxLANGUAGE_DEFAULT)
@@ -119,8 +93,6 @@ class OpenDictApp(wxApp):
 
          self.window.Show(True)
 
-         if withSplash:
-            splash.Destroy()
 
       except:
          print "\n*** Fatal Error ***"
@@ -172,8 +144,6 @@ if __name__ == "__main__":
    print "INFO OpenDict %s\n" % __version__
    print "INFO Global home:", home
    print "INFO Local home:", uhome
-
-   #print "STARTING..."
 
    openDictApp = OpenDictApp(0)
    openDictApp.MainLoop()

@@ -18,7 +18,6 @@ install:
 	cp copying.txt $(HOME)
 	chmod ugo+r $(HOME)/copying.txt
 	ln -sf $(HOME)/opendict.py /usr/bin/opendict
-	#cp run-opendict /usr/bin/opendict
 	chmod ugo+rx /usr/bin/opendict
 	cp misc/opendict.desktop /usr/share/applications/
 	chmod ugo+r /usr/share/applications/opendict.desktop

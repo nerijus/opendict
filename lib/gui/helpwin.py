@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 # OpenDict
 # Copyright (c) 2003-2004 Martynas Jocius <mjoc@akl.lt>
 #
@@ -27,30 +29,9 @@ from info import home, __version__
 
 _ = wxGetTranslation
 
-class ManualWindow(wxFrame):
-
-   def __init__(self, parent, id, title, pos=wxDefaultPosition,
-                size=wxDefaultSize, style=wxCENTRE): # centre!
-      wxFrame.__init__(self, parent, id, title, pos, size, style)
-
-      vbox = wxBoxSizer(wxVERTICAL)
-
-      self.htmlWin = wxHtmlWindow(self, -1)
-      self.htmlWin.LoadPage(os.path.join(home, "doc", "Manual.html"))
-      vbox.Add(self.htmlWin, 1, wxALL | wxEXPAND, 3)
-
-      self.buttonClose = wxButton(self, 2001, _("Close"))
-      vbox.Add(self.buttonClose, 0, wxALL | wxCENTRE, 2)
-
-      self.SetSizer(vbox)
-
-      EVT_BUTTON(self, 2001, self.onClose)
-
-   def onClose(self, event):
-      self.Destroy()
-
 
 class LicenseWindow(wxFrame):
+   """Licence window class"""
 
    def __init__(self, parent, id, title, pos=wxDefaultPosition,
                 size=wxDefaultSize, style=wxCENTRE): # centre!
@@ -58,11 +39,7 @@ class LicenseWindow(wxFrame):
 
       vbox = wxBoxSizer(wxVERTICAL)
 
-      #self.htmlWin = wxHtmlWindow(self, -1)
-      #self.htmlWin.LoadPage(os.path.join(home, "copying.txt"))
-      #vbox.Add(self.htmlWin, 1, wxALL | wxEXPAND, 3)
-
-      # FIXME: which is better: html or plain text?
+      # TODO: which is better: html or plain text?
       scWinAbout = wxScrolledWindow(self, -1, wxPyDefaultPosition,
                                     wxSize(-1, -1))
       text = wxTextCtrl(scWinAbout, -1,
@@ -80,10 +57,15 @@ class LicenseWindow(wxFrame):
 
       EVT_BUTTON(self, 2002, self.onClose)
 
+
    def onClose(self, event):
+      """This method is invoked when Close button is clicked"""
+      
       self.Destroy()
+      
 
 class CreditsWindow(wxDialog):
+   """Credits window class"""
    
    def __init__(self, parent, id, title, pos=wxDefaultPosition,
                 size=wxDefaultSize):
@@ -96,8 +78,8 @@ class CreditsWindow(wxDialog):
       # "Written by" panel
       writePanel = wxPanel(nb, -1)
       vboxWrite = wxBoxSizer(wxVERTICAL)
-      written = _("Martynas Jocius <mjoc@akl.lt>\n" \
-                "Mantas Kriauciunas <mantas@akl.lt>")
+      written = _(unicode("Martynas Jocius <mjoc@akl.lt>\n" \
+                "Mantas Kriaučiūnas <mantas@akl.lt>", 'UTF-8'))
       labelWrite = wxStaticText(writePanel, -1, written)
       vboxWrite.Add(labelWrite, 0, wxALL, 10)
       writePanel.SetSizer(vboxWrite)
@@ -107,37 +89,14 @@ class CreditsWindow(wxDialog):
       # "Translations" panel
       tPanel = wxPanel(nb, -1)
       vboxTP = wxBoxSizer(wxVERTICAL)
-      trans = _("Lithuanian:\n" \
-                "   Irena Baliukonyte <irena.baliukonyte@mif.vu.lt>\n" \
-                "   Martynas Jocius <mjoc@akl.lt>")
+      trans = _(unicode("Lithuanian:\n" \
+                "   Irena Baliukonytė <irena.baliukonyte@mif.vu.lt>\n" \
+                "   Martynas Jocius <mjoc@akl.lt>", 'UTF-8'))
       labelTP = wxStaticText(tPanel, -1, trans)
       vboxTP.Add(labelTP, 0, wxALL, 10)
       tPanel.SetSizer(vboxTP)
       
       nb.AddPage(tPanel, _("Translated By"))
-      
-      # "Graphics" panel
-      gPanel = wxPanel(nb, -1)
-      vboxGP = wxBoxSizer(wxVERTICAL)
-      graphics = _("Gediminas Cekanauskas <hmm@mail.lt>")
-      labelGP = wxStaticText(gPanel, -1, graphics)
-      vboxGP.Add(labelGP, 0, wxALL, 10)
-      gPanel.SetSizer(vboxGP)
-      
-      nb.AddPage(gPanel, _("Logo & Icon"))
-
-      # "Funder" panel
-      fundPanel = wxPanel(nb, -1)
-      vboxFund = wxBoxSizer(wxVERTICAL)
-      funder = _("Vilnius City Municipal Government, " \
-                 "the Republic of Lithuania")
-      labelFund = wxStaticText(fundPanel, -1, funder)
-      vboxFund.Add(labelFund, 0, wxALL, 10)
-      fundPanel.SetSizer(vboxFund)
-      
-#   Advertisement period has expired, will be removed 
-#   nb.AddPage(fundPanel, _("Sponsor"))
-      
       vbox.Add(nb, 1, wxALL | wxEXPAND, 3)
       
       buttonClose = wxButton(self, 2005, _("Close"))
@@ -146,12 +105,15 @@ class CreditsWindow(wxDialog):
       self.SetSizer(vbox)
       
       EVT_BUTTON(self, 2005, self.onClose)
+
       
    def onClose(self, event):
+      """This method is invoked when Close button is clicked"""
+      
       self.Destroy()
+      
 
 class AboutWindow(wxDialog):
-
    """Information window about OpenDict"""
 
    def __init__(self, parent, id, title, pos=wxDefaultPosition,
@@ -205,8 +167,10 @@ class AboutWindow(wxDialog):
       EVT_BUTTON(self, 2003, self.onClose)
       EVT_BUTTON(self, 2004, self.onCredits)
 
+
    def onClose(self, event):
       self.Destroy()
+
       
    def onCredits(self, event):
       creditsWindow = CreditsWindow(self, -1, "Credits",

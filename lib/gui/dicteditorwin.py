@@ -251,21 +251,26 @@ class DictEditorWindow(wxFrame):
         self.controlButtons = []
         
         self.buttonAdd = wxButton(self, 6000, _("Add"))
+        self.buttonAdd.SetToolTipString(_("Add word"))
         self.controlButtons.append(self.buttonAdd)
         
         self.buttonEdit = wxButton(self, 6001, _("Edit"))
+        self.buttonEdit.SetToolTipString(_("Change translation"))
         self.controlButtons.append(self.buttonEdit)
 
         self.buttonRemove = wxButton(self, 6002, _("Remove"))
+        self.buttonRemove.SetToolTipString(_("Remove selected word"))
         self.controlButtons.append(self.buttonRemove)
 
         #self.buttonSearch = wxButton(self, 6003, _("Search"))
         #self.controlButtons.append(self.buttonSearch)
 
         self.buttonSort = wxButton(self, 6004, _("Sort"))
+        self.buttonSort.SetToolTipString(_("Sort word list"))
         self.controlButtons.append(self.buttonSort)
 
         self.buttonSave = wxButton(self, 6005, _("Save"))
+        self.buttonSave.SetToolTipString(_("Save words to file"))
         self.controlButtons.append(self.buttonSave)
         
         for button in self.controlButtons:
@@ -283,7 +288,7 @@ class DictEditorWindow(wxFrame):
                               [],
                               wxLB_SINGLE | wxSUNKEN_BORDER)
                               
-        sbSizerList.AddWindow(self.list, 1, wxALL | wxEXPAND, 0)
+        sbSizerList.Add(self.list, 1, wxALL | wxEXPAND, 0)
         panelList.SetSizer(sbSizerList)
         panelList.SetAutoLayout(true)
         sbSizerList.Fit(panelList)
@@ -293,13 +298,16 @@ class DictEditorWindow(wxFrame):
         vboxDict.Add(hboxDict, 1, wxALL | wxEXPAND, 0)
         vboxMain.Add(vboxDict, 1, wxALL | wxEXPAND, 10)
 
-        self.buttonNew = wxButton(self, 6030, _("Create new dictionary..."))
+        self.buttonNew = wxButton(self, 6030, _("New..."))
+        self.buttonNew.SetToolTipString(_("Start new dictionary"))
         hboxButtons.Add(self.buttonNew, 1, wxALL | wxEXPAND, 1)
 
-        self.buttonOpen = wxButton(self, 6031, _("Open existing..."))
+        self.buttonOpen = wxButton(self, 6031, _("Open..."))
+        self.buttonOpen.SetToolTipString(_("Open dictionary file"))
         hboxButtons.Add(self.buttonOpen, 1, wxALL | wxEXPAND, 1)
 
         self.buttonClose = wxButton(self, 6032, _("Close"))
+        self.buttonClose.SetToolTipString(_("Close editor window"))
         hboxButtons.Add(self.buttonClose, 1, wxALL | wxEXPAND, 1)
 
         vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
@@ -341,6 +349,7 @@ class DictEditorWindow(wxFrame):
         window.CentreOnScreen()
         window.Show(True) 
 
+
     def onRemove(self, event):
         self.SetStatusText("")
         word = self.list.GetStringSelection()
@@ -348,8 +357,10 @@ class DictEditorWindow(wxFrame):
             del self.parser.mapping[word]
             self.list.Delete(self.list.FindString(word))
 
+
     def onSearch(self, event):
         self.SetStatusText("")
+
 
     def onSort(self, event):
         
@@ -364,9 +375,11 @@ class DictEditorWindow(wxFrame):
         self.list.InsertItems(words, 0)
         self.SetStatusText(_("List sorted"))
 
+
     def onSave(self, event):
         self.cAction = "save"
         self.save(self)
+
     
     def save(self, instance):
         instance.SetStatusText("")
@@ -390,16 +403,18 @@ class DictEditorWindow(wxFrame):
             else:
                 print "DictEditor: save canceled"
                 return 0
+
+        xml = []
         
         if info.__unicode__:
-            code = u"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" \
-                   "<tmx version=\"1.1\">\n"
+            xml.append(u"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" \
+                   "<tmx version=\"1.1\">\n")
         else:
-            code = "<?xml version=\"1.0\" encoding=\"%s\"?>\n" \
-                   "<tmx version=\"1.1\">\n" % info.__enc__
+            xml.append("<?xml version=\"1.0\" encoding=\"%s\"?>\n" \
+                   "<tmx version=\"1.1\">\n" % info.__enc__)
                    
-        code += instance.tmxDictHeader(instance.parser)
-        code += "  <body>\n"
+        xml.append(instance.tmxDictHeader(instance.parser))
+        xml.append("  <body>\n")
 
         words = instance.parser.mapping.keys()
         words.sort()
@@ -407,20 +422,21 @@ class DictEditorWindow(wxFrame):
         print "Words:", len(words)
 
         for word in words:
-            code += "    <tu>\n"
-            code += "      <tuv lang=\"%s\">\n" % instance.parser.header["srclang"]
-            code += "        <seg>%s</seg>\n" % word.replace("<", 
-                                                "&lt;").replace(">", "&gt;")
-            code += "      </tuv>\n"
-            code += "      <tuv lang=\"%s\">\n" % instance.parser.lang
+            xml.append("    <tu>\n")
+            xml.append("      <tuv lang=\"%s\">\n" \
+                       % instance.parser.header["srclang"])
+            xml.append("        <seg>%s</seg>\n" \
+                       % word.replace("<", "&lt;").replace(">", "&gt;"))
+            xml.append("      </tuv>\n")
+            xml.append("      <tuv lang=\"%s\">\n" % instance.parser.lang)
             for seg in instance.parser.mapping[word]:
                 # FIXME: what's a bug???
-                code += "        <seg>%s</seg>\n" % seg
-            code += "      </tuv>\n"
-            code += "    </tu>\n"
+                xml.append("        <seg>%s</seg>\n" % seg)
+            xml.append("      </tuv>\n")
+            xml.append("    </tu>\n")
 
-        code += "  </body>\n" \
-                "</tmx>\n"
+        xml.append("  </body>\n" \
+                "</tmx>\n")
         
         fd = open(instance.file, "w")
         
@@ -436,10 +452,11 @@ class DictEditorWindow(wxFrame):
                 
                 return 1
                 
-        fd.write(code)
+        fd.write("".join(xml))
         fd.close()
         instance.SetStatusText(_("Saved"))
         self.changed = 0
+        
 
     def onCreate(self, event):
         self.list.Clear()

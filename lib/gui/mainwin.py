@@ -36,7 +36,7 @@ from gui.dicteditorwin import DictEditorWindow
 from gui.mywordswin import MyWordsWindow
 from gui.dictaddwin import DictAddWindow
 from gui.prefswin import PrefsWindow
-from gui.helpwin import ManualWindow, LicenseWindow, AboutWindow
+from gui.helpwin import LicenseWindow, AboutWindow
 from parser import SlowoParser
 from parser import MovaParser
 from parser import TMXParser
@@ -169,7 +169,7 @@ class MainWindow(wxFrame):
          if self.app.config.defaultEnc == misc.encodings[enc]:
             self.menuEncodings.FindItemById(2100+i).Check(1)
          i+=1
-      menuEdit.AppendMenu(2000, _("Encoding"), self.menuEncodings)
+      menuEdit.AppendMenu(2000, _("Character Encoding"), self.menuEncodings)
       self.menuFontFace = wxMenu()
       i = 0
       keys = misc.fontFaces.keys()
@@ -242,7 +242,8 @@ class MainWindow(wxFrame):
 
       menuTools = wxMenu()
       menuTools.Append(110, _("Manage Dictionaries...\tCtrl-M"),
-                      _("Install or remove dictionaries, see the information"))
+                      _("Install, remove dictionaries and get " \
+                        "information about them"))
 
       # FIXME: Remove group classes and files
       #menuTools.Append(122, _("Manage Groups...\tCtrl-G"),
@@ -252,14 +253,14 @@ class MainWindow(wxFrame):
       menuTools.Append(123, _("Connect to DICT Server..."),
                           _("Open connection to DICT server"))
 
-      #menuTools.AppendSeparator()
+      menuTools.AppendSeparator()
       
       # Editor can't be used with non-unicode GUI, because unicode
       # string are used with TMX files.
 
-      if info.__unicode__:
-          menuTools.Append(5002, _("Dictionaries Editor"),
-                          _("Create and manage your own dictionaries"))  
+      #if info.__unicode__:
+      menuTools.Append(5002, _("Dictionary Editor"),
+                       _("Make your own dictionary"))  
 
       # FIXME: Remove atitinkamas classes
       #menuTools.Append(5003, _("My Words\tCtrl-W"),
@@ -292,7 +293,7 @@ class MainWindow(wxFrame):
                      wxBITMAP_TYPE_PNG)
       self.buttonBack = wxBitmapButton(self, 2010, bmp, (24, 24),
                                          style=wxNO_BORDER)
-      self.buttonBack.SetToolTipString(_("Back"))
+      self.buttonBack.SetToolTipString(_("History Back"))
       self.buttonBack.Disable()
       hboxToolbar.Add(self.buttonBack, 0, wxALL | wxCENTER, 1)
 
@@ -301,7 +302,7 @@ class MainWindow(wxFrame):
                      wxBITMAP_TYPE_PNG)
       self.buttonForward = wxBitmapButton(self, 2011, bmp, (24, 24),
                                          style=wxNO_BORDER)
-      self.buttonForward.SetToolTipString(_("Forward"))
+      self.buttonForward.SetToolTipString(_("History Forward"))
       self.buttonForward.Disable()
       hboxToolbar.Add(self.buttonForward, 0, wxALL | wxCENTER, 1)
 
@@ -957,6 +958,7 @@ For more information visit project's homepage on
       editor.CentreOnScreen()
       editor.Show(True)
 
+
    # FIXME: Remove
    def onShowMyWordList(self, event):
       print "My words"
@@ -1159,14 +1161,10 @@ For more information visit project's homepage on
       dialog.Destroy()
 
    def onManual(self, event):
-      """Shows 'Manual' window"""
+      """Shows Manual window"""
 
-      manualWindow = ManualWindow(self, -1,
-                                _("Manual"),
-                                size=(500, 400),
-                                style=wxDEFAULT_FRAME_STYLE)
-      manualWindow.CentreOnScreen()
-      manualWindow.Show(True)
+      print "INFO Manual function is not impelemented yet"
+      
 
    def onLicense(self, event):
       """Shows 'License' window"""
