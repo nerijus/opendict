@@ -1,0 +1,14 @@
+TODO for OpenDict
+Last modified: 2002-06-29
+OpenDict version: 0.1
+
+[x] 1. Write Mova parser
+[ ] 2. Make Plugin class public for DictParser
+[ ] 3. Devide plugins and base code, make them removable
+[ ] 4. Create working alkonas plugin, solve problems with wxURL
+[x] 5. Add supported encodings or unicode 
+[ ] 6. Write ConfigFile class
+[ ] 7. Make dictionaries register system
+[ ] 8. Add utilities support
+[ ] 9. Make preferences window
+

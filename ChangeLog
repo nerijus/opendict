@@ -1,0 +1,51 @@
+=========================
+Open Dictionary ChangeLog
+=========================
+
+opendict-0.0.1-3
+[August 11, 2001]
+
+   - Slowo_parser class is written
+   - Original words are listed after program starts
+   - [FIXME] program is slower :)
+
+
+opendict-0.0.1-4
+[August 12, 2001]
+
+   - Event handling is written
+   - Some unusual stuff is written :)
+	
+
+opendict-0.0.2
+[August 23, 2001]
+
+   - Open Dictionary works with `slowo' dictionaries
+   - Configuration file support added, but it's not complete
+
+	
+opendict-0.0.3
+[August 28, 2001]
+
+   - EVT_TEXT_ENTER event works, i.e. you can search by hitting
+     <return> in a search entry or clicking a button
+   - You can load any other dictionary from `Dictionary' menu, while
+     it was declared in your config file
+   - Word is selected if found (not complete)
+   - Combo item update after search (if need)
+
+
+opendict-0.0.4
+[October 27, 2001]
+
+   - Text copy into the clipboard added
+
+
+opendict-0.0.5
+[October 31, 2001]
+
+   - Thread support for combo list selects
+   - Slowo parser for all slowo dictionaries
+   - Few interface bugs fixed, few new features added
+   - Faster search engine (database like indexing)
+
