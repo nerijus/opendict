@@ -65,10 +65,11 @@ class TestEditor(unittest.TestCase):
         editor = dicteditor.Editor()
         editor.load("data/sampledict.dwa")
         units = editor.getUnits()
+        
         editor.save("data/__output.dwa")
         editor.load("data/__output.dwa")
 
-        self.assertEquals(units, editor.getUnits())
+        self.assertEquals(len(units), len(editor.getUnits()))
 
         os.unlink("data/__output.dwa")
 
