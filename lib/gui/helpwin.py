@@ -116,6 +116,18 @@ class CreditsWindow(wxDialog):
       tPanel.SetSizer(vboxTP)
       
       nb.AddPage(tPanel, _("Translated By"))
+
+      # "Thanks" panel
+      thPanel = wxPanel(nb, -1)
+      vboxThP = wxBoxSizer(wxVERTICAL)
+      thanksString = unicode("Kęstutis Biliūnas <kebil@kaunas.init.lt>",
+                            "UTF-8")
+      thanks = _(enc.toWX(thanksString))
+      labelThP = wxStaticText(thPanel, -1, thanks)
+      vboxThP.Add(labelThP, 0, wxALL, 10)
+      thPanel.SetSizer(vboxThP)
+      nb.AddPage(thPanel, _("Thanks To"))
+      
       vbox.Add(nb, 1, wxALL | wxEXPAND, 3)
       
       buttonClose = wxButton(self, 2005, _("Close"))
