@@ -84,18 +84,23 @@ class Installer:
             window.CentreOnScreen()
             window.Show(True)
         else:
-            self.install(filePath, extention)
+            self.install(filePath)
 
             
-    def install(self, filePath, extention):
+    def install(self, filePath):
         """Install dictionary"""
+
+        extention = os.path.splitext(filePath)[1][1:]
  
         try:
             if extention.lower() in dicttype.PLUGIN.getFileExtentions():
                 try:
-                    directory = installDictionaryPlugin(filePath)
+                    directory, dtype = installPlugin(filePath)
                     if directory:
-                        dictionary = newplugin._loadDictionaryPlugin(directory)
+                        if dtype.lower() == 'plugin':
+                            dictionary = newplugin._loadDictionaryPlugin(directory)
+                        else:
+                            dictionary = plaindict._loadPlainDictionary(directory)
                         print "Installed dict:", dictionary
                         self.mainWin.addDictionary(dictionary)
                 except Exception, e:
@@ -114,13 +119,13 @@ class Installer:
                         self.mainWin.addDictionary(dictionary)
                 except Exception, e:
                     traceback.print_exc()
-                    errorwin.showErrorMessage(_("Installation failed"),
+                    errorwin.showErrorMessage(_("Installation Error"),
                                               enc.toWX(str(e)))
-                    self.mainWin.SetStatusText(_("Installation failed"))
+                    self.mainWin.SetStatusText(_("Error: Installation failed"))
                     return
         except:
             # Can this happen?
-            self.mainWin.SetStatusText(_("Error: installation failed"))
+            self.mainWin.SetStatusText(_("Error: Installation failed"))
             status = 1
             misc.printError()
 
@@ -249,15 +254,24 @@ def installPlugin(filePath):
            and len(dirName.split('/')) == 1:
             topLevelDirExists = True
 
-    if not plainConfigExists or not pluginConfigExists\
-       or not topLevelDirExists:
+    print plainConfigExists
+    print pluginConfigExists
+    print topLevelDirExists
+
+    if ((not plainConfigExists) and (not pluginConfigExists)) \
+       or (not topLevelDirExists):
         raise Exception, _("Selected file is not valid OpenDict plugin")
 
 
+    dtype = None
     if plainConfigExists:
-        _installPlainPlugin(filePath)
+        directory = _installPlainPlugin(filePath)
+        dtype = 'plain'
     elif pluginConfigExists:
-        _installNormalPlugin(filePath)
+        directory = _installNormalPlugin(filePath)
+        dtype = 'plugin'
+
+    return (directory, dtype)
         
 
 def _installNormalPlugin(filePath):
@@ -265,6 +279,7 @@ def _installNormalPlugin(filePath):
 
     zipFile = zipfile.ZipFile(filePath, 'r')
 
+    topDirectory = zipFile.namelist()[0]
     pluginsPath = os.path.join(info.LOCAL_HOME,
                               info.PLUGIN_DICT_DIR)
 
@@ -272,7 +287,7 @@ def _installNormalPlugin(filePath):
     if os.path.exists(os.path.join(info.LOCAL_HOME,
                                    info.PLUGIN_DICT_DIR,
                                    topDirectory)):
-        raise Exception, _("This plugin dictionary already installed. " \
+        raise Exception, _("This dictionary already installed. " \
                            "If you want to upgrade it, please remove " \
                            "old version first.")
 
@@ -330,6 +345,7 @@ def _installPlainPlugin(filePath):
 ##     util.makeDirectories()
 
     zipFile = zipfile.ZipFile(filePath, 'r')
+    topDirectory = zipFile.namelist()[0]
 
     # Test CRC
     if zipFile.testzip():
@@ -339,12 +355,12 @@ def _installPlainPlugin(filePath):
                               info.PLAIN_DICT_DIR)
 
     # Check if already installed
-    if os.path.exists(os.path.join(info.LOCAL_HOME,
-                                   info.PLUGIN_DICT_DIR,
-                                   topDirectory)):
-        raise Exception, _("This plugin dictionary already installed. " \
-                           "If you want to upgrade it, please remove " \
-                           "old version first.")
+    #if os.path.exists(os.path.join(info.LOCAL_HOME,
+    #                               info.PLUGIN_DICT_DIR,
+    #                               topDirectory)):
+    #    raise Exception, _("This plugin dictionary already installed. " \
+    #                       "If you want to upgrade it, please remove " \
+    #                       "old version first.")
 
     # Install
     try:
@@ -365,7 +381,7 @@ def _installPlainPlugin(filePath):
                 fd.close()
     except Exception, e:
         try:
-            shutil.rmtree(os.path.join(plainDictsPath, topLevelDir))
+            shutil.rmtree(os.path.join(plainDictsPath, topDirectory))
         except Exception, e:
             print "ERROR %s" % e
             raise _("Error while removing created directories after " \

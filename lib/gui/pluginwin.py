@@ -39,8 +39,8 @@ from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 _ = wxGetTranslation
 
-_addOnsListURL = 'file:///home/mjoc/opendict-add-ons.xml'
-#_addOnsListURL = 'http://files.akl.lt/~mjoc/opendict-add-ons.xml'
+#_addOnsListURL = 'file:///home/mjoc/opendict-add-ons.xml'
+_addOnsListURL = 'http://files.akl.lt/~mjoc/opendict-add-ons.xml'
 
 
 class DictListCtrl(wx.ListCtrl):
@@ -203,13 +203,14 @@ class PluginManagerWindow(wxFrame):
        # Make columns
        #
        self.availableList.InsertColumn(0, _("Name"))
+       self.availableList.InsertColumn(1, _("Size"))
 
-       item = wxListItem()
-       item.m_mask = wx.LIST_MASK_TEXT | wxLIST_MASK_FORMAT
-       item.m_format = wx.LIST_FORMAT_RIGHT
-       item.m_text = _("Size")
+       #item = wxListItem()
+       #item.m_mask = wx.LIST_MASK_TEXT | wxLIST_MASK_FORMAT
+       #item.m_format = wx.LIST_FORMAT_RIGHT
+       #item.m_text = _("Size")
 
-       self.availableList.InsertColumnInfo(1, item)
+       #self.availableList.InsertColumnInfo(1, item)
        
        size = 100
        
@@ -236,7 +237,7 @@ class PluginManagerWindow(wxFrame):
            self.availableList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
        else:
            self.availableList.SetColumnWidth(0, 200)
-           self.availableList.SetColumnWidth(1, 70)
+           self.availableList.SetColumnWidth(1, 120)
 
        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onAvailableSelected,
                  self.availableList)
@@ -464,7 +465,7 @@ class PluginManagerWindow(wxFrame):
    def onUpdate(self, event):
        """Update dictionaries list"""
 
-       title = _("Downloading")
+       title = _("Downloading List")
        msg = _("Downloading list of available dictionaries...")
 
        progressDialog = wx.ProgressDialog(title,
@@ -654,10 +655,14 @@ class PluginManagerWindow(wxFrame):
 
        try:
            print "Installing..."
-           installer.installPreparedPlain(localPath)
+           inst = installer.Installer(self.mainWin, self.app.config)
+           inst.install(localPath)
        except Exception, e:
+           traceback.print_exc()
            title = _("Error")
-           msg = _("Unable to install")
+           msg = _("Unable to install dictionary '%s' (Error occured: %s" \
+                   % (dictInfo.getName(), e))
+           errorwin.showErrorMessage(title, msg)
 
 
 

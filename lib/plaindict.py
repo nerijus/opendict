@@ -104,7 +104,7 @@ def _loadPlainDictionary(directory):
         # path. If so, it is replaced with full file path in local or
         # system directory, depending on parameter 'directory' given.
 
-        fileName = config.get('name').replace('%FULL_PLAIN_PATH%', '')
+        fileName = os.path.basename(config.get('path').replace('%FULL_PLAIN_PATH%', ''))
         home = info.LOCAL_HOME
         if directory.startswith(info.GLOBAL_HOME):
             home = info.GLOBAL_HOME
@@ -112,7 +112,6 @@ def _loadPlainDictionary(directory):
         fullFileDir = os.path.join(home, info.PLAIN_DICT_DIR,
                                     fileName, info.__PLAIN_DICT_FILE_DIR) + \
                                     os.path.sep
-        print "Full dictionary directory: '%s'" % fullFileDir
 
         dictionary = Parser(config.get('path').replace('%FULL_PLAIN_PATH%',
                                                        fullFileDir))
