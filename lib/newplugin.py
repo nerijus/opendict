@@ -294,7 +294,7 @@ def _loadDictionaryPlugin(directory):
         plugin = DictionaryPlugin(directory)
     except InvalidPluginException, e:
         systemLog(ERROR, "Unable to load plugin from %s (%s)" % (directory, e))
-        traceback.print_exc
+        #traceback.print_exc()
 
     return plugin
 

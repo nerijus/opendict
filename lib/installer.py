@@ -79,7 +79,7 @@ class Installer:
                 extMapping[ext.lower()] = t
 
         if not extention.lower() in extMapping.keys():
-            print "ERROR Unable to recognise %s format" % filePath
+            #print "ERROR Unable to recognise %s format" % filePath
             window = DictAddWindow(self.mainWin, fileName, filePath)
             window.CentreOnScreen()
             window.Show(True)
@@ -101,7 +101,7 @@ class Installer:
                             dictionary = newplugin._loadDictionaryPlugin(directory)
                         else:
                             dictionary = plaindict._loadPlainDictionary(directory)
-                        print "Installed dict:", dictionary
+                        #print "Installed dict:", dictionary
                         self.mainWin.addDictionary(dictionary)
                 except Exception, e:
                     traceback.print_exc()
@@ -115,7 +115,7 @@ class Installer:
                     directory = installPlainDictionary(filePath)
                     if directory:
                         dictionary = plaindict._loadPlainDictionary(directory)
-                        print "Installed dict:", dictionary
+                        #print "Installed dict:", dictionary
                         self.mainWin.addDictionary(dictionary)
                 except Exception, e:
                     traceback.print_exc()
@@ -127,7 +127,7 @@ class Installer:
             # Can this happen?
             self.mainWin.SetStatusText(_("Error: Installation failed"))
             status = 1
-            misc.printError()
+            tranceback.print_exc()
 
         self.mainWin.SetStatusText(_("Dictionary successfully installed"))
 
@@ -254,10 +254,6 @@ def installPlugin(filePath):
            and len(dirName.split('/')) == 1:
             topLevelDirExists = True
 
-    print plainConfigExists
-    print pluginConfigExists
-    print topLevelDirExists
-
     if ((not plainConfigExists) and (not pluginConfigExists)) \
        or (not topLevelDirExists):
         raise Exception, _("Selected file is not valid OpenDict plugin")
@@ -300,11 +296,11 @@ def _installNormalPlugin(filePath):
             if len(fileName) == 0:
                 dirToCreate = os.path.join(pluginsPath, dirName)
                 if not os.path.exists(dirToCreate):
-                    print "Creating", dirToCreate
+                    #print "Creating", dirToCreate
                     os.mkdir(dirToCreate)
             else:
                 fileToWrite = os.path.join(pluginsPath, dirName, fileName)
-                print "Writing:", fileToWrite
+                #print "Writing:", fileToWrite
                 fd = open(fileToWrite, 'w')
                 fd.write(zipFile.read(fileInZip))
                 fd.close()
@@ -312,12 +308,12 @@ def _installNormalPlugin(filePath):
         try:
             shutil.rmtree(os.path.join(pluginsPath, topLevelDir))
         except Exception, e:
-            print "ERROR %s" % e
+            #print "ERROR %s" % e
             raise _("Error while removing created directories after " \
                     "plugin installation failure. This may be " \
                     "permission or disk space error.")
 
-        print "ERROR %s" % e
+        #print "ERROR %s" % e
         raise _("Unable to install plugin")
 
 
@@ -371,11 +367,11 @@ def _installPlainPlugin(filePath):
             if len(fileName) == 0:
                 dirToCreate = os.path.join(plainDictsPath, dirName)
                 if not os.path.exists(dirToCreate):
-                    print "Creating", dirToCreate
+                    #print "Creating", dirToCreate
                     os.mkdir(dirToCreate)
             else:
                 fileToWrite = os.path.join(plainDictsPath, dirName, fileName)
-                print "Writing:", fileToWrite
+                #print "Writing:", fileToWrite
                 fd = open(fileToWrite, 'w')
                 fd.write(zipFile.read(fileInZip))
                 fd.close()
@@ -383,12 +379,12 @@ def _installPlainPlugin(filePath):
         try:
             shutil.rmtree(os.path.join(plainDictsPath, topDirectory))
         except Exception, e:
-            print "ERROR %s" % e
+            #print "ERROR %s" % e
             raise _("Error while removing created directories after " \
                     "plugin installation failure. This may be " \
                     "permission or disk space error.")
 
-        print "ERROR %s" % e
+        #print "ERROR %s" % e
         raise _("Unable to install dictionary")
 
 
@@ -407,7 +403,7 @@ def removePlainDictionary(dictInstance):
     dictDir = os.path.join(info.LOCAL_HOME, info.PLAIN_DICT_DIR, fileName)
 
     try:
-        print "DEBUG Removing %s..." % dictDir
+        #print "DEBUG Removing %s..." % dictDir
         shutil.rmtree(dictDir)
     except Exception, e:
         raise Exception, str(e)
@@ -422,7 +418,7 @@ def removePluginDictionary(dictInstance):
     dictDir = os.path.join(info.LOCAL_HOME, info.PLUGIN_DICT_DIR, fileName)
 
     try:
-        print "DEBUG Removing %s..." % dictDir
+        #print "DEBUG Removing %s..." % dictDir
         shutil.rmtree(dictDir)
     except Exception, e:
         raise Exception, str(e)
