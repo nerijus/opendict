@@ -1,8 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=OpenDict
-Name[lt]=OpenDict
-Comment=Lookup words in local or Internet dictionary 
+Name=Dictionary OpenDict
+Name[lt]=Žodynas OpenDict
+Comment=Lookup words in a local or Internet dictionary 
 Comment[lt]=Ieškoti žodžių kompiuterio arba Interneto žodyne
 Exec=/usr/bin/opendict
 Icon=/usr/share/opendict/pixmaps/icon-48x48.png

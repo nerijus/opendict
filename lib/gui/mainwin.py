@@ -86,8 +86,8 @@ class MainWindow(wxFrame):
       self.history = History()
       self.htmlCode = ""
       self.dictName = ""
-      self.encoding = self.app.config.defaultEnc
-      self.dict = None
+      #self.encoding = self.app.config.defaultEnc
+      self.activeDictionary = None
       self.list = []
       self.delay = 10 # miliseconds
       
@@ -186,7 +186,7 @@ class MainWindow(wxFrame):
       for encoding in keys:
          self.menuEncodings.AppendRadioItem(2100+i , encoding, "")
          EVT_MENU(self, 2100+i, self.onDefault)
-         if self.app.config.defaultEnc == misc.encodings[encoding]:
+         if self.app.config.encoding == misc.encodings[encoding]:
             self.menuEncodings.FindItemById(2100+i).Check(1)
          i+=1
          
@@ -234,19 +234,21 @@ class MainWindow(wxFrame):
 
       self.menuDict = wxMenu()
 
-      keys = self.app.config.plugins.keys()
-      keys.sort()
-      for name in keys:
+      dictNames = self.app.dictionaries.keys()
+      dictNames.sort()
+      for name in dictNames:
          print "Without trans: %s, %s" % (name, type(name))
          encoded = enc.toWX(name)
          print "With toWX: %s, %s" % (encoded, type(encoded))
+         #print self.app.config.ids[name]
+         itemID = self.app.config.ids.keys()[self.app.config.ids.values().index(encoded)]
 
          try:
             item = wxMenuItem(self.menuDict,
-                              self.app.config.ids[name],
-                              enc.toWX(name))
+                              itemID,
+                              encoded)
             self.menuDict.AppendItem(item)
-            EVT_MENU(self, self.app.config.ids[name], self.onDefault)
+            EVT_MENU(self, itemID, self.onDefault)
          except Exception, e:
             print "ERROR Unable to create menu item for '%s' (%s)" \
                   % (name, e)
@@ -406,7 +408,7 @@ class MainWindow(wxFrame):
       self.splitter.SetMinimumPaneSize(90)
       self.splitter.SetSashSize(5)
 
-      if not self.dict:
+      if not self.activeDictionary:
          self.hideWordList()
 
       vboxMain.Add(self.splitter, 1, wxALL | wxGROW | wxEXPAND, 0)
@@ -594,7 +596,8 @@ For more information visit project's homepage on
             misc.printError()
             return
 
-         transUnicode = unicode(result.translation, self.dict.getEncoding())
+         transUnicode = unicode(result.translation,
+                                self.activeDictionary.getEncoding())
          transPreparedForWX = enc.toWX(transUnicode)
 
          self.htmlWin.SetPage(transPreparedForWX)
@@ -608,7 +611,8 @@ For more information visit project's homepage on
             if not self.__searchedBySelecting:
                self.wordList.Clear()
 
-               toUnicode = lambda s: unicode(s, self.dict.getEncoding())
+               toUnicode = lambda s: unicode(s,
+                                             self.activeDictionary.getEncoding())
                wordsInUnicode = map(toUnicode, result.words)
                wordsPreparedForWX = map(enc.toWX, wordsInUnicode)
                
@@ -634,8 +638,8 @@ For more information visit project's homepage on
          self.timerLoad.Stop()
          self.load.stop()
 
-         self.dict = self.load()
-         if self.dict == None:
+         self.activeDictionary = self.load()
+         if self.activeDictionary == None:
             self.onCloseDict(None)
             self.load = None
             #self.buttonStop.Disable()
@@ -647,23 +651,25 @@ For more information visit project's homepage on
          else:
             self.SetStatusText(_("Dictionary \"%s\" loaded") % self.dictName)
 
-            if not hasattr(self.dict, "name"):
-               self.dict.name = "unknown"
+            if not hasattr(self.activeDictionary, "name"):
+               self.activeDictionary.getName = "unknown"
 
-            if self.dict.name not in self.app.config.registers.keys() + \
+            if self.activeDictionary.name not in self.app.config.registers.keys() + \
                self.app.config.plugins.keys() + self.app.config.groups.keys():
                try:
-                  self.dict.makeHashTable()
+                  self.activeDictionary.makeHashTable()
                except:
                   # Doesn't use it or is bad-written
                   pass
-            elif self.dict.name in self.app.config.registers:
+            elif self.activeDictionary.name in self.app.config.registers:
                # This is a register, hash table must be loaded
-               if self.app.config.registers[self.dict.name][1] \
+               if self.app.config.registers[self.activeDictionary.getName()][1] \
                       not in ['dz', 'dict']:
                   print "INFO Loading hash table..."
                   try:
-                     if os.path.exists(os.path.join(uhome, "register", self.dict.name+".hash")):
+                     if os.path.exists(os.path.join(uhome,
+                                                    "register",
+                                                    self.activeDictionary.name+".hash")):
                         self.dict.hash = self.app.reg.loadHashTable(os.path.join(uhome, "register", self.dict.name+".hash"))
                      else:
                         self.dict.hash = self.app.reg.loadHashTable(os.path.join(home, "register", self.dict.name+".hash"))
@@ -689,7 +695,7 @@ For more information visit project's homepage on
       #self.entry.SetInsertioEnd()
 
    def onSearch(self, event):
-      if self.dict == None:
+      if self.activeDictionary == None:
          self.SetStatusText(_("There is no opened dictionary"))
          return
 
@@ -713,8 +719,8 @@ For more information visit project's homepage on
       self.timerSearch.Start(self.delay)
 
       word = enc.fromWX(word)
-      word = word.encode(self.dict.getEncoding())
-      self.search = Process(self.dict.search, word)
+      word = word.encode(self.activeDictionary.getEncoding())
+      self.search = Process(self.activeDictionary.search, word)
 
 
    def onBack(self, event):
@@ -807,8 +813,8 @@ For more information visit project's homepage on
             self.load = Process(SlowoParser, dialog.GetPaths()[0],
                                 self)
             self.dictName = name
-            self.encoding = self.app.config.defaultEnc
-            self.checkEncMenuItem(self.encoding)
+            #self.encoding = self.app.config.defaultEnc
+            self.checkEncMenuItem(self.app.config.encoding)
          except:
             self.SetStatusText(_("Error: failed to open \"%s\"") % name)
             self.onCloseDict(None)
@@ -828,8 +834,8 @@ For more information visit project's homepage on
             self.timerLoad.Start(self.delay)
             self.load = Process(MovaParser, dialog.GetPaths()[0], self)
             self.dictName = name
-            self.encoding = self.app.config.defaultEnc
-            self.checkEncMenuItem(self.encoding)
+            #self.encoding = self.app.config.defaultEnc
+            self.checkEncMenuItem(self.app.config.encoding)
          except:
             self.SetStatusText(_("Error: failed to open \"%s\"") % name)
             self.onCloseDict(None)
@@ -853,8 +859,8 @@ For more information visit project's homepage on
             self.timerLoad.Start(self.delay)
             self.load = Process(TMXParser, dialog.GetPaths()[0], self)
             self.dictName = name
-            self.encoding = self.app.config.defaultEnc
-            self.checkEncMenuItem(self.encoding)
+            #self.encoding = self.app.config.defaultEnc
+            self.checkEncMenuItem(self.app.config.encoding)
          except:
             self.SetStatusText(_("Error: failed to open \"%s\"") % name)
             self.onCloseDict(None)
@@ -884,8 +890,8 @@ For more information visit project's homepage on
             self.timerLoad.Start(self.delay)
             self.load = Process(DictParser, basename, self)
             self.dictName = name
-            self.encoding = self.app.config.defaultEnc
-            self.checkEncMenuItem(self.encoding)
+            #self.encoding = self.app.config.defaultEnc
+            self.checkEncMenuItem(self.app.config.encoding)
          except:
             self.SetStatusText(_("Error: failed to open \"%s\"") % name)
             self.onCloseDict(None)
@@ -905,7 +911,7 @@ For more information visit project's homepage on
       # If there was a registered dict, set it's default encoding
       try:
          if self.dict.name in self.app.config.registers.keys():
-            self.app.config.registers[self.dict.name][2] = self.encoding
+            self.app.config.registers[self.dict.name][2] = self.app.config.encoding
       except:
          pass
 
@@ -917,8 +923,8 @@ For more information visit project's homepage on
       self.SetTitle("OpenDict")
       self.list = []
       self.dict = None
-      self.encoding = self.app.config.defaultEnc
-      self.checkEncMenuItem(self.encoding)
+      #self.encoding = self.app.config.defaultEnc
+      self.checkEncMenuItem(self.app.config.encoding)
 
       self.SetStatusText(_("Choose a dictionary from \"Dictionaries\" menu"))
       #self.buttonStop.Disable()
@@ -942,10 +948,7 @@ For more information visit project's homepage on
          try:
             self.entry.SetValue(do.GetText())
          except:
-            try:
-               self.entry.SetValue(do.GetText().encode(self.encoding))
-            except:
-               self.SetStatusText(_("Failed to copy text from the clipboard"))
+            self.SetStatusText(_("Failed to copy text from the clipboard"))
       else:
          self.SetStatusText(_("Clipboard contains no text data"))
       wxTheClipboard.Close()
@@ -1022,9 +1025,24 @@ For more information visit project's homepage on
 
    def onDefault(self, event):
       print "DEBUG MainWindow: menu item selected, id:", event.GetId()
+      #print "DEBUG MainWindow: menu item selected, id:", event.GetString()
+      #print "DEBUG MainWindow: item selected:", dir(event)
 
       # FIXME: Bad way. Try setting a few constants for each type
       # of dictionary and then check this type instead of IDs.
+
+
+      eventID = event.GetId()
+      if eventID in self.app.config.ids.keys():
+         dictionary = self.app.dictionaries.get(self.app.config.ids.get(eventID))
+         self.activeDictionary = dictionary
+         self.SetStatusText(enc.toWX(dictionary.getName()))
+         self.SetTitle("%s - OpenDict" % dictionary.getName())
+
+      self.checkIfNeedsList()
+
+      return # :)
+      
       id = event.GetId()
       if 200 <= id < 500:
          self.onCloseDict(None)
@@ -1063,7 +1081,7 @@ For more information visit project's homepage on
    def checkIfNeedsList(self):
       """Unhides word list if current dictionary uses it"""
       
-      if self.dict.getUsesWordList:
+      if self.activeDictionary.getUsesWordList:
          if self.wordListHidden():
             self.unhideWordList()
       else:
@@ -1076,9 +1094,9 @@ For more information visit project's homepage on
 
       self.entry.Disable()
       self.dictName = name
-      self.dict = self.app.config.plugins[name]
+      self.activeDictionary = self.app.config.plugins[name]
       self.checkIfNeedsList()
-      print "Dictionary instance: %s" % self.dict
+      print "Dictionary instance: %s" % self.activeDictionary
       self.SetTitle("%s - OpenDict" % name)
       self.entry.Enable(1)
       self.SetStatusText("Done") # TODO: Set something more useful
@@ -1112,8 +1130,8 @@ For more information visit project's homepage on
          self.SetStatusText(_("Error: not supported dictionary type"))
          return
 
-      self.encoding = item[2]
-      self.checkEncMenuItem(self.encoding)
+      self.app.config.encoding = item[2]
+      self.checkEncMenuItem(self.app.config.encoding)
 
 
    # FIXME: Deprecated
@@ -1129,7 +1147,7 @@ For more information visit project's homepage on
 
 
    def changeEncoding(self, name):
-      self.encoding = misc.encodings[name]
+      self.app.config.encoding = misc.encodings[name]
       self.SetStatusText(_("New encoding will be applied for the next search results"))
 
 
@@ -1276,8 +1294,8 @@ For more information visit project's homepage on
       word = event.GetString()
       self.entry.SetValue(word)
       word = enc.fromWX(word)
-      word = word.encode(self.dict.getEncoding())
-      self.search = Process(self.dict.search, word)
+      word = word.encode(self.activeDictionary.getEncoding())
+      self.search = Process(self.activeDictionary.search, word)
 
 
    def createListPanel(self):
@@ -1333,12 +1351,8 @@ For more information visit project's homepage on
       try:
          self.printer.PrintText(self.htmlCode)
       except:
-         try:
-            self.printer.PreviewText(self.htmlCode.encode(self.encoding, 
-                                                          "replace"))
-         except:
-            self.SetStatusText(_("Failed to print"))
-            misc.printError()
+         self.SetStatusText(_("Failed to print"))
+         misc.printError()
 
 
    def onPreview(self, event):
@@ -1347,9 +1361,5 @@ For more information visit project's homepage on
       try:
          self.printer.PreviewText(self.htmlCode)
       except:
-         try:
-            self.printer.PreviewText(self.htmlCode.encode(self.encoding, 
-                                                          "replace"))
-         except:
-            self.SetStatusText(_("Page preview failed"))
-            misc.printError()
+         self.SetStatusText(_("Page preview failed"))
+         misc.printError()

@@ -27,6 +27,8 @@ from misc import numVersion
 from plugin import Plugin
 import group
 import info
+import util
+import parser
 
 
 class Configuration:
@@ -37,6 +39,10 @@ class Configuration:
       """Initialize default values"""
       
       self.configFile = "opendict.conf"
+
+      # TODO: Should not be here after removing register part from config
+      import wxPython.wx
+      self.app = wxPython.wx.wxGetApp()
       
       self.saveWinSize = 1
       self.saveWinPos = 0
@@ -59,8 +65,8 @@ class Configuration:
       self.regMenuIds = 300
       self.groupMenuIds = 400
 
-      self.defaultEnc = "utf-8"
-      self.encoding = self.defaultEnc
+      #self.defaultEncoding = "utf-8"
+      self.encoding = "UTF-8"
       self.fontFace = "Fixed"
       self.fontSize = 10
       
@@ -77,6 +83,8 @@ class Configuration:
       except:
          return
 
+      gen = util.UniqueIdGenerator()
+
       for line in fd.readlines():
          line = line.strip()
          if line.find("REGISTER=") == 0:
@@ -84,9 +92,30 @@ class Configuration:
             if info.__unicode__:
                 line = line.decode("utf-8")
             line = line.split("*")
-            self.registers[line[0]] = line[1:4]
-            self.ids[line[0]] = self.regMenuIds
-            self.regMenuIds += 1
+            # FIXME: Should be handled using XML
+            name = line[0]
+            path = line[1]
+            format = line[2]
+            setEnc = line[3]
+            dictionary = None
+            if format.upper() == "SLOWO":
+               dictionary = parser.SlowoParser(path)
+            elif format.upper() == "MOVA":
+               dictionary = parser.MovaParser(path)
+            elif format.upper() == "TMX":
+               dictionary = parser.TMXParser(path)
+            elif format.upper() in ('DZ', 'DICT'):
+               dictionary = parser.DictParser(pat)
+
+            if dictionary:
+               print "New register:", dictionary
+               dictionary.setEncoding(setEnc)
+               self.app.dictionaries[dictionary.getName()] = dictionary
+            
+            #self.registers[line[0]] = line[1:4]
+            self.ids[gen.getID()] = dictionary
+            #self.regMenuIds += 1
+            
          elif line.find("GROUP=") == 0:
             line = line.replace("GROUP=", "").strip()
             if info.__unicode__:
@@ -120,7 +149,7 @@ class Configuration:
             self.sashPos = int(line.replace("SASHPOS=", ""))
             self.saveSashPos = 1
          elif line.find("ENCODING=") == 0:
-            self.defaultEnc = line.replace("ENCODING=", "").strip()
+            self.encoding = line.replace("ENCODING=", "").strip()
          elif line.find("FONTFACE=") == 0:
             self.fontFace = line.replace("FONTFACE=", "").strip()
          elif line.find("FONTSIZE=") == 0:
@@ -157,7 +186,7 @@ class Configuration:
          self.groups.has_key(self.dict):
             #print "Setting %s as default dict" % self.dict
             fd.write("DICT=%s\r\n" % self.dict)
-      fd.write("ENCODING=%s\r\n" % self.defaultEnc)
+      fd.write("ENCODING=%s\r\n" % self.encoding)
       fd.write("FONTFACE=%s\r\n" % self.fontFace)
       fd.write("FONTSIZE=%s\r\n" % self.fontSize)
       

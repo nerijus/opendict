@@ -37,25 +37,16 @@ else:
    #sys.path.insert(0, os.curdir+"/lib")
 
 # OpenDict Modules
-try:
-   from info import home, uhome, __version__
-   from gui.mainwin import MainWindow
-   from gui.errorwin import ErrorWindow
-   from config import Configuration
-   from register import Register
-   from plugin import initPlugins, installPlugin
-   import misc
-   import info
-   import newplugin
-except:
-   try:
-      import misc
-      misc.printError()
-   except:
-      print "*** Fatal Error***"
-      print "No system-wide installation found and program is not executed in"
-      print "its top-level directory"
-   sys.exit(1)
+from info import home, uhome, __version__
+from gui.mainwin import MainWindow
+from gui.errorwin import ErrorWindow
+from config import Configuration
+from register import Register
+from plugin import initPlugins, installPlugin
+import misc
+import info
+import newplugin
+import util
 
 
 class OpenDictApp(wxApp):
@@ -74,22 +65,33 @@ class OpenDictApp(wxApp):
          wxLocale_AddCatalogLookupPathPrefix(os.path.join(home, "locale"))
          self.l.Init(wxLANGUAGE_DEFAULT)
          self.l.AddCatalog("opendict")
+
+         # Dictionaries container
+         # Mapping: name -> object
+         self.dictionaries = {}
          
          self.config = Configuration()
          self.config.readConfigFile()
-         
+
+ 
          # FIXME: check gui.pluginwin line 123, can't directly import
          # plugin there.
          self.installPlugin = installPlugin
 
-         #initPlugins(self.config)
+
+         gen = util.UniqueIdGenerator()
 
          # Load new-style plugins
          for plugin in newplugin.loadPlugins():
-            self.config.plugins[plugin.info.name] = plugin
-            self.config.ids[plugin.info.name] = self.config.plugMenuIds
-            self.config.plugMenuIds += 1
-         
+            self.dictionaries[plugin.getName()] = plugin
+            #self.config.plugins[plugin.info.name] = plugin
+            #self.config.ids[plugin.info.name] = gen.getID()
+            self.config.ids[gen.getID()] = plugin.getName()
+
+         print self.dictionaries
+         print self.config.ids
+
+         # TODO: Remove in the future
          self.reg = Register()
 
          self.window = MainWindow(None, -1, "OpenDict",
@@ -97,7 +99,9 @@ class OpenDictApp(wxApp):
                                   self.config.winSize,
                                   style=wxDEFAULT_FRAME_STYLE)
 
+         # FIXME: Avoid this
          self.config.window = self.window
+         
          self.window.Show(True)
 
 

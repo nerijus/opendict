@@ -63,16 +63,20 @@ class SlowoParser(meta.Dictionary):
    the search.
    """
 
-   def __init__(self, file, window):
+   def __init__(self, file):
 
-      self.window = window
+      #self.window = window
       self.needsList = wxGetApp().config.useListWithRegs
       self.fd = open(file)
 
-      #assert self.fd.read(1024).find("=") > -1
-      #assert self.fd.read(1024).find(";") > -1
-      
+      self.encoding = None
       self.name = os.path.split(file)[1]
+
+
+   def getType(self):
+      """Return dictionary type"""
+
+      return dicttype.SLOWO
 
 
    def getName(self):
@@ -81,10 +85,16 @@ class SlowoParser(meta.Dictionary):
       return self.name
 
 
+   def setEncoding(self, encoding):
+      """Set encoding"""
+
+      self.encoding = encoding
+
+
    def getEncoding(self):
       """Return encoding set for that dictionary"""
 
-      raise "getEncoding() not implemented yet"
+      return self.encoding
 
 
    def getUsesWordList(self):
@@ -155,10 +165,10 @@ class SlowoParser(meta.Dictionary):
       result = "<html><head>" \
                "<meta http-equiv=\"Content-Type\" " \
                "content=\"text/html; charset=%s\">" \
-               "</head><body>"  \
-               "<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
-                                                   self.window.app.config.fontFace,
-                                                   self.window.app.config.fontSize)
+               "</head><body>"
+               #"<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
+               #                                    self.window.app.config.fontFace,
+               #                                    self.window.app.config.fontSize)
 
 
       found = 0
@@ -166,11 +176,11 @@ class SlowoParser(meta.Dictionary):
       appended = 0
       
       for line in data:
-         if info.__unicode__:
-             try:
-                 line = line.decode(self.window.encoding)
-             except:
-                 return ("", [], 6)
+         #if info.__unicode__:
+             #try:
+             #    line = line.decode(self.window.encoding)
+             #except:
+             #    return ("", [], 6)
          
          if line.lower().find(word_lowered) > -1:
             orig = line.split("=")[0].strip()
@@ -215,6 +225,7 @@ class SlowoParser(meta.Dictionary):
 
       return (result, list, errno)
 
+
    def makeHashTable(self):
 
       print "Indexing..."
@@ -246,15 +257,23 @@ class MovaParser(meta.Dictionary):
    the search.
    """
 
-   def __init__(self, file, window):
+   def __init__(self, file):
 
-      self.window = window
+      #self.window = window
       self.needsList = wxGetApp().config.useListWithRegs
       self.fd = open(file)
 
       assert self.fd.read(1024).find("  ") > -1
+
+      self.encoding = None
       
       self.name = os.path.split(file)[1]
+
+
+   def getType(self):
+      """Return dictionary type"""
+
+      return dicttype.MOVA
 
 
    def getName(self):
@@ -263,10 +282,16 @@ class MovaParser(meta.Dictionary):
       return self.name
 
 
+   def setEncoding(self, encoding):
+      """Set encoding"""
+
+      self.encoding = encoding
+
+
    def getEncoding(self):
       """Return encoding set for this dictionary"""
 
-      raise "getEncoding not implemented yet"
+      return self.encoding
 
 
    def getUsesWordList(self):
@@ -311,24 +336,24 @@ class MovaParser(meta.Dictionary):
 
       if len(l) == 1:
          i = 0
-         for k in keys:
+         #for k in keys:
             #print "k type: ", type(k)
             
             #print type(k), type(l)
-            if info.__unicode__:
-                try:
-                    if k[0].decode(self.window.encoding) == l:
-                        i = keys.index(k)
-                except:
-                    return ("", [], 6)
+            #if info.__unicode__:
+            #    try:
+            #        if k[0].decode(self.window.encoding) == l:
+            #            i = keys.index(k)
+            #    except:
+            #        return ("", [], 6)
 
          if i < len(keys) - 1:
             end = self.hash[keys[i+1]]
          else:
             end = -1
       else:
-         if keys.index(l.encode(self.window.encoding)) != len(keys) - 1:
-            end = self.hash[keys[keys.index(l.encode(self.window.encoding))+1]]
+         if keys.index(l) != len(keys) - 1:
+            end = self.hash[keys[keys.index(l)+1]]
          else:
             end = -1
 
@@ -342,20 +367,20 @@ class MovaParser(meta.Dictionary):
       result = "<html><head>" \
                "<meta http-equiv=\"Content-Type\" " \
                "content=\"text/html; charset=%s\">" \
-               "</head><body>" \
-               "<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
-                                                   self.window.app.config.fontFace,
-                                                   self.window.app.config.fontSize)
+               "</head><body>"
+               #"<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
+               #                                    self.window.app.config.fontFace,
+               #                                    self.window.app.config.fontSize)
 
 
       found = 0
       list = []
 
       for line in data:
-         try:
-            line = line.decode(self.window.encoding)
-         except:
-            return ("", [], 6)
+         #try:
+         #   line = line.decode(self.window.encoding)
+         #except:
+         #   return ("", [], 6)
 
          #print type(line)
          #line = line.decode(self.window.encoding)
@@ -409,11 +434,12 @@ class TMXParser(meta.Dictionary):
     Reads TMX files and does the search.
     """
 
-    def __init__(self, file="", window=None):
+    def __init__(self, file=""):
 
-       self.window = window
+       #self.window = window
        self.name = file
        self.needsList = wxGetApp().config.useListWithRegs
+       self.encoding = None
 
        self.mapping = {}
        self.header = {}
@@ -435,16 +461,28 @@ class TMXParser(meta.Dictionary):
            print self.mapping[word]
 
 
+    def getType(self):
+      """Return dictionary type"""
+
+      return dicttype.TMX
+
+
     def getName(self):
        """Return file name"""
 
        return self.name
 
+
+    def setEncoding(self, encoding):
+      """Set encoding"""
+
+      self.encoding = encoding
+
     
     def getEncoding(self):
        """Return encoding set for that dictionary"""
        
-       raise "getEncoding() not implemented yet"
+       return wxGetApp().config.encoding
 
 
     def getUsesWordList(self):
@@ -505,10 +543,10 @@ class TMXParser(meta.Dictionary):
        result = "<html><head>" \
                 "<meta http-equiv=\"Content-Type\" " \
                 "content=\"text/html; charset=%s\">" \
-                "</head><body>" \
-                "<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
-                                                    self.window.app.config.fontFace,
-                                                    self.window.app.config.fontSize)
+                "</head><body>"
+                #"<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
+                #                                    self.window.app.config.fontFace,
+                #                                    self.window.app.config.fontSize)
 
        keys = self.mapping.keys()
        avail = []
@@ -542,31 +580,46 @@ class DictParser(meta.Dictionary):
    Reads dictd dictionaries and does the search.
    """
 
-   def __init__(self, path, window):
+   def __init__(self, path):
 
-      self.window = window
+      #self.window = window
       self.needsList = 0
 
+      # Hrrr!!!
       if path.find(".dict.dz") > -1:
          self.name = path.replace(".dict.dz", "")
       else:
          self.name = path.replace(".dict", "")
+
+      self.encoding = None
 
       self.dict = dictdlib.DictDB(self.name)
 
       self.name = os.path.split(self.name)[1]
 
 
+   def getType(self):
+      """Return dictionary type"""
+
+      return dicttype.DICT
+
+
    def getName(self):
       """Return file name"""
       
       return self.name
+
+
+   def setEncoding(self, encoding):
+      """Set encoding"""
+
+      self.encoding = encoding
    
 
    def getEncoding(self):
       """Return encoding set for that dictionary"""
 
-      raise "getEncoding() not implemented yet"
+      return wxGetApp().config.encoding
 
 
    def getUsesWordList(self):
@@ -584,10 +637,10 @@ class DictParser(meta.Dictionary):
       result = "<html><head>" \
                "<meta http-equiv=\"Content-Type\" " \
                "content=\"text/html; charset=%s\">" \
-               "</head><body>"\
-               "<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
-                                                   self.window.app.config.fontFace,
-                                                   self.window.app.config.fontSize)
+               "</head><body>"
+               #"<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
+               #                                    self.window.app.config.fontFace,
+               #                                    self.window.app.config.fontSize)
 
 
       list = self.dict.getdef(word)
@@ -621,19 +674,20 @@ class DictParser(meta.Dictionary):
       return (result, [], errno)
 
 
+# TODO: add needee methods
 class DictConnection(meta.Dictionary):
    """Built-in DICT client
    Connects to a DICT server abd does the search.
    """
 
-   def __init__(self, window, server, port, db, strategy):
+   def __init__(self, server, port, db, strategy):
 
-      self.window = window
+      #self.window = window
       self.server = server
       self.port = port
       self.db = db
       self.strategy = strategy
-
+      self.encoding = None
       self.needsList = 0
 
 
@@ -641,6 +695,18 @@ class DictConnection(meta.Dictionary):
       """Return True if uses word list, False otherwise"""
 
       return self.needsList
+
+
+   def setEncoding(self, encoding):
+      """Set encoding"""
+
+      self.encoding = encoding
+
+
+   def getEncoding(self, encoding):
+      """Return encoding"""
+
+      return self.encoding
 
 
    def search(self, word):
@@ -656,10 +722,10 @@ class DictConnection(meta.Dictionary):
       result = "<html><head>" \
                "<meta http-equiv=\"Content-Type\" " \
                "content=\"text/html; charset=%s\">" \
-               "</head><body>" \
-               "<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
-                                                   self.window.app.config.fontFace,
-                                                   self.window.app.config.fontSize)
+               "</head><body>"
+               #"<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
+               #                                    self.window.app.config.fontFace,
+               #                                    self.window.app.config.fontSize)
 
 
       found = 0
