@@ -41,7 +41,8 @@ from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 _ = wxGetTranslation
 
 #_addOnsListURL = 'http://localhost/~mjoc/OpenDict/opendict-add-ons.xml'
-_addOnsListURL = 'http://files.akl.lt/~mjoc/OpenDict/Data/opendict-add-ons.xml'
+#_addOnsListURL = 'http://files.akl.lt/~mjoc/OpenDict/Data/opendict-add-ons.xml'
+_addOnsListURL = 'http://opendict.sf.net/Repository/Data/opendict-add-ons.xml'
 
 
 class DictListCtrl(wx.ListCtrl):
@@ -290,7 +291,7 @@ class PluginManagerWindow(wxFrame):
        grid.Add(self.stVersion, 0, wxALL | wxALIGN_RIGHT)
        grid.Add(self.labelVersion, 0, wxALL)
 
-       self.stAuthor = wxStaticText(panelInfo, -1, _("Author: "))
+       self.stAuthor = wxStaticText(panelInfo, -1, _("Maintainer: "))
        self.stAuthor.Disable()
        grid.Add(self.stAuthor, 0, wxALL | wxALIGN_RIGHT)
        grid.Add(self.labelAuthor, 0, wxALL)
@@ -686,7 +687,6 @@ class PluginManagerWindow(wxFrame):
            return
 
        md5sum = util.getMD5Sum(localPath)
-       print md5sum
        print dictInfo.getChecksum()
 
        #

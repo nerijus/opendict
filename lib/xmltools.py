@@ -58,7 +58,8 @@ class RegisterConfigGenerator:
         # Version element
         versionElement = doc.createElement('version')
         registerElement.appendChild(versionElement)
-        versionElement.appendChild(doc.createTextNode(args.get('version') or ''))
+        versionElement.appendChild(doc.createTextNode(args.get('version') \
+                                                      or ''))
 
         # Authors element
         authorsElement = doc.createElement('authors')
@@ -83,6 +84,18 @@ class RegisterConfigGenerator:
         encodingElement = doc.createElement('encoding')
         registerElement.appendChild(encodingElement)
         encodingElement.appendChild(doc.createTextNode(args.get('encoding')))
+
+        # Licence element
+        licElement = doc.createElement('licence')
+        registerElement.appendChild(licElement)
+        licElement.appendChild(doc.createTextNode(args.get('licence') \
+                                                   or ''))
+
+        # Description element
+        descElement = doc.createElement('description')
+        registerElement.appendChild(descElement)
+        descElement.appendChild(doc.createTextNode(args.get('description') \
+                                                   or ''))
 
         return doc
     
@@ -120,6 +133,7 @@ class RegisterConfigParser:
         md5 = None
         encoding = None
         licence = None
+        description = None
 
         registers = doc.getElementsByTagName('plain-dictionary')
         if len(registers) == 0:
@@ -159,7 +173,12 @@ class RegisterConfigParser:
         for licenceElement in \
                 registerElement.getElementsByTagName('licence'):
             for node in licenceElement.childNodes:
-                licence = node.data
+                licence = node.data.strip()
+
+        for descElement in \
+                registerElement.getElementsByTagName('description'):
+            for node in descElement.childNodes:
+                description = (description or '') + node.data.strip()
 
         result = {}
         result['name'] = name
@@ -170,6 +189,7 @@ class RegisterConfigParser:
         result['md5'] = md5
         result['encoding'] = encoding
         result['licence'] = licence
+        result['description'] = description
 
         return result
 

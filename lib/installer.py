@@ -101,6 +101,8 @@ class Installer:
                             dictionary = newplugin._loadDictionaryPlugin(directory)
                         else:
                             dictionary = plaindict._loadPlainDictionary(directory)
+                            print dictionary
+                            print directory
                         self.mainWin.addDictionary(dictionary)
                 except Exception, e:
                     traceback.print_exc()
@@ -177,7 +179,7 @@ def installPlainDictionary(filePath):
         os.mkdir(dictDir)
         os.mkdir(os.path.join(dictDir, info.__PLAIN_DICT_CONFIG_DIR))
         os.mkdir(os.path.join(dictDir, info.__PLAIN_DICT_FILE_DIR))
-        os.mkdir(os.path.join(dictDir, info.__PLAIN_DICT_DATA_DIR))
+        os.mkdir(os.path.join(dictDir, info._PLAIN_DICT_DATA_DIR))
     except Exception, e:
         print "ERROR Unable to create dicrectories, aborted (%s)" % e
         try:
@@ -197,7 +199,8 @@ def installPlainDictionary(filePath):
                                            authors={},
                                            path=filePath,
                                            md5=md5sum,
-                                           encoding='UTF-8')
+                                           encoding='UTF-8',
+                                           description=None)
 
     xmltools.writePlainDictConfig(doc, os.path.join(dictDir,
                                                     'conf',

@@ -161,6 +161,12 @@ class PlainDictionary(meta.Dictionary):
         """Set licence file path"""
         
         self.licenceFile = licenceFile
+
+
+    def getLicenceFile(self):
+        """Return licence file"""
+
+        return self.licenceFile
         
         
     def getLicence(self):
@@ -222,6 +228,19 @@ class PlainDictionary(meta.Dictionary):
         return self.authors
 
 
+    def setDescription(self, desc):
+        """Set description"""
+
+        self.description = desc
+
+
+    def getDescription(self):
+        """Get description"""
+
+        return self.description
+    
+
+
 def _loadPlainDictionary(directory):
     """Load one dictionary and returns dictionary object"""
 
@@ -268,6 +287,7 @@ def _loadPlainDictionary(directory):
         dictionary.setAuthors(config.get('authors'))
         dictionary.setChecksum(config.get('md5'))
         dictionary.setLicenceFile(config.get('licence'))
+        dictionary.setDescription(config.get('description'))
 
     except Exception, e:
         traceback.print_exc()
@@ -415,7 +435,9 @@ def savePlainConfiguration(dictionary):
                                            authors=dictionary.getAuthors(),
                                            path=dictionary.getPath(),
                                            md5=md5sum,
-                                           encoding=dictionary.getEncoding())
+                                           encoding=dictionary.getEncoding(),
+                                           description=dictionary.getDescription(),
+                                           licence=dictionary.getLicenceFile())
 
     xmltools.writePlainDictConfig(doc, os.path.join(dictDir,
                                                     'conf',
