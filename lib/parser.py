@@ -32,6 +32,7 @@ import info
 import misc
 import errortype
 import meta
+import plaindict
 from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
@@ -40,7 +41,7 @@ WORD_BG = "#dde2f1" # Bright blue
 #DICT_BG = "#cad1e5"
 DICT_BG = "#b4bedb"
 
-class SlowoParser(meta.Dictionary):
+class SlowoParser(plaindict.PlainDictionary):
    """
    Built-in Slowo Parser
 
@@ -269,7 +270,7 @@ class SlowoParser(meta.Dictionary):
 
 
 
-class MovaParser(meta.Dictionary):
+class MovaParser(plaindict.PlainDictionary):
    """
    Built-in Mova Parser
 
@@ -479,7 +480,7 @@ class MovaParser(meta.Dictionary):
 
 
 # FIXME: Deprecated
-class TMXParser(meta.Dictionary):
+class TMXParser(plaindict.PlainDictionary):
     """Built-in TMX parser.
     Reads TMX files and does the search.
     """
@@ -637,7 +638,7 @@ class TMXParser(meta.Dictionary):
          
 
 
-class DictParser(meta.Dictionary):
+class DictParser(plaindict.PlainDictionary):
    """Built-in dictd dictionaries parser.
    Reads dictd dictionaries and does the search.
    """

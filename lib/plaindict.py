@@ -26,9 +26,9 @@ import os
 import traceback
 
 import info
+import meta
 import util
 import xmltools
-import dicttype
 from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
@@ -79,11 +79,25 @@ class PlainDictInfo:
 
         return self.encoding
 
-    
+
+
+class PlainDictionary(meta.Dictionary):
+    """Plain dictionary class"""
+
+    def getConfigDir(self):
+       """Return configuration directory path"""
+
+       path = os.path.join(info.LOCAL_HOME,
+                           info.PLAIN_DICT_DIR,
+                           os.path.basename(self.getPath()))
+
+       return path
+
 
 def _loadPlainDictionary(directory):
     """Load one dictionary and returns dictionary object"""
 
+    import dicttype
     dictionary = None
 
     try:
@@ -118,7 +132,7 @@ def _loadPlainDictionary(directory):
         dictionary.setEncoding(config.get('encoding'))
         dictionary.setName(config.get('name'))
         dictionary.setChecksum(config.get('md5'))
-        
+
     except Exception, e:
         traceback.print_exc()
 
@@ -188,7 +202,7 @@ def indexShouldBeMade(dictionary):
 
 
 
-def makeIndex(dictionary):
+def makeIndex(dictionary, currentlySetEncoding):
     """Index dictionary"""
 
     filePath = dictionary.getPath()
@@ -198,8 +212,16 @@ def makeIndex(dictionary):
     count = 0L
     
     for line in fd:
-        literal = unicode(line[:2].lower(), dictionary.getEncoding())
-
+        try:
+            literal = unicode(line[:2].lower(), dictionary.getEncoding())
+        except:
+            try:
+                literal = unicode(line[:2].lower(), currentlySetEncoding)
+                dictionary.setEncoding(currentlySetEncoding)
+            except:
+                raise Exception, "Unable to encode data in %s nor %s" \
+                    % (dictionary.getEncoding(), currentlySetEncoding)
+                    
         if not literal in index.keys():
             index[literal] = count
 
@@ -217,6 +239,8 @@ def makeIndex(dictionary):
 
     doc = xmltools.generateIndexFile(index)
     xmltools.writeIndexFile(doc, os.path.join(dictHome, 'data', 'index.xml'))
+
+    savePlainConfiguration(dictionary)
 
 
 
@@ -244,4 +268,27 @@ def loadIndex(dictionary):
         raise Exception, "Index for %s does not exist" % dictionary.getName()
 
     return index
-        
+     
+
+def savePlainConfiguration(dictionary):
+    """Write configuration to disk"""
+
+    import dicttype
+
+    if not dictionary.getType() in dicttype.plainTypes:
+       systemLog(ERROR, "Request to write configuration to %s of type %s" \
+           % (dictionary.getName(), dictionary.getType()))
+       return
+
+    md5sum = util.getMD5Sum(dictionary.getPath())
+    dictDir = dictionary.getConfigDir()
+
+    doc = xmltools.generatePlainDictConfig(name=dictionary.getName(),
+                                           format=dictionary.getType().getIdName(),
+                                           path=dictionary.getPath(),
+                                           md5=md5sum,
+                                           encoding=dictionary.getEncoding())
+
+    xmltools.writePlainDictConfig(doc, os.path.join(dictDir,
+                                                    'conf',
+                                                    'config.xml'))

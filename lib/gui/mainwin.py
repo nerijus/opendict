@@ -1077,7 +1077,8 @@ class MainWindow(wxFrame):
 
             # Make index
             try:
-               plaindict.makeIndex(dictInstance)
+               plaindict.makeIndex(dictInstance, 
+                                   self.app.config.get('encoding'))
             except Exception, e:
                traceback.print_exc()
                title = _("Index Creation Error")
@@ -1182,6 +1183,7 @@ class MainWindow(wxFrame):
          self.activeDictionary.setEncoding(self.app.config.get('encoding'))
          systemLog(INFO, "Dictionary encoding set to %s" \
                % self.activeDictionary.getEncoding())
+         plaindict.savePlainConfiguration(self.activeDictionary)
          
       #self.SetStatusText(_("Selected encoding will be used "))
 

@@ -113,6 +113,12 @@ class Dictionary:
         return None
 
 
+    def getPath(self):
+        """Return ditionary path"""
+
+        pass
+
+
     def getAuthors(self):
         """Return list of authors"""
 

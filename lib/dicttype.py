@@ -22,7 +22,6 @@
 Dictionary types
 """
 
-import parser
 import newplugin # FIXME: rename
 
 
@@ -71,6 +70,8 @@ class TypePlugin(DictionaryType):
 class TypeSlowo(DictionaryType):
     """Slowo dictionary format"""
 
+    import parser
+
     dictClass = parser.SlowoParser
     fileExtentions = ('dwa',)
     name = "Slowo dictionary"
@@ -80,6 +81,8 @@ class TypeSlowo(DictionaryType):
 
 class TypeMova(DictionaryType):
     """Mova dictionary format"""
+
+    import parser
 
     dictClass = parser.MovaParser
     fileExtentions = ('mova',)
@@ -91,6 +94,8 @@ class TypeMova(DictionaryType):
 class TypeTMX(DictionaryType):
     """TMX dictionary format"""
 
+    import parser
+
     dictClass = parser.TMXParser
     fileExtentions = ('tmx',)
     name = "TMX dictionary"
@@ -100,6 +105,8 @@ class TypeTMX(DictionaryType):
 
 class TypeDict(DictionaryType):
     """DICT dictionary type"""
+
+    import parser
 
     dictClass = parser.DictParser
     fileExtentions = ('dict', 'dz',)

@@ -35,4 +35,7 @@ FUTURE [ ] Let DICT connection be handled as a dictionary and be kept
 in Dictionaries menu. Let it have user defined names. Make "Manage
 DICT Connections" for that.
 
-[ ] Ability to merge dictionaries in editor
+Future [ ] Ability to merge dictionaries in editor
+
+[ ] Save changes to dictionary configuration when settings (like font
+encoding) changes.
