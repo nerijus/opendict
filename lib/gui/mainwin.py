@@ -466,7 +466,7 @@ class MainWindow(wxFrame):
       EVT_MENU(self, idAbout, self.onAbout)
 
       # Other events
-      EVT_BUTTON(self, wx.ID_FIND, self.onSearch)
+      EVT_BUTTON(self, idFind, self.onSearch)
       EVT_MENU(self, idFind, self.onSearch)
          
       EVT_BUTTON(self, 2010, self.onBack)
@@ -547,6 +547,7 @@ class MainWindow(wxFrame):
          except:
             self.SetStatusText(_(errortype.INTERNAL_ERROR.getMessage()))
             self.entry.Enable(1)
+            self.buttonStop.Disable()
             self.entry.SetFocus()
 
             if self.activeDictionary.getType() == dicttype.PLUGIN:
@@ -555,10 +556,10 @@ class MainWindow(wxFrame):
             else:
                title = errortype.OPENDICT_BUG.getMessage()
                message = errortype.OPENDICT_BUG.getLongMessage()
-               message += "\n\n" + misc.getTraceback()
-            
-            errorwin.showErrorMessage(title, message)
 
+            systemLog(ERROR, "%s: %s" % (message, misc.getTraceback()))
+            errorwin.showErrorMessage(title, message)
+            
             return
 
          self.SetStatusText("")
@@ -580,6 +581,7 @@ class MainWindow(wxFrame):
                self.SetStatusText(_(result.getError().getMessage()))
                self.entry.Enable(1)
                self.entry.SetFocus()
+               self.buttonStop.Disable()
                
             return
 

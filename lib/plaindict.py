@@ -366,20 +366,30 @@ def makeIndex(dictionary, currentlySetEncoding):
 
     index = {}
     count = 0L
+    linenum = -1
     
     for line in fd:
+        linenum += 1
         try:
-            literal = unicode(line[:2].lower(), dictionary.getEncoding())
+            literal = unicode(line.strip(),
+                              dictionary.getEncoding())[:2].lower()
         except:
             try:
-                literal = unicode(line[:2].lower(), currentlySetEncoding)
+                literal = unicode(line.strip(),
+                                  currentlySetEncoding)[:2].lower()
                 dictionary.setEncoding(currentlySetEncoding)
             except:
-                raise Exception, "Unable to encode data in %s nor %s" \
-                    % (dictionary.getEncoding(), currentlySetEncoding)
-                    
-        if not literal in index.keys():
-            index[literal] = count
+                raise Exception, "Unable to encode data in %s nor %s " \
+                      "at line %d" \
+                      % (dictionary.getEncoding(), currentlySetEncoding,
+                         linenum)
+
+        # Ignore if control character found
+        if literal and not literal in index.keys() and literal[0] > u'\x19':
+            try:
+                index[literal] = count
+            except Exception, e:
+                systemLog(ERROR, e)
 
         count += len(line)
 
