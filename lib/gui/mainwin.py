@@ -185,7 +185,7 @@ class MainWindow(wxFrame):
 
       # Font size
       self.menuFontSize = wxMenu()
-      self.menuFontSize.Append(2007, _("Increase\tCtrl-+"),
+      self.menuFontSize.Append(2007, _("Increase\tCtrl-="),
                                _("Increase text size"))
       self.menuFontSize.Append(2008, _("Decrease\tCtrl--"),
                                _("Decrease text size"))
