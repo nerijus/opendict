@@ -80,8 +80,10 @@ class CreditsWindow(wxDialog):
       # "Written by" panel
       writePanel = wxPanel(nb, -1)
       vboxWrite = wxBoxSizer(wxVERTICAL)
-      written = _(enc.toWX("Martynas Jocius <mjoc@akl.lt>\n" \
-                "Mantas Kriaučiūnas <mantas@akl.lt>"))
+      writtenString = unicode("Martynas Jocius <mjoc@akl.lt>\n" \
+                              "Mantas Kriaučiūnas <mantas@akl.lt>",
+                              "UTF-8")
+      written = _(enc.toWX(writtenString))
       labelWrite = wxStaticText(writePanel, -1, written)
       vboxWrite.Add(labelWrite, 0, wxALL, 10)
       writePanel.SetSizer(vboxWrite)
@@ -91,9 +93,11 @@ class CreditsWindow(wxDialog):
       # "Translations" panel
       tPanel = wxPanel(nb, -1)
       vboxTP = wxBoxSizer(wxVERTICAL)
-      trans = _(enc.toWX("Lithuanian:\n" \
-                "   Irena Baliukonytė <irena.baliukonyte@mif.vu.lt>\n" \
-                "   Martynas Jocius <mjoc@akl.lt>"))
+      transString = unicode("Irena Baliukonytė " \
+                            "<irena.baliukonyte@mif.vu.lt>\n" \
+                            "Martynas Jocius <mjoc@akl.lt>",
+                            "UTF-8")
+      trans = _(enc.toWX(transString))
       labelTP = wxStaticText(tPanel, -1, trans)
       vboxTP.Add(labelTP, 0, wxALL, 10)
       tPanel.SetSizer(vboxTP)
