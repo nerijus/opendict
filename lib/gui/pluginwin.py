@@ -661,20 +661,21 @@ class PluginManagerWindow(wxFrame):
                                                  downloader.getMessage())
 
                if not keepGoing:
-                   downloader.stop()
                    stopped = True
                    break
 
                chunk = downloader.getBytes()
                fd.write(chunk)
                time.sleep(0.1)
-
-           progressDialog.Destroy()
-
+           
            bytes = downloader.getBytes()
            
            if len(bytes):
                fd.write(bytes)
+           
+	   progressDialog.Destroy()
+	   downloader.stop()
+
 
        except Exception, e:
            traceback.print_exc()
