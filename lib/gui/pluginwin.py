@@ -40,8 +40,8 @@ from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 _ = wxGetTranslation
 
-_addOnsListURL = 'http://localhost/~mjoc/OpenDict/opendict-add-ons.xml'
-#_addOnsListURL = 'http://files.akl.lt/~mjoc/OpenDict/Data/opendict-add-ons.xml'
+#_addOnsListURL = 'http://localhost/~mjoc/OpenDict/opendict-add-ons.xml'
+_addOnsListURL = 'http://files.akl.lt/~mjoc/OpenDict/Data/opendict-add-ons.xml'
 
 
 class DictListCtrl(wx.ListCtrl):

@@ -25,6 +25,7 @@ from misc import encodings
 
 _ = wxGetTranslation
 
+
 class PrefsWindow(wxDialog):
    """Preferences dialog class"""
 

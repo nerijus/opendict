@@ -58,7 +58,10 @@ import dicttype
 import plaindict
 
 _ = wxGetTranslation
+
+# Constants
 titleTemplate = "OpenDict - %s"
+NORMAL_FONT_SIZE = '10'
 
 # Used to remember word when searching by entering text to the entry,
 # selecting one from the list or clicking a link.
@@ -414,6 +417,14 @@ class MainWindow(wxFrame):
 
 
       #
+      # Loading default dictionary
+      #
+      if self.app.config.get('defaultDict'):
+         self.loadDictionary(self.app.dictionaries.get(\
+            self.app.config.get('defaultDict')))
+
+
+      #
       # Events
       #
       # TODO: New-style event definition
@@ -486,6 +497,9 @@ class MainWindow(wxFrame):
 </body>
 </html>
 """)
+
+      if self.activeDictionary:
+         self.htmlCode = ""
 
       self.updateHtmlScreen()
      
@@ -1227,8 +1241,7 @@ class MainWindow(wxFrame):
    def onNormalFontSize(self, event):
       """Set normal font size"""
 
-      # TODO: define somewhere else
-      self.app.config.fontSize = 10
+      self.app.config.set('fontSize', NORMAL_FONT_SIZE)
       self.updateHtmlScreen()
 
 
