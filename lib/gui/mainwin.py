@@ -133,7 +133,7 @@ class MainWindow(wxFrame):
       #menuFile.Append(idPreview, _("Print Preview"), "")
 
       idFind = wx.NewId()
-      menuFile.Append(idFind, _("Find\tCtrl-F"), _("Lookup up word"))
+      menuFile.Append(idFind, _("Search\tCtrl-S"), _("Lookup up word"))
       
       menuFile.AppendSeparator()
 
@@ -309,7 +309,8 @@ class MainWindow(wxFrame):
                               wxSize(-1, -1), [], wxCB_DROPDOWN)
       hboxToolbar.Add(self.entry, 1, wxALL | wxCENTER, 1)
 
-      self.buttonSearch = wxButton(self, wx.ID_FIND)
+      #self.buttonSearch = wxButton(self, wx.ID_FIND)
+      self.buttonSearch = wxButton(self, idFind, _("Search"))
       
       hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
       
