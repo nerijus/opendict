@@ -107,9 +107,6 @@ class PrefsWindow(wxDialog):
 
       vboxMain.Add(wxStaticLine(self, -1), 0, wxALL | wxEXPAND, 5)
 
-      self.buttonSave = wxButton(self, 1108, _("Save"))
-      hboxButtons.Add(self.buttonSave, 1, wxALL | wxEXPAND, 1)
-      
       self.buttonOK = wxButton(self, 1104, _("OK"))
       hboxButtons.Add(self.buttonOK, 1, wxALL | wxEXPAND, 1)
 
@@ -127,7 +124,6 @@ class PrefsWindow(wxDialog):
       EVT_CHECKBOX(self, 1103, self.onSaveSashPosClicked)
       EVT_CHECKBOX(self, 1106, self.onUseListRegClicked)
       EVT_CHECKBOX(self, 1107, self.onUseListGroupClicked)
-      EVT_BUTTON(self, 1108, self.onSave)
       EVT_BUTTON(self, 1104, self.onOK)
       EVT_BUTTON(self, 1105, self.onCancel)
 
@@ -180,15 +176,6 @@ class PrefsWindow(wxDialog):
       """This method is invoked when checkbox for window size
       is clicked"""
       self.app.config.useListWithGroups = event.Checked()
-
-      
-   def onSave(self, event):
-      """Write new configuration to disk"""
-
-      pass
-      #savePrefs(self.app.window)
-      #self.app.config.writeConfigFile()
-      #self.app.window.SetStatusText(_("Configuration saved"))
 
        
    def onOK(self, event):
