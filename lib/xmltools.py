@@ -19,6 +19,8 @@
 #
 
 import xml.dom.minidom
+import xml.dom.ext
+import xml.sax.saxutils # need this?
 
 
 class RegisterConfigGenerator:
@@ -61,13 +63,21 @@ class RegisterConfigGenerator:
     
 
 def generatePlainDictConfig(**args):
-    """Generate configuration and return XML string"""
+    """Generate configuration and return DOM object"""
 
     generator = RegisterConfigGenerator()
     doc = generator.generate(**args)
-    xmlData = doc.toxml()
 
-    return xmlData
+    return doc
+
+
+def writePlainDictConfig(doc, path):
+    """Write XML file"""
+
+    fd = open(path, 'w')
+    xml.dom.ext.PrettyPrint(doc, fd)
+    fd.close()
+    
 
 
 class RegisterConfigParser:
@@ -155,13 +165,20 @@ class IndexFileGenerator:
 
 
 def generateIndexFile(index):
-    """Generate index data and return XML string"""
+    """Generate index data and return DOM object"""
 
     generator = IndexFileGenerator()
     doc = generator.generate(index)
-    xmlData = doc.toxml()
 
-    return xmlData
+    return doc
+
+
+def writeIndexFile(doc, path):
+    """Write XML file"""
+
+    fd = open(path, 'w')
+    xml.dom.ext.PrettyPrint(doc, fd)
+    fd.close()
 
 
 

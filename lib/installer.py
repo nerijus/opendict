@@ -182,15 +182,15 @@ def installPlainDictionary(filePath):
     md5sum = util.getMD5Sum(filePath)
 
     # Write configuration
-    xmlData = xmltools.generatePlainDictConfig(name=dictionaryName,
-                                               format=dictFormat,
-                                               path=filePath,
-                                               md5=md5sum,
-                                               encoding='UTF-8')
+    doc = xmltools.generatePlainDictConfig(name=dictionaryName,
+                                           format=dictFormat,
+                                           path=filePath,
+                                           md5=md5sum,
+                                           encoding='UTF-8')
 
-    fd = open(os.path.join(dictDir, 'conf', 'config.xml'), 'w')
-    print >> fd, xmlData
-    fd.close()
+    xmltools.writePlainDictConfig(doc, os.path.join(dictDir,
+                                                    'conf',
+                                                    'config.xml'))
 
     return dictDir
 

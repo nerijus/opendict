@@ -212,12 +212,14 @@ def makeIndex(dictionary):
     #try:
     #    map(toUnicode, index)
 
-    xmlData = xmltools.generateIndexFile(index)
-    print type(xmlData)
+    doc = xmltools.generateIndexFile(index)
+    xmltools.writeIndexFile(doc, os.path.join(dictHome, 'data', 'index.xml'))
 
-    fd = open(os.path.join(dictHome, 'data', 'index.xml'), 'w')
-    fd.write(xmlData)
-    fd.close()
+    #fd = open(os.path.join(dictHome, 'data', 'index.xml'), 'w')
+    #fd.write(xmlData)
+    #doc.write(fd)
+    #fd.close()
+    #fd.close()
     
     #print index
     
