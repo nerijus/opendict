@@ -22,7 +22,7 @@ from wxPython.wx import *
 from shutil import rmtree
 import os
 
-from info import home, uhome
+#from info import home, uhome
 from misc import printError
 from gui.errorwin import errDialog
 
@@ -200,12 +200,19 @@ class PluginManagerWindow(wxFrame):
                       % (plugin.about, e)
              
              path = self.app.config.plugins[name].dir
-             
-             if os.path.exists(os.path.join(uhome, "plugins", path)):
-                 size = misc.getDirSize(os.path.join(uhome, "plugins", path),
+
+             pluginDirPath = os.path.join(info.LOCAL_HOME,
+                                          info.__DICT_DIR,
+                                          info.__PLUGIN_DICT_DIR,
+                                          path)
+             if os.path.exists(pluginDirPath):
+                 size = misc.getDirSize(pluginDirPath,
                                         0, 0, 10)
              else:
-                 size = misc.getDirSize(os.path.join(home, "plugins", path),
+                 size = misc.getDirSize(os.path.join(info.GLOBAL_HOME,
+                                                     info.__DICT_DIR,
+                                                     info.__PLUGIN_DICT_DIR,
+                                                     path),
                                         0, 0, 10)
                  
       elif name in self.app.config.registers.keys():
@@ -238,21 +245,27 @@ class PluginManagerWindow(wxFrame):
 
       if item in self.app.config.plugins.keys():
           # This is a plugin
-          if os.path.exists(os.path.join(uhome, "plugins",
-                                       self.app.config.plugins[item].dir)):
+          pluginDirPath = os.path.join(info.LOCAL_HOME,
+                                       info.__DICT_DIR,
+                                       info.__PLUGIN_DICT_DIR,
+                                       self.app.config.plugins[item].dir)
+          if os.path.exists(pluginDirPath):
               try:
-                  rmtree(os.path.join(uhome, "plugins",
-                                  self.app.config.plugins[item].dir))
+                  rmtree(pluginDirPath)
               except:
                   self.app.window.SetStatusText(_("Error removing \"%s\"") % item)
                   errDialog()
                   printError()
                   return
-          elif os.path.exists(os.path.join(home, "plugins",
-                                         self.app.config.plugins[item].dir)):
+          elif os.path.exists(os.path.join(info.GLOBAL_HOME,
+                                           info.__DICT_DIR,
+                                           info.__PLUGIN_DICT_DIR,
+                                           self.app.config.plugins[item].dir)):
               try:
-                  rmtree(os.path.join(home, "plugins",
-                                  self.app.config.plugins[item].dir))
+                  rmtree(os.path.join(info.GLOBAL_HOME,
+                                           info.__DICT_DIR,
+                                           info.__PLUGIN_DICT_DIR,
+                                           self.app.config.plugins[item].dir))
               except:
                   self.app.window.SetStatusText(_("Error removing \"%s\"") % item)
                   errDialog()

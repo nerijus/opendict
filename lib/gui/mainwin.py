@@ -27,13 +27,14 @@ from wxPython.html import *
 import os
 import cStringIO
 
-from info import home, uhome, __version__
+#from info import info.GLOBAL_HOME, info.LOCAL_HOME, __version__
+import info
 from gui.dictconnwin import DictConnWindow
-from gui.groupswin import GroupsWindow
+#from gui.groupswin import GroupsWindow
 from gui.pluginwin import PluginManagerWindow
 from gui.registerwin import FileRegistryWindow
 from gui.dicteditorwin import DictEditorWindow
-from gui.mywordswin import MyWordsWindow
+#from gui.mywordswin import MyWordsWindow
 from gui.dictaddwin import DictAddWindow
 from gui.prefswin import PrefsWindow
 from gui.helpwin import LicenseWindow, AboutWindow
@@ -41,9 +42,9 @@ from parser import SlowoParser
 from parser import MovaParser
 from parser import TMXParser
 from parser import DictParser
-from group import DictionaryGroup
+#from group import DictionaryGroup
 from threads import Process
-from mywords import MyWords
+#from mywords import MyWords
 from history import History
 from installer import Installer
 from extra.html2text import html2text
@@ -94,19 +95,19 @@ class MainWindow(wxFrame):
       self.lastInstalledDictName = None
 
       # My words list
-      self.myWords = MyWords()
+      #self.myWords = MyWords()
        
-      try: 
-          self.myWords.read()
-      except Exception, e:
-          print "INFO Warning: Unable to read mywords.txt file"
+      #try: 
+      #    self.myWords.read()
+      #except Exception, e:
+      #    print "INFO Warning: Unable to read mywords.txt file"
 
 
       # GUI instances
-      self.myWordsWindow = None
+      #self.myWordsWindow = None
 
       # Activation values
-      self.activeMyWordsWindow = False 
+      #self.activeMyWordsWindow = False 
 
       # This var is used by onTimerSearch to recognize search method.
       # If search was done by selecting a word in a list, then word list
@@ -333,7 +334,7 @@ class MainWindow(wxFrame):
       hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
       
       # Back button
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "left.png"),
+      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "left.png"),
                      wxBITMAP_TYPE_PNG)
       self.buttonBack = wxBitmapButton(self, 2010, bmp, (24, 24),
                                          style=wxNO_BORDER)
@@ -342,7 +343,7 @@ class MainWindow(wxFrame):
       hboxToolbar.Add(self.buttonBack, 0, wxALL | wxCENTER, 1)
 
       # Forward button
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "right.png"),
+      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "right.png"),
                      wxBITMAP_TYPE_PNG)
       self.buttonForward = wxBitmapButton(self, 2011, bmp, (24, 24),
                                          style=wxNO_BORDER)
@@ -352,7 +353,7 @@ class MainWindow(wxFrame):
 
       # Stop threads
       # TODO: how thread can be killed?
-      #bmp = wxBitmap(os.path.join(home, "pixmaps", "stop.xpm"),
+      #bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "stop.xpm"),
       #               wxBITMAP_TYPE_XPM)
       #self.buttonStop = wxBitmapButton(self, 155, bmp, (16, 16),
       #                                 style=wxNO_BORDER)
@@ -361,7 +362,7 @@ class MainWindow(wxFrame):
       #hboxToolbar.Add(self.buttonStop, 0, wxALL | wxCENTER, 1)
       #self.buttonStop.Hide()
 
-      #bmp = wxBitmap(os.path.join(home, "pixmaps", "add.xpm"),
+      #bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "add.xpm"),
       #               wxBITMAP_TYPE_XPM)
       #self.buttonAdd = wxBitmapButton(self, 5004, bmp, (16, 16),
       #                                 style=wxNO_BORDER)
@@ -374,7 +375,7 @@ class MainWindow(wxFrame):
       # Word list is hidden by default
       self.wlHidden = True
       
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "hide.png"),
+      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "hide.png"),
                      wxBITMAP_TYPE_PNG)
       self.buttonHide = wxBitmapButton(self, 152, bmp, (24, 24),
                                        style=wxNO_BORDER)
@@ -443,11 +444,11 @@ class MainWindow(wxFrame):
       wxInitAllImageHandlers()
       if os.name != "posix":
          icon = wxEmptyIcon()
-         data = open(os.path.join(home, "pixmaps", "icon.png"), "rb").read()
+         data = open(os.path.join(info.GLOBAL_HOME, "pixmaps", "icon.png"), "rb").read()
          icon.CopyFromBitmap(wxBitmapFromImage(wxImageFromStream(cStringIO.StringIO(data))))
          self.SetIcon(icon)
       else:
-         self.SetIcon(wxIcon(os.path.join(home, "pixmaps", "icon.xpm"),
+         self.SetIcon(wxIcon(os.path.join(info.GLOBAL_HOME, "pixmaps", "icon.xpm"),
                              wxBITMAP_TYPE_XPM))
 
 
@@ -485,7 +486,7 @@ class MainWindow(wxFrame):
       EVT_MENU(self, 110, self.onShowPluginManager)
       EVT_MENU(self, 120, self.onShowFileRegistry)
       EVT_MENU(self, 5002, self.onShowDictEditor)
-      EVT_MENU(self, 5003, self.onShowMyWordList)
+      #EVT_MENU(self, 5003, self.onShowMyWordList)
       EVT_MENU(self, 111, self.onShowPrefsWindow)
 
       # Help menu events
@@ -499,7 +500,7 @@ class MainWindow(wxFrame):
       EVT_BUTTON(self, 2011, self.onForward)
       EVT_BUTTON(self, 155, self.onStop)
       EVT_BUTTON(self, 151, self.onClean)
-      EVT_BUTTON(self, 5004, self.onAddMyWord)
+      #EVT_BUTTON(self, 5004, self.onAddMyWord)
       EVT_BUTTON(self, 152, self.onHideUnhide)
       EVT_TEXT_ENTER(self, 153, self.onSearch)
       EVT_LISTBOX(self, 154, self.onWordSelected)
@@ -664,12 +665,12 @@ For more information visit project's homepage on
                       not in ['dz', 'dict']:
                   print "INFO Loading hash table..."
                   try:
-                     if os.path.exists(os.path.join(uhome,
+                     if os.path.exists(os.path.join(info.LOCAL_HOME,
                                                     "register",
                                                     self.activeDictionary.name+".hash")):
-                        self.dict.hash = self.app.reg.loadHashTable(os.path.join(uhome, "register", self.dict.name+".hash"))
+                        self.dict.hash = self.app.reg.loadHashTable(os.path.join(info.LOCAL_HOME, "register", self.dict.name+".hash"))
                      else:
-                        self.dict.hash = self.app.reg.loadHashTable(os.path.join(home, "register", self.dict.name+".hash"))
+                        self.dict.hash = self.app.reg.loadHashTable(os.path.join(info.GLOBAL_HOME, "register", self.dict.name+".hash"))
                   except:
                      print "ERROR Failed to load index table"
                      self.SetStatusText(_("Error: failed to load index table"))
@@ -753,21 +754,21 @@ For more information visit project's homepage on
       self.entry.SetValue("")
 
 
-   def onAddMyWord(self, event):
-      word = self.entry.GetValue().strip()
-      if word:
-         status = self.myWords.addWord(word)
-         if status:
-            self.SetStatusText(_("Error: ")+status)
-            return
+##    def onAddMyWord(self, event):
+##       word = self.entry.GetValue().strip()
+##       if word:
+##          status = self.myWords.addWord(word)
+##          if status:
+##             self.SetStatusText(_("Error: ")+status)
+##             return
                
-         self.SetStatusText(_("Word \"%s\" has been added to " \
-                            "\"My Words\" list") % word)
+##          self.SetStatusText(_("Word \"%s\" has been added to " \
+##                             "\"My Words\" list") % word)
 
-         if self.activeMyWordsWindow:
-            self.myWordsWindow.updateList()   
-      else:
-         self.SetStatusText(_("Search entry is empty"))
+##          if self.activeMyWordsWindow:
+##             self.myWordsWindow.updateList()   
+##       else:
+##          self.SetStatusText(_("Search entry is empty"))
          
 
    def onClearHistory(self, event):
@@ -994,17 +995,18 @@ For more information visit project's homepage on
 
 
    # FIXME: Remove
-   def onShowMyWordList(self, event):
-      print "My words"
-      if self.activeMyWordsWindow:
-          return
+   
+##    def onShowMyWordList(self, event):
+##       print "My words"
+##       if self.activeMyWordsWindow:
+##           return
             
-      self.myWordsWindow = MyWordsWindow(self, -1, _("My Words"),
-                                         size=(300, 400),
-                                         style=wxDEFAULT_FRAME_STYLE)
-      self.myWordsWindow.CentreOnScreen()
-      self.myWordsWindow.Show(True)
-      self.activeMyWordsWindow = True 
+##       self.myWordsWindow = MyWordsWindow(self, -1, _("My Words"),
+##                                          size=(300, 400),
+##                                          style=wxDEFAULT_FRAME_STYLE)
+##       self.myWordsWindow.CentreOnScreen()
+##       self.myWordsWindow.Show(True)
+##       self.activeMyWordsWindow = True 
 
       
    def onShowPrefsWindow(self, event):
@@ -1032,11 +1034,12 @@ For more information visit project's homepage on
       eventID = event.GetId()
       if eventID in self.app.config.ids.keys():
          dictionary = self.app.dictionaries.get(self.app.config.ids.get(eventID))
-         self.activeDictionary = dictionary
-         self.SetStatusText(enc.toWX(dictionary.getName()))
-         self.SetTitle("%s - OpenDict" % dictionary.getName())
+         self.loadDictionary(dictionary)
+         #self.activeDictionary = dictionary
+         #self.SetStatusText(enc.toWX(dictionary.getName()))
+         #self.SetTitle("%s - OpenDict" % dictionary.getName())
 
-      self.checkIfNeedsList()
+      #self.checkIfNeedsList()
 
       return # :)
       
@@ -1086,9 +1089,22 @@ For more information visit project's homepage on
             self.hideWordList()
 
 
+   def loadDictionary(self, dictInstance):
+      """Prepares main window for using dictionary"""
+
+      self.activeDictionary = dictInstance
+      self.wordList.Clear()
+      self.checkIfNeedsList()
+      self.SetTitle("%s - OpenDict" % dictInstance.getName())
+      self.SetStatusText(_(enc.toWX("Dictionary \"%s\" loaded" \
+                                    % dictInstance.getName())))
+      self.htmlWin.SetPage("")
+      
+
    def loadPlugin(self, name):
       """Sets plugin as currently used dictionary"""
 
+      print "Loading plugin '%s'..." % name
       self.entry.Disable()
       self.dictName = name
       self.activeDictionary = self.app.dictionaries.get(name)
@@ -1097,6 +1113,7 @@ For more information visit project's homepage on
       self.SetTitle("%s - OpenDict" % name)
       self.entry.Enable(1)
       self.SetStatusText("Done") # TODO: Set something more useful
+      self.htmlWin.SetPage("")
       
 
 
@@ -1203,6 +1220,12 @@ For more information visit project's homepage on
          if name == misc.encodings[key]:
             ename = key
             break
+         
+      print "Encoding name to save: '%s'" % ename
+      if len(ename) == 0:
+         print "ERROR Something wrong with encodings!"
+         return
+      
       self.menuEncodings.FindItemById(self.menuEncodings.FindItem(ename)).Check(1)
 
 
@@ -1320,7 +1343,7 @@ For more information visit project's homepage on
 
       # And change the button pixmap
       print "DEBUG Setting unhide.png icon..."
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "unhide.png"),
+      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "unhide.png"),
                      wxBITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)
       self.buttonHide.SetToolTipString(_("Show word list"))
@@ -1337,7 +1360,7 @@ For more information visit project's homepage on
 
       # And change the pixmap
       print "DEBUG Setting hide.png icon..."
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "hide.png"),
+      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "hide.png"),
                      wxBITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)
       self.buttonHide.SetToolTipString(_("Hide word list"))

@@ -27,6 +27,7 @@ class DictionaryType:
 
     fileExtentions = None
     name = None
+    shortIdName = None
 
     def getFileExtentions(self):
         """Return file extention"""
@@ -38,99 +39,109 @@ class DictionaryType:
         """Return type name"""
 
         return self.name
+
+
+    def getIdName(self):
+        """Return short ID name"""
+
+        return self.shortIdName
 
 
 class TypePlugin(DictionaryType):
     """Dictionary plugin"""
 
-    fileExtentions = ('zip')
+    fileExtentions = ('zip',)
     name = "OpenDict dictionary plugin"
 
-    def getFileExtentions(self):
-        """Return file extention"""
+##     def getFileExtentions(self):
+##         """Return file extention"""
 
-        return self.fileExtentions
+##         return self.fileExtentions
 
 
-    def getName(self):
-        """Return type name"""
+##     def getName(self):
+##         """Return type name"""
 
-        return self.name
+##         return self.name
 
 
 
 class TypeSlowo(DictionaryType):
     """Slowo dictionary format"""
 
-    fileExtentions = ('dwa')
+    fileExtentions = ('dwa',)
     name = "Slowo dictionary"
+    shortIdName = "slowo"
 
-    def getFileExtentions(self):
-        """Return file extention"""
+##     def getFileExtentions(self):
+##         """Return file extention"""
 
-        return self.fileExtentions
+##         return self.fileExtentions
 
 
-    def getName(self):
-        """Return type name"""
+##     def getName(self):
+##         """Return type name"""
 
-        return self.name
+##         return self.name
 
 
 
 class TypeMova(DictionaryType):
     """Mova dictionary format"""
 
-    fileExtentions = ('mova')
+    fileExtentions = ('mova',)
     name = "Mova dictionary"
+    shortIdName = "mova"
 
-    def getFileExtentions(self):
-        """Return file extention"""
+##     def getFileExtentions(self):
+##         """Return file extention"""
 
-        return self.fileExtentions
+##         return self.fileExtentions
 
 
-    def getName(self):
-        """Return type name"""
+##     def getName(self):
+##         """Return type name"""
 
-        return self.name
+##         return self.name
     
 
 class TypeTMX(DictionaryType):
     """TMX dictionary format"""
 
-    fileExtentions = ('tmx')
+    fileExtentions = ('tmx',)
     name = "TMX dictionary"
+    shortIdName = "tmx"
 
-    def getFileExtentions(self):
-        """Return file extention"""
+##     def getFileExtentions(self):
+##         """Return file extention"""
 
-        return self.fileExtentions
+##         return self.fileExtentions
 
     
-    def getName(self):
-        """Return type name"""
+##     def getName(self):
+##         """Return type name"""
 
-        return self.name
+##         return self.name
     
 
 
 class TypeDict(DictionaryType):
     """DICT dictionary type"""
 
-    fileExtentions = ('dict', 'dz')
+    fileExtentions = ('dict', 'dz',)
     name = "DICT dictionary"
+    shortIdName = "dict"
 
-    def getFileExtentions(self):
-        """Return file extention"""
+##     def getFileExtentions(self):
+##         """Return file extention"""
 
-        return self.fileExtentions
+##         return self.fileExtentions
 
 
-    def getName(self):
-        """Return type name"""
+##     def getName(self):
+##         """Return type name"""
 
-        return self.name
+##         return self.name
 
 
 # Constant instances
@@ -139,3 +150,6 @@ SLOWO = TypeSlowo()
 MOVA = TypeMova()
 TMX = TypeTMX()
 DICT = TypeDict()
+
+# Supported types tuple
+supportedTypes = (PLUGIN, SLOWO, MOVA, TMX, DICT)

@@ -26,7 +26,8 @@ import traceback
 _ = wxGetTranslation
 
 
-from info import home, uhome
+#from info import home, uhome
+import info
 
 def errDialog(msg=""):
 
@@ -34,13 +35,14 @@ def errDialog(msg=""):
       msg = traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], 
                                        sys.exc_info()[2])[3]
    print "MSG:", msg
-   window = wxMessageDialog(wxGetApp().window, 
+   window = wxMessageDialog(wxGetApp().window,
                             msg, 
                             _("Error"), 
                             wxOK | wxICON_ERROR)
    window.CenterOnScreen()
    window.ShowModal()
    window.Destroy()
+   
 
 class ErrorWindow(wxFrame):
 
@@ -68,7 +70,7 @@ class ErrorWindow(wxFrame):
             "or this error may be a bug in the program. If so, please\n" \
             "copy this error text and report a bug to developers at\n" \
             "http://opendict.not.yet/bugs.html\n" \
-            "Thank you.") % os.path.join(uhome, "config.txt")
+            "Thank you.") % os.path.join("", "config.txt")
 
       vbox.Add(wxStaticText(self, -1, msg), 0,
                wxALL | wxEXPAND, 5)

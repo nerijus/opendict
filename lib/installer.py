@@ -1,5 +1,6 @@
+#
 # OpenDict
-# Copyright (c) 2003-2004 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA
 #
-# Module: installer.py
 
 from wxPython.wx import *
 import os
@@ -25,6 +25,8 @@ from gui.dictaddwin import DictAddWindow
 import plugin
 import register
 import misc
+import info
+import dicttype
 
 _ = wxGetTranslation
 
@@ -37,6 +39,7 @@ class Installer:
         self.config = config
         
     def showGUI(self):
+        """Show graphical windows for selecting files and formats"""
 
         wildCard = "All files (*.*)|*.*|" \
                    "OpenDict plugins (*.zip)|*.zip|" \
@@ -56,35 +59,53 @@ class Installer:
             fileDialog.Destroy()
             return
         
-        fileName = os.path.split(filePath)[1]
-        rpos = fileName.rfind(".")
-        if rpos > 0:
-            ext = fileName[rpos+1:]
+        #fileName = os.path.split(filePath)[1]
+        #rpos = fileName.rfind(".")
+        #if rpos > 0:
+        #    ext = fileName[rpos+1:]
+
+        fileName = os.path.basename(filePath)
+        extention = os.path.splitext(fileName)[1]
+
+        extMapping = {}
+        for t in dicttype.supportedTypes:
+            for ext in t.getFileExtentions():
+                extMapping[ext.lower()] = t
+
+        print extMapping
       
-        textFormats = misc.dictFormats.keys()
-        textFormats.pop(textFormats.index("zip"))
-      
-        if rpos < 1 or ext.lower() not in ["zip"]+textFormats:
+        #textFormats = misc.dictFormats.keys()
+        #textFormats.pop(textFormats.index("zip"))
+
+        if not extention.lower() in extMapping.keys():
+        #if rpos < 1 or ext.lower() not in ["zip"]+textFormats:
             print "Error: could not recognize!"
             window = DictAddWindow(self.mainWin, fileName, filePath)
             window.CentreOnScreen()
             window.Show(True)
         else:
-            self.install(filePath, ext)
+            self.install(filePath, extention)
+
             
-    def install(self, filePath, ext):
-        ext = ext.lower()
+    def install(self, filePath, extention):
+        """Copies files to special directories"""
+        
+        #ext = ext.lower()
         print "Installer.install() Ext:", ext
-        print misc.dictFormats.keys()
-        textFormats = misc.dictFormats.keys()
-        textFormats.pop(textFormats.index("zip"))
+        #print misc.dictFormats.keys()
+        #textFormats = misc.dictFormats.keys()
+        #textFormats.pop(textFormats.index("zip"))
+        plainFormats = []
+        for t in dicttype.supportedTypes:
+            if t != dicttype.PLUGIN:
+                for ext in t.getFileExtentions():
+                    plainFormats.append(ext)
         
         try:
-            if ext in textFormats:
+            if extention in plainFormats:
                 print "Registering..."
-                reg = register.Register()
-                status = reg.registerDictionary(filePath, ext, 
-                                                self.config.defaultEnc)
+                #reg = register.Register()
+                status = register.registerDictionary(filePath)
                 if (status == 0):
                     self.mainWin.SetStatusText(_("Instalation complete"))
                 elif (status == 1):
@@ -108,3 +129,44 @@ class Installer:
             status = 1
             misc.printError()
 
+
+# ===========================================================================
+
+def registerDictionary(filePath):
+    """Register dictionary"""
+
+    fileName = os.path.basename(filePath)
+    dictionaryName = os.path.splitext(fileName)[0]
+
+    dictDir = os.path.join(info.LOCAL_HOME,
+                           info.__DICT_DIR,
+                           info.__FILE_DICT_DIR,
+                           fileName)
+
+
+    if os.path.exists(dictDir):
+        raise "Dictionary '%s' already exists"
+    
+    print "Will be installed in %s" % dictDir
+
+    extention = os.path.splitext(fileName)[1][1:]
+    
+    #print extention
+    dictType = None
+
+    for t in dicttype.supportedTypes:
+        for ext in t.getFileExtentions():
+            #print ext
+            if ext.lower() == extention.lower():
+                dictType = t
+                break
+
+    if not dictType:
+        raise "Dictionary type for '%s' still unknown! " \
+              "This may be internal error." % fileName
+
+    print dictType
+    
+
+if __name__ == "__main__":
+    registerDictionary("/dsfs/dfghgh/sd.mova")

@@ -56,3 +56,9 @@ else:
       
    LOCAL_HOME = os.path.join(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR)
    GLOBAL_HOME = "/usr/share/opendict"
+
+
+# FIXME: Remove
+uhome = LOCAL_HOME
+home = GLOBAL_HOME
+__version__ = VERSION

@@ -28,7 +28,7 @@ import os
 import codecs
 
 from misc import encodings, printError
-from info import __version__
+#from info import __version__
 from parser import TMXParser
 import info
 
@@ -465,7 +465,7 @@ class DictEditorWindow(wxFrame):
         self.parser.header["o-tmf"] = "ABCTransMem"
         self.parser.header["creationtool"] = "OpenDict"
         self.parser.header["adminlang"] = "en-us"
-        self.parser.header["creationtoolversion"] = __version__
+        self.parser.header["creationtoolversion"] = info.VERSION
         self.parser.header["srclang"] = "UnknownSourceLang"
         self.parser.lang = "UnknownTransLang"
         self.parser.header["datatype"] = "PlainText"
