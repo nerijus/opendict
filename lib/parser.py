@@ -32,6 +32,8 @@ from extra import dictclient
 from extra import dictdlib
 import info
 import misc
+import error
+import meta
 
 
 def binarySearchIndex(data, word):
@@ -53,12 +55,11 @@ def binarySearchIndex(data, word):
       return data.index(sub[0])
 
 
-class SlowoParser:
-
+class SlowoParser(meta.Dictionary):
    """
    Built-in Slowo Parser
 
-   Parses file in 'Slowo' dictionary format and does
+   Parses file in Slowo dictionary format and does
    the search.
    """
 
@@ -68,13 +69,33 @@ class SlowoParser:
       self.needsList = wxGetApp().config.useListWithRegs
       self.fd = open(file)
 
-      assert self.fd.read(1024).find("=") > -1
-      assert self.fd.read(1024).find(";") > -1
+      #assert self.fd.read(1024).find("=") > -1
+      #assert self.fd.read(1024).find(";") > -1
       
       self.name = os.path.split(file)[1]
 
-   def search(self, word):
 
+   def getName(self):
+      """Return file name"""
+
+      return self.name
+
+
+   def getEncoding(self):
+      """Return encoding set for that dictionary"""
+
+      raise "getEncoding() not implemented yet"
+
+
+   def getUsesWordList(self):
+      """Return True if uses word list, False otherwise"""
+
+      return self.needsList
+
+
+   def search(self, word):
+      """Lookup word"""
+      
       errno = 0
       word_lowered = word.lower()
       self.time = time.time()
@@ -217,8 +238,7 @@ class SlowoParser:
          print l, p
 
 
-class MovaParser:
-
+class MovaParser(meta.Dictionary):
    """
    Built-in Mova Parser
 
@@ -236,7 +256,27 @@ class MovaParser:
       
       self.name = os.path.split(file)[1]
 
+
+   def getName(self):
+      """Return file name"""
+
+      return self.name
+
+
+   def getEncoding(self):
+      """Return encoding set for this dictionary"""
+
+      raise "getEncoding not implemented yet"
+
+
+   def getUsesWordList(self):
+      """Return True if uses word list, False otherwise"""
+
+      return self.needsList
+
+
    def search(self, word):
+      """Lookup word"""
 
       errno = 0
       #self.time = time.time()
@@ -363,8 +403,8 @@ class MovaParser:
          n += len(line)
 
 
-class TMXParser:
-
+# TODO: Rewrite this one
+class TMXParser(meta.Dictionary):
     """Built-in TMX parser.
     Reads TMX files and does the search.
     """
@@ -394,7 +434,27 @@ class TMXParser:
        for word in self.mapping.keys():
            print self.mapping[word]
 
+
+    def getName(self):
+       """Return file name"""
+
+       return self.name
+
+    
+    def getEncoding(self):
+       """Return encoding set for that dictionary"""
+       
+       raise "getEncoding() not implemented yet"
+
+
+    def getUsesWordList(self):
+       """Return True if uses word list, False otherwise"""
+       
+       return self.needsList
+
+           
     def startElement(self, name, attrs):
+       """Part of SAX parsing method"""
 
        if name == "tu":
           self.inTu = 1
@@ -412,7 +472,9 @@ class TMXParser:
           self.header["datatype"] = attrs["datatype"]
           self.header["segtype"] = attrs["segtype"]
 
+
     def endElement(self, name):
+       """Part of SAX parsing method"""
 
        if name == "tu":
           self.inTu = 0
@@ -423,7 +485,9 @@ class TMXParser:
        elif name == "seg":
           self.inSeg = 0
 
+
     def charData(self, data):
+       """Part of SAX parsing method"""
 
        if self.inSeg:
           if self.lang == self.header["srclang"]:
@@ -432,7 +496,9 @@ class TMXParser:
              self.trans.append(data)
              #print "TMXParser: data '%s'" % data
 
+
     def search(self, word):
+       """Lookup word"""
        
        errno = 0
 
@@ -443,7 +509,6 @@ class TMXParser:
                 "<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
                                                     self.window.app.config.fontFace,
                                                     self.window.app.config.fontSize)
-
 
        keys = self.mapping.keys()
        avail = []
@@ -472,8 +537,7 @@ class TMXParser:
        pass
          
 
-class DictParser:
-
+class DictParser(meta.Dictionary):
    """Built-in dictd dictionaries parser.
    Reads dictd dictionaries and does the search.
    """
@@ -492,7 +556,27 @@ class DictParser:
 
       self.name = os.path.split(self.name)[1]
 
+
+   def getName(self):
+      """Return file name"""
+      
+      return self.name
+   
+
+   def getEncoding(self):
+      """Return encoding set for that dictionary"""
+
+      raise "getEncoding() not implemented yet"
+
+
+   def getUsesWordList(self):
+      """Return True if uses word list, False otherwise"""
+
+      return self.needsList
+
+
    def search(self, word):
+      """Lookup word"""
 
       word_lowered = word.lower()
       errno = 0
@@ -537,8 +621,7 @@ class DictParser:
       return (result, [], errno)
 
 
-class DictConnection:
-
+class DictConnection(meta.Dictionary):
    """Built-in DICT client
    Connects to a DICT server abd does the search.
    """
@@ -553,7 +636,15 @@ class DictConnection:
 
       self.needsList = 0
 
+
+   def getUsesWordList(self):
+      """Return True if uses word list, False otherwise"""
+
+      return self.needsList
+
+
    def search(self, word):
+      """Lookup word"""
 
       errno = 0
 

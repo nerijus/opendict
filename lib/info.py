@@ -63,8 +63,7 @@ if not home:
       uhome = home
 
    else:
-      # Unix-like system user
-
+      # Unix-like system
       if not uhome:
          if not os.path.exists(os.environ["HOME"]+"/.opendict"):
             os.mkdir(os.environ["HOME"]+"/.opendict")

@@ -26,15 +26,17 @@ from info import home, uhome
 _ = wxGetTranslation
 
 class Register:
-
     """Class is used for making and loading hash table file
     of registered dictionaries, and registering of new files"""
 
     def __init__(self):
+        
       self.app = wxGetApp()
       self.config = self.app.config
 
+
     def recognizeDictType(self, path):
+        
       fd = open(path)
       line = fd.readline()
       fd.close()
@@ -48,7 +50,9 @@ class Register:
       else:
          return ""
 
+
     def loadHashTable(self, path):
+        
       hash = {}
 
       hashFile = open(path)
@@ -59,6 +63,7 @@ class Register:
 
       hashFile.close()
       return hash
+
 
     def makeHashTable(self, path, file):
 
@@ -89,11 +94,13 @@ class Register:
       fdDict.close()
       fdHash.close()
 
+
     #
     # Method used by Installer class for file registering.
     # Returns registered dictionary name if success, None otherwise
     #
     def registerDictionary(self, path, format, name, encoding="utf-8"):
+        
         file = os.path.split(path)[1]
 
         # Using file without prefix for name

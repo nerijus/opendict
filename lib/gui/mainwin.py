@@ -48,7 +48,11 @@ from history import History
 from installer import Installer
 from extra.html2text import html2text
 import plugin
-import misc, info
+import misc
+import info
+import util
+import meta
+import error
 
 _ = wxGetTranslation
 
@@ -200,16 +204,16 @@ class MainWindow(wxFrame):
       keys = self.app.config.plugins.keys()
       keys.sort()
       for name in keys:
-         try:
-            name = name.decode('UTF-8')
-         except Exception, e:
-            print "ERROR Dictionary names must be in UTF-8 ('%s' failed)" \
-                  % (name)
+         #try:
+         #   name = name.decode('UTF-8')
+         #except Exception, e:
+         #   print "ERROR Dictionary names must be in UTF-8 ('%s' failed)" \
+         #         % (name)
 
          try:
             item = wxMenuItem(self.menuDict,
                               self.app.config.ids[name],
-                              name)
+                              util.toWX(name))
             self.menuDict.AppendItem(item)
             EVT_MENU(self, self.app.config.ids[name], self.onDefault)
          except Exception, e:
@@ -474,95 +478,71 @@ For more information visit project's homepage on
       self.htmlWin.SetPage(helpMessage)
      
 
-   # Callbacks and other functions
+   # Callback functions
 
    def onExit(self, event):
+      
       self.onCloseDict(None)
       misc.savePrefs(self)
       self.app.config.writeConfigFile()
       self.Close(True)
 
+
    def onCloseWindow(self, event):
+      
       self.onCloseDict(None)
       misc.savePrefs(self)
       self.app.config.writeConfigFile()
       self.Destroy()
 
+
+   # TODO: Move aftersearch actions into separate method
    def onTimerSearch(self, event):
+      """Search timer. When finished, sets search results"""
+      
       if self.search != None and self.search.isDone():
          wxEndBusyCursor()
          self.timerSearch.Stop()
          self.search.stop()
-         #print "Search timer stopped"
          word = self.entry.GetValue()
          
          result = self.search()
 
-         # Checking if dictionary returned valid result
-         # (plugin may be bad-written)
+         # Check if search result is SerachResult object.
+         # SearchResult class is used by new-type plugins.
          try:
-            assert len(result) == 3
+            assert result.__class__ == meta.SearchResult
          except:
-            self.SetStatusText(_(misc.errors[2]))
-            #self.buttonStop.Disable()
+            self.SetStatusText(error.reason.get(error.INTERNAL_ERROR))
             self.entry.Enable(1)
             self.entry.SetFocus()
             return
 
          self.SetStatusText("")
-         #self.buttonStop.Disable()
          self.entry.Enable(1)
          self.search = None
 
-         if self.entry.FindString(word) == -1:
-            self.entry.Append(word)
+         # ??? What is this?
+         #if self.entry.FindString(word) == -1:
+         #   self.entry.Append(word)
 
-         if result[2]:
-            print "ERROR Error:", result[2]
-            self.SetStatusText(_(misc.errors[result[2]]))
+         # Check status code
+         if result.status != error.OK:
+            print "ERROR Error:", result.status
+            self.SetStatusText(_(error.reason.get(result.status)))
             self.entry.Enable(1)
             self.entry.SetFocus()
             misc.printError()
             return
 
-         self.htmlCode = result[0]
-         #print self.htmlCode
-         
-         #if info.__unicode__ and type(self.htmlCode) != type(u''):
-         #   print "WARNING: non-unicode string '%s'" % self.htmlCode
-         #   self.htmlCode = unicode(self.htmlCode, __enc__)
-         #else:
-         #   print "Search result length: %d bytes" % len(self.htmlCode)
+         self.htmlCode = result.translation
          
          if type(self.htmlCode) != type(u''):
-##             if not info.__unicode__:
-##                print "Setting page (not encoded)"
-##                print self.htmlCode.decode("utf-8")
-##                try:
-##                   # FIXME: non-unicode version must be fixed
-##                   self.htmlWin.SetPage(self.htmlCode.decode(self.encoding))
-##                   self.history.add(self.htmlCode.decode(self.encoding))
-                  
-##                   self.htmlWin.SetPage(self.htmlCode)
-##                   self.history.add(self.htmlCode)
-##                except Exception, e:
-##                   print e
-##                   self.SetStatusText(_(misc.errors[6]))
-##             else:
-##                 print "Setting page (encoded in %s)" % info.__enc__
-##                 # FIXME: non-unicode version must be fixed
-##                 if hasattr(self.dict, "encoding"):
-##                     print "Dictionary has an encoding defined, huh!"
-##                     enc = self.dict.encoding
-##                 else:
-##                     enc = info.__enc__
-##                 self.htmlWin.SetPage(self.htmlCode.decode(enc))
-##                 self.history.add(self.htmlCode.decode(enc))
 
             if hasattr(self.dict, "encoding"):
                enc = self.dict.encoding
             else:
-               enc = info.__enc__
+               enc = info.__enc__ # FIXME: Avoid this!!!
                self.htmlWin.SetPage(self.htmlCode.decode(enc))
                self.history.add(self.htmlCode.decode(enc))
                print "DEBUG Setting page (encoded in %s)" % enc
@@ -584,8 +564,8 @@ For more information visit project's homepage on
                self.wordList.Clear()
 
                print "INFO Appending list..."
-               self.wordList.InsertItems(result[1], 0)
-               self.list = result[1]
+               self.wordList.InsertItems(result.words, 0)
+               self.list = result.words
 
          if not self.__searchedBySelecting:
             matches = self.wordList.GetCount()
@@ -600,6 +580,7 @@ For more information visit project's homepage on
          self.entry.SetFocus()
 
 
+   # FIXME: Deprecated
    def onTimerLoad(self, event):
       if self.load != None and self.load.isDone():
          self.timerLoad.Stop()
@@ -685,17 +666,20 @@ For more information visit project's homepage on
       
       self.search = Process(self.dict.search, word)
 
+
    def onBack(self, event):
       self.buttonForward.Enable(1)
       self.htmlWin.SetPage(self.history.back())
       if not self.history.canBack():
          self.buttonBack.Disable()
 
+
    def onForward(self, event):
       self.buttonBack.Enable(1)
       self.htmlWin.SetPage(self.history.forward())
       if not self.history.canForward():
          self.buttonForward.Disable()
+
 
    def onStop(self, event):
       #self.buttonStop.Disable()
@@ -989,6 +973,8 @@ For more information visit project's homepage on
    def onDefault(self, event):
       print "DEBUG MainWindow: menu item selected, id:", event.GetId()
 
+      # FIXME: Bad way. Try setting a few constants for each type
+      # of dictionary and then check this type instead of IDs.
       id = event.GetId()
       if 200 <= id < 500:
          self.onCloseDict(None)
@@ -1002,9 +988,11 @@ For more information visit project's homepage on
             elif 300 <= id < 400:
                # register
                self.loadRegister(name)
-            elif 400 <= id < 500:
+               
+            # Not supported
+            #elif 400 <= id < 500:
                # group
-               self.loadGroup(name)
+            #   self.loadGroup(name)
          except:
             #print "Failed loading", name
             self.onCloseDict(None)
@@ -1023,35 +1011,34 @@ For more information visit project's homepage on
 
 
    def checkIfNeedsList(self):
-      if self.dict.needsList:
+      """Unhides word list if current dictionary uses it"""
+      
+      if self.dict.getUsesWordList:
          if self.wordListHidden():
             self.unhideWordList()
-            #self.wlHidden = 0
       else:
          if not self.wordListHidden():
             self.hideWordList()
-         #self.wlHidden = 1
 
 
    def loadPlugin(self, name):
-      p = self.app.config.plugins[name]
-
-      # hmm, is this ok?
-      if plugin.checkPluginVersion(p):
-         self.SetStatusText("")
-         #self.buttonStop.Disable() # temporarly uavailable
-         return
+      """Sets plugin as currently used dictionary"""
 
       self.entry.Disable()
-      self.timerLoad.Start(self.delay)
-      self.load = Process(p.load, self)
       self.dictName = name
+      self.dict = self.app.config.plugins[name]
+      self.checkIfNeedsList()
+      print "Dictionary instance: %s" % self.dict
       self.SetTitle("%s - OpenDict" % name)
+      self.entry.Enable(1)
+      self.SetStatusText("Done") # TODO: Set something more useful
 
+
+   # FIXME: deprecated, update!
    def loadRegister(self, name):
-      print "INFO Loading '%s'..." % name
+      #print "INFO Loading '%s'..." % name
 
-      self.SetTitle("%s - OpenDict" % name)
+      self.SetTitle("%s - OpenDict" % name) # TODO: should be set after loading
       item = self.app.config.registers[name]
       self.dictName = name
       self.entry.Disable()
@@ -1079,6 +1066,7 @@ For more information visit project's homepage on
       self.checkEncMenuItem(self.encoding)
 
 
+   # FIXME: Deprecated
    def loadGroup(self, name):
       print "INFO Loading '%s'..." % name
       self.SetTitle("%s - OpenDict" % name)

@@ -28,6 +28,7 @@ from plugin import Plugin
 import group
 import info
 
+
 class Configuration:
    """This class is used for reading and writing config file.
    It also takes care of installing new plugins (but shouldn't)"""
@@ -65,6 +66,7 @@ class Configuration:
       
       self.dictServer = "dict.org"
       self.dictServerPort = "2628"
+
 
    def readConfigFile(self):
       try:

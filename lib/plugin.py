@@ -25,6 +25,7 @@ import sys
 import zipfile
 import imp
 import string
+import traceback
 
 from info import home, uhome, __version__, __enc__
 from misc import numVersion, printError
@@ -35,7 +36,6 @@ import info
 _ = wxGetTranslation
 
 class Plugin:
-
    """Class object contains information about the plugin,
    it can load plugin's code for use."""
 
@@ -48,15 +48,31 @@ class Plugin:
           fd = open(os.path.join(home, "plugins", self.dir, "DESC"), "r")
        lines = fd.readlines()
        
-       self.name = ""
-       self.code = ""
-       self.version = ""
-       self.opendict = ""
-       self.author = ""
-       self.about = ""
-       self.encoding = ""
+       self.name = u""
+       self.code = u""
+       self.version = u""
+       self.opendict = u""
+       self.author = u""
+       self.about = u""
+       self.encoding = u""
 
+       ulines = []
        for line in lines:
+          try:
+             lines.append(unicode(line, 'UTF-8'))
+             #print "DEBUG %s" % type(line)
+          except Exception, e:
+             print "ERROR String failed: not UTF-8 string"
+             continue
+
+       for line in ulines:
+          #try:
+          #   line = unicode(line, 'UTF-8')
+          #   print "DEBUG %s" % type(line)
+          #except Exception, e:
+          #   print "ERROR String '%s' failed: not UTF-8 string" % line
+          #   continue
+             
           if line.find("name=") == 0:
              self.name = line.replace("name=", "").strip()
           elif line.find("code=") == 0:
@@ -69,37 +85,40 @@ class Plugin:
              self.author = line.replace("author=", "").strip()
           elif line.find("about=") == 0:
              self.about = line.replace("about=", "")
-             self.about += string.join(lines[lines.index(line)+1:], "")
+             print "About type:", type(self.about)
+             #print lines
+             self.about += u"".join(lines[lines.index(line)+1:])
        
-       if info.__unicode__:
-           try:
-               self.name = self.name.decode("UTF-8")
-               self.author = self.author.decode("UTF-8")
-               self.about = self.about.decode("UTF-8")
-           except:
-               print "WARNING: Plugin description (DESC) file must be"
-               print "         encoded in UTF-8, but is not"
+##        if info.__unicode__:
+##            try:
+##                self.name = self.name.decode("UTF-8")
+##                self.author = self.author.decode("UTF-8")
+##                self.about = self.about.decode("UTF-8")
+##            except:
+##                print "WARNING: Plugin description (DESC) file must be"
+##                print "         encoded in UTF-8, but is not"
                
-               # Getting sure the information is encoded correctly
-               if type(self.about) != type(u""):
-                   print "WARNING: non-unicode plugin string '%s'" % self.about
-                   self.about = unicode(self.about, info.__enc__)
+##                # Getting sure the information is encoded correctly
+##                if type(self.about) != type(u""):
+##                    print "WARNING: non-unicode plugin string '%s'" % self.about
+##                    self.about = unicode(self.about, info.__enc__)
               
-               if type(self.name) != type(u''):
-                  print "WARNING: non-unicode plugin string '%s'" % self.name
-                  self.name = unicode(self.name, __enc__)
+##                if type(self.name) != type(u''):
+##                   print "WARNING: non-unicode plugin string '%s'" % self.name
+##                   self.name = unicode(self.name, __enc__)
+                  
 
    def load(self, window):
+      """Load plugin and return plugin object"""
+      
       userpath = os.path.join(uhome, "plugins", self.dir)
       syspath = os.path.join(home, "plugins", self.dir)
       if os.path.exists(userpath):
          p = userpath
          h = uhome
-         #print "Plugin '%s' found on %s" % (self.name, p)
       elif os.path.exists(syspath):
          h = home
          p = syspath
-         #print "Plugin '%s' found on %s" % (self.name, p)
       else:
          print "ERROR: plugin not found"
          return
@@ -123,8 +142,8 @@ class Plugin:
                           window)
    
 
-
 def checkPluginVersion(plugin):
+   """Check if plugin supports current OpenDict version"""
 
    if numVersion(plugin.opendict) > numVersion(__version__):
       msg = _("Plugin %s %s requires OpenDict %s\n" \
@@ -141,9 +160,11 @@ def checkPluginVersion(plugin):
 
    return 0
 
+
 def pluginPreinstall(config, path, zip):
    """This method does things that are needed before plugin can be installed
    Returns 0 if all things are OK (ex. user agree with license), else 1"""
+   
    ok = 0
 
    iModName = None
@@ -337,6 +358,7 @@ def installPlugin(config, path):
 
     return status
 
+
 def initPlugins(config):
 
    dirs = []
@@ -355,9 +377,10 @@ def initPlugins(config):
       try:
         p = Plugin(dir)
       except Exception, e:
-        print e
+        #print "ERROR %s" % e
+        traceback.print_exc()
+        continue
       
       config.plugins[p.name] = p
       config.ids[p.name] = config.plugMenuIds
       config.plugMenuIds += 1
-
