@@ -324,14 +324,14 @@ def removePluginDictionary(dictInstance):
         raise Exception, str(e)
     
 
-if __name__ == "__main__":
-    #try:
-    #    installPlainDictionary("/home/mjoc/")
-    #except Exception, e:
-    #    print "ERROR %s" % e
+## if __name__ == "__main__":
+##     #try:
+##     #    installPlainDictionary("/home/mjoc/")
+##     #except Exception, e:
+##     #    print "ERROR %s" % e
 
-    try:
-        installDictionaryPlugin("/home/mjoc/sampleplugin2.zip")
-    except Exception, e:
-        print "ERROR %s" % e
+##     try:
+##         installDictionaryPlugin("/home/mjoc/sampleplugin2.zip")
+##     except Exception, e:
+##         print "ERROR %s" % e
         

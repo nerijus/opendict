@@ -31,6 +31,7 @@ import xml.dom.minidom
 
 import info
 import meta
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
 class PluginInfo:
@@ -135,13 +136,11 @@ class DictionaryPlugin(meta.Dictionary):
 
         try:
             self.info = self._loadInfo(path)
-            print self.info
         except Exception, e:
             raise InvalidPluginException, e
 
         try:
             self.dictionary = self._loadPlugin(path)
-            print self.dictionary
         except Exception, e:
             raise InvalidPluginException, e
 
@@ -285,11 +284,10 @@ def _loadDictionaryPlugin(directory):
     plugin = None
 
     try:
-        print "Loading %s..." % directory
+        systemLog(INFO, "Loading %s..." % directory)
         plugin = DictionaryPlugin(directory)
-        print "Success:", plugin
     except InvalidPluginException, e:
-        print "FAILED:", directory, e
+        systemLog(ERROR, "Unable to load plugin from %s (%s)" % (directory, e))
         traceback.print_exc
 
     return plugin

@@ -29,6 +29,7 @@ import info
 import util
 import xmltools
 import dicttype
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
 class PlainDictInfo:
@@ -151,8 +152,6 @@ def indexShouldBeMade(dictionary):
     filePath = dictionary.getPath()
     fileName = os.path.basename(filePath)
 
-    print "File name:", fileName
-
     dictLocalHome = os.path.join(info.LOCAL_HOME,
                                  info.PLAIN_DICT_DIR,
                                  fileName)
@@ -161,17 +160,14 @@ def indexShouldBeMade(dictionary):
                                   info.PLAIN_DICT_DIR,
                                   fileName)
 
-    print dictLocalHome
-    print dictGlobalHome
-
     if not os.path.exists(os.path.join(dictGlobalHome, 'data', 'index.xml')) \
            and not os.path.exists(os.path.join(dictLocalHome, 'data',
                                                'index.xml')):
         return True
 
-    print "Old checksum:", dictionary.getChecksum()
+    debugLog(INFO, "Old checksum: %s" % dictionary.getChecksum())
     newChecksum = util.getMD5Sum(filePath)
-    print "New checksum:", newChecksum
+    debugLog(INFO, "New checksum: %s" % newChecksum)
 
     return dictionary.getChecksum() != newChecksum
 
@@ -234,11 +230,3 @@ def loadIndex(dictionary):
 
     return index
         
-
-if __name__ == "__main__":
-    #print loadPlainDictionaries()
-    class D:
-        def getPath(self):
-            return "/home/mjoc/test.mova"
-        
-    print makeIndex(D())

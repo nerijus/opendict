@@ -46,6 +46,7 @@ from threads import Process
 from history import History
 from installer import Installer
 from extra.html2text import html2text
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 import plugin
 import misc
 import info
@@ -64,7 +65,7 @@ class HtmlWindow(wxHtmlWindow):
    link-clicking"""
 
    def OnLinkClicked(self, linkinfo):
-      print "DEBUG LinkInfo: searching for '%s'" % linkinfo.GetHref()
+      debugLog(DEBUG, "LinkInfo: searching for '%s'" % linkinfo.GetHref())
       wxBeginBusyCursor()
       parent = self.GetParent().GetParent().GetParent()
       parent.SetStatusText(_("Searching..."))
@@ -247,8 +248,8 @@ class MainWindow(wxFrame):
             self.menuDict.AppendItem(item)
             EVT_MENU(self, itemID, self.onDefault)
          except Exception, e:
-            print "ERROR Unable to create menu item for '%s' (%s)" \
-                  % (name, e)
+            systemLog(ERROR, "Unable to create menu item for '%s' (%s)" \
+                  % (name, e))
 
       keys = self.app.config.registers.keys()
       keys.sort()
@@ -430,34 +431,33 @@ class MainWindow(wxFrame):
       self.search = None
       self.load = None
 
-      # Load default dictionary
-      if self.app.config.dict != "":
-         try:
-            self.SetStatusText(_("Loading \"%s\"...") % self.app.config.dict)
-            if self.app.config.plugins.has_key(self.app.config.dict):
-               self.loadPlugin(self.app.config.dict)
+      # TODO: Load default dictionary
 
-            elif self.app.config.registers.has_key(self.app.config.dict):
-               self.loadRegister(self.app.config.dict)
+##       # Load default dictionary
+##       if self.app.config.dict != "":
+##          try:
+##             self.SetStatusText(_("Loading \"%s\"...") % self.app.config.dict)
+##             if self.app.config.plugins.has_key(self.app.config.dict):
+##                self.loadPlugin(self.app.config.dict)
 
-            elif self.app.config.groups.has_key(self.app.config.dict):
-               self.loadGroup(self.app.config.dict)
+##             elif self.app.config.registers.has_key(self.app.config.dict):
+##                self.loadRegister(self.app.config.dict)
 
-         except Exception, e:
-            self.SetStatusText(_("Error: failed to load \"%s\"") % self.app.config.dict)
-            print "ERROR Exception:", e
-            self.onCloseDict(None)
+##             elif self.app.config.groups.has_key(self.app.config.dict):
+##                self.loadGroup(self.app.config.dict)
+
+##          except Exception, e:
+##             self.SetStatusText(_("Error: failed to load \"%s\"") % self.app.config.dict)
+##             print "ERROR Exception:", e
+##             self.onCloseDict(None)
 
       # FIMXE: MS Windows doesn't want to show XPM pixmaps in the title bar
       wxInitAllImageHandlers()
-      if os.name != "posix":
-         icon = wxEmptyIcon()
-         data = open(os.path.join(info.GLOBAL_HOME, "pixmaps", "icon.png"), "rb").read()
-         icon.CopyFromBitmap(wxBitmapFromImage(wxImageFromStream(cStringIO.StringIO(data))))
-         self.SetIcon(icon)
-      else:
-         self.SetIcon(wxIcon(os.path.join(info.GLOBAL_HOME, "pixmaps", "icon.xpm"),
-                             wxBITMAP_TYPE_XPM))
+      
+      self.SetIcon(wxIcon(os.path.join(info.GLOBAL_HOME,
+                                       "pixmaps",
+                                       "icon-24x24.png"),
+                          wxBITMAP_TYPE_PNG))
 
 
       #
@@ -491,9 +491,9 @@ class MainWindow(wxFrame):
 
       # Tools menu events
       EVT_MENU(self, idDictServer, self.onOpenDictConn)
-      EVT_MENU(self, 122, self.onShowGroupsWindow)
+      #EVT_MENU(self, 122, self.onShowGroupsWindow)
       EVT_MENU(self, idManageDict, self.onShowPluginManager)
-      EVT_MENU(self, 120, self.onShowFileRegistry)
+      #EVT_MENU(self, 120, self.onShowFileRegistry)
       EVT_MENU(self, 5002, self.onShowDictEditor)
       #EVT_MENU(self, 5003, self.onShowMyWordList)
       EVT_MENU(self, idPrefs, self.onShowPrefsWindow)
@@ -561,8 +561,8 @@ For more information visit project's homepage on
    def onCloseWindow(self, event):
       
       self.onCloseDict(None)
-      misc.savePrefs(self)
-      self.app.config.writeConfigFile()
+      #misc.savePrefs(self)
+      #self.app.config.writeConfigFile()
       self.Destroy()
 
 
@@ -605,7 +605,7 @@ For more information visit project's homepage on
 
          # Check status code
          if result.getError() != errortype.OK:
-            print "ERROR Error:", result.getError()
+            systemLog(ERROR, result.getError())
             
             self.htmlWin.SetPage("")
             self.wordList.Clear()
@@ -618,18 +618,18 @@ For more information visit project's homepage on
                self.SetStatusText(_(result.getError().getMessage()))
                self.entry.Enable(1)
                self.entry.SetFocus()
-               misc.printError()
                
             return
 
-         print result.getTranslation()
-
          try:
-            print "DEBUG Decoding translation in %s" \
-                  % self.activeDictionary.getEncoding()
+            debugLog(DEBUG, "Decoding translation in %s" \
+                  % self.activeDictionary.getEncoding())
             transUnicode = unicode(result.translation,
                                    self.activeDictionary.getEncoding())
-         except:
+         except Exception, e:
+            systemLog(ERROR, "Unable to decode translation in %s (%s)" \
+                      % (self.activeDictionary.getEncoding(),
+                         e))
             title = _(errortype.INVALID_ENCODING.getMessage())
             msg = _("Translation cannot be displayed using selected " \
                     "encoding %s. Please try another encoding from " \
@@ -676,6 +676,9 @@ For more information visit project's homepage on
 
    # FIXME: Deprecated
    def onTimerLoad(self, event):
+
+      raise Exception, "mainwin.py:onTimerLoad() is deprecated"
+      
       if self.load != None and self.load.isDone():
          self.timerLoad.Stop()
          self.load.stop()
@@ -728,21 +731,12 @@ For more information visit project's homepage on
          self.entry.SetFocus()
 
 
-   #def onEntryUpdate(self, event):
-      #word = self.entry.GetValue()
-      #print "Word:", word
-      #self.onSearch(None)
-      #self.entry.SetFocus()
-      #self.entry.SetSelection(0, 0)
-      #self.entry.SetInsertioEnd()
-
    def onSearch(self, event):
       if self.activeDictionary == None:
          self.SetStatusText(_("There is no opened dictionary"))
          return
 
       word = self.entry.GetValue()
-      #print "Got word value '%s', type '%s'" % (word, type(word))
 
       if word == "":
          self.SetStatusText(_("Enter a word"))
@@ -842,6 +836,9 @@ For more information visit project's homepage on
 
 
    def onOpenSlowo(self, event):
+
+      raise Exception, "mainwin.py:onOpenSlowo() is deprecated"
+      
       dialog = wxFileDialog(self, _("Choose Slowo dictionary file"), "", "",
                          "", wxOPEN|wxMULTIPLE)
       if dialog.ShowModal() == wxID_OK:
@@ -864,6 +861,8 @@ For more information visit project's homepage on
       dialog.Destroy()
 
    def onOpenMova(self, event):
+
+      raise Exception, "mainwin.py:onOpenSlowo() is deprecated"
       dialog = wxFileDialog(self, _("Choose Mova dictionary file"), "", "",
                          "", wxOPEN|wxMULTIPLE)
       if dialog.ShowModal() == wxID_OK:
@@ -886,6 +885,8 @@ For more information visit project's homepage on
 
    # TODO: write TMX parser
    def onOpenTMX(self, event):
+
+      raise Exception, "mainwin.py:onOpenSlowo() is deprecated"
       dialog = wxFileDialog(self, _("Choose TMX dictionary file"), "", "",
                          "", wxOPEN|wxMULTIPLE)
       if dialog.ShowModal() == wxID_OK:
@@ -912,6 +913,7 @@ For more information visit project's homepage on
 
    def onOpenDictFile(self, event):
 
+      raise Exception, "mainwin.py:onOpenSlowo() is deprecated"
       dialog = wxFileDialog(self, _("Choose dictionary file"), "", "",
                          "", wxOPEN|wxMULTIPLE)
       if dialog.ShowModal() == wxID_OK:
@@ -954,15 +956,13 @@ For more information visit project's homepage on
       """Clear widgets and set messages"""
 
       # If there was a registered dict, set it's default encoding
+      # FIXME: new way
       try:
          if self.dict.name in self.app.config.registers.keys():
             self.app.config.registers[self.dict.name][2] = self.app.config.encoding
       except:
          pass
 
-      # Users requested not to clean text entry
-      #self.entry.SetValue("")
-      
       self.wordList.Clear()
       self.htmlWin.SetPage("")
       self.SetTitle("OpenDict")
@@ -971,8 +971,7 @@ For more information visit project's homepage on
       if self.activeDictionary:
          self.activeDictionary.stop()
          self.activeDictionary = None
-      #self.encoding = self.app.config.defaultEnc
-      self.checkEncMenuItem(self.app.config.encoding)
+
 
       self.SetStatusText(_("Choose a dictionary from \"Dictionaries\" menu"))
       #self.buttonStop.Disable()
@@ -1024,7 +1023,7 @@ For more information visit project's homepage on
          self.pmWindow.Show(True)
       except Exception, e:
          traceback.print_exc()
-         print "ERROR Unable to show prefs window: %s" % e
+         systemLog(ERROR, "Unable to show prefs window: %s" % e)
          self.SetStatusText("Error occured, please contact developers (%s)" \
                             % e)
          
@@ -1045,21 +1044,6 @@ For more information visit project's homepage on
       editor.CentreOnScreen()
       editor.Show(True)
 
-
-   # FIXME: Remove
-   
-##    def onShowMyWordList(self, event):
-##       print "My words"
-##       if self.activeMyWordsWindow:
-##           return
-            
-##       self.myWordsWindow = MyWordsWindow(self, -1, _("My Words"),
-##                                          size=(300, 400),
-##                                          style=wxDEFAULT_FRAME_STYLE)
-##       self.myWordsWindow.CentreOnScreen()
-##       self.myWordsWindow.Show(True)
-##       self.activeMyWordsWindow = True 
-
       
    def onShowPrefsWindow(self, event):
       try:
@@ -1069,18 +1053,20 @@ For more information visit project's homepage on
          self.prefsWindow.CentreOnScreen()
          self.prefsWindow.Show(True)
       except Exception, e:
-         print "ERROR Unable to show prefs window: %s" % e
+         systemLog(ERROR, "Unable to show preferences window: %s" % e)
          self.SetStatusText("Error occured, please contact developers (%s)" \
                             % e)
+         title = errortype.OPENDICT_BUG.getMessage()
+         msg = errortype.OPENDICT_BUG.getLongMessage()
+         errorwin.showErrorMessage(title, msg)
          
 
    def onDefault(self, event):
-      print "DEBUG MainWindow: menu item selected, id:", event.GetId()
       # FIXME: Bad way. Try setting a few constants for each type
       # of dictionary and then check this type instead of IDs.
 
       eventID = event.GetId()
-      print "DEBUG Event ID = %d" % eventID
+      debugLog(DEBUG, "Event ID = %d" % eventID)
       
       if eventID in self.app.config.ids.keys():
          dictionary = self.app.dictionaries.get(self.app.config.ids.get(eventID))
@@ -1164,7 +1150,7 @@ For more information visit project's homepage on
          try:
             index = plaindict.loadIndex(dictInstance)
             self.activeDictionary.setIndex(index)
-            print "Index loaded:", index
+            #debugLog(INFO, "Index loaded: %s" % index)
          except Exception, e:
             traceback.print_exc()
             title = _("Error")
@@ -1184,13 +1170,13 @@ For more information visit project's homepage on
    def loadPlugin(self, name):
       """Sets plugin as currently used dictionary"""
 
-      print "Loading plugin '%s'..." % name
+      systemLog(INFO, "Loading plugin '%s'..." % name)
       self.entry.Disable()
       self.dictName = name
       self.activeDictionary = self.app.dictionaries.get(name)
       self.checkIfNeedsList()
-      print "Dictionary instance: %s" % self.activeDictionary
-      self.SetTitle("%s - OpenDict" % name)
+      debugLog(INFO, "Dictionary instance: %s" % self.activeDictionary)
+      self.SetTitle("%s - OpenDict" % name) # FIXME: use template
       self.entry.Enable(1)
       self.SetStatusText("Done") # TODO: Set something more useful
       self.htmlWin.SetPage("")
@@ -1199,7 +1185,6 @@ For more information visit project's homepage on
 
    # FIXME: deprecated, update!
    def loadRegister(self, name):
-      #print "INFO Loading '%s'..." % name
 
       self.SetTitle("%s - OpenDict" % name) # TODO: should be set after loading
       item = self.app.config.registers[name]
@@ -1231,6 +1216,7 @@ For more information visit project's homepage on
 
    # FIXME: Deprecated
    def loadGroup(self, name):
+      raise Exception, "mainwin.py:loadGroup() is deprecated"
       print "INFO Loading '%s'..." % name
       self.SetTitle("%s - OpenDict" % name)
 
@@ -1246,10 +1232,10 @@ For more information visit project's homepage on
 
       if self.activeDictionary:
          self.activeDictionary.setEncoding(self.app.config.encoding)
-         print "Dictionary encoding set to %s" \
-               % self.activeDictionary.getEncoding()
+         systemLog(INFO, "Dictionary encoding set to %s" \
+               % self.activeDictionary.getEncoding())
          
-      self.SetStatusText(_("New encoding will be applied for the next search results"))
+      #self.SetStatusText(_("Selected encoding will be used "))
 
 
    def changeFontFace(self, name):
@@ -1262,7 +1248,7 @@ For more information visit project's homepage on
    def changeFontSize(self, name):
       
       fontSize = int(name) * 10
-      print "INFO Setting font size %d" % fontSize
+      systemLog(INFO, "Setting font size %d" % fontSize)
       self.app.config.fontSize = fontSize
       self.updateHtmlScreen()
 
@@ -1278,7 +1264,6 @@ For more information visit project's homepage on
    def onIncreaseFontSize(self, event):
       """Increase font size"""
 
-      print "Increase"
       self.app.config.fontSize += 2
       self.updateHtmlScreen()
 
@@ -1286,7 +1271,6 @@ For more information visit project's homepage on
    def onDecreaseFontSize(self, event):
       """Decrease font size"""
 
-      print "Decrease"
       self.app.config.fontSize -= 2
       self.updateHtmlScreen()
 
@@ -1295,12 +1279,12 @@ For more information visit project's homepage on
       """Set normal font size"""
 
       # TODO: define somewhere else
-      print "Normal"
       self.app.config.fontSize = 10
       self.updateHtmlScreen()
 
 
    def checkEncMenuItem(self, name):
+      """Select menu item defined by name"""
       
       ename = ""
       for key in misc.encodings:
@@ -1308,9 +1292,9 @@ For more information visit project's homepage on
             ename = key
             break
          
-      print "Encoding name to save: '%s'" % ename
+      debugLog(DEBUG, "Encoding name to select: '%s'" % ename)
       if len(ename) == 0:
-         print "ERROR Something wrong with encodings!"
+         systemLog(ERROR, "Something wrong with encodings (name == None)")
          return
       
       self.menuEncodings.FindItemById(self.menuEncodings.FindItem(ename)).Check(1)
@@ -1373,7 +1357,7 @@ For more information visit project's homepage on
    def onManual(self, event):
       """Shows Manual window"""
 
-      print "INFO Manual function is not impelemented yet"
+      systemLog(WARNING, "Manual function is not impelemented yet")
       
 
    def onLicense(self, event):
@@ -1401,7 +1385,6 @@ For more information visit project's homepage on
    def onWordSelected(self, event):
       """Is called when word list item is selected"""
 
-      #print "Word selected: " + event.GetString()
       self.__searchedBySelecting = 1
       self.SetStatusText(_("Searching..."))
       #self.buttonStop.Enable(1)
@@ -1415,7 +1398,6 @@ For more information visit project's homepage on
 
    def createListPanel(self):
       self.panelList = wxPanel(self.splitter, -1)
-      #sbList = wxStaticBox(panelList, -1, _("Alternatives"))
       sbSizerList = wxStaticBoxSizer(wxStaticBox(self.panelList, -1, 
                                                  _("Word List")), 
                                      wxVERTICAL)
@@ -1430,13 +1412,13 @@ For more information visit project's homepage on
    def hideWordList(self):
       """Hides word list"""
 
-      print "DEBUG Hiding word list..."
+      systemLog(DEBUG, "Hiding word list...")
       self.splitter.SetSashPosition(0)
       self.splitter.Unsplit(self.panelList)
       self.wlHidden = True
 
       # And change the button pixmap
-      print "DEBUG Setting unhide.png icon..."
+      debugLog(DEBUG, "Setting unhide.png icon...")
       bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "unhide.png"),
                      wxBITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)
@@ -1446,14 +1428,14 @@ For more information visit project's homepage on
    def unhideWordList(self):
       """Shows word list"""
 
-      print "DEBUG Showing word list..."
+      systemLog(DEBUG, "Showing word list...")
       self.createListPanel()
       self.splitter.SplitVertically(self.panelList, self.panelHtml)
       self.splitter.SetSashPosition(self.app.config.sashPos)
       self.wlHidden = False
 
       # And change the pixmap
-      print "DEBUG Setting hide.png icon..."
+      debugLog(DEBUG, "Setting hide.png icon...")
       bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "hide.png"),
                      wxBITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)
@@ -1465,9 +1447,10 @@ For more information visit project's homepage on
 
       try:
          self.printer.PrintText(self.htmlCode)
-      except:
+      except Exception, e:
          self.SetStatusText(_("Failed to print"))
-         misc.printError()
+         systemLog(ERROR, "Unable to print translation (%s)" % e)
+         traceback.print_exc()
 
 
    def onPreview(self, event):
@@ -1475,6 +1458,7 @@ For more information visit project's homepage on
 
       try:
          self.printer.PreviewText(self.htmlCode)
-      except:
+      except Exception, e:
+         systemLog(ERROR, "Unable to preview translation (%s)" % e)
          self.SetStatusText(_("Page preview failed"))
-         misc.printError()
+         traceback.print_exc()

@@ -488,6 +488,7 @@ class PluginManagerWindow(wxFrame):
            self.mainWin.menuDict.Delete(idDictMenuItem)
                
        self.buttonRemove.Disable()
+       del self.app.dictionaries[dictName]
        
 
    def onClose(self, event):

@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
+#
 # OpenDict
-# Copyright (c) 2003 Martynas Jocius <mjoc@delfi.lt>
+# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA
 #
-# Module: parser
 
 import time
 import string
@@ -28,42 +26,17 @@ import traceback
 import xml.parsers.expat
 from wxPython.wx import wxGetApp
 
-#from misc import errors
 from extra import dictclient
 from extra import dictdlib
 import info
 import misc
 import errortype
 import meta
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
 #WORD_BG = "#cad1e5" # Normal blue
 WORD_BG = "#dde2f1" # Bright blue
-
-# TODO:
-# 1. Remove wx from this module
-# 2. Add start() stop() methods to parser classes
-# 3. Apply new error system
-
-
-# TODO: Check algorithm
-## def binarySearchIndex(data, word):
-
-##    sub = data
-
-##    while len(sub) > 1:
-##       index = len(sub) / 2
-##       #w = re.findall("\<u\>(.*?)\<\/u\>", sub[index])[0]
-##       w = sub[index]
-##       c = cmp(w, word)
-##       if c == -1:
-##          sub = sub[index:]
-##       elif c == 1:
-##          sub = sub[:index]
-##       else:
-##          break
-
-##       return data.index(sub[0])
 
 
 class SlowoParser(meta.Dictionary):
@@ -93,7 +66,7 @@ class SlowoParser(meta.Dictionary):
    def start(self):
       """Open file handle"""
 
-      print "DEBUG Opening file %s" % self.filePath
+      debugLog(DEBUG, "Opening file %s" % self.filePath)
       self.fd = open(self.filePath)
 
 
@@ -101,7 +74,7 @@ class SlowoParser(meta.Dictionary):
       """Close file handle"""
 
       try:
-         print "DEBUG Closing file..."
+         debugLog(DEBUG, "Closing file %s" % self.filePath)
          self.fd.close()
       except:
          pass
@@ -191,8 +164,8 @@ class SlowoParser(meta.Dictionary):
       if word_lowered[:2] in self.index.keys():
          position = self.index[word_lowered[:2]]
 
-      print "DEBUG Index: %s->%d" % (word_lowered[:2], position)
-      print "DEBUG SlowoParser: Seeking to %d" % position
+      debugLog(DEBUG, "Index: %s->%d" % (word_lowered[:2], position))
+      debugLog(DEBUG, "SlowoParser: Seeking to %d" % position)
       
       self.fd.seek(position)
 
@@ -263,7 +236,7 @@ class SlowoParser(meta.Dictionary):
          elif len(words):
             break
 
-      print "%d lines scanned" % _linesRead
+      debugLog(DEBUG, "%d lines scanned" % _linesRead)
       
       if not found:
          if words:
@@ -282,8 +255,8 @@ class SlowoParser(meta.Dictionary):
       result.setTranslation(translation)
       result.setWordList(words)
 
-      print "DEBUG SlowoParser: search took %f seconds" \
-            % (time.time() - _start)
+      debugLog(DEBUG, "SlowoParser: search took %f seconds" \
+            % (time.time() - _start))
 
       return result
 
@@ -319,19 +292,15 @@ class MovaParser(meta.Dictionary):
    def start(self):
       """Open file handle"""
 
-      print "DEBUG Opening file %s" % self.filePath
+      debugLog(DEBUG, "Opening file %s" % self.filePath)
       self.fd = open(self.filePath)
-
-      # TODO: Will be indexed
-      #self.data = self.fd.readlines()
-      #print "%d lines read" % len(self.data)
       
 
    def stop(self):
       """Close file handle"""
 
       try:
-         print "DEBUG Closing file..."
+         debugLog(DEBUG, "Closing file %s" % self.filePath)
          self.fd.close()
       except:
          pass
@@ -426,9 +395,8 @@ class MovaParser(meta.Dictionary):
       if word_lowered[:2] in self.index.keys():
          position = self.index[word_lowered[:2]]
 
-      print "DEBUG Index: %s->%d" % (word_lowered[:2], position)
-
-      print "DEBUG MovaParser: Seeking to %d" % position
+      debugLog(DEBUG, "Index: %s->%d" % (word_lowered[:2], position))
+      debugLog(DEBUG, "MovaParser: Seeking to %d" % position)
       self.fd.seek(position)
 
       html = []
@@ -471,7 +439,7 @@ class MovaParser(meta.Dictionary):
          elif len(words):
             break
 
-      print "%d lines scanned" % _linesRead
+      debugLog(DEBUG, "%d lines scanned" % _linesRead)
       
       if not found:
          if words:
@@ -490,7 +458,8 @@ class MovaParser(meta.Dictionary):
       result.setTranslation(translation)
       result.setWordList(words)
 
-      print "DEBUG MovaParser: Search took %f seconds" % (time.time() - _start)
+      debugLog(DEBUG, "MovaParser: Search took %f seconds" \
+               % (time.time() - _start))
 
       return result
 
@@ -504,14 +473,13 @@ class TMXParser(meta.Dictionary):
 
     def __init__(self, filePath):
 
-       print "***"
-       print "*** WARNING:"
-       print "*** TMX implementation is fuzzy and should not be used yet!"
-       print "***"
+       systemLog(WARNING, "***")
+       systemLog(WARNING, "*** WARNING:")
+       systemLog(WARNING, "*** TMX implementation is fuzzy and should " \
+                 "not be used yet!")
+       systemLog(WARNING, "***")
 
-       #self.window = window
        self.name = os.path.splitext(os.path.basename(filePath))[0]
-       #self.needsList = wxGetApp().config.useListWithRegs
        self.needsList = True
        self.encoding = None
 
@@ -534,9 +502,6 @@ class TMXParser(meta.Dictionary):
           fd = open(file)
           parser.Parse(fd.read(), 1)
           fd.close()
-
-       for word in self.mapping.keys():
-           print self.mapping[word]
 
 
     def getType(self):
@@ -610,7 +575,6 @@ class TMXParser(meta.Dictionary):
              self.orig = data
           else:
              self.trans.append(data)
-             #print "TMXParser: data '%s'" % data
 
 
     def search(self, word):
@@ -817,7 +781,7 @@ class DictParser(meta.Dictionary):
 
       if not translation:
          if len(words):
-            print "Retrying search..."
+            debugLog(DEBUG, "Retrying search...")
             _word = words[0]
             orig, translation = self._getTranslation(_word)
             if not translation:
@@ -837,8 +801,8 @@ class DictParser(meta.Dictionary):
       result.setTranslation("".join(html))
       result.setWordList(words)
 
-      print "DEBUG DictParser: Search took % f seconds" \
-            % (time.time() - _start)
+      debugLog(DEBUG, "DictParser: Search took % f seconds" \
+            % (time.time() - _start))
 
       return result
 
@@ -894,26 +858,15 @@ class DictConnection(meta.Dictionary):
                "<meta http-equiv=\"Content-Type\" " \
                "content=\"text/html; charset=%s\">" \
                "</head><body>"
-               #"<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
-               #                                    self.window.app.config.fontFace,
-               #                                    self.window.app.config.fontSize)
-
 
       found = 0
 
       try:
-         #data = conn.match(self.db, "prefix", word)
          data = conn.define(self.db, word)
       except:
           data = []
 
-      #alt = []
-          
       for d in data:
-         #alt.append(d.getdefstr().split("\n")[0])
-         #result += "<p>"+d.getdefstr()
-         #continue
-         
          found = 1
          result += "<table><tr><td bgcolor=\"#cccccc\">" \
                    "<b>%s</b></td></tr></table>" % d.db.getdescription()
@@ -921,11 +874,6 @@ class DictConnection(meta.Dictionary):
          trans = d.getdefstr().split("\n")
          orig = trans[0]
          
-         print "Word:", word, "Orig:", orig
-         
-         #if orig != word:
-         #alt.append(orig)
-
          pron = re.findall("\[(.*?)\]", orig)
          if len(pron) > 0:
             orig = "<b><u>%s</u></b> [<i>%s</i>]<br>" % \
@@ -942,8 +890,6 @@ class DictConnection(meta.Dictionary):
                               "<a href=\"%s\">%s</a>"%(link, link))
          result += "%s<p>" % translation
 
-      #return (result, alt, 0)
-         
       result += "</font></body></html>"
       
       if not found:

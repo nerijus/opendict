@@ -43,7 +43,7 @@ from gui.errorwin import ErrorWindow
 from config import Configuration
 from register import Register
 from plugin import initPlugins, installPlugin
-from logger import systemLog, debugLog, INFO, DEBUG, ERROR
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 import misc
 import info
 import newplugin
@@ -116,8 +116,6 @@ class OpenDictApp(wxApp):
          self.dictionaries[plain.getName()] = plain
          self.config.ids[wx.NewId()] = plain.getName()
 
-      print self.config.ids
-         
          
       # TODO: Remove in the future
       self.reg = Register()
