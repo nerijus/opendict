@@ -22,14 +22,18 @@
 
 from wxPython.wx import *
 from wxPython.lib.rcsizer import RowColSizer
+import wx
 import os
 import codecs
 import traceback
 
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 from misc import encodings, printError
 from parser import TMXParser
+from gui import errorwin
 import info
 import dicteditor
+import enc
 
 _ = wxGetTranslation
 
@@ -102,13 +106,15 @@ class DictEditorWindow(wxFrame):
                 parent.changed = 1
                 self.Destroy()
             else:
-                self.SetStatusText(_("Error: word \"%s\" already exists") % word)
+                self.SetStatusText(_("Error: word \"%s\" already exists") \
+                                   % word)
 
         def onClose(self, event):
             self.Destroy()
 
 
     class EditWordWindow(wxFrame):
+        """Word editor window"""
 
         def __init__(self, word, parent, id, title, pos=wxDefaultPosition,
                  size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
@@ -116,29 +122,77 @@ class DictEditorWindow(wxFrame):
 
             vboxMain = wxBoxSizer(wxVERTICAL)
             hboxButtons = wxBoxSizer(wxHORIZONTAL)
-            boxInfo = RowColSizer()
+            self.boxInfo = RowColSizer()
 
 
-            boxInfo.Add(wxStaticText(self, -1, _("Word: "), pos=(-1, -1)),
-                        flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
-                        row=0, col=0, border=1)
+            self.boxInfo.Add(wxStaticText(self, -1, _("Word: "), pos=(-1, -1)),
+                             flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
+                             row=0, col=0, border=1)
 
             self.entryWord = wxTextCtrl(self, -1, word)
             self.entryWord.Disable()
-            boxInfo.Add(self.entryWord, flag=wxEXPAND, row=0, col=1, border=1)
+            self.boxInfo.Add(self.entryWord, flag=wxEXPAND,
+                             row=0, col=1, border=1)
 
-            boxInfo.Add(wxStaticText(self, -1, _("Translation: ")),
-                        flag=wxALIGN_RIGHT | wxALIGN_TOP,
-                        row=1, col=0, border=1)
 
-            self.text = wxTextCtrl(self, -1,
-                                   "\n".join(parent.parser.mapping[word]),
-                                   size=(-1, 140),
-                                   style=wxTE_MULTILINE)
-            boxInfo.Add(self.text, flag=wxEXPAND, row=1, col=1, border=1)
+            self.transLabels = {}
+            self.textEntries = {}
+            
 
-            boxInfo.AddGrowableCol(1)
-            vboxMain.Add(boxInfo, 1, wxALL | wxEXPAND, 2)
+            unit = parent.editor.getUnit(word)
+            translations = unit.getTranslations()
+            for trans in translations:
+                comment = translations[trans]
+                if comment:
+                    transcomm = "%s // %s" % (trans, comment)
+                else:
+                    transcomm = trans
+
+                try:
+                    transcomm = unicode(transcomm, "UTF-8")
+                except Exception, e:
+                    systemLog(ERROR, "Unable to encode translation " \
+                              "in UTF-8: %s" % e)
+                    
+                    title = _("Character Encoding Error")
+                    msg = _("OpenDict Editor works only with dictionaries " \
+                            "encoded in UTF-8 encoding.")
+
+                    errorwin.showErrorMessage(title, msg)
+                    return
+                
+
+                transcomm = enc.toWX(transcomm)
+##                 transLabel = wxStaticText(self, -1, _("Translation #%d: " \
+##                                                       % (len(self.textEntries)+1)))
+##                 self.transLabels[len(self.transLabels)] = transLabel
+##                 self.boxInfo.Add(transLabel,
+##                                  flag=wxALIGN_RIGHT | wxALIGN_TOP,
+##                                  row=len(self.transLabels), col=0, border=1)
+                    
+##                 text = wxTextCtrl(self, -1,
+##                                   transcomm,
+##                                   size=(100, -1))
+##                                   #style=wxTE_MULTILINE)
+##                 self.textEntries[len(self.textEntries)] = text
+                
+##                 self.boxInfo.Add(text, flag=wxEXPAND,
+##                                  row=len(self.textEntries),
+##                                  col=1, border=1)
+                self.onAddEmptyField(None)
+                entry = self.textEntries.get(max(self.textEntries.keys()))
+                if entry:
+                    entry.SetValue(transcomm)
+                else:
+                    print entry
+
+            
+            self.boxInfo.AddGrowableCol(1)
+            vboxMain.Add(self.boxInfo, 1, wxALL | wxEXPAND, 2)
+
+            idAdd = wx.NewId()
+            self.buttonAdd = wxButton(self, idAdd, _("Add translation field"))
+            vboxMain.Add(self.buttonAdd, 0, wxALL | wxALIGN_RIGHT, 2)
 
             self.buttonOK = wxButton(self, 6050, _("OK"))
             hboxButtons.Add(self.buttonOK, 1, wxALL, 1)
@@ -146,14 +200,42 @@ class DictEditorWindow(wxFrame):
             self.buttonCancel = wxButton(self, 6051, _("Cancel"))
             hboxButtons.Add(self.buttonCancel, 1, wxALL, 1)
 
-            vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
+            vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 2)
 
             self.SetSizer(vboxMain)
             self.Fit()
-            self.SetSize((300, -1))
+            self.SetSize((500, -1))
 
-            EVT_BUTTON(self, 6050, self.onSave)
-            EVT_BUTTON(self, 6051, self.onClose)
+            self.Bind(wx.EVT_BUTTON, self.onAddEmptyField, self.buttonAdd)
+            self.Bind(wx.EVT_BUTTON, self.onSave, self.buttonOK)
+            self.Bind(wx.EVT_BUTTON, self.onClose, self.buttonCancel)
+            
+
+
+        def onAddEmptyField(self, event):
+            """Add empty translation field"""
+
+            print "Adding new"
+            transLabel = wxStaticText(self, -1, _("Translation #%d: " \
+                                                  % (len(self.textEntries)+1)))
+            self.transLabels[len(self.transLabels)] = transLabel
+            self.boxInfo.Add(transLabel,
+                             flag=wxALIGN_RIGHT | wxALIGN_TOP,
+                             row=len(self.transLabels), col=0, border=1)
+            
+            text = wxTextCtrl(self, -1,
+                              "",
+                              size=(100, -1))
+            
+            self.textEntries[len(self.textEntries)] = text
+            
+            self.boxInfo.Add(text, flag=wxEXPAND,
+                             row=len(self.textEntries),
+                             col=1, border=1)
+            
+            self.Fit()
+            self.SetSize((500, -1))
+                
 
         def onSave(self, event):
            
@@ -165,8 +247,11 @@ class DictEditorWindow(wxFrame):
 
             self.Destroy()
 
+
         def onClose(self, event):
             self.Destroy()
+
+
 
     # IDs range: 6000-6003
     class ConfirmExitWindow(wxDialog):
@@ -344,7 +429,7 @@ class DictEditorWindow(wxFrame):
             return
 
         window = self.EditWordWindow(word, self, -1, _("Edit Word"),
-                                     size=(-1, -1), pos=(-1, -1),
+                                     size=(-1, -1),
                                      style=wxDEFAULT_FRAME_STYLE)
         window.CentreOnScreen()
         window.Show(True) 
