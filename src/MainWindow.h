@@ -83,9 +83,9 @@ class MainWindow: public wxFrame
 
       void show_preferences(wxCommandEvent& event);
 
-      void update_words_list(wxListBox*, DictParser*, char);
+      void update_words_list(wxListBox*, DictParser*, wxChar);
       void set_letter_count_list(wxComboBox*, DictParser*);
-      void update_letter_count_list(wxComboBox*, DictParser*, const char&);
+      void update_letter_count_list(wxComboBox*, DictParser*, const wxChar&);
       void update_all_after_search(const wxString&);
 
       DictParser* dict;

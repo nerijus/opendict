@@ -27,14 +27,14 @@ class DictLetterList: public wxComboBox
    public:
       DictLetterList(wxWindow *parent,
                      wxWindowID id = -1,
-                     const wxString &value = "",
+                     const wxString &value = _T(""),
                      const wxPoint &pos = wxDefaultPosition,
                      const wxSize &size = wxDefaultSize,
                      int n = 0,
                      const wxString letters[] = 0,
                      long style = 0,
                      const wxValidator &validator = wxDefaultValidator,
-                     const wxString &name = "letter");
+                     const wxString &name = _T("letter"));
 };
 
 #endif

@@ -21,7 +21,7 @@
 
 bool OpenDict::OnInit()
 {
-   mainWindow = new MainWindow("OpenDict 0.1",
+   mainWindow = new MainWindow(_T("OpenDict 0.1"),
                                wxPoint(-1, -1),
                                wxSize(500, 400));
 

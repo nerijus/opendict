@@ -37,10 +37,10 @@ SlowoParser::SlowoParser(const wxString &fname,
    if (enc.Length() != 0)
      default_encoding = enc;
    else
-     default_encoding = "iso8859-1";
+     default_encoding = _T("iso8859-1");
 
    sbar = status_bar;
-   sbar->SetStatusText("Parsing...");
+   sbar->SetStatusText(_T("Parsing..."));
 
    wxTextFile *file = new wxTextFile();
 
@@ -111,7 +111,7 @@ SlowoParser::SlowoParser(const wxString &fname,
          first_letter_array.Add(c);
          letter_starts_at_line_array.Add(lnumber);
 
-	 tmp.Printf("%c (%d)", l_char, l_count); 
+	 tmp.Printf(_T("%c (%d)"), l_char, l_count); 
 	 letter_count->Add(tmp);
 	 l_char = c;
 	 l_count = 0;
@@ -132,7 +132,7 @@ SlowoParser::SlowoParser(const wxString &fname,
    file->Close();
    wxLogDebug(_T("done"));
 
-   sbar->SetStatusText("");
+   sbar->SetStatusText(_T(""));
 };
 
 /*
@@ -141,7 +141,7 @@ SlowoParser::SlowoParser(const wxString &fname,
  */
 wxString SlowoParser::find(const wxString &keyword)
 {
-  wxString sbar_msg = "Searching... ";
+  wxString sbar_msg = _T("Searching... ");
   sbar->SetStatusText(sbar_msg);
 
   wxLogDebug(_T("Searching for \"%s\"... "), keyword.c_str());
@@ -183,10 +183,10 @@ wxString SlowoParser::find(const wxString &keyword)
 
    // Start new HTML page, text encoding must be unicode, 
    // I'm doing different just for now.
-   result = "<html>\n<head>\n<meta http-equiv=\"Content-Type\" ";
-   result += "content=\"text/html; charset=" + default_encoding + "\">\n";
-   result += "</head>\n<body>\n";
-   result += "<font face=\"fixed\" size=\"2\">\n";
+   result = _T("<html>\n<head>\n<meta http-equiv=\"Content-Type\" ");
+   result += _T("content=\"text/html; charset=") + default_encoding + _T("\">\n");
+   result += _T("</head>\n<body>\n");
+   result += _T("<font face=\"fixed\" size=\"2\">\n");
 
    bool searching = true;
    while(searching && file->Eof() == FALSE)
@@ -217,58 +217,58 @@ wxString SlowoParser::find(const wxString &keyword)
          {
             if (line[i] == '=')
             {
-               result += "<b>";
+               result += _T("<b>");
 	       orig = rem_space(line.SubString(0, i-1));
 	       if (! orig.Contains(keyword))
 		 {
 		   break;
 		 }
                result += orig;
-               result += "</b>:<br>\n";
+               result += _T("</b>:<br>\n");
                li = i + 1;
             }
    
-            if (line[i] == ';')
+            if (line[i] == _T(';'))
             {
                if (not_first_trans)
-                  result += ", ";
+                  result += _T(", ");
                result += rem_space(line.SubString(li, i-1));
 	       
                li = i + 1;
                not_first_trans = true;
             }
 
-            if (line[i] == '/' && line[i+1] == '/')
+            if (line[i] == _T('/') && line[i+1] == _T('/'))
             {
                result += rem_space(line.SubString(li, i-1));
-               result += "<br>\n(<i>";
+               result += _T("<br>\n(<i>");
                result += rem_space(line.SubString(i+2, line.Length()-2));
 	       
-               result += "</i>)\n<p>\n";
+               result += _T("</i>)\n<p>\n");
                break;
 	    }
          }
 
-	 if (line.Find("//") == -1)
-	   result += "<p>\n";
+	 if (line.Find(_T("//")) == -1)
+	   result += _T("<p>\n");
 
 	 not_first_trans = false;
       }
    }
 
-   result += "</font>\n";
-   result += "</body></html>";
+   result += _T("</font>\n");
+   result += _T("</body></html>");
 
    file->Close();
 
    if (found)
      {
-       sbar_msg.Printf("%d found", results_found);
+       sbar_msg.Printf(_T("%d found"), results_found);
        sbar->SetStatusText(sbar_msg);
      }
    else
      {
-       sbar_msg = "\""+keyword+"\" not found";
+       sbar_msg = _T("\"")+keyword+_T("\" not found");
        sbar->SetStatusText(sbar_msg);
      }
 

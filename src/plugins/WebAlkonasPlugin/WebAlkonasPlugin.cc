@@ -52,15 +52,15 @@ wxString WebAlkonasPlugin::find(const wxString &keyword)
   //if (url->GetProtocolName() == "http")
   //  url->GetProtocol.SetHeader("Host", "http://127.0.0.1/");
   
-  if (! http->Connect("127.0.0.1"))
+  if (! http->Connect(_T("127.0.0.1")))
     {
       wxLogDebug(_T("Can't connect"));
-      return "";
+      return _T("");
     }
   
 
-  http->SetHeader("Content-type", "text/html");
-  wxLogDebug(_T("Header: %s"), http->GetHeader("Content-type").c_str());
+  http->SetHeader(_T("Content-type"), _T("text/html"));
+  wxLogDebug(_T("Header: %s"), http->GetHeader(_T("Content-type")).c_str());
   //cout<<"URL: "<<url->GetURL().c_str()<<endl;
   //cout<<"Protocol: "<<url->GetProtocolName().c_str()<<endl;
   //cout<<"Path: "<<url->GetPath().c_str()<<endl;
@@ -94,7 +94,7 @@ wxString WebAlkonasPlugin::find(const wxString &keyword)
 	  }
 	}
 
-      return "";
+      return _T("");
     }
 
   //cout<<"Protocol name: "<<http->GetProtocolName().c_str()<<endl;
@@ -102,18 +102,18 @@ wxString WebAlkonasPlugin::find(const wxString &keyword)
   if (! stream)
     {
       wxLogDebug(_T("Seems to be no stream..."));
-      return "";
+      return _T("");
     }
 
   wxLogDebug(_T("Size: %u"), stream->GetSize());
   if (stream->GetSize() == (unsigned)-1)
     {
       wxLogDebug(_T("Unknown stream's size"));
-      return "";
+      return _T("");
     }
 
   wxString result;
-  char data[33];
+  wxChar data[33];
   int bytes;
 
   while((bytes = (stream->Read(data, 32)).LastRead()) > 0)
@@ -130,7 +130,7 @@ wxString WebAlkonasPlugin::find(const wxString &keyword)
 /*
  * Returns the first letter to use when loading dictionary
  */
-char WebAlkonasPlugin::dict_start_letter()
+wxChar WebAlkonasPlugin::dict_start_letter()
 {
    return first_letter;
 }
@@ -169,7 +169,7 @@ wxString WebAlkonasPlugin::rem_space(const wxString& bad_string)
  * toupper('c') == 'C'
  * toupper('7') != '7'
  */
-const char WebAlkonasPlugin::conv_to_upper(const char& c)
+const wxChar WebAlkonasPlugin::conv_to_upper(const wxChar& c)
 {
   if (isalpha(c))
     return toupper(c);

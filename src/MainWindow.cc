@@ -49,48 +49,48 @@ MainWindow::MainWindow(const wxString& title,
    wxString choices[] = { };
    wxString ltrs[] = { };
 
-   wxMenu* fileMenu = new wxMenu("", wxMENU_TEAROFF);
-   wxMenu* dictMenu = new wxMenu("", wxMENU_TEAROFF);
-   wxMenu* piMenu = new wxMenu("", wxMENU_TEAROFF);
-   wxMenu* utMenu = new wxMenu("", wxMENU_TEAROFF);
-   wxMenu* setMenu = new wxMenu("", wxMENU_TEAROFF);
-   wxMenu* helpMenu = new wxMenu("", wxMENU_TEAROFF);
+   wxMenu* fileMenu = new wxMenu(_T(""), wxMENU_TEAROFF);
+   wxMenu* dictMenu = new wxMenu(_T(""), wxMENU_TEAROFF);
+   wxMenu* piMenu = new wxMenu(_T(""), wxMENU_TEAROFF);
+   wxMenu* utMenu = new wxMenu(_T(""), wxMENU_TEAROFF);
+   wxMenu* setMenu = new wxMenu(_T(""), wxMENU_TEAROFF);
+   wxMenu* helpMenu = new wxMenu(_T(""), wxMENU_TEAROFF);
    
    fileMenu->Append(OPEN_SLOWO_DICT, 
-		    "Open &Slowo dictionary\tCtrl-S", "Open Slowo dicitonary");
+		    _T("Open &Slowo dictionary\tCtrl-S"), _T("Open Slowo dicitonary"));
    fileMenu->Append(OPEN_MOVA_DICT, 
-		    "Open &Mova dictionary\tCtrl-M", "Open Mova dicitonary");
+		    _T("Open &Mova dictionary\tCtrl-M"), _T("Open Mova dicitonary"));
    fileMenu->Append(OPEN_PO_FILE, 
-		    "Open &Po translation file\tCtrl-P", "Open Po translation file");
+		    _T("Open &Po translation file\tCtrl-P"), _T("Open Po translation file"));
    fileMenu->AppendSeparator();
    fileMenu->Append(CLOSE_OPENED, 
-		    "Close opened dictionary", "Close opened dictionary");
+		    _T("Close opened dictionary"), _T("Close opened dictionary"));
    fileMenu->AppendSeparator();
-   fileMenu->Append(QUIT, "E&xit\tCtrl-X", "Exit program");
+   fileMenu->Append(QUIT, _T("E&xit\tCtrl-X"), _T("Exit program"));
 
    dictMenu->AppendSeparator();
    dictMenu->Append(ADD_DICT, 
-		    "Add new dictionary...\tCtrl-D", "Add new dictionary");
+		    _T("Add new dictionary...\tCtrl-D"), _T("Add new dictionary"));
 
    utMenu->AppendSeparator();
-   utMenu->Append(0, "Add new utility...\tCtrl-U", "Add new utility program");
+   utMenu->Append(0, _T("Add new utility...\tCtrl-U"), _T("Add new utility program"));
    
    piMenu->Append(OPEN_WEB_ALKONAS_DICT,
-		 "Web Alkonas", "Alkonas internete");
+		 _T("Web Alkonas"), _T("Alkonas internete"));
    piMenu->AppendSeparator();
-   piMenu->Append(0, "Add new plugin\tCtrl-L", "Add new plugin");
-   piMenu->Append(0, "Edit plugins", "Edit plugins");
+   piMenu->Append(0, _T("Add new plugin\tCtrl-L"), _T("Add new plugin"));
+   piMenu->Append(0, _T("Edit plugins"), _T("Edit plugins"));
 
-   setMenu->Append(PREFS, "Preferences...\tCtrl-P", "Preferences");
+   setMenu->Append(PREFS, _T("Preferences...\tCtrl-P"), _T("Preferences"));
 
-   wxMenu* encodings = new wxMenu("", wxMENU_TEAROFF);
+   wxMenu* encodings = new wxMenu(_T(""), wxMENU_TEAROFF);
    wxString tmp;
    for (int i=0, id=100; i<ENC; i++, id++) {
-     tmp = font_encodings[i][1] + " (" + font_encodings[i][0] + ")";
+     tmp = font_encodings[i][1] + _T(" (") + font_encodings[i][0] + _T(")");
      encodings->Append(id, tmp, font_encodings[i][1]);
    }
-   setMenu->Append(0, "Change font encoding", encodings, 
-		   "Change font encoding");
+   setMenu->Append(0, _T("Change font encoding"), encodings, 
+		   _T("Change font encoding"));
 
    /*
    wxMenu* families = new wxMenu("", wxMENU_TEAROFF);
@@ -99,16 +99,16 @@ MainWindow::MainWindow(const wxString& title,
    setMenu->Append(0, "Change font family", families, "Change font family");
    */
 
-   helpMenu->Append(ABOUT, "About...\tCtrl-A", "About");
+   helpMenu->Append(ABOUT, _T("About...\tCtrl-A"), _T("About"));
    
    wxMenuBar* menu_bar = new wxMenuBar();
 
-   menu_bar->Append(fileMenu, "&File");
-   menu_bar->Append(dictMenu, "&Dictionaries");
-   menu_bar->Append(piMenu, "&Plugins");
-   menu_bar->Append(utMenu, "&Utilities");
-   menu_bar->Append(setMenu, "&Settings");
-   menu_bar->Append(helpMenu, "&Help");
+   menu_bar->Append(fileMenu, _T("&File"));
+   menu_bar->Append(dictMenu, _T("&Dictionaries"));
+   menu_bar->Append(piMenu, _T("&Plugins"));
+   menu_bar->Append(utMenu, _T("&Utilities"));
+   menu_bar->Append(setMenu, _T("&Settings"));
+   menu_bar->Append(helpMenu, _T("&Help"));
 
    /*
     * Basic widgets
@@ -117,12 +117,12 @@ MainWindow::MainWindow(const wxString& title,
 //   wxString findw[] = {};
 
    find_entry = new wxTextCtrl(this,
-			       FIND_ENTER, "",
+			       FIND_ENTER, _T(""),
 			       wxDefaultPosition, 
 			       wxSize(330, -1),
 			       wxSUNKEN_BORDER | wxTE_PROCESS_ENTER);
 
-   letter_list = new DictLetterList(this, LETTER_SELECTED, "", 
+   letter_list = new DictLetterList(this, LETTER_SELECTED, _T(""),
 				    wxDefaultPosition,
 				    wxDefaultSize,
 				    0, ltrs,
@@ -142,10 +142,12 @@ MainWindow::MainWindow(const wxString& title,
    //htmlParser->SetOutputEncoding(wxFontEncoding(wxFONTENCODING_ISO8859_13));
    
    word_trans->SetBorders(5);
-   word_trans->SetPage("");
+   word_trans->SetPage(_T(""));
 
+#if !wxUSE_UNICODE
    html_parser->SetInputEncoding(html_parser->GetOutputEncoding());
-   html_parser->SetFontFace("courier");
+#endif
+   html_parser->SetFontFace(_T("courier"));
    html_parser->SetFontSize(1);
 
    // Bitmap for clear button
@@ -163,7 +165,7 @@ MainWindow::MainWindow(const wxString& title,
 
    hbox_find->Add(new wxBitmapButton(this, CLEAR, clear_bmp), 0, wxALL, 2);
    hbox_find->Add(find_entry, 1, wxALL | wxEXPAND, 1);
-   hbox_find->Add(new wxButton(this, FIND, "Find"), 0, wxALL, 3);
+   hbox_find->Add(new wxButton(this, FIND, _T("Find")), 0, wxALL, 3);
 
    // hbox for another stuff
    wxBoxSizer* hbox_word = new wxBoxSizer(wxHORIZONTAL);
@@ -242,7 +244,7 @@ void MainWindow::on_about(wxCommandEvent& WXUNUSED(event))
  */
 void MainWindow::on_clear(wxCommandEvent& WXUNUSED(event))
 {
-  find_entry->SetValue("");
+  find_entry->SetValue(_T(""));
 }
 
 /*
@@ -252,7 +254,7 @@ void MainWindow::on_find(wxCommandEvent& WXUNUSED(event))
 {
   if (dict == NULL)
     {
-      SetStatusText("There is no opened dictionary");
+      SetStatusText(_T("There is no opened dictionary"));
       return;
     } 
 
@@ -261,7 +263,7 @@ void MainWindow::on_find(wxCommandEvent& WXUNUSED(event))
 
   if (word.Length() == 0)
     {
-      SetStatusText("Type a word to search for");
+      SetStatusText(_T("Type a word to search for"));
       return;
     }
 
@@ -295,7 +297,7 @@ void MainWindow::on_change(wxCommandEvent& event)
 	update_all_after_search(this->last_word);
       }
    
-      SetStatusText("Encoding changed to "+enc);
+      SetStatusText(_T("Encoding changed to ")+enc);
     }
 
   /*
@@ -345,7 +347,7 @@ void MainWindow::on_word_selected(wxCommandEvent& WXUNUSED(event))
 void MainWindow::on_letter_selected(wxCommandEvent& WXUNUSED(event))
 {
   wxBeginBusyCursor();
-  char c = this->letter_list->GetString(this->letter_list->GetSelection())[0u];
+  wxChar c = this->letter_list->GetString(this->letter_list->GetSelection())[0u];
   c = toupper(c);
 
   update_words_list(this->word_list, this->dict, c);
@@ -361,8 +363,8 @@ void MainWindow::on_letter_selected(wxCommandEvent& WXUNUSED(event))
 void MainWindow::open_slowo_dict(wxCommandEvent& WXUNUSED(event))
 {
   wxFileDialog* dialog = new wxFileDialog(this, 
-					  "Choose Slowo dictionary file",
-					  ".", "", "Slowo (*.dwa)|*.dwa|All files (*.*)|*.*");
+					  _T("Choose Slowo dictionary file"),
+					  _T("."), _T(""), _T("Slowo (*.dwa)|*.dwa|All files (*.*)|*.*"));
   dialog->Show(TRUE);
 
   wxString file;
@@ -400,7 +402,7 @@ void MainWindow::open_slowo_dict(wxCommandEvent& WXUNUSED(event))
  */
 void MainWindow::open_mova_dict(wxCommandEvent& WXUNUSED(event))
 {wxFileDialog* dialog = new wxFileDialog(this, 
-					  "Choose Mova dictionary file");
+					  _T("Choose Mova dictionary file"));
   dialog->Show(TRUE);
 
   wxString file;
@@ -438,12 +440,12 @@ void MainWindow::open_mova_dict(wxCommandEvent& WXUNUSED(event))
  */
 void MainWindow::open_po_file(wxCommandEvent& WXUNUSED(event))
 {
-  SetStatusText("No Po support yet");
+  SetStatusText(_T("No Po support yet"));
 }
 
 void MainWindow::activate_plugin(wxCommandEvent& WXUNUSED(event))
 {
-  SetStatusText("Online Alkonas dictionary", 1);
+  SetStatusText(_T("Online Alkonas dictionary"), 1);
   this->dict = new WebAlkonasPlugin(GetStatusBar());
 }
 
@@ -453,7 +455,7 @@ void MainWindow::activate_plugin(wxCommandEvent& WXUNUSED(event))
  */
 void MainWindow::add_dict(wxCommandEvent& WXUNUSED(event))
 {
-  SetStatusText("No register system yet");
+  SetStatusText(_T("No register system yet"));
 }
 
 /*
@@ -461,7 +463,7 @@ void MainWindow::add_dict(wxCommandEvent& WXUNUSED(event))
  */
 void MainWindow::show_preferences(wxCommandEvent& WXUNUSED(event))
 {
-  SetStatusText("No preferences window yet");
+  SetStatusText(_T("No preferences window yet"));
 }
 
 /*
@@ -469,7 +471,7 @@ void MainWindow::show_preferences(wxCommandEvent& WXUNUSED(event))
  */
 void MainWindow::update_words_list(wxListBox* list, 
 				   DictParser* dict, 
-				   char letter)
+				   wxChar letter)
 {
   wxLogDebug(_T("Updating words list for letter `%c'"), letter);
   wxString item;
@@ -507,7 +509,7 @@ void MainWindow::set_letter_count_list(wxComboBox* list,
  */
 void MainWindow::update_letter_count_list(wxComboBox* list, 
 					  DictParser* dict, 
-					  const char& c)
+					  const wxChar& c)
 {
   for (unsigned int i=0; i<dict->get_letter_count()->Count(); i++)
     {
@@ -527,7 +529,7 @@ void MainWindow::close_opened_dict(wxCommandEvent& WXUNUSED(event))
 {
   if (! this->dict)
     {
-      SetStatusText("There is no opened dictionary");
+      SetStatusText(_T("There is no opened dictionary"));
       return;
     }
 
@@ -536,18 +538,18 @@ void MainWindow::close_opened_dict(wxCommandEvent& WXUNUSED(event))
   this->word_list->Clear();
 
   this->letter_list->Clear();
-  this->letter_list->SetValue("");
+  this->letter_list->SetValue(_T(""));
 
   this->find_entry->Clear();
-  this->find_entry->SetValue("");
+  this->find_entry->SetValue(_T(""));
 
-  this->word_trans->SetPage("");
+  this->word_trans->SetPage(_T(""));
 
   wxStatusBar* status_bar = GetStatusBar();
 
-  if(status_bar->GetStatusText(1) != "")
-    status_bar->SetStatusText("\""+status_bar->GetStatusText(1)+"\" closed");
-  status_bar->SetStatusText("", 1);
+  if(status_bar->GetStatusText(1) != _T(""))
+    status_bar->SetStatusText(_T("\"")+status_bar->GetStatusText(1)+_T("\" closed"));
+  status_bar->SetStatusText(_T(""), 1);
 
   if (this->dict)
     delete this->dict;

@@ -31,12 +31,12 @@ class DictText: public wxTextCtrl
    public:
       DictText(wxWindow *parent,
                wxWindowID id = -1,
-               const wxString &value = "",
+               const wxString &value = _T(""),
                const wxPoint &pos = wxDefaultPosition,
                const wxSize &size = wxDefaultSize,
                long style = 0,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString &name = "text");
+               const wxString &name = _T("text"));
 };
 
 #endif

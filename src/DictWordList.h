@@ -32,7 +32,7 @@ class DictWordList: public wxListBox
                   const wxString list[] = 0,
                   long style = wxLB_ALWAYS_SB,
                   const wxValidator &validator = wxDefaultValidator,
-                  const wxString &name = "list");
+                  const wxString &name = _T("list"));
 };
 
 #endif

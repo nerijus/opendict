@@ -21,7 +21,7 @@
 #include "images/logo.xpm"
 
 About::About(wxFrame* window)
-  : wxDialog(window, -1, "About")
+  : wxDialog(window, -1, _T("About"))
 {
   wxString msg;
   msg.Printf(_T("OpenDict 0.1\n")
@@ -40,7 +40,7 @@ About::About(wxFrame* window)
   
   vbox->Add(logo, 0, wxALL | wxCENTRE, 5);
   vbox->Add(new wxStaticText(this, -1, msg), 0, wxALL, 10);
-  vbox->Add(new wxButton(this, wxID_CANCEL, "OK"), 1, 
+  vbox->Add(new wxButton(this, wxID_CANCEL, _T("OK")), 1, 
 	    wxALL | wxALIGN_CENTRE, 5);
 
   vbox->Fit(this);

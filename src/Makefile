@@ -1,5 +1,5 @@
-WX_CONFIG_PATH=wx-config
-#WX_CONFIG_PATH=/usr/local/wxWindows.22/bin/wx-config
+#WX_CONFIG_PATH=wx-config
+WX_CONFIG_PATH=/usr/local/wxWindows.gtk2/bin/wx-config
 
 CC = $(shell $(WX_CONFIG_PATH) --cxx)
 CFLAGS = $(shell $(WX_CONFIG_PATH) --cxxflags) -g -Wall

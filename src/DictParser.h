@@ -25,7 +25,7 @@
 
 #ifndef CHAR_VECTOR
 #define CHAR_VECTOR
-WX_DEFINE_ARRAY_INT(char, CharVector);
+WX_DEFINE_ARRAY_INT(wxChar, CharVector);
 #endif
 
 #ifndef LONG_VECTOR
@@ -40,7 +40,7 @@ class DictParser
   virtual ~DictParser() {};
 
   virtual wxString find(const wxString &) = 0;
-  //   virtual char dict_start_letter() = 0;
+  //   virtual wxChar dict_start_letter() = 0;
   //  virtual CharVector first_letter() = 0;
   //  virtual LongVector first_letter_index() = 0;
   virtual wxArrayString* get_words_list() = 0;
@@ -50,7 +50,7 @@ class DictParser
   virtual void set_default_encoding(const wxString&) = 0;
 
   virtual wxString rem_space(wxString&);
-  virtual const char conv_to_upper(const char&) = 0;
+  virtual const wxChar conv_to_upper(const wxChar&) = 0;
 };
 
 #endif
