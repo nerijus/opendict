@@ -274,7 +274,7 @@ class MainWindow(wxFrame):
       menuTools.AppendSeparator()
 
       idUseScan = wx.NewId()
-      menuTools.Append(idUseScan, _("Scan Clipboard For Words"),
+      menuTools.Append(idUseScan, _("Take Words From Clipboard"),
                        _("Scan the clipboard for text to translate"),
                        wx.ITEM_CHECK)
 
