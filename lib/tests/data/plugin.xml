@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin SYSTEM "/usr/share/opendict/conf/plugin.dtd">
+<plugin>
+<name>Sample plugin name ąčę</name>
+<version>1.2.3</version>
+<authors>
+<author name="Sample author name ąčę" email="sample@example.com" />
+</authors>
+<module lang="Python">mymodule.py</module>
+<encoding>UTF-8</encoding>
+<uses-word-list>True</uses-word-list>
+<opendict-version>0.5.8</opendict-version>
+<python-version>2.3</python-version>
+<platforms>
+<platform name="Linux" />
+<platform name="BSD" />
+<platform name="Windows" />
+</platforms>
+<description>This is short or long description ąčę.</description>
+</plugin>
