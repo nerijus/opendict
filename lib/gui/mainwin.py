@@ -333,7 +333,7 @@ class MainWindow(wxFrame):
                                                  _("Translation")),
                                      wxVERTICAL)
       self.htmlWin = HtmlWindow(self.panelHtml, -1, style=wxSUNKEN_BORDER)
-      sbSizerHtml.AddWindow(self.htmlWin, 1, wxALL | wxEXPAND, 0)
+      sbSizerHtml.Add(self.htmlWin, 1, wxALL | wxEXPAND, 0)
       self.panelHtml.SetSizer(sbSizerHtml)
       self.panelHtml.SetAutoLayout(true)
       sbSizerHtml.Fit(self.panelHtml)
@@ -715,7 +715,7 @@ class MainWindow(wxFrame):
          self.entry.Disable()
          name = os.path.split(dialog.GetPaths()[0])[1]
          self.SetStatusText(_("Loading \"%s\"...") % name)
-         self.SetTitle("OpenDict: %s" % name)
+         self.SetTitle("%s - OpenDict" % name)
          try:
             self.timerLoad.Start(self.delay)
             self.load = Process(SlowoParser, dialog.GetPaths()[0],
@@ -737,7 +737,7 @@ class MainWindow(wxFrame):
          self.entry.Disable()
          name = os.path.split(dialog.GetPaths()[0])[1]
          self.SetStatusText(_("Loading \"%s\"...") % name)
-         self.SetTitle("OpenDict: %s" % name)
+         self.SetTitle("%s - OpenDict" % name)
          try:
             self.timerLoad.Start(self.delay)
             self.load = Process(MovaParser, dialog.GetPaths()[0], self)
@@ -759,7 +759,7 @@ class MainWindow(wxFrame):
          self.entry.Disable()
          #self.buttonStop.Enable(1)
          name = os.path.split(dialog.GetPaths()[0])[1]
-         self.SetTitle("OpenDict: %s" % name)
+         self.SetTitle("%s - OpenDict" % name)
          self.SetStatusText(_("Loading \"%s\"...") % name)
 
          try:
@@ -789,7 +789,7 @@ class MainWindow(wxFrame):
             basename = name.replace(".dict.dz", "")
          else:
             basename = name.replace(".dict", "")
-         self.SetTitle("OpenDict: %s" % basename)
+         self.SetTitle("%s - OpenDict" % basename)
 
          self.SetStatusText(_("Loading \"%s\"...") % name)
          # do we need this try/except? I think it does nothing
@@ -983,12 +983,12 @@ class MainWindow(wxFrame):
       self.timerLoad.Start(self.delay)
       self.load = Process(p.load, self)
       self.dictName = name
-      self.SetTitle("OpenDict: %s" % name)
+      self.SetTitle("%s - OpenDict" % name)
 
    def loadRegister(self, name):
       print "Loading '%s'..." % name
 
-      self.SetTitle("OpenDict: %s" % name)
+      self.SetTitle("%s - OpenDict" % name)
       item = self.app.config.registers[name]
       self.dictName = name
       self.entry.Disable()
@@ -1017,7 +1017,7 @@ class MainWindow(wxFrame):
 
    def loadGroup(self, name):
       print "Loading '%s'..." % name
-      self.SetTitle("OpenDict: %s" % name)
+      self.SetTitle("%s - OpenDict" % name)
 
       self.entry.Disable()
       self.timerLoad.Start(self.delay)
@@ -1140,7 +1140,7 @@ class MainWindow(wxFrame):
                                      wxVERTICAL)
       self.wordList = wxListBox(self.panelList, 154, wxPoint(-1, -1),
                                 wxSize(-1, -1), self.list, wxLB_SINGLE)
-      sbSizerList.AddWindow(self.wordList, 1, wxALL | wxEXPAND, 0)
+      sbSizerList.Add(self.wordList, 1, wxALL | wxEXPAND, 0)
       self.panelList.SetSizer(sbSizerList)
       self.panelList.SetAutoLayout(true)
       sbSizerList.Fit(self.panelList)

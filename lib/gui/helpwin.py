@@ -165,7 +165,7 @@ class AboutWindow(wxDialog):
       wxCENTRE, 5)
 
       about = _("""OpenDict %s
-Copyright (c) 2003-2004 Martynas Jocius <mjoc@akl.lt>
+Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 
 Multiplatform free dictionary program for wide
 range of translations.""") % __version__

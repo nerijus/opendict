@@ -28,7 +28,7 @@ import misc
 
 _ = wxGetTranslation
 
-CONNECTION_CHECK_INTERVAL = 100
+CONNECTION_CHECK_INTERVAL = 400
 
 class DictConnWindow(wxFrame):
 
@@ -241,9 +241,9 @@ class DictConnWindow(wxFrame):
                                             db, "")
 
       if db_name != "":
-         title = "OpenDict: %s:%s %s" % (self.server, self.port, db_name)
+         title = "%s:%s %s - OpenDict" % (self.server, self.port, db_name)
       else:
-         title = "OpenDict: %s:%s" % (self.server, self.port)
+         title = "%s:%s - OpenDict" % (self.server, self.port)
       self.app.window.SetTitle(title)
 
       self.app.window.encoding = self.app.config.defaultEnc
