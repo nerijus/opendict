@@ -264,18 +264,33 @@ class MovaParser(meta.Dictionary):
    the search.
    """
 
-   def __init__(self, file):
+   def __init__(self, filePath):
+      """Initialize"""
 
-      #self.window = window
-      self.needsList = wxGetApp().config.useListWithRegs
-      self.fd = open(file)
+      self.filePath = filePath
 
-      assert self.fd.read(1024).find("  ") > -1
-
+      self.needsList = True
       self.encoding = None
-      
-      self.name = os.path.split(file)[1]
+      self.name = os.path.splitext(os.path.basename(filePath))[0]
 
+
+   def start(self):
+      """Open file handle"""
+
+      print "DEBUG Opening file %s" % self.filePath
+      self.fd = open(self.filePath)
+
+      # TODO: Will be indexed
+      self.data = self.fd.readlines()
+      print "%d lines read" % len(self.data)
+      
+
+   def stop(self):
+      """Close file handle"""
+
+      print "DEBUG Closing file..."
+      self.fd.close()
+      
 
    def getType(self):
       """Return dictionary type"""
@@ -310,129 +325,148 @@ class MovaParser(meta.Dictionary):
    def search(self, word):
       """Lookup word"""
 
-      errno = 0
-      #self.time = time.time()
-      word_lowered = word.lower()
-      l = word_lowered[0:2]
+      word_lowered = word.lower().encode(self.getEncoding())
+      print "Word type:", type(word_lowered)
+##       index = word_lowered[:2]
 
-      pos = 0
-      if self.hash.has_key(l) == 0:
-         if len(word) == 1:
-            keys = self.hash.keys()
-            keys.sort()
-            for k in keys:
-               try:
-                   if k[0] == l:
-                       pos = self.hash[k]
-                       self.fd.seek(pos)
-                       break
-               except:
-                   misc.printError()
-                   return ("", [], 6)
-         else:
-            return ("", [], 1)
+##       pos = 0
+##       if self.hash.has_key(l) == 0:
+##          if len(word) == 1:
+##             keys = self.hash.keys()
+##             keys.sort()
+##             for k in keys:
+##                try:
+##                    if k[0] == l:
+##                        pos = self.hash[k]
+##                        self.fd.seek(pos)
+##                        break
+##                except:
+##                    misc.printError()
+##                    return ("", [], 6)
+##          else:
+##             return ("", [], 1)
 
-      else:
-         pos = self.hash[l]
-         self.fd.seek(pos)
+##       else:
+##          pos = self.hash[l]
+##          self.fd.seek(pos)
 
 
-      keys = self.hash.keys()
-      keys.sort()
-      end = pos
+##       keys = self.hash.keys()
+##       keys.sort()
+##       end = pos
 
-      if len(l) == 1:
-         i = 0
-         #for k in keys:
-            #print "k type: ", type(k)
+##       if len(l) == 1:
+##          i = 0
+##          #for k in keys:
+##             #print "k type: ", type(k)
             
-            #print type(k), type(l)
-            #if info.__unicode__:
-            #    try:
-            #        if k[0].decode(self.window.encoding) == l:
-            #            i = keys.index(k)
-            #    except:
-            #        return ("", [], 6)
+##             #print type(k), type(l)
+##             #if info.__unicode__:
+##             #    try:
+##             #        if k[0].decode(self.window.encoding) == l:
+##             #            i = keys.index(k)
+##             #    except:
+##             #        return ("", [], 6)
 
-         if i < len(keys) - 1:
-            end = self.hash[keys[i+1]]
-         else:
-            end = -1
-      else:
-         if keys.index(l) != len(keys) - 1:
-            end = self.hash[keys[keys.index(l)+1]]
-         else:
-            end = -1
+##          if i < len(keys) - 1:
+##             end = self.hash[keys[i+1]]
+##          else:
+##             end = -1
+##       else:
+##          if keys.index(l) != len(keys) - 1:
+##             end = self.hash[keys[keys.index(l)+1]]
+##          else:
+##             end = -1
 
-      if end > -1:
-         data = self.fd.read(end-pos).split("\n")
-      else:
-         data = self.fd.read().split("\n")
+##       if end > -1:
+##          data = self.fd.read(end-pos).split("\n")
+##       else:
+##          data = self.fd.read().split("\n")
 
       #data = data[binarySearchIndex(data, word):]
 
-      result = "<html><head>" \
-               "<meta http-equiv=\"Content-Type\" " \
-               "content=\"text/html; charset=%s\">" \
-               "</head><body>"
-               #"<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
-               #                                    self.window.app.config.fontFace,
-               #                                    self.window.app.config.fontSize)
+      
 
+      html = []
 
-      found = 0
-      list = []
+      html.append("<html><head>")
+      html.append("<meta http-equiv=\"Content-Type\" " \
+                  "content=\"text/html; charset=%s\">" \
+                  % str(self.getEncoding()))
+      html.append("<head><body>")
 
-      for line in data:
+      found = False
+      words = []
+
+      result = meta.SearchResult()
+
+      for line in self.data:
+         #print line
+
+         #print "Encoding in %s" % self.getEncoding()
+         
          #try:
-         #   line = line.decode(self.window.encoding)
-         #except:
-         #   return ("", [], 6)
-
-         #print type(line)
-         #line = line.decode(self.window.encoding)
-         #print type(line)
+         #   line = unicode(line, self.getEncoding())
+         #except Exception, e:
+         #   print "ERROR %s" % e
+         #   result.setError(errortype.INVALID_ENCODING)
+         #   return result
               
-         if line.lower().find(word_lowered) > -1:
+         if line.lower().startswith(word_lowered):
             orig = line.split("  ")[0].strip()
-            if orig.lower().find(word_lowered) != 0:
+            if not orig.lower().startswith(word_lowered):
                continue
-            if found == 0:
-               found = 1
-               result += "<b><u>%s</u></b><br>" % orig + "&nbsp;"*4
+            
+            if not found:
+               found = True
+               html.append("<table width=\"100%\"><tr>")
+               html.append("<td bgcolor=\"#e6f1e9\">")
+               html.append("<b>%s</b></td></tr>" % orig)
                trans = '&nbsp;&nbsp;'.join(line.split("  ")[1:]).strip()
-               result += "<table><tr><td>"
-               result += "&nbsp;"*4 + "%s<p>" % trans
-               result += "</td></tr></table>"
+               html.append("<tr><td>")
+               html.append("&nbsp;"*4 + "%s<p>" % trans)
+               html.append("</td></tr></table>")
 
-            list.append(orig)
+            words.append(orig)
 
-      result += "</font></body></html>"
+      html.append("</font></body></html>")
 
-      if found == 0:
-         errno = 1
+      print html
+
+      try:
+         trans = "".join(html)
+      except:
+         trans = ""
+      
+      result.setTranslation(trans)
+      result.setWordList(words)
+      
+      if not found:
+         result.setError(errortype.NOT_FOUND)
+
+      return result
+         
       #print "Search took %s sec" % (time.time() - self.time)
 
-      return (result, list, errno)
 
-   def makeHashTable(self):
+##    def makeHashTable(self):
 
-      print "Indexing..."
-      self.hash = {}
+##       print "Indexing..."
+##       self.hash = {}
 
-      self.fd.seek(0)
-      line = self.fd.readline()
-      l = line[0:2].lower()
-      n = 0
+##       self.fd.seek(0)
+##       line = self.fd.readline()
+##       l = line[0:2].lower()
+##       n = 0
 
-      self.hash[l] = n
-      n += len(line)
+##       self.hash[l] = n
+##       n += len(line)
 
-      for line in self.fd.readlines():
-         l = line[0:2].lower()
-         if not self.hash.has_key(l):
-            self.hash[l] = n
-         n += len(line)
+##       for line in self.fd.readlines():
+##          l = line[0:2].lower()
+##          if not self.hash.has_key(l):
+##             self.hash[l] = n
+##          n += len(line)
 
 
 # TODO: Rewrite this one

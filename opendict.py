@@ -88,7 +88,7 @@ class OpenDictApp(wxApp):
 
       for plain in plaindict.loadPlainDictionaries():
          self.dictionaries[plain.getName()] = plain
-         self.config.ids[gen.getID()] = plain.getName()
+         self.config.ids[util.generateUniqueID()] = plain.getName()
          
          
       # TODO: Remove in the future

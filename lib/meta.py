@@ -31,9 +31,46 @@ class SearchResult:
     def __init__(self):
         """Set default values"""
 
-        self.status = errortype.OK
+        self.error = errortype.OK
         self.translation = ""
         self.words = []
+
+
+    def setError(self, err):
+        """Set error object"""
+
+        self.error = err
+
+
+    def getError(self):
+        """Get error object"""
+
+        return self.error
+
+
+    def setTranslation(self, trans):
+        """Set translation string"""
+
+        self.translation = trans
+
+
+    def getTranslation(self):
+        """Get translation string"""
+
+        return self.translation
+
+
+    def setWordList(self, words):
+        """Set word list"""
+
+        self.words = words
+
+
+    def getWordList(self):
+        """Get word list"""
+
+        return self.words
+
 
 
 class Dictionary:
@@ -74,6 +111,12 @@ class Dictionary:
         """Return list of authors"""
 
         return None
+
+
+    def setEncoding(self, encoding):
+        """Set encoding"""
+
+        pass
 
 
     def getEncoding(self):

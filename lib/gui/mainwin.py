@@ -569,6 +569,8 @@ For more information visit project's homepage on
          
          result = self.search()
 
+         print "Search result: %s" % result, result.getError()
+
          # Check if search result is SerachResult object.
          # SearchResult class is used by new-type plugins.
          try:
@@ -587,25 +589,37 @@ For more information visit project's homepage on
             return
 
 
+         print "Translation type:", type(result.getTranslation())
+
          self.SetStatusText("")
          self.entry.Enable(1)
          self.search = None
 
          # Check status code
-         if result.status != errortype.OK:
-            print "ERROR Error:", result.status
-            if result.status == errortype.INTERNAL_ERROR:
-               errorwin.showErrorMessage(result.status.getMessage(),
-                                         result.status.getLongMessage())
+         if result.getError() != errortype.OK:
+            print "ERROR Error:", result.getError()
+            if result.getError() == errortype.INTERNAL_ERROR:
+               errorwin.showErrorMessage(result.getError().getMessage(),
+                                         result.getError().getLongMessage())
             else:
-               self.SetStatusText(_(result.status.getMessage()))
+               self.SetStatusText(_(result.getError().getMessage()))
                self.entry.Enable(1)
                self.entry.SetFocus()
                misc.printError()
             return
 
-         transUnicode = unicode(result.translation,
-                                self.activeDictionary.getEncoding())
+         try:
+            transUnicode = unicode(result.translation,
+                                   self.activeDictionary.getEncoding())
+         except:
+            title = _(errortype.INVALID_ENCODING.getMessage())
+            msg = _("Translation cannot be decoded using selected " \
+                    "encoding %s. Please try another encoding from " \
+                    "View > Character Encoding menu." % self.app.config.encoding)
+            self.SetStatusText(title)
+            errorwin.showErrorMessage(title, msg)
+            return 
+            
          transPreparedForWX = enc.toWX(transUnicode)
 
          self.htmlWin.SetPage(transPreparedForWX)
@@ -1034,9 +1048,6 @@ For more information visit project's homepage on
 
    def onDefault(self, event):
       print "DEBUG MainWindow: menu item selected, id:", event.GetId()
-      #print "DEBUG MainWindow: menu item selected, id:", event.GetString()
-      #print "DEBUG MainWindow: item selected:", dir(event)
-
       # FIXME: Bad way. Try setting a few constants for each type
       # of dictionary and then check this type instead of IDs.
 
@@ -1045,46 +1056,15 @@ For more information visit project's homepage on
       if eventID in self.app.config.ids.keys():
          dictionary = self.app.dictionaries.get(self.app.config.ids.get(eventID))
          self.loadDictionary(dictionary)
-         #self.activeDictionary = dictionary
-         #self.SetStatusText(enc.toWX(dictionary.getName()))
-         #self.SetTitle("%s - OpenDict" % dictionary.getName())
 
-      #self.checkIfNeedsList()
-
-      return # :)
-      
-      id = event.GetId()
-      if 200 <= id < 500:
-         self.onCloseDict(None)
-         name = self.app.config.ids.keys()[self.app.config.ids.values().index(id)]
-         try:
-            self.SetStatusText(_("Loading \"%s\"...") % name)
-            #self.buttonStop.Enable(1)
-            if 200 <= id < 300:
-               # plugin
-               self.loadPlugin(name)
-            elif 300 <= id < 400:
-               # register
-               self.loadRegister(name)
-               
-            # Not supported
-            #elif 400 <= id < 500:
-               # group
-            #   self.loadGroup(name)
-         except:
-            #print "Failed loading", name
-            self.onCloseDict(None)
-            self.SetStatusText(_("Error loading \"%s\"") % name)
-            misc.printError()
-
-      elif 2100 <= id < 2500:
-         label = self.menuEncodings.FindItemById(id).GetLabel()
+      elif 2100 <= eventID < 2500:
+         label = self.menuEncodings.FindItemById(eventID).GetLabel()
          self.changeEncoding(label)
-      elif 2500 <= id < 2600:
-         label = self.menuFontFace.FindItemById(id).GetLabel()
+      elif 2500 <= eventID < 2600:
+         label = self.menuFontFace.FindItemById(eventID).GetLabel()
          self.changeFontFace(label)
-      elif 2600 <= id < 2700:
-         label = self.menuFontSize.FindItemById(id).GetLabel()
+      elif 2600 <= eventID < 2700:
+         label = self.menuFontSize.FindItemById(eventID).GetLabel()
          self.changeFontSize(label)
 
 
@@ -1120,6 +1100,7 @@ For more information visit project's homepage on
 
       self.onCloseDict(None)
       self.activeDictionary = dictInstance
+      self.activeDictionary.start()
       #self.wordList.Clear()
       self.checkIfNeedsList()
       self.SetTitle("%s - OpenDict" % dictInstance.getName())
@@ -1190,6 +1171,12 @@ For more information visit project's homepage on
 
    def changeEncoding(self, name):
       self.app.config.encoding = misc.encodings[name]
+
+      if self.activeDictionary:
+         self.activeDictionary.setEncoding(self.app.config.encoding)
+         print "Dictionary encoding set to %s" \
+               % self.activeDictionary.getEncoding()
+         
       self.SetStatusText(_("New encoding will be applied for the next search results"))
 
 
