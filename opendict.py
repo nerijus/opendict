@@ -35,10 +35,8 @@ if sys.platform == "win32":
 else:
    # Unix-like system
    sys.path.insert(0, "/usr/share/opendict/lib")
-   #sys.path.insert(0, os.curdir+"/lib")
 
 # OpenDict Modules
-#from info import home, uhome, __version__
 import info
 from gui.mainwin import MainWindow
 from gui.errorwin import ErrorWindow
@@ -60,6 +58,11 @@ class OpenDictApp(wxApp):
    def OnInit(self):
 
       _ = wxGetTranslation
+
+      from gui import errorwin
+      title = _("Warning")
+      msg = _("This OpenDict version is for developer use only")
+      errorwin.showInfoMessage(title, msg)
 
       _start = time.time()
 

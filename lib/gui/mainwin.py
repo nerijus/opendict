@@ -269,8 +269,9 @@ class MainWindow(wxFrame):
          EVT_MENU(self, self.app.config.ids[name], self.onDefault)
 
       self.menuDict.AppendSeparator()
-      
-      self.menuDict.Append(112, _("&Add New Dictionary"))
+
+      idAddDict = wx.NewId()
+      self.menuDict.Append(idAddDict, _("&Add New Dictionary"))
       
       menuBar.Append(self.menuDict, _("&Dictionaries"))
 
@@ -280,7 +281,9 @@ class MainWindow(wxFrame):
       #
 
       menuTools = wxMenu()
-      menuTools.Append(110, _("Manage Dictionaries...\tCtrl-M"),
+
+      idManageDict = wx.NewId()
+      menuTools.Append(idManageDict, _("Manage Dictionaries...\tCtrl-M"),
                       _("Install, remove dictionaries and get " \
                         "information about them"))
 
@@ -289,7 +292,9 @@ class MainWindow(wxFrame):
       #                _("Edit groups of dictionaries"))
                       
       menuTools.AppendSeparator()
-      menuTools.Append(123, _("Connect to DICT Server..."),
+
+      idDictServer = wx.NewId()
+      menuTools.Append(idDictServer, _("Connect to DICT Server..."),
                           _("Open connection to DICT server"))
 
       menuTools.AppendSeparator()
@@ -313,8 +318,12 @@ class MainWindow(wxFrame):
       #
 
       menuHelp = wxMenu()
+
+      idLicence = wx.NewId()
       menuHelp.Append(117, _("&License"))
-      menuHelp.Append(116, _("&About\tCtrl-A"))
+
+      idAbout = wx.NewId()
+      menuHelp.Append(idAbout, _("&About\tCtrl-A"))
 
       menuBar.Append(menuHelp, _("&Help"))
 
@@ -478,12 +487,12 @@ class MainWindow(wxFrame):
       EVT_MENU(self, 2009, self.onNormalFontSize)
 
       # Dictionaries menu events
-      EVT_MENU(self, 112, self.onAddDict)
+      EVT_MENU(self, idAddDict, self.onAddDict)
 
       # Tools menu events
-      EVT_MENU(self, 123, self.onOpenDictConn)
+      EVT_MENU(self, idDictServer, self.onOpenDictConn)
       EVT_MENU(self, 122, self.onShowGroupsWindow)
-      EVT_MENU(self, 110, self.onShowPluginManager)
+      EVT_MENU(self, idManageDict, self.onShowPluginManager)
       EVT_MENU(self, 120, self.onShowFileRegistry)
       EVT_MENU(self, 5002, self.onShowDictEditor)
       #EVT_MENU(self, 5003, self.onShowMyWordList)
@@ -491,8 +500,8 @@ class MainWindow(wxFrame):
 
       # Help menu events
       #EVT_MENU(self, 115, self.onManual)
-      EVT_MENU(self, 117, self.onLicense)
-      EVT_MENU(self, 116, self.onAbout)
+      EVT_MENU(self, idLicence, self.onLicense)
+      EVT_MENU(self, idAbout, self.onAbout)
 
       # Other events
       EVT_BUTTON(self, wx.ID_FIND, self.onSearch)
@@ -613,14 +622,19 @@ For more information visit project's homepage on
                
             return
 
+         print result.getTranslation()
+
          try:
+            print "DEBUG Decoding translation in %s" \
+                  % self.activeDictionary.getEncoding()
             transUnicode = unicode(result.translation,
                                    self.activeDictionary.getEncoding())
          except:
             title = _(errortype.INVALID_ENCODING.getMessage())
             msg = _("Translation cannot be displayed using selected " \
                     "encoding %s. Please try another encoding from " \
-                    "View > Character Encoding menu." % self.app.config.encoding)
+                    "View > Character Encoding menu." \
+                    % self.activeDictionary.getEncoding())
             self.SetStatusText(title)
             errorwin.showErrorMessage(title, msg)
             return 
@@ -1065,8 +1079,9 @@ For more information visit project's homepage on
       # FIXME: Bad way. Try setting a few constants for each type
       # of dictionary and then check this type instead of IDs.
 
-
       eventID = event.GetId()
+      print "DEBUG Event ID = %d" % eventID
+      
       if eventID in self.app.config.ids.keys():
          dictionary = self.app.dictionaries.get(self.app.config.ids.get(eventID))
          self.loadDictionary(dictionary)
@@ -1085,7 +1100,7 @@ For more information visit project's homepage on
    def checkIfNeedsList(self):
       """Unhides word list if current dictionary uses it"""
       
-      if self.activeDictionary.getUsesWordList:
+      if self.activeDictionary.getUsesWordList():
          if self.wordListHidden():
             self.unhideWordList()
       else:

@@ -97,7 +97,7 @@ class PluginInfo:
         for wordListElement in doc.getElementsByTagName('uses-word-list'):
             for node in wordListElement.childNodes:
                 if node.nodeType == node.TEXT_NODE:
-                    self.usesWordList = bool(node.data)
+                    self.usesWordList = node.data.lower() == 'true'
 
         # Get required OpenDict version
         for odVersionElement in doc.getElementsByTagName('opendict-version'):
