@@ -43,5 +43,5 @@ developers, it is quite hard to find and fix them.
 For developers
 --------------
 
-OpenDict works, but to be a better peace of software it should be
+OpenDict works, but to be a better piece of software it should be
 redesigned and rewritten.
