@@ -266,7 +266,7 @@ def main():
         print "* %s" % filePath
 
     doc = makeDocument(xmlElements)
-    fd = open('opendict-addons.xml', 'w')
+    fd = open('opendict-add-ons.xml', 'w')
     xml.dom.ext.PrettyPrint(doc, fd)
     fd.close()
     

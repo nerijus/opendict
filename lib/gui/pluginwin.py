@@ -40,8 +40,7 @@ from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 _ = wxGetTranslation
 
-#_addOnsListURL = 'http://localhost/~mjoc/OpenDict/opendict-add-ons.xml'
-#_addOnsListURL = 'http://files.akl.lt/~mjoc/OpenDict/Data/opendict-add-ons.xml'
+# Location of add-ons list file
 _addOnsListURL = 'http://opendict.sf.net/Repository/Data/opendict-add-ons.xml'
 
 
@@ -109,6 +108,8 @@ class PluginManagerWindow(wxFrame):
       EVT_BUTTON(self, 161, self.onInstall)
       EVT_BUTTON(self, 162, self.onRemove)
       EVT_BUTTON(self, 163, self.onClose)
+
+      self.addons = self.app.cache.get("addons", {})
 
 
    def _makeInstalledPanel(self, tabbedPanel):
@@ -753,3 +754,4 @@ class PluginManagerWindow(wxFrame):
            errorwin.showErrorMessage(title, msg)
 
        self.availableList.DeleteItem(self.currentAvailItemSelection)
+       del self.addons[dictInfo.getName()]
