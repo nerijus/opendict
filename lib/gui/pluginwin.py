@@ -25,6 +25,7 @@ import wx
 from shutil import rmtree
 import os
 import traceback
+import urllib2
 
 from gui import errorwin
 import installer
@@ -36,6 +37,9 @@ from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
 _ = wxGetTranslation
+
+#_addOnsListURL = 'file:///home/mjoc/opendict-add-ons.xml'
+_addOnsListURL = 'http://files.akl.lt/~mjoc/opendict-add-ons.xml'
 
 
 class DictListCtrl(wx.ListCtrl):
@@ -459,10 +463,56 @@ class PluginManagerWindow(wxFrame):
    def onUpdate(self, event):
        """Update dictionaries list"""
 
-       fd = open('/home/mjoc/opendict-add-ons.xml')
-       xmlData = fd.read()
-       fd.close()
+       title = _("Downloading")
+       msg = _("Downloading list of available dictionaries...")
 
+       progressDialog = wx.ProgressDialog(title,
+                                          msg,
+                                          maximum=100,
+                                          parent=self,
+                                          style=wx.PD_CAN_ABORT
+                                          | wx.PD_APP_MODAL)
+       keepGoing = True
+       count = 2
+
+       progressDialog.Update(0)
+
+       try:
+           up = urllib2.urlopen(_addOnsListURL)
+           dataChunks = []
+           count = 0
+           percents = 0
+           fileSize = up.info().getheader('Content-length')
+           
+           while keepGoing and count < fileSize:
+               percents = int(float(count) / float(fileSize) * 100)
+               
+               if percents == 100:
+                   progressDialog.Destroy()
+                   break
+           
+               keepGoing = progressDialog.Update(percents)
+               if not keepGoing:
+                   progressDialog.Destroy()
+                   break
+           
+               chunk = up.read(1024)
+               dataChunks.append(chunk)
+               count += len(chunk)
+           
+           up.close()
+           
+           xmlData = u''.join(dataChunks)
+       except Exception, e:
+           progressDialog.Destroy()
+           systemLog(ERROR, "Unable to fetch add-ons list from %s: %s" \
+                     % (_addOnsListURL, e))
+           title = _("Error")
+           msg = _("Unable to download the list of available dictionaries " \
+                   "(system responded: %s)" % e)
+           errorwin.showErrorMessage(title, msg)
+           return
+       
        if hasattr(self, "addons"):
            del self.addons
        self.addons = xmltools.parseAddOns(xmlData)

@@ -52,6 +52,7 @@ def showInfoMessage(title, msg):
    window.ShowModal()
    window.Destroy()
    
+   
 
 class ErrorWindow(wxFrame):
 
