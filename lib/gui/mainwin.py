@@ -1112,9 +1112,12 @@ class MainWindow(wxFrame):
 
             # Make index
             try:
+               wx.BeginBusyCursor()
                plaindict.makeIndex(dictInstance, 
                                    self.app.config.get('encoding'))
+               wx.EndBusyCursor()
             except Exception, e:
+               wx.EndBusyCursor()
                traceback.print_exc()
                title = _("Index Creation Error")
                msg = _("Error occured while indexing file. " \
@@ -1130,9 +1133,12 @@ class MainWindow(wxFrame):
 
          # Load index
          try:
+            wx.BeginBusyCursor()
             index = plaindict.loadIndex(dictInstance)
             self.activeDictionary.setIndex(index)
+            wx.EndBusyCursor()
          except Exception, e:
+            wx.EndBusyCursor()
             traceback.print_exc()
             title = _("Error")
             msg = _("Unable to load dictionary index table. " \
@@ -1140,7 +1146,8 @@ class MainWindow(wxFrame):
             from gui import errorwin
             errorwin.showErrorMessage(title, msg)
             return
-      
+
+      wx.BeginBusyCursor()
       self.activeDictionary.start()
       self.checkIfNeedsList()
       self.SetTitle(titleTemplate % dictInstance.getName())
@@ -1153,6 +1160,8 @@ class MainWindow(wxFrame):
          self.checkEncMenuItem(self.activeDictionary.getEncoding())
       except Exception, e:
          systemLog(ERROR, "Unable to select encoding menu item: %s" % e)
+
+      wxEndBusyCursor()
       
 
    def loadPlugin(self, name):

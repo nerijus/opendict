@@ -574,10 +574,13 @@ class DictEditorWindow(wxFrame):
             name = os.path.split(dialog.GetPaths()[0])[1]
             self.filePath = dialog.GetPaths()[0]
             self.name = os.path.split(self.filePath)[1]
+
+            wx.BeginBusyCursor()
             
             try:
                 self.editor.load(self.filePath)
             except Exception, e:
+                wx.EndBusyCursor()
                 traceback.print_exc()
                 title = _("Open Failed")
                 msg = _("Unable to open dictionary (got message: %s" % e)
@@ -596,6 +599,8 @@ class DictEditorWindow(wxFrame):
             self.list.InsertItems(words, 0)
             self.checkAllButtons()
             self.SetStatusText(_("Dictionary loaded"))
+
+            wx.EndBusyCursor()
 
 
     def onWordSelected(self, event):
