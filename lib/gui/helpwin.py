@@ -20,6 +20,7 @@
 
 from wxPython.wx import *
 from wxPython.html import *
+import wx
 import os
 
 from info import home, __version__
@@ -160,19 +161,33 @@ class AboutWindow(wxDialog):
       hboxButtons = wxBoxSizer(wxHORIZONTAL)
       vbox = wxBoxSizer(wxVERTICAL)
 
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "logo.xpm"), wxBITMAP_TYPE_XPM)
+      bmp = wxBitmap(os.path.join(home, "pixmaps", "icon-96x96.png"),
+                     wxBITMAP_TYPE_PNG)
       vbox.Add(wxStaticBitmap(self, -1, bmp, wxPoint(-1, -1)), 0, wxALL |
       wxCENTRE, 5)
 
-      about = _("""OpenDict %s
-Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
+      title = _("OpenDict %s" % __version__)
+      copy = "Copyright %s 2003-2005 Martynas Jocius <mjoc@akl.lt>" % \
+             unicode("\302\251", "UTF-8")
+      desc = _("OpenDict is multiplatform dictionary program.")
+      page = "http://opendict.sourceforge.net"
 
-Multiplatform free dictionary program.
+      titleLabel = wxStaticText(self, -1, title,
+                                style=wx.ALIGN_CENTER)
+      titleLabel.SetFont(wx.Font(18, wx.SWISS, wx.BOLD, wx.BOLD))
+      vbox.Add(titleLabel, 1, wxALL | wxALIGN_CENTER, 5)
 
-Home page: http://opendict.sourceforge.net""") % __version__
+      copyLabel = wxStaticText(self, -1, copy, style=wx.ALIGN_CENTER)
+      copyLabel.SetFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.NORMAL))
+      vbox.Add(copyLabel, 1, wxALL | wxALIGN_CENTER, 5)
 
-      vbox.Add(wxStaticText(self, -1, about), 1,
-               wxALL, 5)
+      descLabel = wxStaticText(self, -1, desc, style=wx.ALIGN_CENTER)
+      descLabel.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL))
+      vbox.Add(descLabel, 1, wxALL | wxALIGN_CENTER, 5)
+
+      pageLabel = wxStaticText(self, -1, page, style=wx.ALIGN_CENTER)
+      pageLabel.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL))
+      vbox.Add(pageLabel, 1, wxALL | wxALIGN_CENTER, 5)
 
       vbox.Add(wxStaticLine(self, -1), 0, wxALL | wxEXPAND, 5)
 
