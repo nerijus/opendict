@@ -30,3 +30,7 @@ few pointers assigned (no need to launch new thread).
 
 [ ] Rename plugin.xml to about.xml
 [ ] Add "plugin" attribute to about.xml base tag
+
+FUTURE [ ] Let DICT connection be handled as a dictionary and be kept
+in Dictionaries menu. Let it have user defined names. Make "Manage
+DICT Connections" for that.
