@@ -136,8 +136,8 @@ def generateElement(**args):
     # Description element
     descElement = doc.createElement('description')
     addonElement.appendChild(descElement)
-    descElement.appendChild(doc.createTextNode(args.get('description') \
-                                               or None))
+    descEscaped = "%s" % args.get('description', '')
+    descElement.appendChild(doc.createTextNode(descEscaped))
 
     # MD5 element
     md5Element = doc.createElement('md5')
