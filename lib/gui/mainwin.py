@@ -514,7 +514,7 @@ class MainWindow(wxFrame):
          title = _("Invalid Dictionaries")
          msg = _("The following dictionaries are invalid and cannot be " \
                  "loaded:\n\n%s\n\nThis may be because of critical changes "\
-                 "in OpenDict archtecture. Remove listed directories by " \
+                 "in OpenDict architecture. Remove listed directories by " \
                  "hand to avoid this message in the future" \
                  % '\n'.join(self.app.invalidDictionaries))
          from lib.gui import errorwin
