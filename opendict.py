@@ -43,6 +43,7 @@ from gui.errorwin import ErrorWindow
 from config import Configuration
 from register import Register
 from plugin import initPlugins, installPlugin
+from logger import systemLog, debugLog, INFO, DEBUG, ERROR
 import misc
 import info
 import newplugin
@@ -83,7 +84,7 @@ class OpenDictApp(wxApp):
          return False
       
       
-      print "DEBUG Unicode version:", wx.USE_UNICODE
+      systemLog(DEBUG, "Unicode version: %s" % wx.USE_UNICODE)
       
       # Init gettext support
       wxLocale_AddCatalogLookupPathPrefix(os.path.join(info.GLOBAL_HOME,
@@ -106,12 +107,12 @@ class OpenDictApp(wxApp):
       
       # Load new-style plugins
       for plugin in newplugin.loadDictionaryPlugins():
-         print "DEBUG Loading '%s'..." % plugin.getName()
+         systemLog(DEBUG, "Loading '%s'..." % plugin.getName())
          self.dictionaries[plugin.getName()] = plugin
          self.config.ids[wx.NewId()] = plugin.getName()
 
       for plain in plaindict.loadPlainDictionaries():
-         print "DEBUG Loading '%s'..." % plain.getName()
+         systemLog(DEBUG, "Loading '%s'..." % plain.getName())
          self.dictionaries[plain.getName()] = plain
          self.config.ids[wx.NewId()] = plain.getName()
 
@@ -129,7 +130,7 @@ class OpenDictApp(wxApp):
       # FIXME: Avoid this
       self.config.window = self.window
 
-      print "DEBUG Loaded in %f seconds" % (time.time() - _start)
+      systemLog(DEBUG, "Loaded in %f seconds" % (time.time() - _start))
       
       self.window.Show(True)
 
@@ -137,20 +138,10 @@ class OpenDictApp(wxApp):
 
 
 if __name__ == "__main__":
-
-   if len(sys.argv) == 2 and sys.argv[1] in ("-h", "--help"):
-      print "Usage: %s [OPTIONS]" % sys.argv[0]
-      print
-      print "OPTIONS:"
-      print "  -h, --help        show this help"
-      #print "  --splash          enable splash screen"
-      print "  --home=<DIR>      specify home directory"
-
-      sys.exit(0)
    
-   print "INFO OpenDict %s\n" % info.VERSION
-   print "INFO Global home:", info.GLOBAL_HOME
-   print "INFO Local home:", info.LOCAL_HOME
+   systemLog(INFO, "OpenDict %s" % info.VERSION)
+   systemLog(INFO, "Global home: %s:" % info.GLOBAL_HOME)
+   systemLog(INFO, "Local home: %s" % info.LOCAL_HOME)
 
    openDictApp = OpenDictApp(0)
    openDictApp.MainLoop()
