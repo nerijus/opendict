@@ -301,12 +301,12 @@ class MainWindow(wxFrame):
       #hboxToolbar.Add(self.buttonStop, 0, wxALL | wxCENTER, 1)
       self.buttonStop.Hide()
 
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "add.xpm"),
-                     wxBITMAP_TYPE_XPM)
-      self.buttonAdd = wxBitmapButton(self, 5004, bmp, (16, 16),
-                                       style=wxNO_BORDER)
-      self.buttonAdd.SetToolTipString(_("Add current word to \"My Words\""))
-      hboxToolbar.Add(self.buttonAdd, 0, wxALL | wxCENTER, 1)
+      #bmp = wxBitmap(os.path.join(home, "pixmaps", "add.xpm"),
+      #               wxBITMAP_TYPE_XPM)
+      #self.buttonAdd = wxBitmapButton(self, 5004, bmp, (16, 16),
+      #                                 style=wxNO_BORDER)
+      #self.buttonAdd.SetToolTipString(_("Add current word to \"My Words\""))
+      #hboxToolbar.Add(self.buttonAdd, 0, wxALL | wxCENTER, 1)
       
       # List toggle bitmap button
       # If word list isn't hidden for this dict, else...
@@ -823,7 +823,9 @@ class MainWindow(wxFrame):
       except:
          pass
 
-      self.entry.SetValue("")
+      # Users requested not to clean text entry
+      #self.entry.SetValue("")
+      
       self.wordList.Clear()
       self.htmlWin.SetPage("")
       self.SetTitle("OpenDict")
