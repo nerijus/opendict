@@ -50,7 +50,8 @@ class DictConnWindow(wxFrame):
                      flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
                      row=0, col=0, border=1)
 
-      self.entryServer = wxTextCtrl(self, -1, self.app.config.dictServer)
+      self.entryServer = wxTextCtrl(self, -1,
+                                    self.app.config.get('dictServer'))
       hboxServer.Add(self.entryServer, flag=wxEXPAND, row=0, col=1, border=1)
       hboxServer.Add(wxButton(self, 1000, _("Default Server")),
                      flag=wxEXPAND, row=0, col=2, border=5)
@@ -61,7 +62,8 @@ class DictConnWindow(wxFrame):
       hboxServer.Add(wxButton(self, 1001, _("Default Port")),
                      flag=wxEXPAND, row=1, col=2, border=5)
 
-      self.entryPort = wxTextCtrl(self, -1, self.app.config.dictServerPort)
+      self.entryPort = wxTextCtrl(self, -1,
+                                  self.app.config.get('dictServerPort'))
       hboxServer.Add(self.entryPort, flag=wxEXPAND, row=1, col=1, border=1)
 
       hboxServer.Add(wxStaticText(self, -1, _("Database: ")),
@@ -242,7 +244,7 @@ class DictConnWindow(wxFrame):
          title = "OpenDict - %s" % self.server
       self.app.window.SetTitle(title)
 
-      self.app.window.checkEncMenuItem(self.app.config.encoding)
+      self.app.window.checkEncMenuItem(self.app.config.get('encoding'))
 
       if not self.app.window.activeDictionary.getUsesWordList():
           self.app.window.hideWordList()

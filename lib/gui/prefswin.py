@@ -21,7 +21,7 @@
 from wxPython.wx import *
 
 from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-from misc import encodings, savePrefs
+from misc import encodings
 
 _ = wxGetTranslation
 

@@ -22,6 +22,7 @@ import os
 import string
 import codecs
 
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 from info import home, uhome
 from misc import numVersion
 from plugin import Plugin
@@ -94,8 +95,11 @@ class Configuration:
    def load(self):
       """Load configuration from file to memory"""
 
-      if os.path.exists(self.filePath):
-         self.props.update(xmltools.parseMainConfig(self.filePath))
+      try:
+         if os.path.exists(self.filePath):
+            self.props.update(xmltools.parseMainConfig(self.filePath))
+      except Exception, e:
+         systemLog(ERROR, "Unable to read configuration file: %s" % e)
 
 
    def save(self):
