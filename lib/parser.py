@@ -37,7 +37,8 @@ from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 #WORD_BG = "#cad1e5" # Normal blue
 WORD_BG = "#dde2f1" # Bright blue
-
+#DICT_BG = "#cad1e5"
+DICT_BG = "#b4bedb"
 
 class SlowoParser(meta.Dictionary):
    """
@@ -610,7 +611,7 @@ class TMXParser(meta.Dictionary):
 
        keys = self.mapping.keys()
        avail = []
-       found = 0
+       found = False
        word_lowered = word.lower()
 
        for key in keys:
@@ -621,7 +622,7 @@ class TMXParser(meta.Dictionary):
                  result += "<table><tr><td>"
                  result += "&nbsp;"*3+str("<br>"+"&nbsp;"*3).join(self.mapping[key])
                  result += "</td></tr></table>"
-                 found = 1
+                 found = True
 
        result += "</font></body></html>"
 
@@ -886,52 +887,73 @@ class DictConnection(meta.Dictionary):
    def search(self, word):
       """Lookup word"""
 
-      errno = 0
+      result = meta.SearchResult()
 
       try:
          conn = dictclient.Connection(self.server, self.port)
       except:
-         return ("", [], 4)
+         result.setError(errortype.CONNECTION_ERROR)
+         return result
 
-      result = "<html><head>" \
-               "<meta http-equiv=\"Content-Type\" " \
-               "content=\"text/html; charset=%s\">" \
-               "</head><body>"
+      html = []
+      html.append("<html><head>" \
+                  "<meta http-equiv=\"Content-Type\" " \
+                  "content=\"text/html; charset=%s\">" \
+                  "</head><body>" % self.getEncoding())
 
-      found = 0
+      found = False
 
       try:
          data = conn.define(self.db, word)
       except:
-          data = []
+         data = []
 
       for d in data:
-         found = 1
-         result += "<table><tr><td bgcolor=\"#cccccc\">" \
-                   "<b>%s</b></td></tr></table>" % d.db.getdescription()
+         found = True
 
-         trans = d.getdefstr().split("\n")
-         orig = trans[0]
+         html.append("<p><table width=\"100%\"><tr>")
+         html.append("<td bgcolor=\"%s\">" % DICT_BG)
+         html.append("<b><i>%s</i></b></td></tr>" % d.getdb().getdescription())
+
+         source = d.getdefstr()
+         source = source.replace('<', '&lt;')
+         source = source.replace('>', '&gt;')
+         orig = source.split("\n", 1)[0]
          
-         pron = re.findall("\[(.*?)\]", orig)
+         pron = re.findall("\[(.*?)\]", orig) # 1st comment type
+         pronPatt = " [%s]"
+         
+         if len(pron) == 0:
+            pron = re.findall("\/(.*?)\/", orig) # 2nd comment type
+            pronPatt = " /%s/"
+         if len(pron) == 0:
+            pron = re.findall(r"\\(.*?)\\", orig) # 3rd comment type
+            pronPatt = " \\%s\\"
+         
          if len(pron) > 0:
-            orig = "<b><u>%s</u></b> [<i>%s</i>]<br>" % \
-                   (orig.replace(" [%s]"%pron[0], ""), pron[0])
+            orig = "<b>%s</b> [<i>%s</i>]" % \
+                   (orig.replace(pronPatt % pron[0], ""), pron[0])
          else:
-            orig = "<b><u>%s</u></b><br>" % orig
+            orig = "<b>%s</b>" % orig
 
-         result += orig + "&nbsp;"*4
-         translation = string.join(trans[1:], "<br>"+"&nbsp;"*4)
+         html.append("<tr><td bgcolor=\"%s\">" % WORD_BG)
+         html.append("%s</td></tr>" % orig)
 
-         links = re.findall("{(.*?)}", str)
+         source = source.replace('\n\n', '<br><br>')
+         
+         translation = ' '.join(source.split('\n')[:])
+         links = re.findall("{(.*?)}", translation)
          for link in links:
-            translation = str.replace("{%s}"%link,
-                              "<a href=\"%s\">%s</a>"%(link, link))
-         result += "%s<p>" % translation
+            translation = translation.replace("{%s}" % link,
+                              "<a href=\"%s\">%s</a>" % (link, link))
+         html.append("<tr><td>%s</td></tr>" % translation)
+         html.append("</table></p>")
 
-      result += "</font></body></html>"
+      html.append("</body></html>")
+
+      result.setTranslation(''.join(html))
       
       if not found:
-         errno = 1
+         result.setError(errortype.NOT_FOUND)
 
-      return (result, [], errno)
+      return result

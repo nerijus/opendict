@@ -1,5 +1,6 @@
+#
 # OpenDict
-# Copyright (c) 2003 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,11 +17,12 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA
 #
-# Module: gui.dictconnwin
 
 from wxPython.wx import *
 from wxPython.lib.rcsizer import RowColSizer
+import traceback
 
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 from parser import DictConnection
 from extra import dictclient
 from threads import Process
@@ -50,13 +52,13 @@ class DictConnWindow(wxFrame):
 
       self.entryServer = wxTextCtrl(self, -1, self.app.config.dictServer)
       hboxServer.Add(self.entryServer, flag=wxEXPAND, row=0, col=1, border=1)
-      hboxServer.Add(wxButton(self, 1000, _("Default server")),
+      hboxServer.Add(wxButton(self, 1000, _("Default Server")),
                      flag=wxEXPAND, row=0, col=2, border=5)
 
       hboxServer.Add(wxStaticText(self, -1, _("Port: ")),
                      flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
                      row=1, col=0, border=1)
-      hboxServer.Add(wxButton(self, 1001, _("Default port")),
+      hboxServer.Add(wxButton(self, 1001, _("Default Port")),
                      flag=wxEXPAND, row=1, col=2, border=5)
 
       self.entryPort = wxTextCtrl(self, -1, self.app.config.dictServerPort)
@@ -73,7 +75,7 @@ class DictConnWindow(wxFrame):
       self.choiceDB.SetInsertionPoint(0)
       hboxServer.Add(self.choiceDB, flag=wxEXPAND, row=2, col=1, border=1)
 
-      hboxServer.Add(wxButton(self, 1003, _("Update")), #size=(-1, 18)),
+      hboxServer.Add(wxButton(self, 1003, _("Fetch List")), #size=(-1, 18)),
                      flag=wxEXPAND, row=2, col=2, border=1)
 
       #hboxServer.Add(wxStaticText(self, -1, _("Strategy: ")),
@@ -124,13 +126,13 @@ class DictConnWindow(wxFrame):
 
 
    def onTimerUpdateDB(self, event):
-      print "DictConnection: [IDLE] Receiving DB list..."
+      
+      systemLog(DEBUG, "DictConnection: [IDLE] Receiving DB list...")
       if self.update != None:
          if self.update.isDone():
-            print "DictConnection: DB list received"
+            systemLog(DEBUG, "DictConnection: DB list received")
             obj = self.update()
             if type(obj) == type({}):
-               # this is dbs
                self.timerUpdateDB.Stop()
                self.update = None
                self.choiceDB.Clear()
@@ -141,7 +143,6 @@ class DictConnWindow(wxFrame):
                self.choiceDB.SetValue(self.msgSearchInAll)
                self.choiceDB.SetInsertionPoint(0)
             elif obj != None:
-               # this is connection, now get dbs
                self.SetStatusText(_("Receiving database list..."))
                self.update = Process(obj.getdbdescs)
             else:
@@ -150,27 +151,31 @@ class DictConnWindow(wxFrame):
 
 
    def onTimerConnect(self, event):
-      print "DictConnection: [IDLE] Connecting..."
+      
       if self.connection != None:
          if self.connection.isDone():
-            print "Stopped"
+            systemLog(INFO, "Connection timer stopped")
             self.timerConnect.Stop()
             self.conn = self.connection()
             
             if self.conn == None:
                 self.SetStatusText(_("Unable to connect"))
             else:
-                print self.conn
                 self.prepareForUsing()
             
 
    def onDefaultServer(self, event):
+      
       self.entryServer.SetValue("dict.org")
 
+
    def onDefaultPort(self, event):
+      
       self.entryPort.SetValue("2628")
 
+
    def onUpdateDB(self, event):
+      
       self.SetStatusText(_("Connecting..."))
       self.timerUpdateDB.Start(CONNECTION_CHECK_INTERVAL)
       self.update = Process(dictclient.Connection,
@@ -187,37 +192,28 @@ class DictConnWindow(wxFrame):
 
 
    def onDBSelected(self, event):
-      print "DB:", event.GetString()
-      #self.Fit()
+      pass
 
+   
    # Thread is not used there, because program don't hang if can't
    # connect. Otherwise, it may hang for a second depending on the
-   # connection speed. TODO: someting better?
+   # connection speed. TODO: better solution?
    def onOK(self, event):
-      #if self.timerConnect.isDone():
       self.server = self.entryServer.GetValue()
       self.port = self.entryPort.GetValue()
           
-          #self.Hide()
       self.timerConnect.Stop()
       self.timerUpdateDB.Stop()
       self.SetStatusText(_("Connecting to %s...") % self.server)
       self.timerConnect.Start(CONNECTION_CHECK_INTERVAL)
       self.connection = Process(dictclient.Connection,
                                 self.server, int(self.port))
-          #self.app.window.SetStatusText(_("Connecting to %s...") % server)
-
-          # Check if it is posibble to connect
-      #try:
-      #   conn = dictclient.Connection(server, int(port))
-      #except:
-      #   self.app.window.SetStatusText(_("Can't connect to %s") % server)
-      #   return
 
          
    def prepareForUsing(self):
+      """Prepare MainWindow for displaying data"""
        
-      print "DictConnection: Connected, preparing main window..."
+      systemLog(INFO, "DictConnection: Connected, preparing main window...")
 
       db = self.choiceDB.GetValue()
       if self.choiceDB.FindString(db) == 0:
@@ -231,7 +227,7 @@ class DictConnWindow(wxFrame):
                   db = d
             db_name = dbs[db]
          except:
-            misc.printError()
+            traceback.print_exc()
             self.app.window.SetStatusText(misc.errors[4])
             return
 
@@ -241,20 +237,15 @@ class DictConnWindow(wxFrame):
                                             db, "")
 
       if db_name != "":
-         title = "%s:%s %s - OpenDict" % (self.server, self.port, db_name)
+         title = "OpenDict - %s (%s)" % (self.server, db_name)
       else:
-         title = "%s:%s - OpenDict" % (self.server, self.port)
+         title = "OpenDict - %s" % self.server
       self.app.window.SetTitle(title)
 
-      #self.app.window.encoding = self.app.config.defaultEnc
       self.app.window.checkEncMenuItem(self.app.config.encoding)
 
       if not self.app.window.activeDictionary.getUsesWordList():
-          #self.app.window.wlHidden = 1
           self.app.window.hideWordList()
-      #else:
-      #    self.app.window.wlHidden = 0
-      #    self.app.window.unhideWordList()
 
       self.app.window.SetStatusText("")
       self.timerUpdateDB.Stop()
@@ -264,5 +255,5 @@ class DictConnWindow(wxFrame):
       self.timerUpdateDB.Stop()
       self.timerConnect.Stop()
       self.Destroy()
-      print "DictConnection window: destroyed"
+
 

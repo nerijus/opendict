@@ -111,6 +111,24 @@ class ErrorOpenDict(ErrorType):
                   "Thank you!"
 
 
+class ErrorCustom(ErrorType):
+    """Custom error"""
+
+    shortMessage = u"Unknown Error"
+    longMessage = u"Unknown error occured."
+
+    def setMessage(self, msg):
+        """Set custom message"""
+
+        self.shortMessage = msg
+
+
+    def setLongMessage(self, msg):
+        """Set custom descriptive message"""
+
+        self.longMessage = msg
+
+
 # Error constant instances
 OK = ErrorOk()
 NOT_FOUND = ErrorNotFound()
@@ -120,3 +138,4 @@ CONNECTION_ERROR = ErrorConnectionTimeout()
 CONNECTION_TIMEOUT = CONNECTION_ERROR
 INVALID_ENCODING = ErrorInvalidEncoding()
 OPENDICT_BUG = ErrorOpenDict()
+CUSTOM_ERROR = ErrorCustom()

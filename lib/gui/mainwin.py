@@ -66,12 +66,16 @@ class HtmlWindow(wxHtmlWindow):
    link-clicking"""
 
    def OnLinkClicked(self, linkinfo):
+      
       debugLog(DEBUG, "LinkInfo: searching for '%s'" % linkinfo.GetHref())
       wxBeginBusyCursor()
       parent = self.GetParent().GetParent().GetParent()
       parent.SetStatusText(_("Searching..."))
       parent.timerSearch.Start(parent.delay)
-      parent.search = Process(parent.dict.search, linkinfo.GetHref())
+      parent.search = Process(parent.activeDictionary.search,
+                              linkinfo.GetHref())
+
+      
 
 class MainWindow(wxFrame):
 
