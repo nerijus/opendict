@@ -441,19 +441,25 @@ class PluginManagerWindow(wxFrame):
        """Clear the list of available dictionaries and set
        new items"""
 
-       # TODO: Clear list
        self.availableList.DeleteAllItems()
 
        names = addons.keys()
        names.sort()
+
        for name in names:
            addon = addons.get(name)
+
            index = self.availableList.InsertStringItem(0, addon.getName())
            self.availableList.SetStringItem(index, 1,
                                             str(addon.getSize())+" KB")
            self.availableList.SetItemData(index, index+1)
 
-       self.availableList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+       if names:
+           self.availableList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+       else:
+           title = _("List updated")
+           msg = _("All your dictionaries are up to date.")
+           errorwin.showInfoMessage(title, msg)
 
 
    def onUpdate(self, event):
@@ -516,7 +522,16 @@ class PluginManagerWindow(wxFrame):
        
        if hasattr(self, "addons"):
            del self.addons
-       self.addons = xmltools.parseAddOns(xmlData)
+       allAddons = xmltools.parseAddOns(xmlData)
+       self.addons = {}
+
+       for name, obj in allAddons.items():
+           if name in self.app.dictionaries.keys() \
+                  and obj.getVersion() <= (\
+               self.app.dictionaries.get(name).getVersion() or ""):
+               continue
+
+           self.addons[name] = obj
 
        app = wxGetApp()
        if app.cache.has_key("addons"):

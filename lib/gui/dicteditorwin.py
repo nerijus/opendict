@@ -74,17 +74,12 @@ class EditWordWindow(wxFrame):
                 else:
                     transcomm = trans
                     
-                print transcomm, type(transcomm)
                 transcomm = enc.toWX(transcomm)
-                print transcomm, type(transcomm)
                 
                 self.onAddEmptyField(None)
                 entry = self.textEntries.get(max(self.textEntries.keys()))
                 if entry:
                     entry.SetValue(transcomm)
-                else:
-                    print entry
-
 
         self.boxInfo.AddGrowableCol(1)
         vboxMain.Add(self.boxInfo, 1, wxALL | wxEXPAND, 2)
@@ -161,7 +156,8 @@ class EditWordWindow(wxFrame):
             transcomm[t] = c
 
         parent.editor.getUnit(word).setTranslations(transcomm)
-        parent.changed = True
+        parent.setChanged(True)
+        parent.checkAllButtons()
 
         self.Destroy()
 
@@ -179,85 +175,12 @@ class DictEditorWindow(wxFrame):
     """Built-in dictionary editor. This tool lets user create and
     manage his own dictionaries in TMX format."""
 
-##     # IDs range: 6060-6069
-##     class CreateNewWordWindow(wxFrame):
-
-##         """Enter some info and add new word"""
-
-##         def __init__(self, parent, id, title, pos=wxDefaultPosition,
-##                  size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
-##             wxFrame.__init__(self, parent, id, title, pos, size, style)
-
-##             vboxMain = wxBoxSizer(wxVERTICAL)
-##             hboxButtons = wxBoxSizer(wxHORIZONTAL)
-##             boxInfo = RowColSizer()
-
-
-##             boxInfo.Add(wxStaticText(self, -1, _("Word: "), pos=(-1, -1)),
-##                         flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
-##                         row=0, col=0, border=1)
-
-##             self.entryWord = wxTextCtrl(self, -1, "")
-##             boxInfo.Add(self.entryWord, flag=wxEXPAND, row=0, col=1, border=1)
-
-##             boxInfo.Add(wxStaticText(self, -1, _("Translation: ")),
-##                         flag=wxALIGN_RIGHT | wxALIGN_TOP,
-##                         row=1, col=0, border=1)
-
-##             self.text = wxTextCtrl(self, -1, "", size=(-1, 140),
-##                                    style=wxTE_MULTILINE)
-##             boxInfo.Add(self.text, flag=wxEXPAND, row=1, col=1, border=1)
-
-##             boxInfo.AddGrowableCol(1)
-##             vboxMain.Add(boxInfo, 1, wxALL | wxEXPAND, 2)
-
-##             self.buttonOK = wxButton(self, 6050, _("OK"))
-##             hboxButtons.Add(self.buttonOK, 1, wxALL, 1)
-
-##             self.buttonCancel = wxButton(self, 6051, _("Cancel"))
-##             hboxButtons.Add(self.buttonCancel, 1, wxALL, 1)
-
-##             vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
-            
-##             self.CreateStatusBar()
-
-##             self.SetSizer(vboxMain)
-##             self.Fit()
-##             self.SetSize((300, -1))
-
-##             EVT_BUTTON(self, 6050, self.onSave)
-##             EVT_BUTTON(self, 6051, self.onClose)
-
-
-##         def onSave(self, event):
-           
-##             parent = self.GetParent()
-
-##             word = self.entryWord.GetValue()
-##             if word == "":
-##                 word = _("(empty)")
-            
-##             if not word in parent.parser.mapping.keys():
-##                 parent.parser.mapping[word] = self.text.GetValue().split('\n')
-##                 parent.list.Append(word)
-##                 parent.changed = 1
-##                 self.Destroy()
-##             else:
-##                 self.SetStatusText(_("Error: word \"%s\" already exists") \
-##                                    % word)
-
-##         def onClose(self, event):
-##             self.Destroy()
-
-
-
     class AddWordWindow(EditWordWindow):
         """Window for adding new word"""
 
         def __init__(self, parent, id, title, pos=wxDefaultPosition,
                  size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
 
-            #print dir(super)
             EditWordWindow.__init__(self, '', parent, id, title, pos,
                                     size, style)
             
@@ -297,9 +220,8 @@ class DictEditorWindow(wxFrame):
             parent.editor.addUnit(unit)
             parent.list.Append(enc.toWX(word))
             
+            parent.setChanged(True)
             parent.checkAllButtons()
-            #parent.editor.getUnit(word).setTranslations(transcomm)
-            parent.changed = True
 
             self.Destroy()
 
@@ -346,15 +268,16 @@ class DictEditorWindow(wxFrame):
         def onSave(self, event):
             
             if self.parent.cAction == "save":
-                if self.parent.save(parent):
-                    self.parent.Destroy()
+                self.parent.onSave(None)
+                self.parent.Destroy()
             elif self.parent.cAction == "open":
-                if self.parent.save(self.parent):
-                    self.parent.open()
+                self.parent.onSave(None)
+                self.Hide()
+                self.parent.open()
             elif self.parent.cAction == "close":
-                if self.parent.save(self.parent):
-                    self.parent.Destroy()
-
+                self.parent.onSave(None)
+                self.parent.Destroy()
+                
             
         def onExitParent(self, event):
             
@@ -406,9 +329,6 @@ class DictEditorWindow(wxFrame):
         self.buttonRemove = wxButton(self, 6002, _("Remove"))
         self.buttonRemove.SetToolTipString(_("Remove selected word"))
         self.controlButtons.append(self.buttonRemove)
-
-        #self.buttonSearch = wxButton(self, 6003, _("Search"))
-        #self.controlButtons.append(self.buttonSearch)
 
         self.buttonSort = wxButton(self, 6004, _("Sort"))
         self.buttonSort.SetToolTipString(_("Sort word list"))
@@ -463,7 +383,9 @@ class DictEditorWindow(wxFrame):
                             wxBITMAP_TYPE_PNG))
 
         self.SetSizer(vboxMain)
-        #self.Fit()
+
+        self.Bind(wx.EVT_LISTBOX, self.onWordSelected, self.list)
+        self.Bind(wx.EVT_BUTTON, self.onCreate, self.buttonNew)
 
         EVT_BUTTON(self, 6000, self.onAddWord)
         EVT_BUTTON(self, 6001, self.onEdit)
@@ -471,7 +393,6 @@ class DictEditorWindow(wxFrame):
         EVT_BUTTON(self, 6003, self.onSearch)
         EVT_BUTTON(self, 6004, self.onSort)
         EVT_BUTTON(self, 6005, self.onSave)
-        EVT_BUTTON(self, 6030, self.onCreate)
         EVT_BUTTON(self, 6031, self.onOpen)
         EVT_BUTTON(self, 6032, self.onClose)
         EVT_CLOSE(self, self.onClose)
@@ -485,7 +406,7 @@ class DictEditorWindow(wxFrame):
                                     size=(-1, -1), pos=(-1, -1),
                                     style=wxDEFAULT_FRAME_STYLE)
         window.CentreOnScreen()
-        window.Show(True)           
+        window.Show(True)
 
 
     def onEdit(self, event):
@@ -500,7 +421,9 @@ class DictEditorWindow(wxFrame):
                                 size=(-1, -1),
                                 style=wxDEFAULT_FRAME_STYLE)
         window.CentreOnScreen()
-        window.Show(True) 
+        window.Show(True)
+
+        self.checkAllButtons()
 
 
     def onRemove(self, event):
@@ -508,8 +431,10 @@ class DictEditorWindow(wxFrame):
         self.SetStatusText("")
         word = self.list.GetStringSelection()
         if word != "":
-            #del self.parser.mapping[word]
             self.list.Delete(self.list.FindString(word))
+        self.editor.removeUnit(self.editor.getUnit(word))
+        self.setChanged(True)
+        self.checkAllButtons()
 
 
     def onSearch(self, event):
@@ -532,36 +457,66 @@ class DictEditorWindow(wxFrame):
         self.list.InsertItems(words, 0)
         self.SetStatusText(_("List sorted"))
 
+        self.setChanged(True)
+        self.checkAllButtons()
+
 
     def onSave(self, event):
-        
+
+        self.SetStatusText("")
         self.cAction = "save"
 
         if not self.savedOnce:
-            print "Opening save dialog"
+            dialog = wx.FileDialog(self, message=_("Save file"),
+                                   style=wx.SAVE | wx.CHANGE_DIR)
+            if dialog.ShowModal() == wx.ID_OK:
+                self.filePath = dialog.GetPaths()[0]
             
-        self.save(self)
-        self.changed = False
-
-    
-    def save(self, instance):
-        """Write ditionary to disk"""
-        
-        instance.SetStatusText("")
         self.editor.save(self.filePath)
-        
+        self.setChanged(False)
+        self.name = os.path.basename(self.filePath)
+        self.savedOnce = True
+        self.checkAllButtons()
+        self.SetStatusText(_("Dictionary saved"))
+        self.SetTitle("%s - %s" % (self.priTitle, self.name))
+
 
     def onCreate(self, event):
-        
-        self.list.Clear()
-        self.buttonAdd.Enable(1)
-        self.buttonEdit.Enable(1)
-        self.buttonRemove.Enable(1)
-        #self.checkSortButton()
-        #self.buttonSave.Enable(1)
-        self.checkAllButtons()
 
+        self.editor = dicteditor.Editor()
+        self.list.Clear()
+        self.checkAllButtons()
+        self.savedOnce = False
         self.name = _("Untitled")
+        self.SetStatusText("")
+        self.SetTitle("%s - %s" % (self.priTitle, self.name))
+
+
+    def checkAddButton(self):
+        """Check for add button visibility"""
+
+        if not hasattr(self, 'editor'):
+            self.buttonAdd.Disable()
+        else:
+            self.buttonAdd.Enable(1)
+
+
+    def checkEditButton(self):
+        """Check for edit button visibility"""
+
+        if self.list.GetSelection() == -1:
+            self.buttonEdit.Disable()
+        else:
+            self.buttonEdit.Enable(1)
+
+
+    def checkRemoveButton(self):
+        """Check for remove button visibility"""
+
+        if self.list.GetSelection() == -1:
+            self.buttonRemove.Disable()
+        else:
+            self.buttonRemove.Enable(1)
 
 
     def checkSortButton(self):
@@ -569,7 +524,7 @@ class DictEditorWindow(wxFrame):
 
         if not hasattr(self, 'editor'):
             self.buttonSort.Disable()
-        elif len(self.editor.getUnits()) == 0:
+        elif len(self.editor.getUnits()) < 2:
             self.buttonSort.Disable()
         else:
             self.buttonSort.Enable(1)
@@ -580,7 +535,7 @@ class DictEditorWindow(wxFrame):
 
         if not hasattr(self, 'editor'):
             self.buttonSave.Disable()
-        elif len(self.editor.getUnits()) == 0:
+        elif not self.changed:
             self.buttonSave.Disable()
         else:
             self.buttonSave.Enable(1)
@@ -589,13 +544,16 @@ class DictEditorWindow(wxFrame):
     def checkAllButtons(self):
         """Check all buttons for visibility changes"""
 
+        self.checkAddButton()
+        self.checkEditButton()
+        self.checkRemoveButton()
         self.checkSortButton()
         self.checkSaveButton()
         
 
     def onOpen(self, event):
         
-        if self.parser and self.changed:
+        if self.editor and self.changed:
                 window = self.ConfirmExitWindow(self,
                                                 -1,
                                                 _("Exit confirmation"))
@@ -608,12 +566,9 @@ class DictEditorWindow(wxFrame):
 
         
     def open(self):
-        
-        #self.editor = dicteditor.Editor()
-
         wildCard = "Slowo dictionaries (*.dwa)|*.dwa|"
         
-        dialog = wxFileDialog(self, message=_("Choose TMX dictionary file"),
+        dialog = wxFileDialog(self, message=_("Choose dictionary file"),
                               wildcard=wildCard, style=wxOPEN|wxMULTIPLE)
         if dialog.ShowModal() == wxID_OK:
             name = os.path.split(dialog.GetPaths()[0])[1]
@@ -630,7 +585,7 @@ class DictEditorWindow(wxFrame):
                 
                 return
             
-            self.SetTitle("%s: %s" % (self.priTitle, self.name))
+            self.SetTitle("%s - %s" % (self.priTitle, self.name))
             
             self.list.Clear()
             words = []
@@ -639,11 +594,14 @@ class DictEditorWindow(wxFrame):
             words.sort()
 
             self.list.InsertItems(words, 0)
-            
-            for button in self.controlButtons:
-                button.Enable(1)
-            
+            self.checkAllButtons()
             self.SetStatusText(_("Dictionary loaded"))
+
+
+    def onWordSelected(self, event):
+        """This method is invoked when list item is selected"""
+
+        self.checkAllButtons()
 
             
     def onClose(self, event):
@@ -656,3 +614,14 @@ class DictEditorWindow(wxFrame):
         else:
             self.Destroy()
 
+
+    def setChanged(self, value):
+        """Set changed=value"""
+        
+        self.changed = value
+
+
+    def getChanged(self):
+        """Get if changed"""
+
+        return self.changed

@@ -84,6 +84,7 @@ class Editor:
         """Load dictionary into memory"""
 
         self.filePath = filePath
+        self.units = []
 
         try:
             fd = open(filePath)
@@ -146,7 +147,6 @@ class Editor:
                         chunks.append(trans)
                 outstr += u' ; '.join(chunks) + u' ;'
                 outstr = outstr.encode(self.encoding)
-                #print outstr, type(outstr)
                 print >> fd, outstr
         except Exception, e:
             raise Exception, "Unable to save dictionary: %s" % e
