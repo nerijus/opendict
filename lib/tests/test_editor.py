@@ -39,7 +39,12 @@ class TestTranslation(unittest.TestCase):
         self.assertEquals(len(trans.keys()), 3)
         self.assertEquals(trans['trans3'], 'comment3')
 
-        
+        trans = {'key1': 'value1', 'key2': 'value2'}
+        self.translations.setTranslations(trans)
+
+        self.assertEquals(len(self.translations.getTranslations()), 2)
+
+
 
 class TestEditor(unittest.TestCase):
     """Editor test"""
@@ -105,6 +110,17 @@ class TestEditor(unittest.TestCase):
         editor.removeUnit(unit)
         
         self.assertEquals(len(editor.getUnits()), oldCount - 1)
+
+
+    def test_unicode(self):
+        """All the strings must be unicode objects"""
+
+        editor = dicteditor.Editor()
+        editor.load("data/sampledict.dwa")
+
+        for unit in editor.getUnits()[:10]:
+            for trans in unit.getTranslations().keys():
+                self.assertEquals(type(trans), type(u''))
         
 
 if __name__ == "__main__":

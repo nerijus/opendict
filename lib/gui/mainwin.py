@@ -530,8 +530,11 @@ class MainWindow(wxFrame):
 <ul>
 <li>To start using dictionary, select one from <i><b>Dictionaries</b></i>
 menu.</li>
-<li>To add new dictionary, select <i><b>Add New Dictionary</b></i>
+<li>To add new dictionary from file, select <i><b>Add New Dictionary</b></i>
 from <i><b>Dictionaries</b></i> menu.</li>
+<li>To install new dictionary from the Internet, select
+<i><b>Manage Dictionaries</b></i>
+from <i><b>Tools</b></i> menu and choose <i><b>Available</b></i> tab.</li>
 </ul>
 
 <p>

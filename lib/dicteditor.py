@@ -54,6 +54,12 @@ class Translation:
         self.translations[trans] = comment
 
 
+    def setTranslations(self, newTrans):
+        """Set translation dictionary"""
+
+        self.translations = newTrans
+
+
     def getTranslations(self):
         """Return translation object"""
 
@@ -68,6 +74,7 @@ class Editor:
 
         self.filePath = filePath
         self.units = []
+        self.encoding = 'UTF-8'
 
         if filePath:
             self.load(filePath)
@@ -82,9 +89,15 @@ class Editor:
             fd = open(filePath)
 
             for line in fd:
+                try:
+                    line = unicode(line, self.encoding)
+                except Exception, e:
+                    raise Exception, "Unable to encode text in %s" \
+                          % self.encoding
+                
                 word, end = line.split('=')
-
                 word = word.strip()
+                
                 translation = Translation()
                 translation.setWord(word)
 
@@ -131,7 +144,9 @@ class Editor:
                         chunks.append("%s // %s" % (trans, comment))
                     else:
                         chunks.append(trans)
-                outstr += ' ; '.join(chunks) + ' ;'
+                outstr += u' ; '.join(chunks) + u' ;'
+                outstr = outstr.encode(self.encoding)
+                #print outstr, type(outstr)
                 print >> fd, outstr
         except Exception, e:
             raise Exception, "Unable to save dictionary: %s" % e
