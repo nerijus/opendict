@@ -329,11 +329,10 @@ class MainWindow(wxFrame):
       # Word list is hidden by default
       self.wlHidden = True
       
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "hide.xpm"),
-                     wxBITMAP_TYPE_XPM)
+      bmp = wxBitmap(os.path.join(home, "pixmaps", "hide.png"),
+                     wxBITMAP_TYPE_PNG)
       self.buttonHide = wxBitmapButton(self, 152, bmp, (24, 24),
                                        style=wxNO_BORDER)
-      self.buttonHide.SetToolTipString(_("Hide word list"))
       hboxToolbar.Add(self.buttonHide, 0, wxALL | wxCENTER, 1)
 
       vboxMain.Add(hboxToolbar, 0, wxALL | wxEXPAND | wxGROW, 0)
@@ -1077,6 +1076,7 @@ For more information visit project's homepage on
       self.encoding = item[2]
       self.checkEncMenuItem(self.encoding)
 
+
    def loadGroup(self, name):
       print "INFO Loading '%s'..." % name
       self.SetTitle("%s - OpenDict" % name)
@@ -1087,17 +1087,21 @@ For more information visit project's homepage on
       self.load = Process(DictionaryGroup, dicts, self)
       self.dictName = name
 
+
    def changeEncoding(self, name):
       self.encoding = misc.encodings[name]
       self.SetStatusText(_("New encoding will be applied for the next search results"))
+
 
    def changeFontFace(self, name):
       self.app.config.fontFace = misc.fontFaces[name]
       self.SetStatusText(_("New font face will be applied for the next search results"))
 
+
    def changeFontSize(self, name):
       self.app.config.fontSize = name
       self.SetStatusText(_("New font size will be applied for the next search results"))
+
 
    def checkEncMenuItem(self, name):
       ename = ""
@@ -1107,9 +1111,11 @@ For more information visit project's homepage on
             break
       self.menuEncodings.FindItemById(self.menuEncodings.FindItem(ename)).Check(1)
 
+
    def onAddDict(self, event):
       installer = Installer(self, self.app.config)
       installer.showGUI()
+
       
    def onAddFromFile(self, event):
       """Starts dictionary registration process"""
@@ -1172,6 +1178,7 @@ For more information visit project's homepage on
       licenseWindow.CenterOnScreen()
       licenseWindow.Show(True)
 
+
    def onAbout(self, event):
       """Shows 'About' window"""
 
@@ -1181,6 +1188,7 @@ For more information visit project's homepage on
                                 style=wxDEFAULT_DIALOG_STYLE)
       aboutWindow.CentreOnScreen()
       aboutWindow.Show(True)
+
 
    def onWordSelected(self, event):
       """Is called when word list item is selected"""
@@ -1214,20 +1222,32 @@ For more information visit project's homepage on
 
       print "DEBUG Hiding word list..."
       self.splitter.SetSashPosition(0)
-      self.buttonHide.SetToolTipString(_("Show word list"))
       self.splitter.Unsplit(self.panelList)
       self.wlHidden = True
+
+      # And change the button pixmap
+      print "DEBUG Setting unhide.png icon..."
+      bmp = wxBitmap(os.path.join(home, "pixmaps", "unhide.png"),
+                     wxBITMAP_TYPE_PNG)
+      self.buttonHide.SetBitmapLabel(bmp)
+      self.buttonHide.SetToolTipString(_("Show word list"))
 
 
    def unhideWordList(self):
       """Shows word list"""
 
       print "DEBUG Showing word list..."
-      self.buttonHide.SetToolTipString(_("Hide word list"))
       self.createListPanel()
       self.splitter.SplitVertically(self.panelList, self.panelHtml)
       self.splitter.SetSashPosition(self.app.config.sashPos)
       self.wlHidden = False
+
+      # And change the pixmap
+      print "DEBUG Setting hide.png icon..."
+      bmp = wxBitmap(os.path.join(home, "pixmaps", "hide.png"),
+                     wxBITMAP_TYPE_PNG)
+      self.buttonHide.SetBitmapLabel(bmp)
+      self.buttonHide.SetToolTipString(_("Hide word list"))
 
 
    def onPrint(self, event):
