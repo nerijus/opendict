@@ -30,8 +30,36 @@ import xmltools
 import dicttype
 
 
+def _loadPlainDictionary(directory):
+    """Load one dictionary and returns dictionary object"""
+
+    dictionary = None
+
+    try:
+        config = xmltools.parsePlainDictConfig(\
+                os.path.join(directory,
+                             info.__PLAIN_DICT_CONFIG_DIR,
+                             'config.xml'))
+
+        for t in dicttype.supportedTypes:
+            if t.getIdName() == config.get('format'):
+                Parser = t.getClass()
+
+        if not Parser:
+            raise "This is internal error and should not happen: " \
+                  "no parser class found for dictionary in %s" % directory
+
+        dictionary = Parser(config.get('path'))
+        dictionary.setEncoding(config.get('encoding'))
+        
+    except Exception, e:
+        traceback.print_exc()
+
+    return dictionary
+
+
 def loadPlainDictionaries():
-    """Load dictionaries and return tuple of dictionary objects"""
+    """Load dictionaries and return a list of dictionary objects"""
 
 
     dirs = []
@@ -55,28 +83,10 @@ def loadPlainDictionaries():
     dictionaries = []
 
     for directory in dirs:
-        try:
-            config = xmltools.parsePlainDictConfig(\
-                os.path.join(directory,
-                             info.__PLAIN_DICT_CONFIG_DIR,
-                             'config.xml'))
-
-            Parser = None
-
-            for t in dicttype.supportedTypes:
-                if t.getIdName() == config.get('format'):
-                    Parser = t.getClass()
-
-            if not Parser:
-                raise "This is internal error and should not happen: " \
-                      "no parser class found for dictionary in %s" % directory
-
-            dictionary = Parser(config.get('path'))
+        dictionary = _loadPlainDictionary(directory)
+        if dictionary:
             dictionaries.append(dictionary)
-            
-        except Exception, e:
-            traceback.print_exc()
-
+        
     return dictionaries
 
 

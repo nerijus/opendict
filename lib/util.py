@@ -57,7 +57,13 @@ class UniqueIdGenerator:
         """Return unique ID"""
 
         return self.__instance.getID()
-    
+
+
+def generateUniqueID():
+    """Helper function for getting unique ID"""
+
+    gen = UniqueIdGenerator(0)
+    return gen.getID()
 
 
 def getMD5Sum(filePath):

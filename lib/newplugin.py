@@ -26,6 +26,7 @@ New plugin module
 
 import os
 import sys
+import traceback
 import xml.dom.minidom
 
 import info
@@ -269,7 +270,23 @@ class DictionaryPlugin(meta.Dictionary):
             return False
 
 
-def loadPlugins():
+def _loadDictionaryPlugin(directory):
+    """Load dictionary plugin"""
+
+    plugin = None
+
+    try:
+        print "Loading %s..." % directory
+        plugin = DictionaryPlugin(directory)
+        print "Success:", plugin
+    except InvalidPluginException, e:
+        print "FAILED:", directory, e
+        traceback.print_exc
+
+    return plugin
+
+
+def loadDictionaryPlugins():
     """Load plugins. Returns list of PluginHandler objects"""
 
     pluginDirs = []
@@ -295,13 +312,9 @@ def loadPlugins():
     plugins = []
 
     for dirName in pluginDirs:
-        try:
-            print "Loading %s..." % dirName
-            plugin = DictionaryPlugin(dirName)
+        plugin = _loadDictionaryPlugin(dirName)
+        if plugin:
             plugins.append(plugin)
-            print "Success:", plugin
-        except InvalidPluginException, e:
-            print "FAILED:", dirName, e
 
     return plugins
 

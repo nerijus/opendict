@@ -40,6 +40,9 @@ class Plugin:
    it can load plugin's code for use."""
 
    def __init__(self, dir):
+
+       raise "Deprecated"
+      
        self.dir = dir
 
        if os.path.exists(os.path.join(uhome, "plugins", self.dir, "DESC")):
@@ -267,6 +270,8 @@ def pluginPreinstall(config, path, zip):
 def installPlugin(config, path):
     """This method is used to unzip plugin zip files and add
     new plugin object into plugins dict"""
+
+    raise "Deprecated"
 
     #plugname = ""
     errmsg = ""

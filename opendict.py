@@ -81,19 +81,15 @@ class OpenDictApp(wxApp):
       self.installPlugin = installPlugin
       
       
-      gen = util.UniqueIdGenerator()
-      
       # Load new-style plugins
-      for plugin in newplugin.loadPlugins():
+      for plugin in newplugin.loadDictionaryPlugins():
          self.dictionaries[plugin.getName()] = plugin
-         self.config.ids[gen.getID()] = plugin.getName()
+         self.config.ids[util.generateUniqueID()] = plugin.getName()
 
       for plain in plaindict.loadPlainDictionaries():
          self.dictionaries[plain.getName()] = plain
          self.config.ids[gen.getID()] = plain.getName()
          
-      #print self.dictionaries
-      #print self.config.ids
          
       # TODO: Remove in the future
       self.reg = Register()

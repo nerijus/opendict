@@ -39,6 +39,19 @@ class SearchResult:
 class Dictionary:
     """Dictionary interface"""
 
+
+    def start(self):
+        """Allocate resources"""
+
+        pass
+
+
+    def stop(self):
+        """Free resources"""
+
+        pass
+    
+
     def getType(self):
         """Return dictionary type"""
 

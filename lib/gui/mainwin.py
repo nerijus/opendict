@@ -52,7 +52,7 @@ from extra.html2text import html2text
 import plugin
 import misc
 import info
-#import util
+import util
 import meta
 import enc
 import errortype
@@ -1099,16 +1099,33 @@ For more information visit project's homepage on
             self.hideWordList()
 
 
+   def addDictionary(self, dictInstance):
+      """Add dictionary to menu and updates ids"""
+
+      app = wxGetApp()
+      app.dictionaries[dictInstance.getName()] = dictInstance
+      unid = util.generateUniqueID()
+      app.config.ids[unid] = dictInstance.getName()
+      
+      item = wxMenuItem(self.menuDict,
+                        unid,
+                        dictInstance.getName())
+      EVT_MENU(self, unid, self.onDefault)
+
+      self.menuDict.InsertItem(self.menuDict.GetMenuItemCount()-2, item)
+
+
    def loadDictionary(self, dictInstance):
       """Prepares main window for using dictionary"""
 
+      self.onCloseDict(None)
       self.activeDictionary = dictInstance
-      self.wordList.Clear()
+      #self.wordList.Clear()
       self.checkIfNeedsList()
       self.SetTitle("%s - OpenDict" % dictInstance.getName())
       self.SetStatusText(_(enc.toWX("Dictionary \"%s\" loaded" \
                                     % dictInstance.getName())))
-      self.htmlWin.SetPage("")
+      #self.htmlWin.SetPage("")
       
 
    def loadPlugin(self, name):
@@ -1238,6 +1255,13 @@ For more information visit project's homepage on
       
       self.menuEncodings.FindItemById(self.menuEncodings.FindItem(ename)).Check(1)
 
+
+   def getCurrentEncoding(self):
+      """Return currently set encoding"""
+
+      # Is this the best way for keeping it?
+      return self.app.config.encoding
+   
 
    def onAddDict(self, event):
       installer = Installer(self, self.app.config)

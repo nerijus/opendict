@@ -33,6 +33,8 @@ import dicttype
 import xmltools
 import util
 import enc
+import plaindict
+import newplugin
 
 _ = wxGetTranslation
 
@@ -46,7 +48,7 @@ class Installer:
 
         
     def showGUI(self):
-        """Show graphical windows for selecting files and formats"""
+        """Show graphical window for selecting files and formats"""
 
         wildCard = "All files (*.*)|*.*|" \
                    "OpenDict plugins (*.zip)|*.zip|" \
@@ -75,7 +77,7 @@ class Installer:
                 extMapping[ext.lower()] = t
 
         if not extention.lower() in extMapping.keys():
-            print "Error: could not recognize!"
+            print "ERROR Unable to recognise %s format" % filePath
             window = DictAddWindow(self.mainWin, fileName, filePath)
             window.CentreOnScreen()
             window.Show(True)
@@ -88,9 +90,12 @@ class Installer:
  
         try:
             if extention.lower() in dicttype.PLUGIN.getFileExtentions():
-                print "Installing plugin"
                 try:
-                    installDictionaryPlugin(filePath)
+                    directory = installDictionaryPlugin(filePath)
+                    if directory:
+                        dictionary = newplugin._loadDictionaryPlugin(directory)
+                        print "Installed dict:", dictionary
+                        self.mainWin.addDictionary(dictionary)
                 except Exception, e:
                     errorwin.showErrorMessage(_("Installation failed"),
                                               enc.toWX(str(e)))
@@ -98,9 +103,12 @@ class Installer:
                     return
 
             else:
-                print "Registering..."
                 try:
-                    installPlainDictionary(filePath)
+                    directory = installPlainDictionary(filePath)
+                    if directory:
+                        dictionary = plaindict._loadPlainDictionary(directory)
+                        print "Installed dict:", dictionary
+                        self.mainWin.addDictionary(dictionary)
                 except Exception, e:
                     errorwin.showErrorMessage(_("Installation failed"),
                                               enc.toWX(str(e)))
@@ -118,7 +126,7 @@ class Installer:
 # ===========================================================================
 
 def installPlainDictionary(filePath):
-    """Install plain dictionary"""
+    """Install plain dictionary and return directory path"""
 
     if not os.path.exists(filePath):
         raise Exception, _("File %s does not exist") % filePath
@@ -181,9 +189,11 @@ def installPlainDictionary(filePath):
     print >> fd, xmlData
     fd.close()
 
+    return dictDir
+
 
 def installDictionaryPlugin(filePath):
-    """Install dictionary plugin"""
+    """Install dictionary plugin and return directory path"""
 
     # Check if file exists
     if not os.path.exists(filePath):
@@ -267,6 +277,11 @@ def installDictionaryPlugin(filePath):
 
         print "ERROR %s" % e
         raise _("Unable to install plugin")
+
+
+    return os.path.join(info.LOCAL_HOME,
+                        info.PLUGIN_DICT_DIR,
+                        topDirectory)
     
 
 if __name__ == "__main__":
