@@ -2,8 +2,8 @@
 Encoding=UTF-8
 Name=OpenDict
 Name[lt]=OpenDict
-Comment=Lookup words in a local or online dictionary 
-Comment[lt]=Ieškoti žodžių kompiuterio ar interneto žodyne
+Comment=Lookup words in local or Internet dictionary 
+Comment[lt]=Ieškoti žodžių kompiuterio arba Interneto žodyne
 Exec=/usr/bin/opendict
 Icon=/usr/share/opendict/pixmaps/icon-48x48.png
 Terminal=false
