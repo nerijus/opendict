@@ -236,8 +236,8 @@ class DictConnWindow(wxFrame):
             return
 
       self.app.window.onCloseDict(None)
-      self.app.window.dict = DictConnection(self.app.window,
-                                            self.server, int(self.port), 
+      self.app.window.activeDictionary = DictConnection(self.server,
+                                                        int(self.port), 
                                             db, "")
 
       if db_name != "":
@@ -246,11 +246,11 @@ class DictConnWindow(wxFrame):
          title = "%s:%s - OpenDict" % (self.server, self.port)
       self.app.window.SetTitle(title)
 
-      self.app.window.encoding = self.app.config.defaultEnc
-      self.app.window.checkEncMenuItem(self.app.window.encoding)
+      #self.app.window.encoding = self.app.config.defaultEnc
+      self.app.window.checkEncMenuItem(self.app.config.encoding)
 
-      if not self.app.window.dict.needsList:
-          self.app.window.wlHidden = 1
+      if not self.app.window.activeDictionary.getUsesWordList():
+          #self.app.window.wlHidden = 1
           self.app.window.hideWordList()
       #else:
       #    self.app.window.wlHidden = 0

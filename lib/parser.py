@@ -687,7 +687,7 @@ class DictConnection(meta.Dictionary):
       self.port = port
       self.db = db
       self.strategy = strategy
-      self.encoding = None
+      self.encoding = "UTF-8"
       self.needsList = 0
 
 
@@ -703,7 +703,7 @@ class DictConnection(meta.Dictionary):
       self.encoding = encoding
 
 
-   def getEncoding(self, encoding):
+   def getEncoding(self):
       """Return encoding"""
 
       return self.encoding
