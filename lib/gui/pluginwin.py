@@ -80,7 +80,7 @@ class PluginManagerWindow(wxFrame):
 
       self.textAbout = wxTextCtrl(self.panelDesc, -1, size=(-1, 60),
                        style=wxTE_MULTILINE | wxTE_READONLY)
-      sbSizerDesc.AddWindow(self.textAbout, 1, wxALL | wxEXPAND, 0)
+      sbSizerDesc.Add(self.textAbout, 1, wxALL | wxEXPAND, 0)
       self.panelDesc.SetSizer(sbSizerDesc)
       self.panelDesc.SetAutoLayout(true)
       sbSizerDesc.Fit(self.panelDesc)

@@ -140,11 +140,25 @@ class MainWindow(wxFrame):
       menuBar.Append(menuFile, _("&File"))
 
       menuEdit = wxMenu()
+
+      #
+      # Clear functions
+      #
       menuEdit.Append(109, _("&Clear Search Entry\tCtrl-L"))
       menuEdit.Append(121, _("Clear History"))
-      menuEdit.Append(108, _("Copy Translation\tCtrl-C"))
-      menuEdit.Append(2005, _("Paste Word\tCtrl-V"))
+
       menuEdit.AppendSeparator()
+
+      #
+      # Clipboard functions
+      #
+      menuEdit.Append(108, _("Copy\tCtrl-C"),
+                      _("Copy selected translation text"))
+      menuEdit.Append(2005, _("Paste\tCtrl-V"),
+                      _("Paste clipboard text into the search entry"))
+      
+      menuEdit.AppendSeparator()
+      
       self.menuEncodings = wxMenu()
       i = 0
       keys = misc.encodings.keys()
@@ -277,7 +291,8 @@ class MainWindow(wxFrame):
       #               wxBITMAP_TYPE_XPM)
       #self.buttonSearch = wxBitmapButton(self, 150, bmp, (16, 16),
       #                                   style=wxNO_BORDER)
-      self.buttonSearch = wxButton(self, 150, _("Search"))
+      #self.buttonSearch = wxButton(self, 150, _("Search"))
+      self.buttonSearch = wxButton(self, wx.ID_FIND)
       self.buttonSearch.SetToolTipString(_("Look up word"))
       hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
       
@@ -444,7 +459,7 @@ class MainWindow(wxFrame):
       EVT_MENU(self, 115, self.onManual)
       EVT_MENU(self, 117, self.onLicense)
       EVT_MENU(self, 116, self.onAbout)
-      EVT_BUTTON(self, 150, self.onSearch)
+      EVT_BUTTON(self, wx.ID_FIND, self.onSearch)
       EVT_BUTTON(self, 2010, self.onBack)
       EVT_BUTTON(self, 2011, self.onForward)
       EVT_BUTTON(self, 155, self.onStop)
@@ -470,12 +485,13 @@ class MainWindow(wxFrame):
 <ul>
 <li>To start using dictionary, select one from <i><b>Dictionaries</b></i>
 menu.</li>
-<li>To add new dictionary, select <i><b>Add New Dictionary</b></i> from <i><b>Dictionaries</b></i> menu.</li>
+<li>To add new dictionary, select <i><b>Add New Dictionary</b></i>
+from <i><b>Dictionaries</b></i> menu.</li>
 </ul>
 
 <p>
 For more information visit project's homepage on
-<i>http://opendict.sourceforge.net</i>.
+<i>http://sourceforge.net/projects/opendict</i>
 </p>
 </body>
 </html>
@@ -888,14 +904,8 @@ For more information visit project's homepage on
    def onCopy(self, event):
       
       self.do = wxTextDataObject()
-      try:
-         self.do.SetText(html2text(self.htmlCode))
-      except:
-         try:
-            self.do.SetText(html2text(self.htmlCode.encode(self.encoding)))
-         except:
-            self.SetStatusText(_("Failed to copy text to the clipboard"))
-            return
+      self.do.SetText(self.htmlWin.SelectionToText())
+      
       wxTheClipboard.Open()
       wxTheClipboard.SetData(self.do)
       wxTheClipboard.Close()
