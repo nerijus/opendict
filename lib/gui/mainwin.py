@@ -108,25 +108,12 @@ class MainWindow(wxFrame):
       #
       # Menu Bar
       #
-      
       menuBar = wxMenuBar()
 
       #
       # File menu
       #
-
       menuFile = wxMenu()
-##       menuFileOpen = wxMenu()
-      
-##       menuFileOpen.Append(101, "Slowo dictionary",
-##                           _("Slowo dictionaries usually have 'dwa' extention"))
-##       menuFileOpen.Append(102, "Mova dictionary",
-##                           _("Mova dictionaries usually have 'mova' extention"))
-##       menuFileOpen.Append(103, "TMX dictionary",
-##                           _("TMX dictionaries usually have 'tmx' extention"))
-##       menuFileOpen.Append(104, "DICT dictionary",
-##                           _("DICT dictionaries usually have " \
-##                             "'dict' or 'dz' extention"))
 
       idPrint = wx.NewId()
       menuFile.Append(idPrint, _("Print Translation"), "")
@@ -180,8 +167,7 @@ class MainWindow(wxFrame):
 
       #
       # View menu
-      #
-      
+      #      
       menuView = wxMenu()
 
       # Font size
@@ -232,7 +218,6 @@ class MainWindow(wxFrame):
       #
       # Dictionaries menu
       #
-
       self.menuDict = wxMenu()
 
       dictNames = []
@@ -285,7 +270,6 @@ class MainWindow(wxFrame):
       #
       # Tools menu
       #
-
       menuTools = wxMenu()
 
       idManageDict = wx.NewId()
@@ -293,10 +277,6 @@ class MainWindow(wxFrame):
                       _("Install, remove dictionaries and get " \
                         "information about them"))
 
-      # FIXME: Remove group classes and files
-      #menuTools.Append(122, _("Manage Groups...\tCtrl-G"),
-      #                _("Edit groups of dictionaries"))
-                      
       menuTools.AppendSeparator()
 
       idDictServer = wx.NewId()
@@ -305,16 +285,8 @@ class MainWindow(wxFrame):
 
       menuTools.AppendSeparator()
       
-      # Editor can't be used with non-unicode GUI, because unicode
-      # string are used with TMX files.
-
-      #if info.__unicode__:
       menuTools.Append(5002, _("Dictionary Editor"),
                        _("Make your own dictionary"))  
-
-      # FIXME: Remove atitinkamas classes
-      #menuTools.Append(5003, _("My Words\tCtrl-W"),
-      #                    _("Your significant words list"))
                            
       menuBar.Append(menuTools, _("Tools"))
 
@@ -322,7 +294,6 @@ class MainWindow(wxFrame):
       #
       # Help menu
       #
-
       menuHelp = wxMenu()
 
       idLicence = wx.NewId()
@@ -471,10 +442,6 @@ class MainWindow(wxFrame):
       # TODO: New-style event definition
 
       # File menu events
-##       EVT_MENU(self, 101, self.onOpenSlowo)
-##       EVT_MENU(self, 102, self.onOpenMova)
-##       EVT_MENU(self, 103, self.onOpenTMX)
-##       EVT_MENU(self, 104, self.onOpenDictFile)
       EVT_MENU(self, idPrint, self.onPrint)
       EVT_MENU(self, idPreview, self.onPreview)
       EVT_MENU(self, idCloseDict, self.onCloseDict)
@@ -498,13 +465,10 @@ class MainWindow(wxFrame):
       EVT_MENU(self, idDictServer, self.onOpenDictConn)
       #EVT_MENU(self, 122, self.onShowGroupsWindow)
       EVT_MENU(self, idManageDict, self.onShowPluginManager)
-      #EVT_MENU(self, 120, self.onShowFileRegistry)
       EVT_MENU(self, 5002, self.onShowDictEditor)
-      #EVT_MENU(self, 5003, self.onShowMyWordList)
       EVT_MENU(self, idPrefs, self.onShowPrefsWindow)
 
       # Help menu events
-      #EVT_MENU(self, 115, self.onManual)
       EVT_MENU(self, idLicence, self.onLicense)
       EVT_MENU(self, idAbout, self.onAbout)
 
@@ -515,7 +479,6 @@ class MainWindow(wxFrame):
       EVT_BUTTON(self, 2011, self.onForward)
       EVT_BUTTON(self, 155, self.onStop)
       EVT_BUTTON(self, 151, self.onClean)
-      #EVT_BUTTON(self, 5004, self.onAddMyWord)
       EVT_BUTTON(self, 152, self.onHideUnhide)
       EVT_TEXT_ENTER(self, 153, self.onSearch)
       EVT_LISTBOX(self, 154, self.onWordSelected)
@@ -583,6 +546,9 @@ For more information visit project's homepage on
          self.timerSearch.Stop()
          self.search.stop()
          word = self.entry.GetValue()
+
+         if self.entry.FindString(word) == -1:
+            self.entry.Append(word)
          
          result = self.search()
 
@@ -798,23 +764,6 @@ For more information visit project's homepage on
 
    def onClean(self, event):
       self.entry.SetValue("")
-
-
-##    def onAddMyWord(self, event):
-##       word = self.entry.GetValue().strip()
-##       if word:
-##          status = self.myWords.addWord(word)
-##          if status:
-##             self.SetStatusText(_("Error: ")+status)
-##             return
-               
-##          self.SetStatusText(_("Word \"%s\" has been added to " \
-##                             "\"My Words\" list") % word)
-
-##          if self.activeMyWordsWindow:
-##             self.myWordsWindow.updateList()   
-##       else:
-##          self.SetStatusText(_("Search entry is empty"))
          
 
    def onClearHistory(self, event):
@@ -837,10 +786,8 @@ For more information visit project's homepage on
    def onHideUnhide(self, event):
       if self.wordListHidden():
             self.unhideWordList()
-            #self.wlHidden = 0
       else:
             self.hideWordList()
-            #self.wlHidden = 1
 
 
    def onOpenSlowo(self, event):
@@ -860,7 +807,6 @@ For more information visit project's homepage on
             self.load = Process(SlowoParser, dialog.GetPaths()[0],
                                 self)
             self.dictName = name
-            #self.encoding = self.app.config.defaultEnc
             self.checkEncMenuItem(self.app.config.encoding)
          except:
             self.SetStatusText(_("Error: failed to open \"%s\"") % name)
