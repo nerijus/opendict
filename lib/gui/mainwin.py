@@ -716,7 +716,7 @@ class MainWindow(wxFrame):
       word = self.entry.GetValue()
 
       if word == "":
-         self.SetStatusText(_("Enter a word and try again"))
+         self.SetStatusText(_("Please enter some text and try again"))
          self.entry.SetFocus()
          return
 
@@ -735,7 +735,29 @@ class MainWindow(wxFrame):
       self.timerSearch.Start(self.delay)
 
       word = enc.fromWX(word)
-      word = word.encode(self.activeDictionary.getEncoding())
+      try:
+         word = word.encode(self.activeDictionary.getEncoding())
+      except Exception, e:
+         # FIXME: Cope duplication
+         self.buttonStop.Disable()
+         self.entry.Enable(True)
+         self.timerSearch.Stop()
+         self.SetStatusText(_('Stopped'))
+         wxEndBusyCursor()
+         
+         systemLog(ERROR, "Unable to decode '%s': %s" % (word.encode('UTF-8'),
+                                                         e))
+         title = _("Encode Failed")
+         msg = _("Unable to encode text \"%s\" in %s for \"%s\". " \
+                 "That logically means the word " \
+                 "definition does not exists in the dictionary." \
+                 % (enc.toWX(word), self.activeDictionary.getEncoding(),
+                 self.activeDictionary.getName()))
+                    
+         errorwin.showErrorMessage(title, msg)
+
+         return
+         
       self.search = Process(self.activeDictionary.search, word)
 
 

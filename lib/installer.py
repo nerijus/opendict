@@ -335,8 +335,7 @@ def _installNormalPlugin(filePath):
                     os.mkdir(dirToCreate)
             else:
                 fileToWrite = os.path.join(pluginsPath, dirName, fileName)
-                #print "Writing:", fileToWrite
-                fd = open(fileToWrite, 'w')
+                fd = open(fileToWrite, 'wb')
                 fd.write(zipFile.read(fileInZip))
                 fd.close()
     except Exception, e:
@@ -383,7 +382,7 @@ def _installPlainPlugin(filePath):
                     os.mkdir(dirToCreate)
             else:
                 fileToWrite = os.path.join(plainDictsPath, dirName, fileName)
-                fd = open(fileToWrite, 'w')
+                fd = open(fileToWrite, 'wb')
                 fd.write(zipFile.read(fileInZip))
                 fd.close()
     except Exception, e:
