@@ -43,6 +43,8 @@ class PlainDictInfo:
                              info.__PLAIN_DICT_CONFIG_DIR,
                              'config.xml'))
 
+        self.directory = directory
+
         self.name = config.get('name')
         self.formatString = config.get('format')
         self.path = config.get('path')
@@ -80,25 +82,102 @@ class PlainDictInfo:
         return self.encoding
 
 
+    def getLicence(self):
+        """Return licence text"""
+
+        filePath = self.licence
+
+        if filePath:
+            if not os.path.exists(filePath):
+                filePath = os.path.join(self.directory,
+                                        info._PLAIN_DICT_DATA_DIR,
+                                        self.licence)
+                if not os.path.exists(filePath):
+                    filePath = None
+
+            errMsg = "Error: <i>licence file not found</i>"
+
+            if not filePath:
+                systemLog(ERROR, "Cannot find defined licence file for %s: %" \
+                          % (self.getName(), e))
+                return errMsg
+
+            try:
+                fd = open(filePath)
+                data = fd.read()
+                fd.close()
+                return data
+            except Exception, e:
+                systemLog(ERROR, "Unable to read licence file for %s: %" \
+                          % (self.getName(), e))
+                return errMsg
+
+        return None
+
+
 
 class PlainDictionary(meta.Dictionary):
     """Plain dictionary class"""
 
+    licenceFile = None
+    
+
     def getConfigDir(self):
-       """Return configuration directory path"""
+        """Return configuration directory path"""
+        
+        if os.path.exists(os.path.join(info.LOCAL_HOME,
+                                       info.PLAIN_DICT_DIR,
+                                       os.path.basename(self.getPath()))):
+            path = os.path.join(info.LOCAL_HOME,
+                                info.PLAIN_DICT_DIR,
+                                os.path.basename(self.getPath()))
+        else:
+            path = os.path.join(info.GLOBAL_HOME,
+                                info.PLAIN_DICT_DIR,
+                                os.path.basename(self.getPath()))
+            
+        return path
+    
+    
+    def setLicenceFile(self, licenceFile):
+        """Set licence file path"""
+        
+        self.licenceFile = licenceFile
+        
+        
+    def getLicence(self):
+        """Return licence text"""
+        
+        filePath = self.licenceFile
 
-       if os.path.exists(os.path.join(info.LOCAL_HOME,
-                                      info.PLAIN_DICT_DIR,
-                                      os.path.basename(self.getPath()))):
-           path = os.path.join(info.LOCAL_HOME,
-                                      info.PLAIN_DICT_DIR,
-                                      os.path.basename(self.getPath()))
-       else:
-           path = os.path.join(info.GLOBAL_HOME,
-                               info.PLAIN_DICT_DIR,
-                               os.path.basename(self.getPath()))
+        if filePath:
+            if not os.path.exists(filePath):
+                filePath = os.path.join(self.getConfigDir(),
+                                        info._PLAIN_DICT_DATA_DIR,
+                                        self.licenceFile)
 
-       return path
+                if not os.path.exists(filePath):
+                    filePath = None
+
+            errMsg = "Error: <i>licence file not found</i>"
+
+            if not filePath:
+                systemLog(ERROR,
+                          "Cannot find defined licence file '%s' for '%s'" \
+                          % (self.licenceFile, self.getName()))
+                return errMsg
+
+            try:
+                fd = open(filePath)
+                data = fd.read()
+                fd.close()
+                return data
+            except Exception, e:
+                systemLog(ERROR, "Unable to read licence file for %s: %" \
+                          % (self.getName(), e))
+                return errMsg
+
+        return None
 
 
 def _loadPlainDictionary(directory):
@@ -118,27 +197,33 @@ def _loadPlainDictionary(directory):
                 Parser = t.getClass()
 
         if not Parser:
-            raise "This is internal error and should not happen: " \
+            raise Exception, "This is internal error and should not happen: " \
                   "no parser class found for dictionary in %s" % directory
 
-        # Constant %FULL_PLAIN_PATH% can be used to define dictionary file
-        # path. If so, it is replaced with full file path in local or
-        # system directory, depending on parameter 'directory' given.
-
-        fileName = os.path.basename(config.get('path').replace('%FULL_PLAIN_PATH%', ''))
+        filePath = config.get('path')
+        fileName = os.path.basename(filePath)
         home = info.LOCAL_HOME
         if directory.startswith(info.GLOBAL_HOME):
             home = info.GLOBAL_HOME
-        fileName = os.path.basename(fileName)
-        fullFileDir = os.path.join(home, info.PLAIN_DICT_DIR,
-                                    fileName, info.__PLAIN_DICT_FILE_DIR) + \
-                                    os.path.sep
 
-        dictionary = Parser(config.get('path').replace('%FULL_PLAIN_PATH%',
-                                                       fullFileDir))
+        if not os.path.exists(filePath):
+            newPath = os.path.join(home, info.PLAIN_DICT_DIR,
+                                   fileName, info.__PLAIN_DICT_FILE_DIR,
+                                   fileName)
+            if os.path.exists(newPath):
+                filePath = newPath
+            else:
+                filePath = None
+
+            
+        if not filePath:
+            raise Exception, "Dictionary file not found: %s" % fileName
+
+        dictionary = Parser(filePath)
         dictionary.setEncoding(config.get('encoding'))
         dictionary.setName(config.get('name'))
         dictionary.setChecksum(config.get('md5'))
+        dictionary.setLicenceFile(config.get('licence'))
 
     except Exception, e:
         traceback.print_exc()

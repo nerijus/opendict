@@ -76,7 +76,6 @@ class OpenDictApp(wxApp):
    def OnInit(self):
 
       _ = wxGetTranslation
-
       _start = time.time()
 
       if wxPython.__version__.split('.') < ['2', '5']:
@@ -100,9 +99,9 @@ class OpenDictApp(wxApp):
       
       # Init gettext support
       wxLocale_AddCatalogLookupPathPrefix(os.path.join(info.GLOBAL_HOME,
-                                                       "locale"))
+                                                       'locale'))
       self.l.Init(wxLANGUAGE_DEFAULT)
-      self.l.AddCatalog("opendict")
+      self.l.AddCatalog('opendict')
 
       # Data cache instance
       self.cache = {}
@@ -113,6 +112,9 @@ class OpenDictApp(wxApp):
       
       self.config = Configuration()
       self.config.load()
+
+      self.agreements = util.AgreementsManager(os.path.join(info.LOCAL_HOME,
+                                                            'agreements.txt'))
       
       
       # FIXME: check gui.pluginwin line 123, can't directly import

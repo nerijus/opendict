@@ -38,6 +38,7 @@ from gui.dictaddwin import DictAddWindow
 from gui.prefswin import PrefsWindow
 from gui.helpwin import LicenseWindow, AboutWindow
 from gui import errorwin
+from gui import miscwin
 from parser import SlowoParser
 from parser import MovaParser
 from parser import TMXParser
@@ -505,16 +506,15 @@ class MainWindow(wxFrame):
      
 
    def onExit(self, event):
-      
-      self.onCloseDict(None)
-      self.savePreferences()
-      self.Close(True)
+
+      self.onCloseWindow(None)
 
 
    def onCloseWindow(self, event):
-      
+
       self.onCloseDict(None)
       self.savePreferences()
+      #self.Close(True)
       self.Destroy()
 
 
@@ -526,7 +526,7 @@ class MainWindow(wxFrame):
          wxEndBusyCursor()
          self.timerSearch.Stop()
          self.search.stop()
-         #word = self.entry.GetValue()
+
          global lastLookupWord
          word = lastLookupWord
 
@@ -1068,9 +1068,26 @@ class MainWindow(wxFrame):
    def loadDictionary(self, dictInstance):
       """Prepares main window for using dictionary"""
 
+      #
+      # Check licence agreement
+      #
+      licence = dictInstance.getLicence()
+      
+      if licence \
+             and not self.app.agreements.getAccepted(dictInstance.getPath()):
+         if not miscwin.showLicenceAgreement(None, licence):
+            from gui import errorwin
+            title = _("Licence Agreement Rejected")
+            msg = _("You cannot use dictionary \"%s\" without accepting "\
+                    "licence agreement" % dictInstance.getName())
+            errorwin.showErrorMessage(title, msg)
+            return
+         else:
+            self.app.agreements.addAgreement(dictInstance.getPath())
+
       self.onCloseDict(None)
       self.activeDictionary = dictInstance
-
+        
       if dictInstance.getType() in dicttype.indexableTypes:
          if plaindict.indexShouldBeMade(dictInstance):
             # Notify about indexing
@@ -1198,8 +1215,6 @@ class MainWindow(wxFrame):
                % self.activeDictionary.getEncoding())
          plaindict.savePlainConfiguration(self.activeDictionary)
          
-      #self.SetStatusText(_("Selected encoding will be used "))
-
 
    def changeFontFace(self, name):
       """Save font face changes"""

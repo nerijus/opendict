@@ -708,35 +708,3 @@ class PluginManagerWindow(wxFrame):
                    % dictInfo.getName())
            errorwin.showErrorMessage(title, msg)
 
-
-
-class PluginLicenseWindow(wxDialog):
-
-   def __init__(self, parent, id, title, msg, pos=wxDefaultPosition,
-                size=wxDefaultSize, style=wxDEFAULT_DIALOG_STYLE):
-      wxDialog.__init__(self, parent, id, title, pos, size, style)
-
-      vbox = wxBoxSizer(wxVERTICAL)
-      vboxButtons = wxBoxSizer(wxHORIZONTAL)
-
-      label = _("Please read the following License Agreement. You must " \
-                "accept the terms of this agreement\nto install the plugin.")
-
-      vbox.Add(wxStaticText(self, -1, label), 0, wxALL, 5)
-
-      text = wxTextCtrl(self, -1, size=wxSize(-1, 300),
-                        style=wxTE_MULTILINE | wxTE_READONLY)
-      text.write(msg)
-
-      vbox.Add(text, 1, wxALL | wxEXPAND, 10)
-
-      self.buttonNo = wxButton(self, wxID_CANCEL, _("Do not accept"))
-      vboxButtons.Add(self.buttonNo, 1, wxALL | wxCENTRE, 2)
-
-      self.buttonYes = wxButton(self, wxID_OK, _("Accept"))
-      vboxButtons.Add(self.buttonYes, 1, wxALL | wxCENTRE, 2)
-
-      vbox.Add(vboxButtons, 0, wxALL | wxEXPAND, 0)
-      self.SetSizer(vbox)
-      self.Fit()
-

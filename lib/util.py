@@ -234,3 +234,63 @@ class DownloadThread:
             self.errorMessage = "Error while fetching data from %s: %s" \
                                 % (self.url, e)
             self.done =  True
+
+
+
+class AgreementsManager:
+    """Manages information about licence agreements for dictionaries"""
+
+    def __init__(self, filePath):
+        """Initialize variables"""
+
+        self.filePath = filePath
+        self.dictPaths = []
+
+        self._load()
+
+
+    def addAgreement(self, dictConfigPath):
+        """Mark dictionary licence as accepted"""
+
+        if not dictConfigPath in self.dictPaths:
+            self.dictPaths.append(dictConfigPath)
+            self._updateFile()
+
+
+    def removeAgreement(self, dictConfigPath):
+        """Mark dictionary licence as rejected,
+        i.e. remove from accepted list"""
+
+        if dictConfigPath in self.dictPaths:
+            self.dictPaths.remove(dictConfigPath)
+            self._updateFile()
+
+
+    def getAccepted(self, dictConfigPath):
+        """Return True if dictionary licence is marked as accepted"""
+
+        if dictConfigPath in self.dictPaths:
+            return True
+        else:
+            return False
+
+
+    def _load(self):
+        """Read data from file"""
+
+        try:
+            fd = open(self.filePath)
+            for line in fd:
+                self.dictPaths.append(line.strip())
+            fd.close()
+        except:
+            pass
+
+
+    def _updateFile(self):
+        """Write changes to file"""
+
+        fd = open(self.filePath, 'w')
+        for path in self.dictPaths:
+            print >> fd, path
+        fd.close()

@@ -103,6 +103,7 @@ class RegisterConfigParser:
         path = None
         md5 = None
         encoding = None
+        licence = None
 
         registers = doc.getElementsByTagName('plain-dictionary')
         if len(registers) == 0:
@@ -131,12 +132,18 @@ class RegisterConfigParser:
             for node in encodingElement.childNodes:
                 encoding = node.data
 
+        for licenceElement in \
+                registerElement.getElementsByTagName('licence'):
+            for node in licenceElement.childNodes:
+                licence = node.data
+
         result = {}
         result['name'] = name
         result['format'] = format
         result['path'] = path
         result['md5'] = md5
         result['encoding'] = encoding
+        result['licence'] = licence
 
         return result
 

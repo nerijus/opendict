@@ -51,6 +51,7 @@ class PluginInfo:
         self.pythonVersion = None
         self.platforms = []
         self.description = None
+        self.licenceFile = None
 
         self.xmlData = xmlData
         self._parse()
@@ -129,6 +130,12 @@ class PluginInfo:
             for node in descElement.childNodes:
                 if node.nodeType == node.TEXT_NODE:
                     self.description = node.data
+
+        # Get licence file
+        for licenceElement in doc.getElementsByTagName('licence'):
+            for node in licenceElement.childNodes:
+                if node.nodeType == node.TEXT_NODE:
+                    self.licenceFile = node.data
 
 
 
@@ -222,6 +229,20 @@ class DictionaryPlugin(meta.Dictionary):
         """Returns description text"""
         
         return self.info.description
+
+
+    def getLicence(self):
+        """Return licence text (HTML format required)"""
+
+        try:
+            fd = open(os.path.join(self.getPath(), self.info.licenceFile))
+            data = fd.read()
+            fd.close()
+        except Exception, e:
+            systemLog(ERROR, "Unable to read licence file: %s" % e)
+            data = 'Error: <i>Licence file not found</i>'
+
+        return data
         
 
     def search(self, word):

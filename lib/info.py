@@ -33,7 +33,7 @@ __PLUGIN_DICT_DIR = "plugins" # plugin dictionaries
 __PLAIN_DICT_DIR = "plain" # used for downloaded dictionaries
 __PLAIN_DICT_CONFIG_DIR = "conf"
 __PLAIN_DICT_FILE_DIR = "file"
-__PLAIN_DICT_DATA_DIR = "data"
+_PLAIN_DICT_DATA_DIR = "data"
 
 PLAIN_DICT_DIR = os.path.join(__DICT_DIR, __PLAIN_DICT_DIR)
 PLUGIN_DICT_DIR = os.path.join(__DICT_DIR, __PLUGIN_DICT_DIR)

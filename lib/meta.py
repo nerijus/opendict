@@ -147,6 +147,12 @@ class Dictionary:
         """Returns description text"""
         
         return None
+
+
+    def getLicence(self):
+        """Return licence text"""
+
+        return None
     
 
     def search(self, word):
