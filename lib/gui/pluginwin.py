@@ -24,7 +24,7 @@ import os
 
 #from info import home, uhome
 from misc import printError
-from gui.errorwin import errDialog
+from gui import errorwin
 
 import group
 import misc

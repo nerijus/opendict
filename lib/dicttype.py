@@ -22,12 +22,24 @@
 Dictionary types
 """
 
+import parser
+import newplugin # FIXME: rename
+
+
 class DictionaryType:
     """Dictionary type interface"""
 
+    dictClass = None
     fileExtentions = None
     name = None
     shortIdName = None
+ 
+
+    def getClass(self):
+        """Return dictionary class"""
+
+        return self.dictClass
+    
 
     def getFileExtentions(self):
         """Return file extention"""
@@ -50,98 +62,50 @@ class DictionaryType:
 class TypePlugin(DictionaryType):
     """Dictionary plugin"""
 
+    dictClass = newplugin.DictionaryPlugin
     fileExtentions = ('zip',)
     name = "OpenDict dictionary plugin"
-
-##     def getFileExtentions(self):
-##         """Return file extention"""
-
-##         return self.fileExtentions
-
-
-##     def getName(self):
-##         """Return type name"""
-
-##         return self.name
 
 
 
 class TypeSlowo(DictionaryType):
     """Slowo dictionary format"""
 
+    dictClass = parser.SlowoParser
     fileExtentions = ('dwa',)
     name = "Slowo dictionary"
     shortIdName = "slowo"
-
-##     def getFileExtentions(self):
-##         """Return file extention"""
-
-##         return self.fileExtentions
-
-
-##     def getName(self):
-##         """Return type name"""
-
-##         return self.name
 
 
 
 class TypeMova(DictionaryType):
     """Mova dictionary format"""
 
+    dictClass = parser.MovaParser
     fileExtentions = ('mova',)
     name = "Mova dictionary"
     shortIdName = "mova"
 
-##     def getFileExtentions(self):
-##         """Return file extention"""
-
-##         return self.fileExtentions
-
-
-##     def getName(self):
-##         """Return type name"""
-
-##         return self.name
     
 
 class TypeTMX(DictionaryType):
     """TMX dictionary format"""
 
+    dictClass = parser.TMXParser
     fileExtentions = ('tmx',)
     name = "TMX dictionary"
     shortIdName = "tmx"
 
-##     def getFileExtentions(self):
-##         """Return file extention"""
-
-##         return self.fileExtentions
-
-    
-##     def getName(self):
-##         """Return type name"""
-
-##         return self.name
-    
 
 
 class TypeDict(DictionaryType):
     """DICT dictionary type"""
 
+    dictClass = parser.DictParser
     fileExtentions = ('dict', 'dz',)
     name = "DICT dictionary"
     shortIdName = "dict"
 
-##     def getFileExtentions(self):
-##         """Return file extention"""
-
-##         return self.fileExtentions
-
-
-##     def getName(self):
-##         """Return type name"""
-
-##         return self.name
 
 
 # Constant instances

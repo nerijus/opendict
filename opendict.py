@@ -37,7 +37,8 @@ else:
    #sys.path.insert(0, os.curdir+"/lib")
 
 # OpenDict Modules
-from info import home, uhome, __version__
+#from info import home, uhome, __version__
+import info
 from gui.mainwin import MainWindow
 from gui.errorwin import ErrorWindow
 from config import Configuration
@@ -46,6 +47,7 @@ from plugin import initPlugins, installPlugin
 import misc
 import info
 import newplugin
+import plaindict
 import util
 
 
@@ -58,84 +60,53 @@ class OpenDictApp(wxApp):
 
       _ = wxGetTranslation
       
-      try:
-         print "DEBUG Unicode version:", info.__unicode__
+      print "DEBUG Unicode version:", wx.USE_UNICODE
+      
+      # Init gettext support
+      wxLocale_AddCatalogLookupPathPrefix(os.path.join(info.GLOBAL_HOME,
+                                                       "locale"))
+      self.l.Init(wxLANGUAGE_DEFAULT)
+      self.l.AddCatalog("opendict")
+      
+      # Dictionaries container
+      # Mapping: name -> object
+      self.dictionaries = {}
+      
+      self.config = Configuration()
+      self.config.readConfigFile()
+      
+      
+      # FIXME: check gui.pluginwin line 123, can't directly import
+      # plugin there.
+      self.installPlugin = installPlugin
+      
+      
+      gen = util.UniqueIdGenerator()
+      
+      # Load new-style plugins
+      for plugin in newplugin.loadPlugins():
+         self.dictionaries[plugin.getName()] = plugin
+         self.config.ids[gen.getID()] = plugin.getName()
+
+      for plain in plaindict.loadPlainDictionaries():
+         self.dictionaries[plain.getName()] = plain
+         self.config.ids[gen.getID()] = plain.getName()
          
-         # Init gettext support
-         wxLocale_AddCatalogLookupPathPrefix(os.path.join(home, "locale"))
-         self.l.Init(wxLANGUAGE_DEFAULT)
-         self.l.AddCatalog("opendict")
-
-         # Dictionaries container
-         # Mapping: name -> object
-         self.dictionaries = {}
+      #print self.dictionaries
+      #print self.config.ids
          
-         self.config = Configuration()
-         self.config.readConfigFile()
-
- 
-         # FIXME: check gui.pluginwin line 123, can't directly import
-         # plugin there.
-         self.installPlugin = installPlugin
-
-
-         gen = util.UniqueIdGenerator()
-
-         # Load new-style plugins
-         for plugin in newplugin.loadPlugins():
-            self.dictionaries[plugin.getName()] = plugin
-            #self.config.plugins[plugin.info.name] = plugin
-            #self.config.ids[plugin.info.name] = gen.getID()
-            self.config.ids[gen.getID()] = plugin.getName()
-
-         print self.dictionaries
-         print self.config.ids
-
-         # TODO: Remove in the future
-         self.reg = Register()
-
-         self.window = MainWindow(None, -1, "OpenDict",
-                                  self.config.winPos,
-                                  self.config.winSize,
-                                  style=wxDEFAULT_FRAME_STYLE)
-
-         # FIXME: Avoid this
-         self.config.window = self.window
-         
-         self.window.Show(True)
-
-
-      except:
-         print "\n*** Fatal Error ***"
-
-         msg = string.join(traceback.format_exception(
-               sys.exc_info()[0], sys.exc_info()[1],
-               sys.exc_info()[2]), "")
-
-         import wxPython
-         msg += "\n[Information]\n" \
-                "OpenDict: %s\n" \
-                "Python: %s\n" \
-                "wxPython: %s\n" \
-                "Platform: %s" % (__version__, sys.version,
-                                  wxPython.__version__, sys.platform)
-
-         print msg
-         
-         try:
-            errWin = ErrorWindow(None, -1, _("Error"), msg,
-                                 size=(300, 300),
-                                 style=wxDEFAULT_FRAME_STYLE)
-     
-            errWin.Show(true)
-         except:
-            print "ERROR Unable to show window with the message above"
-            msg = string.join(traceback.format_exception(
-                  sys.exc_info()[0], sys.exc_info()[1],
-                  sys.exc_info()[2]), "")
-            print msg
-            
-         return False
+      # TODO: Remove in the future
+      self.reg = Register()
+      
+      self.window = MainWindow(None, -1, "OpenDict",
+                               self.config.winPos,
+                               self.config.winSize,
+                               style=wxDEFAULT_FRAME_STYLE)
+      
+      # FIXME: Avoid this
+      self.config.window = self.window
+      
+      self.window.Show(True)
 
       return True
 
@@ -152,9 +123,9 @@ if __name__ == "__main__":
 
       sys.exit(0)
    
-   print "INFO OpenDict %s\n" % __version__
-   print "INFO Global home:", home
-   print "INFO Local home:", uhome
+   print "INFO OpenDict %s\n" % info.VERSION
+   print "INFO Global home:", info.GLOBAL_HOME
+   print "INFO Local home:", info.LOCAL_HOME
 
    openDictApp = OpenDictApp(0)
    openDictApp.MainLoop()

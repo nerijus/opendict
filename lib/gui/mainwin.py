@@ -38,6 +38,7 @@ from gui.dicteditorwin import DictEditorWindow
 from gui.dictaddwin import DictAddWindow
 from gui.prefswin import PrefsWindow
 from gui.helpwin import LicenseWindow, AboutWindow
+from gui import errorwin
 from parser import SlowoParser
 from parser import MovaParser
 from parser import TMXParser
@@ -573,13 +574,18 @@ For more information visit project's homepage on
          try:
             assert result.__class__ == meta.SearchResult
          except:
-            self.SetStatusText(errortype.INTERNAL_ERROR.getMessage())
+            self.SetStatusText(_(errortype.INTERNAL_ERROR.getMessage()))
             self.entry.Enable(1)
             self.entry.SetFocus()
+            
+            title = _("Dictionary Error")
+            message = _("The dictionary you currently use has internal " \
+                        "errors, so OpenDict cannot work with it.")
+            
+            errorwin.showErrorMessage(title, message)
+
             return
 
-         #print "Translation: '%s'" % result.translation
-         #print "Error: %s" % result.status
 
          self.SetStatusText("")
          self.entry.Enable(1)
@@ -588,10 +594,14 @@ For more information visit project's homepage on
          # Check status code
          if result.status != errortype.OK:
             print "ERROR Error:", result.status
-            self.SetStatusText(_(result.status.getMessage()))
-            self.entry.Enable(1)
-            self.entry.SetFocus()
-            misc.printError()
+            if result.status == errortype.INTERNAL_ERROR:
+               errorwin.showErrorMessage(result.status.getMessage(),
+                                         result.status.getLongMessage())
+            else:
+               self.SetStatusText(_(result.status.getMessage()))
+               self.entry.Enable(1)
+               self.entry.SetFocus()
+               misc.printError()
             return
 
          transUnicode = unicode(result.translation,

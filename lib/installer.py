@@ -19,14 +19,20 @@
 #
 
 from wxPython.wx import *
+
 import os
+import zipfile
 
 from gui.dictaddwin import DictAddWindow
+from gui import errorwin
 import plugin
 import register
 import misc
 import info
 import dicttype
+import xmltools
+import util
+import enc
 
 _ = wxGetTranslation
 
@@ -37,6 +43,7 @@ class Installer:
     def __init__(self, mainWin, config):
         self.mainWin = mainWin
         self.config = config
+
         
     def showGUI(self):
         """Show graphical windows for selecting files and formats"""
@@ -58,27 +65,16 @@ class Installer:
         else:
             fileDialog.Destroy()
             return
-        
-        #fileName = os.path.split(filePath)[1]
-        #rpos = fileName.rfind(".")
-        #if rpos > 0:
-        #    ext = fileName[rpos+1:]
 
         fileName = os.path.basename(filePath)
-        extention = os.path.splitext(fileName)[1]
+        extention = os.path.splitext(fileName)[1][1:]
 
         extMapping = {}
         for t in dicttype.supportedTypes:
             for ext in t.getFileExtentions():
                 extMapping[ext.lower()] = t
 
-        print extMapping
-      
-        #textFormats = misc.dictFormats.keys()
-        #textFormats.pop(textFormats.index("zip"))
-
         if not extention.lower() in extMapping.keys():
-        #if rpos < 1 or ext.lower() not in ["zip"]+textFormats:
             print "Error: could not recognize!"
             window = DictAddWindow(self.mainWin, fileName, filePath)
             window.CentreOnScreen()
@@ -88,85 +84,199 @@ class Installer:
 
             
     def install(self, filePath, extention):
-        """Copies files to special directories"""
-        
-        #ext = ext.lower()
-        print "Installer.install() Ext:", ext
-        #print misc.dictFormats.keys()
-        #textFormats = misc.dictFormats.keys()
-        #textFormats.pop(textFormats.index("zip"))
-        plainFormats = []
-        for t in dicttype.supportedTypes:
-            if t != dicttype.PLUGIN:
-                for ext in t.getFileExtentions():
-                    plainFormats.append(ext)
-        
+        """Install dictionary"""
+ 
         try:
-            if extention in plainFormats:
-                print "Registering..."
-                #reg = register.Register()
-                status = register.registerDictionary(filePath)
-                if (status == 0):
-                    self.mainWin.SetStatusText(_("Instalation complete"))
-                elif (status == 1):
-                    self.mainWin.SetStatusText(_("Error: dictionary is already installed"))
-            elif ext == "zip":
+            if extention.lower() in dicttype.PLUGIN.getFileExtentions():
                 print "Installing plugin"
-                status = plugin.installPlugin(self.config, filePath)
-                
-                if (status == 0):
-                    self.mainWin.SetStatusText(_("Instalation complete"))
-                elif (status == 1):
-                    self.mainWin.SetStatusText(_("Error: dictionary is already installed"))
-                elif (status == 2):
-                    self.mainWin.SetStatusText(_("Error: installation failed"))
-                elif (status == 3):
-                    self.mainWin.SetStatusText(_("Installation canceled"))
-                    
+                try:
+                    installDictionaryPlugin(filePath)
+                except Exception, e:
+                    errorwin.showErrorMessage(_("Installation failed"),
+                                              enc.toWX(str(e)))
+                    self.mainWin.SetStatusText(_("Installation failed"))
+                    return
+
+            else:
+                print "Registering..."
+                try:
+                    installPlainDictionary(filePath)
+                except Exception, e:
+                    errorwin.showErrorMessage(_("Installation failed"),
+                                              enc.toWX(str(e)))
+                    self.mainWin.SetStatusText(_("Installation failed"))
+                    return
         except:
             # Can this happen?
             self.mainWin.SetStatusText(_("Error: installation failed"))
             status = 1
             misc.printError()
 
+        self.mainWin.SetStatusText(_("Dictionary successfully installed"))
+
 
 # ===========================================================================
 
-def registerDictionary(filePath):
-    """Register dictionary"""
+def installPlainDictionary(filePath):
+    """Install plain dictionary"""
+
+    if not os.path.exists(filePath):
+        raise Exception, _("File %s does not exist") % filePath
+
+    if not os.path.isfile(filePath):
+        raise Exception, _("%s is not a file") % filePath
 
     fileName = os.path.basename(filePath)
     dictionaryName = os.path.splitext(fileName)[0]
 
     dictDir = os.path.join(info.LOCAL_HOME,
                            info.__DICT_DIR,
-                           info.__FILE_DICT_DIR,
+                           info.__PLAIN_DICT_DIR,
                            fileName)
 
-
+    # Check existance
     if os.path.exists(dictDir):
-        raise "Dictionary '%s' already exists"
+        raise Exception, _("Dictionary '%s' already exists") % dictionaryName
     
-    print "Will be installed in %s" % dictDir
-
     extention = os.path.splitext(fileName)[1][1:]
-    
-    #print extention
     dictType = None
 
+    # Determine type
     for t in dicttype.supportedTypes:
         for ext in t.getFileExtentions():
-            #print ext
             if ext.lower() == extention.lower():
                 dictType = t
                 break
 
     if not dictType:
-        raise "Dictionary type for '%s' still unknown! " \
+        raise Exception, "Dictionary type for '%s' still unknown! " \
               "This may be internal error." % fileName
 
-    print dictType
+    # Create directories
+    try:
+        os.mkdir(dictDir)
+        os.mkdir(os.path.join(dictDir, info.__PLAIN_DICT_CONFIG_DIR))
+        os.mkdir(os.path.join(dictDir, info.__PLAIN_DICT_FILE_DIR))
+        os.mkdir(os.path.join(dictDir, info.__PLAIN_DICT_DATA_DIR))
+    except Exception, e:
+        print "ERROR Unable to create dicrectories, aborted (%s)" % e
+        try:
+            shutil.rmtree(dictDir)
+        except Exception, e:
+            print "ERROR Unable to remove directories (%s)" % e
+
+
+    # Determine info
+    dictFormat = dictType.getIdName()
+    md5sum = util.getMD5Sum(filePath)
+
+    # Write configuration
+    xmlData = xmltools.generatePlainDictConfig(name=dictionaryName,
+                                               format=dictFormat,
+                                               path=filePath,
+                                               md5=md5sum,
+                                               encoding='UTF-8')
+
+    fd = open(os.path.join(dictDir, 'conf', 'config.xml'), 'w')
+    print >> fd, xmlData
+    fd.close()
+
+
+def installDictionaryPlugin(filePath):
+    """Install dictionary plugin"""
+
+    # Check if file exists
+    if not os.path.exists(filePath):
+        raise Exception, _("File %s does not exist") % filePath
+
+    # Check if it is file
+    if not os.path.isfile(filePath):
+        raise Exception, _("%s is not a file") % filePath
+
+    # Check if it is ZIP archive
+    if os.path.splitext(filePath)[1].lower()[1:] != "zip":
+        raise Exception, _("%s is not OpenDict dictionary plugin" % filePath)
+
+    zipFile = zipfile.ZipFile(filePath, 'r')
+
+    # Test CRC
+    if zipFile.testzip():
+        raise Exception, _("Dictionary plugin file is corrupted")
+
+    # Check if empty
+    try:
+        topDirectory = zipFile.namelist()[0]
+    except Exception, e:
+        raise Exception, _("Plugin file is empty (%s)" % e)
+
+    configFileExists = False
+    topLevelDirExists = False
+
+    # Check for validity
+    for fileInZip in zipFile.namelist():
+        dirName = os.path.dirname(fileInZip)
+        fileName = os.path.basename(fileInZip)
+
+        if fileName == "plugin.xml":
+            configFileExists = True
+
+        if len(fileName) == 0 \
+           and len(dirName.split('/')) == 1:
+            topLevelDirExists = True
+
+    if not configFileExists \
+       or not topLevelDirExists:
+        raise Exception, _("Selected file is not valid OpenDict plugin")
+
+    pluginsPath = os.path.join(info.LOCAL_HOME,
+                              info.PLUGIN_DICT_DIR)
+
+    # Check if already installed
+    if os.path.exists(os.path.join(info.LOCAL_HOME,
+                                   info.PLUGIN_DICT_DIR,
+                                   topDirectory)):
+        raise Exception, _("This plugin dictionary already installed. " \
+                           "If you want to upgrade it, please remove " \
+                           "old version first.")
+
+    # Install
+    try:
+        for fileInZip in zipFile.namelist():
+            dirName = os.path.dirname(fileInZip)
+            fileName = os.path.basename(fileInZip)
+
+            if len(fileName) == 0:
+                dirToCreate = os.path.join(pluginsPath, dirName)
+                if not os.path.exists(dirToCreate):
+                    print "Creating", dirToCreate
+                    os.mkdir(dirToCreate)
+            else:
+                fileToWrite = os.path.join(pluginsPath, dirName, fileName)
+                print "Writing:", fileToWrite
+                fd = open(fileToWrite, 'w')
+                fd.write(zipFile.read(fileInZip))
+                fd.close()
+    except Exception, e:
+        try:
+            shutil.rmtree(os.path.join(pluginsPath, topLevelDir))
+        except Exception, e:
+            print "ERROR %s" % e
+            raise _("Error while removing created directories after " \
+                    "plugin installation failure. This may be " \
+                    "permission or disk space error.")
+
+        print "ERROR %s" % e
+        raise _("Unable to install plugin")
     
 
 if __name__ == "__main__":
-    registerDictionary("/dsfs/dfghgh/sd.mova")
+    #try:
+    #    installPlainDictionary("/home/mjoc/")
+    #except Exception, e:
+    #    print "ERROR %s" % e
+
+    try:
+        installDictionaryPlugin("/home/mjoc/sampleplugin2.zip")
+    except Exception, e:
+        print "ERROR %s" % e
+        

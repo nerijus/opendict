@@ -30,10 +30,13 @@ __OPENDICT_LOCAL_DIR = ".opendict"
 
 __DICT_DIR = "dictionaries"
 __PLUGIN_DICT_DIR = "plugins" # plugin dictionaries
-__FILE_DICT_DIR = "plain" # used for downloaded dictionaries
-__FILE_DICT_CONFIG_DIR = "conf"
-__FILE_DICT_FILES_DIR = "file"
-__FILE_DICT_DATA_DIR = "data"
+__PLAIN_DICT_DIR = "plain" # used for downloaded dictionaries
+__PLAIN_DICT_CONFIG_DIR = "conf"
+__PLAIN_DICT_FILE_DIR = "file"
+__PLAIN_DICT_DATA_DIR = "data"
+
+PLAIN_DICT_DIR = os.path.join(__DICT_DIR, __PLAIN_DICT_DIR)
+PLUGIN_DICT_DIR = os.path.join(__DICT_DIR, __PLUGIN_DICT_DIR)
 
 GLOBAL_HOME = None
 LOCAL_HOME = None

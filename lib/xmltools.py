@@ -29,7 +29,7 @@ class RegisterConfigGenerator:
 
         doc = xml.dom.minidom.Document()
 
-        registerElement = doc.createElement("register")
+        registerElement = doc.createElement("plain-dictionary")
         doc.appendChild(registerElement)
 
         # Format element
@@ -60,7 +60,7 @@ class RegisterConfigGenerator:
         return doc
     
 
-def generateRegisterConfig(**args):
+def generatePlainDictConfig(**args):
     """Generate configuration and return XML string"""
 
     generator = RegisterConfigGenerator()
@@ -83,7 +83,7 @@ class RegisterConfigParser:
         md5 = None
         encoding = None
 
-        registers = doc.getElementsByTagName('register')
+        registers = doc.getElementsByTagName('plain-dictionary')
         if len(registers) == 0:
             raise "Invalid configuration"
 
@@ -120,7 +120,7 @@ class RegisterConfigParser:
         return result
 
 
-def parseRegisterConfig(configPath):
+def parsePlainDictConfig(configPath):
     """Parse configuration file and return data dictionary"""
 
     parser = RegisterConfigParser()
@@ -133,9 +133,9 @@ def parseRegisterConfig(configPath):
     
 
 if __name__ == "__main__":
-    print generateRegisterConfig(name='Test', format='Nonsense',
+    print generatePlainDictConfig(name='Test', format='Nonsense',
                                  path='/home/mjoc/xxx/',
                                  md5='34kj34lk5j3lkj345',
                                  encoding='UTF-8')
 
-    print parseRegisterConfig('/home/mjoc/config.xml')
+    print parsePlainDictConfig('/home/mjoc/config.xml')

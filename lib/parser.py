@@ -36,6 +36,13 @@ import errortype
 import meta
 
 
+# TODO:
+# 1. Remove wx from this module
+# 2. Add start() stop() methods to parser classes
+# 3. Apply new error system
+
+
+# TODO: Check algorithm
 def binarySearchIndex(data, word):
 
    sub = data
@@ -434,11 +441,12 @@ class TMXParser(meta.Dictionary):
     Reads TMX files and does the search.
     """
 
-    def __init__(self, file=""):
+    def __init__(self, filePath):
 
        #self.window = window
-       self.name = file
-       self.needsList = wxGetApp().config.useListWithRegs
+       self.name = os.path.splitext(os.path.basename(filePath))[0]
+       #self.needsList = wxGetApp().config.useListWithRegs
+       self.needsList = True
        self.encoding = None
 
        self.mapping = {}
@@ -446,6 +454,10 @@ class TMXParser(meta.Dictionary):
        self.trans = []
        self.inSeg = 0
        self.lang = ""
+
+
+    def start(self):
+       """Allocate resources"""
 
        parser = xml.parsers.expat.ParserCreate()
        parser.StartElementHandler = self.startElement
@@ -674,7 +686,10 @@ class DictParser(meta.Dictionary):
       return (result, [], errno)
 
 
-# TODO: add needee methods
+# TODO:
+# 1. This is not a parser, move to another module
+# 2. Add needee methods
+# 
 class DictConnection(meta.Dictionary):
    """Built-in DICT client
    Connects to a DICT server abd does the search.

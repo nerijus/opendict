@@ -29,15 +29,16 @@ _ = wxGetTranslation
 #from info import home, uhome
 import info
 
-def errDialog(msg=""):
 
-   if msg == "":
-      msg = traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], 
-                                       sys.exc_info()[2])[3]
-   print "MSG:", msg
-   window = wxMessageDialog(wxGetApp().window,
+def showErrorMessage(title, msg):
+
+   #if msg == "":
+   #   msg = traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1], 
+   #                                    sys.exc_info()[2])[3]
+   #print "MSG:", msg
+   window = wxMessageDialog(None,
                             msg, 
-                            _("Error"), 
+                            _(title), 
                             wxOK | wxICON_ERROR)
    window.CenterOnScreen()
    window.ShowModal()
@@ -64,13 +65,13 @@ class ErrorWindow(wxFrame):
       vbox.Add(errMsg, 1,
                wxALL | wxEXPAND, 10)
 
-      msg = _("This may be a configuration error due to lost files and may\n" \
-            "be fixed by editing %s\n" \
-            "by hand using text editor and removing corruped entries,\n" \
-            "or this error may be a bug in the program. If so, please\n" \
-            "copy this error text and report a bug to developers at\n" \
-            "http://opendict.not.yet/bugs.html\n" \
-            "Thank you.") % os.path.join("", "config.txt")
+      #msg = _("This may be a configuration error due to lost files and may\n" \
+      #      "be fixed by editing %s\n" \
+      #      "by hand using text editor and removing corruped entries,\n" \
+      #      "or this error may be a bug in the program. If so, please\n" \
+      #      "copy this error text and report a bug to developers at\n" \
+      #      "http://opendict.not.yet/bugs.html\n" \
+      #      "Thank you.") % os.path.join("", "config.txt")
 
       vbox.Add(wxStaticText(self, -1, msg), 0,
                wxALL | wxEXPAND, 5)
@@ -85,10 +86,12 @@ class ErrorWindow(wxFrame):
       EVT_CLOSE(self, self.onCloseWindow)
       EVT_BUTTON(self, 200, self.onExit)
 
-   def onCloseWindow(self, event):
-      self.Destroy() # ??
-      sys.exit(1) # FIXME: how to exit without this?
+
+   #def onCloseWindow(self, event):
+   #   self.Destroy() # ??
+   #   sys.exit(1) # FIXME: how to exit without this?
       #wxGetApp().window.Close(True)
 
-   def onExit(self, event):
-      self.Close(True)
+
+   #def onExit(self, event):
+   #   self.Close(True)
