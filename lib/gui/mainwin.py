@@ -52,7 +52,7 @@ import misc
 import info
 import util
 import meta
-import error
+import errortype
 
 _ = wxGetTranslation
 
@@ -513,7 +513,7 @@ For more information visit project's homepage on
          try:
             assert result.__class__ == meta.SearchResult
          except:
-            self.SetStatusText(error.reason.get(error.INTERNAL_ERROR))
+            self.SetStatusText(errortype.INTERNAL_ERROR.getMessage())
             self.entry.Enable(1)
             self.entry.SetFocus()
             return
@@ -529,7 +529,7 @@ For more information visit project's homepage on
          # Check status code
          if result.status != error.OK:
             print "ERROR Error:", result.status
-            self.SetStatusText(_(error.reason.get(result.status)))
+            self.SetStatusText(_(result.status.getMessage()))
             self.entry.Enable(1)
             self.entry.SetFocus()
             misc.printError()

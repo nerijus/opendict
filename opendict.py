@@ -32,9 +32,9 @@ if sys.platform == "win32":
    # MS Windows user
    sys.path = [os.path.join(os.curdir, "lib")] + sys.path
 else:
-   # Unix-like system user
+   # Unix-like system
    sys.path.insert(0, "/usr/share/opendict/lib")
-   sys.path.insert(0, os.curdir+"/lib")
+   #sys.path.insert(0, os.curdir+"/lib")
 
 # OpenDict Modules
 try:
@@ -46,6 +46,7 @@ try:
    from plugin import initPlugins, installPlugin
    import misc
    import info
+   import newplugin
 except:
    try:
       import misc
@@ -82,6 +83,13 @@ class OpenDictApp(wxApp):
          self.installPlugin = installPlugin
 
          initPlugins(self.config)
+
+         # Load new-style plugins
+         for plugin in newplugin.loadPlugins():
+            self.config.plugins[plugin.info.name] = plugin
+            self.config.ids[plugin.info.name] = self.config.plugMenuIds
+            self.config.plugMenuIds += 1
+         
          self.reg = Register()
 
          self.window = MainWindow(None, -1, "OpenDict",
@@ -90,7 +98,6 @@ class OpenDictApp(wxApp):
                                   style=wxDEFAULT_FRAME_STYLE)
 
          self.config.window = self.window
-
          self.window.Show(True)
 
 
@@ -136,7 +143,7 @@ if __name__ == "__main__":
       print
       print "OPTIONS:"
       print "  -h, --help        show this help"
-      print "  --splash          enable splash screen"
+      #print "  --splash          enable splash screen"
       print "  --home=<DIR>      specify home directory"
 
       sys.exit(0)

@@ -5,7 +5,6 @@ Status:
   * -- not finished
   ? -- needs to be discussed
 
-[ ] <Doc>: Write the manual
 [ ] <Base>: Make "Stop" button kill the process
 [ ] <Base>: Full unicode support
 [ ] <Feature>: Ability to have new window or new tab to open another dictionary
@@ -16,5 +15,22 @@ Status:
 [ ] New plugins and registers system for external dictionaries
 [ ] <DictEditor> Cannot edit dictionary if it is a registered one.
 
-BUG [ ] When selecting a file, mask is damaged sometimes.
+[ ] Make DictConnction show alternative word list (FUTURE)
+
+BUG [x] When selecting a file, mask is damaged sometimes.
 [x] Replace XPM files with PNG ones.
+
+---------------
+
+[x] 1. Finish with parser classes to implement meta.Dictionary
+[ ] 2. Unify dictionary load
+[ ] 3. Make dictionary to be created at start, and after button press only
+few pointers assigned (no need to launch new thread).
+[ ] Make message dialog class to show errors
+[ ] All the dictionaries must be kept in one data structure.
+    Example: dictionaries {name: object}
+[ ] Unify dictionary types
+
+Steps:
+1. Scan for plugins and add to list
+2. Scan for registers and add to list
