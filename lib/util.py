@@ -230,6 +230,7 @@ class DownloadThread:
                 
             self.up.close()
             self.done = True
+            self.statusMessage = "Done"
         except Exception, e:
             self.errorMessage = "Error while fetching data from %s: %s" \
                                 % (self.url, e)

@@ -650,6 +650,7 @@ class PluginManagerWindow(wxFrame):
        error = None
 
        downloader = util.DownloadThread(dictInfo.getLocation())
+       stopped = False
 
        try:
            fd = open(localPath, 'w')
@@ -661,6 +662,7 @@ class PluginManagerWindow(wxFrame):
 
                if not keepGoing:
                    downloader.stop()
+                   stopped = True
                    break
 
                chunk = downloader.getBytes()
@@ -684,6 +686,9 @@ class PluginManagerWindow(wxFrame):
 
        fd.close()
 
+       if stopped:
+           return
+
        if not error:
            error = downloader.getErrorMessage()
 
@@ -694,7 +699,6 @@ class PluginManagerWindow(wxFrame):
            return
 
        md5sum = util.getMD5Sum(localPath)
-       print dictInfo.getChecksum()
 
        #
        # Check checksum
