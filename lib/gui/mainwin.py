@@ -60,7 +60,7 @@ class HtmlWindow(wxHtmlWindow):
       wxBeginBusyCursor()
       parent = self.GetParent().GetParent().GetParent()
       parent.SetStatusText(_("Searching..."))
-      parent.buttonStop.Enable(1)
+      #parent.buttonStop.Enable(1)
       parent.timerSearch.Start(parent.delay)
       parent.search = Process(parent.dict.search, linkinfo.GetHref())
 
@@ -256,11 +256,12 @@ class MainWindow(wxFrame):
       hboxToolbar.Add(self.entry, 1, wxALL | wxCENTER, 1)
 
       # Search bitmap button
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "search.xpm"),
-                     wxBITMAP_TYPE_XPM)
-      self.buttonSearch = wxBitmapButton(self, 150, bmp, (16, 16),
-                                         style=wxNO_BORDER)
-      self.buttonSearch.SetToolTipString(_("Search"))
+      #bmp = wxBitmap(os.path.join(home, "pixmaps", "search.xpm"),
+      #               wxBITMAP_TYPE_XPM)
+      #self.buttonSearch = wxBitmapButton(self, 150, bmp, (16, 16),
+      #                                   style=wxNO_BORDER)
+      self.buttonSearch = wxButton(self, 150, _("Search"))
+      self.buttonSearch.SetToolTipString(_("Look up word"))
       hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
       
       # Clear bitmap button
@@ -273,18 +274,18 @@ class MainWindow(wxFrame):
       #hboxToolbar.Add(buttonClean, 0, wxALL | wxCENTER, 1)
       
       # Back button
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "left.xpm"),
-                     wxBITMAP_TYPE_XPM)
-      self.buttonBack = wxBitmapButton(self, 2010, bmp, (16, 16),
+      bmp = wxBitmap(os.path.join(home, "pixmaps", "left.png"),
+                     wxBITMAP_TYPE_PNG)
+      self.buttonBack = wxBitmapButton(self, 2010, bmp, (24, 24),
                                          style=wxNO_BORDER)
       self.buttonBack.SetToolTipString(_("Back"))
       self.buttonBack.Disable()
       hboxToolbar.Add(self.buttonBack, 0, wxALL | wxCENTER, 1)
 
       # Forward button
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "right.xpm"),
-                     wxBITMAP_TYPE_XPM)
-      self.buttonForward = wxBitmapButton(self, 2011, bmp, (16, 16),
+      bmp = wxBitmap(os.path.join(home, "pixmaps", "right.png"),
+                     wxBITMAP_TYPE_PNG)
+      self.buttonForward = wxBitmapButton(self, 2011, bmp, (24, 24),
                                          style=wxNO_BORDER)
       self.buttonForward.SetToolTipString(_("Forward"))
       self.buttonForward.Disable()
@@ -292,14 +293,14 @@ class MainWindow(wxFrame):
 
       # Stop threads
       # TODO: how thread can be killed?
-      bmp = wxBitmap(os.path.join(home, "pixmaps", "stop.xpm"),
-                     wxBITMAP_TYPE_XPM)
-      self.buttonStop = wxBitmapButton(self, 155, bmp, (16, 16),
-                                       style=wxNO_BORDER)
+      #bmp = wxBitmap(os.path.join(home, "pixmaps", "stop.xpm"),
+      #               wxBITMAP_TYPE_XPM)
+      #self.buttonStop = wxBitmapButton(self, 155, bmp, (16, 16),
+      #                                 style=wxNO_BORDER)
       #self.buttonStop.SetToolTipString(_("Stop"))
       #self.buttonStop.Disable()
       #hboxToolbar.Add(self.buttonStop, 0, wxALL | wxCENTER, 1)
-      self.buttonStop.Hide()
+      #self.buttonStop.Hide()
 
       #bmp = wxBitmap(os.path.join(home, "pixmaps", "add.xpm"),
       #               wxBITMAP_TYPE_XPM)
@@ -313,7 +314,7 @@ class MainWindow(wxFrame):
       self.wlHidden = 0
       bmp = wxBitmap(os.path.join(home, "pixmaps", "hide.xpm"),
                      wxBITMAP_TYPE_XPM)
-      self.buttonHide = wxBitmapButton(self, 152, bmp, (16, 16),
+      self.buttonHide = wxBitmapButton(self, 152, bmp, (24, 24),
                                        style=wxNO_BORDER)
       self.buttonHide.SetToolTipString(_("Hide word list"))
       hboxToolbar.Add(self.buttonHide, 0, wxALL | wxCENTER, 1)
@@ -468,13 +469,13 @@ class MainWindow(wxFrame):
             assert len(result) == 3
          except:
             self.SetStatusText(_(misc.errors[2]))
-            self.buttonStop.Disable()
+            #self.buttonStop.Disable()
             self.entry.Enable(1)
             self.entry.SetFocus()
             return
 
          self.SetStatusText("")
-         self.buttonStop.Disable()
+         #self.buttonStop.Disable()
          self.entry.Enable(1)
          self.search = None
 
@@ -569,7 +570,7 @@ class MainWindow(wxFrame):
          if self.dict == None:
             self.onCloseDict(None)
             self.load = None
-            self.buttonStop.Disable()
+            #self.buttonStop.Disable()
             self.entry.Enable(1)
             self.entry.SetFocus()
             self.SetStatusText(_("Error: failed to load"))
@@ -605,7 +606,7 @@ class MainWindow(wxFrame):
          self.checkIfNeedsList()
          
          self.load = None
-         self.buttonStop.Disable()
+         #self.buttonStop.Disable()
          self.entry.Enable(1)
          self.entry.SetFocus()
 
@@ -638,7 +639,7 @@ class MainWindow(wxFrame):
       self.timerSearch.Stop()
       self.search = None # should be killed here
 
-      self.buttonStop.Enable(1)
+      #self.buttonStop.Enable(1)
       self.entry.Disable()
       self.timerSearch.Start(self.delay)
       
@@ -657,7 +658,7 @@ class MainWindow(wxFrame):
          self.buttonForward.Disable()
 
    def onStop(self, event):
-      self.buttonStop.Disable()
+      #self.buttonStop.Disable()
       self.entry.Enable(1)
       self.SetStatusText(_("Stopped"))
       self.timerSearch.Stop()
@@ -756,7 +757,7 @@ class MainWindow(wxFrame):
       if dialog.ShowModal() == wxID_OK:
          self.onCloseDict(event)
          self.entry.Disable()
-         self.buttonStop.Enable(1)
+         #self.buttonStop.Enable(1)
          name = os.path.split(dialog.GetPaths()[0])[1]
          self.SetTitle("OpenDict: %s" % name)
          self.SetStatusText(_("Loading \"%s\"...") % name)
@@ -833,7 +834,7 @@ class MainWindow(wxFrame):
       self.dict = None
       self.encoding = self.app.config.defaultEnc
       self.checkEncMenuItem(self.encoding)
-      self.buttonStop.Disable()
+      #self.buttonStop.Disable()
 
    
    def onCopy(self, event):
@@ -934,7 +935,7 @@ class MainWindow(wxFrame):
                print "MainWindow: Loading selected dictionary..."
                
             self.SetStatusText(_("Loading \"%s\"...") % name)
-            self.buttonStop.Enable(1)
+            #self.buttonStop.Enable(1)
             if 200 <= id < 300:
                # plugin
                self.loadPlugin(name)
@@ -975,7 +976,7 @@ class MainWindow(wxFrame):
       # hmm, is this ok?
       if plugin.checkPluginVersion(p):
          self.SetStatusText("")
-         self.buttonStop.Disable() # temporarly uavailable
+         #self.buttonStop.Disable() # temporarly uavailable
          return
 
       self.entry.Disable()
@@ -1125,7 +1126,7 @@ class MainWindow(wxFrame):
       #print "Word selected: " + event.GetString()
       self.__searchedBySelecting = 1
       self.SetStatusText(_("Searching..."))
-      self.buttonStop.Enable(1)
+      #self.buttonStop.Enable(1)
       self.timerSearch.Start(self.delay)
       word = event.GetString()
       self.entry.SetValue(word) 
