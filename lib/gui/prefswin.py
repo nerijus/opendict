@@ -108,12 +108,12 @@ class PrefsWindow(wxDialog):
       vboxMain.Add(wxStaticLine(self, -1), 0, wxALL | wxEXPAND, 5)
 
       self.buttonOK = wxButton(self, 1104, _("OK"))
-      hboxButtons.Add(self.buttonOK, 1, wxALL | wxEXPAND, 1)
+      hboxButtons.Add(self.buttonOK, 0, wxALL | wxEXPAND, 2)
 
       self.buttonCancel = wxButton(self, 1105, _("Cancel"))
-      hboxButtons.Add(self.buttonCancel, 1, wxALL | wxEXPAND, 1)
+      hboxButtons.Add(self.buttonCancel, 0, wxALL | wxEXPAND, 2)
 
-      vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
+      vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 2)
 
       self.SetSizer(vboxMain)
       self.Fit()
