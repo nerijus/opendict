@@ -39,8 +39,8 @@ from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 _ = wxGetTranslation
 
-_addOnsListURL = 'file:///home/mjoc/opendict-add-ons.xml'
-#_addOnsListURL = 'http://files.akl.lt/~mjoc/opendict-add-ons.xml'
+#_addOnsListURL = 'file:///home/mjoc/opendict-add-ons.xml'
+_addOnsListURL = 'http://files.akl.lt/~mjoc/opendict-add-ons.xml'
 
 
 class DictListCtrl(wx.ListCtrl):
