@@ -998,6 +998,10 @@ class MainWindow(wxFrame):
    def loadDictionary(self, dictInstance):
       """Prepares main window for using dictionary"""
 
+      if not dictInstance:
+         systemLog(ERROR, "loadDictionary: dictInstance is False")
+         return
+
       #
       # Check licence agreement
       #
