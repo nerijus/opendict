@@ -68,10 +68,8 @@ class ErrorInternal(ErrorType):
     """Internal error class"""
 
     shortMessage = u"Internal error"
-    longMessage = u"Internal error occured. This may be the " \
-                  "bug of the dictionary you use at the moment, or this can " \
-                  "be a bug of OpenDict itself. Please send bug report to " \
-                  "OpenDict and dictionary of current use authors. Thank you."
+    longMessage = u"Internal error occured. Please send bug report to " \
+                  "the dictionary's of current use authors. Thank you."
 
 
 
@@ -89,8 +87,8 @@ class ErrorConnectionTimeout(ErrorType):
     """Not connected error class"""
 
     shortMessage = u"Connection timeout"
-    longMessage = u"Timed out while waiting for requested " \
-                  "translation. Check if your Internet connection is alive."
+    longMessage = u"Timed out while waiting for response. " \
+                  "Check if your Internet connection is alive."
 
 
 

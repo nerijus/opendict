@@ -30,6 +30,7 @@ from misc import printError
 from gui import errorwin
 import installer
 import dicttype
+import enc
 
 #import group
 import misc
@@ -67,9 +68,6 @@ class PluginManagerWindow(wxFrame):
 
       for dictName in self.app.dictionaries.keys():
           self.installedDictionaries[dictName] = installed
-
-      #for xxx in [u'Vienas pienas', u'Du kartu', u'Trys kas nors']:
-      #    self.allDictionaries[xxx] = not installed
 
       tabbedPanel = wx.Notebook(self, -1)
 
@@ -285,17 +283,17 @@ class PluginManagerWindow(wxFrame):
 
        self.stName = wxStaticText(panelInfo, -1, _("Name: "))
        self.stName.Disable()
-       grid.Add(self.stName, 0, wxALL)
+       grid.Add(self.stName, 0, wxALL | wxALIGN_RIGHT)
        grid.Add(self.labelName, 0, wxALL)
 
        self.stVersion = wxStaticText(panelInfo, -1, _("Version: "))
        self.stVersion.Disable()
-       grid.Add(self.stVersion, 0, wxALL)
+       grid.Add(self.stVersion, 0, wxALL | wxALIGN_RIGHT)
        grid.Add(self.labelVersion, 0, wxALL)
 
        self.stAuthor = wxStaticText(panelInfo, -1, _("Author: "))
        self.stAuthor.Disable()
-       grid.Add(self.stAuthor, 0, wxALL)
+       grid.Add(self.stAuthor, 0, wxALL | wxALIGN_RIGHT)
        grid.Add(self.labelAuthor, 0, wxALL)
 
        vboxInfoBox.Add(grid, 1, wxALL | wxEXPAND, 1)
@@ -322,106 +320,105 @@ class PluginManagerWindow(wxFrame):
            print "Showing info about installed item %d" \
                  % self.currentInstalledItemSelection
            if self.currentInstalledItemSelection == -1:
+               self.clearInfo()
                self.disableInfo()
            else:
                self.enableInfo()
+               self.showInstalledInfo()
        elif sel == _pageAvail:
            print "Showing info about avail item %d" \
                  % self.currentAvailItemSelection
            if self.currentAvailItemSelection == -1:
+               self.clearInfo()
                self.disableInfo()
            else:
                self.enableInfo()
-       
-
-   def GetListCtrl(self):
-        return self.list
-
-
+               self.showAvailableInfo()
+               
+               
    def onInstalledSelected(self, event):
+       """Called when list item is selected"""
+       
+       self.currentInstalledItemSelection = event.m_itemIndex
+       self.buttonRemove.Enable(1)
+       
+       self.showInstalledInfo()
 
-      self.currentInstalledItemSelection = event.m_itemIndex
-      self.buttonRemove.Enable(1)
 
-      self.stName.Enable(1)
-      self.stVersion.Enable(1)
-      self.stAuthor.Enable(1)
+   def showInstalledInfo(self):
+       """Show information about selected dictionary"""
 
-      print self.installedList.GetItemText(self.currentInstalledItemSelection)
+       dictName = self.installedList.GetItemText(\
+          self.currentInstalledItemSelection)
+       
+       self.showInfo(dictName)
+
+
+   def showAvailableInfo(self):
+       """Show information about selected dictionary"""
+
+       dictName = self.availableList.GetItemText(\
+          self.currentAvailItemSelection)
+
+       self.showInfo(dictName)
+       
+       
+   def showInfo(self, dictName):        
+       """Show information about dictionary"""
+
+       dictInstance = self.app.dictionaries.get(dictName)
+       
+       self.stName.Enable(1)
+       self.stVersion.Enable(1)
+       self.stAuthor.Enable(1)
+       
+       if dictInstance.getName():
+           dictName = enc.toWX(dictInstance.getName())
+       else:
+           dictName = '--'
+       self.labelName.SetLabel(dictName)
+       
+       if dictInstance.getVersion():
+           dictVersion = enc.toWX(dictInstance.getVersion())
+       else:
+           dictVersion = '--'
+       self.labelVersion.SetLabel(dictVersion)
+       
+       if dictInstance.getAuthors():
+           authors = []
+           for author in dictInstance.getAuthors():
+               if author:
+                   authors.append("%s <%s>" % (author.get('name'),
+                                               author.get('email')))
       
-##       name = event.GetString()
-##       size = -1
+           dictAuthors = enc.toWX(', '.join(authors))
+       else:
+           dictAuthors = '--'
+       self.labelAuthor.SetLabel(dictAuthors)
+
+       if dictInstance.getDescription():
+           description = enc.toWX(dictInstance.getDescription().strip())
+       else:
+           description = ''
+       self.textAbout.Clear()
+       self.textAbout.WriteText(description)
       
-##       #if self.dictMap[name] == "plugin":
-##       if name in self.app.config.plugins.keys():
-##              plugin = self.app.config.plugins[name]
-
-##              try:
-##                 self.labelName.SetLabel(plugin.name.decode('UTF-8'))
-##              except Exception, e:
-##                 print "ERROR Unable to set label '%s' (%s)" \
-##                       % (plugin.name, e)
-
-##              try:
-##                 self.labelVersion.SetLabel(plugin.version.decode('UTF-8'))
-##              except Exception, e:
-##                 print "ERROR: Unable to set label '%s' (%s)" \
-##                       % (plugin.version, e)
-
-##              self.labelFormat.SetLabel(_("OpenDict plugin"))
-                
-##              try:
-##                 self.labelAuthor.SetLabel(plugin.author.decode('UTF-8'))
-##              except Exception, e:
-##                 print "ERROR: Unable to set label '%s' (%s)" \
-##                       % (plugin.author, e)
-                
-##              self.textAbout.Clear()
-
-##              try:
-##                 self.textAbout.WriteText(plugin.about.decode('UTF-8'))
-##              except Exception, e:
-##                 print "ERROR: Unable to set label '%s' (%s)" \
-##                       % (plugin.about, e)
-             
-##              path = self.app.config.plugins[name].dir
-
-##              pluginDirPath = os.path.join(info.LOCAL_HOME,
-##                                           info.__DICT_DIR,
-##                                           info.__PLUGIN_DICT_DIR,
-##                                           path)
-##              if os.path.exists(pluginDirPath):
-##                  size = misc.getDirSize(pluginDirPath,
-##                                         0, 0, 10)
-##              else:
-##                  size = misc.getDirSize(os.path.join(info.GLOBAL_HOME,
-##                                                      info.__DICT_DIR,
-##                                                      info.__PLUGIN_DICT_DIR,
-##                                                      path),
-##                                         0, 0, 10)
-                 
-##       elif name in self.app.config.registers.keys():
-##              regFile = self.app.config.registers[name]
-##              self.labelName.SetLabel(name)
-##              self.labelVersion.SetLabel("--")
-##              self.labelFormat.SetLabel(misc.dictFormats[regFile[1]])
-##              self.labelAuthor.SetLabel("--")
-##              self.textAbout.Clear()
-             
-##              size = misc.getFileSize(self.app.config.registers[name][0])
-##       else:
-##           print "onPluginSelected(): misunderstood"
-      
-##       self.labelSize.SetLabel(str(size/1000.)+" KB")
-
 
    def onAvailableSelected(self, event):
 
       self.currentAvailItemSelection = event.m_itemIndex
       print self.availableList.GetItemText(self.currentAvailItemSelection)
-      #self.installedList.
       self.buttonInstall.Enable(1)
       self.enableInfo()
+
+
+   def clearInfo(self):
+       """Clear info fields"""
+
+       self.labelName.SetLabel('')
+       self.labelVersion.SetLabel('')
+       self.labelAuthor.SetLabel('')
+       self.textAbout.Clear()
 
 
    def disableInfo(self):
@@ -497,6 +494,7 @@ class PluginManagerWindow(wxFrame):
        """Close event occured"""
        
        self.Destroy()
+
 
 
 class PluginLicenseWindow(wxDialog):
