@@ -315,10 +315,16 @@ class MainWindow(wxFrame):
       
       self.entry = wxComboBox(self, 153, "", wxPoint(-1, -1),
                               wxSize(-1, -1), [], wxCB_DROPDOWN)
+      self.entry.SetToolTipString(_("Enter some text and press " \
+                                    "\"Look Up\" button or "
+                                    "[ENTER] key on your keyboard"))
       self.hboxToolbar.Add(self.entry, 1, wxALL | wxCENTER, 1)
 
       #self.buttonSearch = wxButton(self, wx.ID_FIND)
       self.buttonSearch = wxButton(self, idFind, _("Look Up"))
+      self.buttonSearch.SetToolTipString(_("Click this button to look " \
+                                           "up word in " \
+                                           "the dictionary"))
       
       self.hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
 
