@@ -37,9 +37,17 @@ class Installer:
         self.config = config
         
     def showGUI(self):
+
+        wildCard = "All files (*.*)|*.*|" \
+                   "OpenDict plugins (*.zip)|*.zip|" \
+                   "Slowo dictionaries (*.dwa)|*.dwa|" \
+                   "Mova dictionaries (*.mova)|*.mova|" \
+                   "TMX dictionaries (*.tmx)|*.tmx"
         
-        fileDialog = wxFileDialog(self.mainWin, _("Choose dictionary file"), "", "",
-                                  "", wxOPEN)
+        fileDialog = wxFileDialog(self.mainWin,
+                                  message=_("Choose dictionary file"),
+                                  wildcard=_(wildCard),
+                                  style=wxOPEN|wxCHANGE_DIR)
         fileDialog.CentreOnScreen()
 
         if fileDialog.ShowModal() == wxID_OK:

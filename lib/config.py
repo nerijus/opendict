@@ -29,11 +29,14 @@ import group
 import info
 
 class Configuration:
-
    """This class is used for reading and writing config file.
    It also takes care of installing new plugins (but shouldn't)"""
 
    def __init__(self):
+      """Initialize default values"""
+      
+      self.configFile = "opendict.conf"
+      
       self.saveWinSize = 1
       self.saveWinPos = 0
       self.saveSashPos = 0
@@ -41,9 +44,9 @@ class Configuration:
       self.useListWithGroups = 1
 
       self.dict = ""
-      self.winSize = (400, 300)
+      self.winSize = (700, 500)
       self.winPos = (-1, -1)
-      self.sashPos = 120
+      self.sashPos = 160
 
       self.window = None
       self.plugins = {}
@@ -65,7 +68,7 @@ class Configuration:
 
    def readConfigFile(self):
       try:
-         fd = open(os.path.join(uhome, "config.txt"), "r")
+         fd = open(os.path.join(uhome, self.configFile), "r")
          if info.__unicode__:
              sw = codecs.lookup("utf-8")[3]
              fd = sw(fd)
@@ -135,7 +138,7 @@ class Configuration:
 
       print "Writing new config file..."
       try:
-         fd = open(os.path.join(uhome, "config.txt"), "w")
+         fd = open(os.path.join(uhome, self.configFile), "w")
          if info.__unicode__:
              sw = codecs.lookup("utf-8")[3]
              fd = sw(fd)

@@ -1,5 +1,5 @@
 # OpenDict
-# Copyright (c) 2003 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2005 Martynas Jocius <mjoc at akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -126,13 +126,13 @@ class MainWindow(wxFrame):
       menuFileOpen.Append(104, "DICT dictionary",
                           _("DICT dictionaries usually have " \
                             "'dict' or 'dz' extention"))
-      menuFile.AppendMenu(105, _("Load Dictionary From File"), menuFileOpen)
+      #menuFile.AppendMenu(105, _("Load Dictionary From File"), menuFileOpen)
 
-      menuFile.AppendSeparator()
-      #menuFile.Append(2004, _("Print Translation"), "")
-      #menuFile.Append(2006, _("Print Preview"), "")
       #menuFile.AppendSeparator()
-      menuFile.Append(106, _("&Close Dictionary\tCtrl-W"),
+      menuFile.Append(2004, _("Print Translation"), "")
+      menuFile.Append(2006, _("Print Preview"), "")
+      menuFile.AppendSeparator()
+      menuFile.Append(106, _("&Close\tCtrl-W"),
                       _("Close opened dicitonary"))
       menuFile.Append(107, _("E&xit\tCtrl-Q"),
                       _("Exit program"))
@@ -200,13 +200,26 @@ class MainWindow(wxFrame):
       keys = self.app.config.plugins.keys()
       keys.sort()
       for name in keys:
+         print type(name), name
          #print "Name:", name
-         item = wxMenuItem(self.menuDict,
-                           self.app.config.ids[name],
-                           name)
 
-         self.menuDict.AppendItem(item)
-         EVT_MENU(self, self.app.config.ids[name], self.onDefault)
+         try:
+            name = name.decode('UTF-8')
+         except Exception, e:
+            print "ERROR Dictionary names must be in UTF-8 ('%s' failed)" \
+                  % (name)
+
+         print type(name), name
+         
+         try:
+            item = wxMenuItem(self.menuDict,
+                              self.app.config.ids[name],
+                              name)
+            self.menuDict.AppendItem(item)
+            EVT_MENU(self, self.app.config.ids[name], self.onDefault)
+         except Exception, e:
+            print "ERROR Unable to create menu item for '%s' (%s)" \
+                  % (name, e)
 
       keys = self.app.config.registers.keys()
       keys.sort()
@@ -343,7 +356,10 @@ class MainWindow(wxFrame):
       
       # List toggle bitmap button
       # If word list isn't hidden for this dict, else...
-      self.wlHidden = 0
+
+      # Word list is hidden by default
+      self.wlHidden = True
+      
       bmp = wxBitmap(os.path.join(home, "pixmaps", "hide.xpm"),
                      wxBITMAP_TYPE_XPM)
       self.buttonHide = wxBitmapButton(self, 152, bmp, (24, 24),
@@ -370,14 +386,16 @@ class MainWindow(wxFrame):
       self.panelHtml.SetAutoLayout(true)
       sbSizerHtml.Fit(self.panelHtml)
 
+      #if not self.wordListHidden():
       self.splitter.SplitVertically(self.panelList, self.panelHtml,
                                     self.app.config.sashPos)
+         
       self.splitter.SetMinimumPaneSize(90)
       self.splitter.SetSashSize(5)
 
-      if self.dict != None:
-         if self.dict.needsList == 0:
-            self.hideWordList()
+      #if self.dict != None:
+      #   if self.dict.needsList == 0:
+      #      self.hideWordList()
 
       if not self.dict:
          self.hideWordList()
@@ -491,7 +509,7 @@ from <i><b>Dictionaries</b></i> menu.</li>
 
 <p>
 For more information visit project's homepage on
-<i>http://sourceforge.net/projects/opendict</i>
+<i>http://sourceforge.net/projects/opendict</i>.
 </p>
 </body>
 </html>
@@ -562,38 +580,43 @@ For more information visit project's homepage on
          #   print "Search result length: %d bytes" % len(self.htmlCode)
          
          if type(self.htmlCode) != type(u''):
-            if not info.__unicode__:
-                print "Setting page (not encoded)"
-                #print self.htmlCode.decode("utf-8")
-                try:
-                    # FIXME: non-unicode version must be fixed
-                    #self.htmlWin.SetPage(self.htmlCode.decode(self.encoding))
-                    #self.history.add(self.htmlCode.decode(self.encoding))
-                    
-                    self.htmlWin.SetPage(self.htmlCode)
-                    self.history.add(self.htmlCode)
-                except:
-                    self.SetStatusText(_(misc.errors[6]))
+##             if not info.__unicode__:
+##                print "Setting page (not encoded)"
+##                print self.htmlCode.decode("utf-8")
+##                try:
+##                   # FIXME: non-unicode version must be fixed
+##                   self.htmlWin.SetPage(self.htmlCode.decode(self.encoding))
+##                   self.history.add(self.htmlCode.decode(self.encoding))
+                  
+##                   self.htmlWin.SetPage(self.htmlCode)
+##                   self.history.add(self.htmlCode)
+##                except Exception, e:
+##                   print e
+##                   self.SetStatusText(_(misc.errors[6]))
+##             else:
+##                 print "Setting page (encoded in %s)" % info.__enc__
+##                 # FIXME: non-unicode version must be fixed
+##                 if hasattr(self.dict, "encoding"):
+##                     print "Dictionary has an encoding defined, huh!"
+##                     enc = self.dict.encoding
+##                 else:
+##                     enc = info.__enc__
+##                 self.htmlWin.SetPage(self.htmlCode.decode(enc))
+##                 self.history.add(self.htmlCode.decode(enc))
+
+            if hasattr(self.dict, "encoding"):
+               enc = self.dict.encoding
             else:
-                print "Setting page (encoded in %s)" % info.__enc__
-                # FIXME: non-unicode version must be fixed
-                if hasattr(self.dict, "encoding"):
-                    print "Dictionary has an encoding defined, huh!"
-                    enc = self.dict.encoding
-                else:
-                    enc = info.__enc__
-                self.htmlWin.SetPage(self.htmlCode.decode(enc))
-                self.history.add(self.htmlCode.decode(enc))
+               enc = info.__enc__
+               self.htmlWin.SetPage(self.htmlCode.decode(enc))
+               self.history.add(self.htmlCode.decode(enc))
+               print "Setting page (encoded in %s)" % enc
          else:
             print "Setting unicode page"
             try:
-               #self.htmlWin.SetPage(self.htmlCode)
-               self.htmlWin.SetPage(self.htmlCode)#.encode(self.encoding, 
-                                                         #"replace"))
-               self.history.add(self.htmlCode)#.encode(self.encoding, 
-                                                         #"replace"))
-               #self.htmlWin.SetPage(result[0].encode(self.encoding, "replace"))
-               #self.history.add(result[0].encode(self.encoding, "replace"))
+               self.htmlWin.SetPage(self.htmlCode)
+
+               self.history.add(self.htmlCode)
             except:
                print "Failed to encode '%s'... to %s, iso-8859-1 used" \
                      % (self.htmlCode[:10], self.encoding)
@@ -602,7 +625,7 @@ For more information visit project's homepage on
                self.history.add(self.htmlCode.encode("iso-8859-1", "replace"))
                #self.SetStatusText(_("Error: failed to encode in %s") % self.encoding)
          
-         if not self.wlHidden:
+         if not self.wordListHidden():
             if not self.__searchedBySelecting:
                self.wordList.Clear()
 
@@ -653,7 +676,8 @@ For more information visit project's homepage on
                   pass
             elif self.dict.name in self.app.config.registers:
                # This is a register, hash table must be loaded
-               if self.app.config.registers[self.dict.name][1] != "Dict":
+               if self.app.config.registers[self.dict.name][1] \
+                      not in ['dz', 'dict']:
                   print "Loading hash table..."
                   try:
                      if os.path.exists(os.path.join(uhome, "register", self.dict.name+".hash")):
@@ -761,13 +785,25 @@ For more information visit project's homepage on
       self.buttonBack.Disable()
       self.buttonForward.Disable()
 
+
+   def wordListHidden(self):
+      """Returns True if word list marked to be hidden, False
+      otherwise"""
+
+      if self.wlHidden:
+         return True
+
+      return False
+   
+
    def onHideUnhide(self, event):
-      if self.wlHidden == 1:
+      if self.wordListHidden():
             self.unhideWordList()
-            self.wlHidden = 0
-      elif self.wlHidden == 0:
+            #self.wlHidden = 0
+      else:
             self.hideWordList()
-            self.wlHidden = 1
+            #self.wlHidden = 1
+
 
    def onOpenSlowo(self, event):
       dialog = wxFileDialog(self, _("Choose Slowo dictionary file"), "", "",
@@ -912,6 +948,7 @@ For more information visit project's homepage on
 
    
    def onPaste(self, event):
+      """This method is invoked when Paste menu item is selected"""
       do = wxTextDataObject()
       wxTheClipboard.Open()
       if wxTheClipboard.GetData(do):
@@ -926,7 +963,9 @@ For more information visit project's homepage on
          self.SetStatusText(_("Clipboard contains no text data"))
       wxTheClipboard.Close()
 
+
    def onShowGroupsWindow(self, event):
+      """This method is invoked when Groups menu item is selected"""
       self.groupsWindow = GroupsWindow(self, -1,
                                           _("Groups"),
                                           size=(330, 150),
@@ -934,12 +973,21 @@ For more information visit project's homepage on
       self.groupsWindow.CentreOnScreen()
       self.groupsWindow.Show(True)
 
+
    def onShowPluginManager(self, event):
-      self.pmWindow = PluginManagerWindow(self, -1,
-                                          _("Dictionaries Manager"),
-                                          style=wxDEFAULT_FRAME_STYLE)
-      self.pmWindow.CentreOnScreen()
-      self.pmWindow.Show(True)
+      """This method is invoked when Dictionaries Manager
+      menu item is selected"""
+      try:
+         self.pmWindow = PluginManagerWindow(self, -1,
+                                             _("Dictionaries Manager"),
+                                             style=wxDEFAULT_FRAME_STYLE)
+         self.pmWindow.CentreOnScreen()
+         self.pmWindow.Show(True)
+      except Exception, e:
+         print "ERROR Unable to show prefs window: %s" % e
+         self.SetStatusText("Error occured, please contact developers (%s)" \
+                            % e)
+         
 
    def onShowFileRegistry(self, event):
       self.regWindow = FileRegistryWindow(self, -1,
@@ -971,11 +1019,17 @@ For more information visit project's homepage on
 
       
    def onShowPrefsWindow(self, event):
-      self.prefsWindow = PrefsWindow(self, -1, _("Preferences"),
-                                     size=(-1, -1),
-                                     style=wxDEFAULT_FRAME_STYLE)
-      self.prefsWindow.CentreOnScreen()
-      self.prefsWindow.Show(True)
+      try:
+         self.prefsWindow = PrefsWindow(self, -1, _("Preferences"),
+                                        size=(-1, -1),
+                                        style=wxDEFAULT_FRAME_STYLE)
+         self.prefsWindow.CentreOnScreen()
+         self.prefsWindow.Show(True)
+      except Exception, e:
+         print "ERROR Unable to show prefs window: %s" % e
+         self.SetStatusText("Error occured, please contact developers (%s)" \
+                            % e)
+         
 
    def onDefault(self, event):
       print "MainWindow: menu item selected, id:", event.GetId()
@@ -1019,14 +1073,17 @@ For more information visit project's homepage on
          label = self.menuFontSize.FindItemById(id).GetLabel()
          self.changeFontSize(label)
 
+
    def checkIfNeedsList(self):
       if self.dict.needsList:
-         if self.wlHidden == 1:
+         if self.wordListHidden():
             self.unhideWordList()
-            self.wlHidden = 0
-      elif self.wlHidden == 0:
-         self.hideWordList()
-         self.wlHidden = 1
+            #self.wlHidden = 0
+      else:
+         if not self.wordListHidden():
+            self.hideWordList()
+         #self.wlHidden = 1
+
 
    def loadPlugin(self, name):
       p = self.app.config.plugins[name]
@@ -1190,6 +1247,7 @@ For more information visit project's homepage on
       self.entry.SetValue(word) 
       self.search = Process(self.dict.search, event.GetString())
 
+
    def createListPanel(self):
       self.panelList = wxPanel(self.splitter, -1)
       #sbList = wxStaticBox(panelList, -1, _("Alternatives"))
@@ -1202,23 +1260,31 @@ For more information visit project's homepage on
       self.panelList.SetSizer(sbSizerList)
       self.panelList.SetAutoLayout(true)
       sbSizerList.Fit(self.panelList)
+
       
    def hideWordList(self):
       """Hides word list"""
 
+      print "DEBUG Hiding word list..."
       self.splitter.SetSashPosition(0)
       self.buttonHide.SetToolTipString(_("Show word list"))
       self.splitter.Unsplit(self.panelList)
+      self.wlHidden = True
+
 
    def unhideWordList(self):
       """Shows word list"""
 
+      print "DEBUG Showing word list..."
       self.buttonHide.SetToolTipString(_("Hide word list"))
       self.createListPanel()
       self.splitter.SplitVertically(self.panelList, self.panelHtml)
       self.splitter.SetSashPosition(self.app.config.sashPos)
+      self.wlHidden = False
+
 
    def onPrint(self, event):
+      """This method is invoked when print menu item is selected"""
 
       try:
          self.printer.PrintText(self.htmlCode)
@@ -1230,7 +1296,9 @@ For more information visit project's homepage on
             self.SetStatusText(_("Failed to print"))
             misc.printError()
 
+
    def onPreview(self, event):
+      """This method is invoked when preview menu item is selected"""
 
       try:
          self.printer.PreviewText(self.htmlCode)
@@ -1241,6 +1309,3 @@ For more information visit project's homepage on
          except:
             self.SetStatusText(_("Page preview failed"))
             misc.printError()
-
-    
-      

@@ -312,11 +312,15 @@ class MovaParser:
       list = []
 
       for line in data:
-         if info.__unicode__:
-             try:
-                 line = line.decode(self.window.encoding)
-             except:
-                 return ("", [], 6)
+         try:
+            line = line.decode(self.window.encoding)
+         except:
+            return ("", [], 6)
+
+         #print type(line)
+         #line = line.decode(self.window.encoding)
+         #print type(line)
+              
          if line.lower().find(word_lowered) > -1:
             orig = line.split("  ")[0].strip()
             if orig.lower().find(word_lowered) != 0:

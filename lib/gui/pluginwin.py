@@ -170,12 +170,34 @@ class PluginManagerWindow(wxFrame):
       #if self.dictMap[name] == "plugin":
       if name in self.app.config.plugins.keys():
              plugin = self.app.config.plugins[name]
-             self.labelName.SetLabel(plugin.name)
-             self.labelVersion.SetLabel(plugin.version)
+
+             try:
+                self.labelName.SetLabel(plugin.name.decode('UTF-8'))
+             except Exception, e:
+                print "ERROR Unable to set label '%s' (%s)" \
+                      % (plugin.name, e)
+
+             try:
+                self.labelVersion.SetLabel(plugin.version.decode('UTF-8'))
+             except Exception, e:
+                print "ERROR: Unable to set label '%s' (%s)" \
+                      % (plugin.version, e)
+
              self.labelFormat.SetLabel(_("OpenDict plugin"))
-             self.labelAuthor.SetLabel(plugin.author)
+                
+             try:
+                self.labelAuthor.SetLabel(plugin.author.decode('UTF-8'))
+             except Exception, e:
+                print "ERROR: Unable to set label '%s' (%s)" \
+                      % (plugin.author, e)
+                
              self.textAbout.Clear()
-             self.textAbout.WriteText(plugin.about)
+
+             try:
+                self.textAbout.WriteText(plugin.about.decode('UTF-8'))
+             except Exception, e:
+                print "ERROR: Unable to set label '%s' (%s)" \
+                      % (plugin.about, e)
              
              path = self.app.config.plugins[name].dir
              

@@ -25,9 +25,12 @@ from misc import encodings, savePrefs
 _ = wxGetTranslation
 
 class PrefsWindow(wxDialog):
+   """Preferences dialog class"""
 
    def __init__(self, parent, id, title, pos=wxDefaultPosition,
                 size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
+      """Initialize preferences dialog window"""
+      
       wxDialog.__init__(self, parent, id, title, pos, size, style)
 
       self.app = wxGetApp()
@@ -45,6 +48,12 @@ class PrefsWindow(wxDialog):
       list.extend(self.app.config.registers.keys())
       list.extend(self.app.config.groups.keys())
       list.insert(0, "")
+
+      try:
+         map(lambda s: unicode(s, 'UTF-8'), list)
+      except Exception, e:
+         print "ERROR Unable to decode titles to UTF-8 (%s)" % e
+      
       self.dictChooser = wxComboBox(self, 1100, self.app.config.dict,
                                    wxPoint(-1, -1),
                                    wxSize(-1, -1), list, wxTE_READONLY)
@@ -61,12 +70,12 @@ class PrefsWindow(wxDialog):
       
       grid.AddGrowableCol(1)
       
-      grid.Add(wxStaticText(self, -1, _("Default server: ")),
+      grid.Add(wxStaticText(self, -1, _("Default DICT server: ")),
                    0, wxALIGN_CENTER_VERTICAL)
       self.serverEntry = wxTextCtrl(self, -1, self.app.config.dictServer)
       grid.Add(self.serverEntry, 0, wxEXPAND)
       
-      grid.Add(wxStaticText(self, -1, _("Default port: ")),
+      grid.Add(wxStaticText(self, -1, _("Default DICT server port: ")),
                    0, wxALIGN_CENTER_VERTICAL)
       self.portEntry = wxTextCtrl(self, -1, self.app.config.dictServerPort)
       grid.Add(self.portEntry, 0, wxEXPAND)
@@ -89,9 +98,11 @@ class PrefsWindow(wxDialog):
       self.listReg.SetValue(self.app.config.useListWithRegs)
       vboxMain.Add(self.listReg, 0, wxALL, 0)
 
-      self.listGroup = wxCheckBox(self, 1107, _("Use word list with dictionary groups"))
-      self.listGroup.SetValue(self.app.config.useListWithGroups)
-      vboxMain.Add(self.listGroup, 0, wxALL, 0)
+      # FIXME: Remove groups
+      #self.listGroup = wxCheckBox(self, 1107,
+      #                            _("Use word list with dictionary groups"))
+      #self.listGroup.SetValue(self.app.config.useListWithGroups)
+      #vboxMain.Add(self.listGroup, 0, wxALL, 0)
 
       vboxMain.Add(wxStaticLine(self, -1), 0, wxALL | wxEXPAND, 5)
 
@@ -119,7 +130,11 @@ class PrefsWindow(wxDialog):
       EVT_BUTTON(self, 1104, self.onOK)
       EVT_BUTTON(self, 1105, self.onCancel)
 
+
    def onSaveWinSizeClicked(self, event):
+      """This method is invoked when checkbox for window size
+      is clicked"""
+      
       print "WinSize:", event.Checked()
       if event.Checked() == 1:
          self.app.config.winSize = self.GetParent().GetSize()
@@ -127,7 +142,11 @@ class PrefsWindow(wxDialog):
       else:
          self.app.config.saveWinSize = 0
 
+
    def onSaveWinPosClicked(self, event):
+      """This method is invoked when checkbox for window position
+      is clicked"""
+      
       print "WinPos:", event.Checked()
       if event.Checked() == 1:
          self.app.config.winPos = self.GetParent().GetPosition()
@@ -135,7 +154,11 @@ class PrefsWindow(wxDialog):
       else:
          self.app.config.saveWinPos = 0
 
+
    def onSaveSashPosClicked(self, event):
+      """This method is invoked when checkbox for sash position
+      is clicked"""
+      
       print "Sash:", event.Checked()
       if event.Checked() == 1:
          self.app.config.sashPos = self.GetParent().splitter.GetSashPosition()
@@ -143,18 +166,32 @@ class PrefsWindow(wxDialog):
       else:
          self.app.config.saveSashPos = 0
 
+
    def onUseListRegClicked(self, event):
+      """This method is invoked when checkbox for list for files
+      is clicked"""
+      
       self.app.config.useListWithRegs = event.Checked()
 
+
+   # FIXME: Must be removed
    def onUseListGroupClicked(self, event):
+      """This method is invoked when checkbox for window size
+      is clicked"""
       self.app.config.useListWithGroups = event.Checked()
+
       
    def onSave(self, event):
-       savePrefs(self.app.window)
-       self.app.config.writeConfigFile()
-       self.app.window.SetStatusText(_("Configuration saved"))
+      """Write new configuration to disk"""
+      
+      savePrefs(self.app.window)
+      self.app.config.writeConfigFile()
+      self.app.window.SetStatusText(_("Configuration saved"))
+
        
    def onOK(self, event):
+      """Save configuration in the configuration object"""
+      
       self.app.config.dict = self.dictChooser.GetValue()
 
       self.app.config.defaultEnc = encodings[self.encChooser.GetValue()]
@@ -168,8 +205,11 @@ class PrefsWindow(wxDialog):
       self.app.config.saveWinPos = self.winPos.GetValue()
       self.app.config.saveSashPos = self.sashPos.GetValue()
       self.app.config.useListWithRegs = self.listReg.GetValue()
-      self.app.config.useListWithGroups = self.listGroup.GetValue()
+      #self.app.config.useListWithGroups = self.listGroup.GetValue()
       self.Destroy()
 
+
    def onCancel(self, event):
+      """Close dialog window"""
+      
       self.Destroy()

@@ -94,6 +94,7 @@ def savePrefs(frame):
    if app.config.saveSashPos == 1:
       app.config.sashPos = frame.splitter.GetSashPosition()
 
+
 def getFileSize(path):
     """Returns the size of file in bytes"""
     
