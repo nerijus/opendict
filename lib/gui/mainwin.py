@@ -127,10 +127,13 @@ class MainWindow(wxFrame):
       menuFile = wxMenu()
 
       idPrint = wx.NewId()
-      menuFile.Append(idPrint, _("Print Translation"), "")
+      #menuFile.Append(idPrint, _("Print Translation"), "")
 
       idPreview = wx.NewId()
-      menuFile.Append(idPreview, _("Print Preview"), "")
+      #menuFile.Append(idPreview, _("Print Preview"), "")
+
+      idFind = wx.NewId()
+      menuFile.Append(idFind, _("Find\tCtrl-F"), _("Lookup up word"))
       
       menuFile.AppendSeparator()
 
@@ -463,6 +466,7 @@ class MainWindow(wxFrame):
 
       # Other events
       EVT_BUTTON(self, wx.ID_FIND, self.onSearch)
+      EVT_MENU(self, idFind, self.onSearch)
          
       EVT_BUTTON(self, 2010, self.onBack)
       EVT_BUTTON(self, 2011, self.onForward)
