@@ -297,8 +297,6 @@ def _installNormalPlugin(filePath):
     installFile = os.path.join(topDirectory, 'install.py')
     
     if installFile in zipFile.namelist():
-        print "Starting custom install"
-
         data = zipFile.read(installFile)
 
         try:
