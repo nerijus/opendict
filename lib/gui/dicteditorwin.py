@@ -89,10 +89,10 @@ class EditWordWindow(wxFrame):
         vboxMain.Add(self.buttonAdd, 0, wxALL | wxALIGN_RIGHT, 2)
 
         self.buttonOK = wxButton(self, 6050, _("OK"))
-        hboxButtons.Add(self.buttonOK, 1, wxALL, 1)
+        hboxButtons.Add(self.buttonOK, 0, wxALL, 1)
 
         self.buttonCancel = wxButton(self, 6051, _("Cancel"))
-        hboxButtons.Add(self.buttonCancel, 1, wxALL, 1)
+        hboxButtons.Add(self.buttonCancel, 0, wxALL, 1)
 
         vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 2)
 
@@ -365,17 +365,17 @@ class DictEditorWindow(wxFrame):
 
         self.buttonNew = wxButton(self, 6030, _("New..."))
         self.buttonNew.SetToolTipString(_("Start new dictionary"))
-        hboxButtons.Add(self.buttonNew, 1, wxALL | wxEXPAND, 1)
+        hboxButtons.Add(self.buttonNew, 0, wxALL | wxEXPAND, 1)
 
         self.buttonOpen = wxButton(self, 6031, _("Open..."))
         self.buttonOpen.SetToolTipString(_("Open dictionary file"))
-        hboxButtons.Add(self.buttonOpen, 1, wxALL | wxEXPAND, 1)
+        hboxButtons.Add(self.buttonOpen, 0, wxALL | wxEXPAND, 1)
 
         self.buttonClose = wxButton(self, 6032, _("Close"))
         self.buttonClose.SetToolTipString(_("Close editor window"))
-        hboxButtons.Add(self.buttonClose, 1, wxALL | wxEXPAND, 1)
+        hboxButtons.Add(self.buttonClose, 0, wxALL | wxEXPAND, 1)
 
-        vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
+        vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 2)
 
         self.SetIcon(wxIcon(os.path.join(info.GLOBAL_HOME,
                                         "pixmaps",

@@ -1,3 +1,4 @@
+#
 # OpenDict
 # Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 #
@@ -15,6 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA
+#
 
 """
 Utility functions
@@ -22,8 +24,13 @@ Utility functions
 
 import os
 import md5
+import threading
+import time
+import urllib2
+import traceback
 
 import info
+from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
 class UniqueIdGenerator:
@@ -95,26 +102,27 @@ def makeDirectories():
 
     if not os.path.exists(info.LOCAL_HOME):
         try:
-            print "DEBUG %s does not exist, creating..." % info.LOCAL_HOME
+            systemLog(DEBUG, "%s does not exist, creating..." \
+                      % info.LOCAL_HOME)
             os.mkdir(info.LOCAL_HOME)
         except Exception, e:
-            print "ERROR Unable to create %s (%s)" % (info.LOCAL_HOME, e)
+            systemLog(ERROR, "Unable to create %s (%s)" % (info.LOCAL_HOME, e))
 
     if not os.path.exists(os.path.join(info.LOCAL_HOME, info.__DICT_DIR)):
         try:
-            print "DEBUG %s does not exist, creating..." \
-                  % os.path.join(info.LOCAL_HOME, info.__DICT_DIR)
+            systemLog(DEBUG, "%s does not exist, creating..." \
+                  % os.path.join(info.LOCAL_HOME, info.__DICT_DIR))
             os.mkdir(os.path.join(info.LOCAL_HOME, info.__DICT_DIR))
         except Exception, e:
-            print "ERROR Unable to create %s (%s)" \
-                  % (os.path.join(info.LOCAL_HOME, info.__DICT_DIR), e)
+            systemLog(ERROR, "Unable to create %s (%s)" \
+                  % (os.path.join(info.LOCAL_HOME, info.__DICT_DIR), e))
 
     if not os.path.exists(plainDir):
         try:
-            print "DEBUG %s does not exist, creating..." % plainDir
+            systemLog(DEBUG, "%s does not exist, creating..." % plainDir)
             os.mkdir(plainDir)
         except Exception, e:
-            print "ERROR Unable to create %s (%s)" % (plainDir, e)
+            systemLog(ERROR, "Unable to create %s (%s)" % (plainDir, e))
 
     
     if not os.path.exists(pluginDir):
@@ -125,6 +133,104 @@ def makeDirectories():
             print "ERROR Unable to create %s (%s)" % (pluginDir, e)
 
 
-if __name__ == "__main__":
-    makeDirectories()
+
+class DownloadThread:
+    """Non-blocking download thread
     
+    Can be used to connect and download files from the Internet.
+    """
+
+    def __init__(self, url):
+        """Initialize variables"""
+
+        self.url = url
+        self.thread = threading.Thread(target=self.worker)
+        self.thread.setDaemon(True) # Daemonize for fast exiting
+        self.statusMessage = ''
+        self.errorMessage = None
+        self.percents = 0
+        self.stopRequested = False
+        self.done = False
+        self.buffer = ''
+
+
+    def start(self):
+        """Start thread"""
+
+        self.thread.start()
+
+
+    def stop(self):
+        """Request thread to stop, may hang for some time"""
+
+        self.stopRequested = True
+
+
+    def getMessage(self):
+        """Return status message"""
+
+        return self.statusMessage
+
+
+    def getErrorMessage(self):
+        """Return error message"""
+
+        return self.errorMessage
+
+
+    def getPercentage(self):
+        """Return percentage"""
+
+        return self.percents
+
+
+    def finished(self):
+        """Return True if finished, False otherwise"""
+
+        return self.done
+
+
+    def getBytes(self):
+        """Return buffered bytes and clear the buffer"""
+
+        bytes = self.buffer
+        self.buffer = ''
+
+        return bytes
+
+
+    def worker(self):
+        """Main worker method"""
+
+        try:
+            serverName = '/'.join(self.url.split('/')[:3])
+        except:
+            serverName = self.url
+
+        try:
+            self.statusMessage = "Connecting to %s..." % serverName
+            self.up = urllib2.urlopen(self.url)
+            fileSize = int(self.up.info().getheader('Content-length'))
+        except Exception, e:
+            self.errorMessage = "Unable to connect to %s" % serverName
+            self.done = True
+            return
+
+        count = 0
+
+        try:
+            while not self.stopRequested and count < fileSize:
+                self.statusMessage = "Downloading data from %s" \
+                                     % (self.url)
+                bytes = self.up.read(1024)
+                count += len(bytes)
+                self.buffer += bytes
+                self.percents = int(float(count) / fileSize * 100)
+                time.sleep(0.005) # To lower CPU usage
+                
+            self.up.close()
+            self.done = True
+        except Exception, e:
+            self.errorMessage = "Error while fetching data from %s: %s" \
+                                % (self.url, e)
+            self.done =  True

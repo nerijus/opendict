@@ -251,7 +251,7 @@ class MainWindow(wxFrame):
       self.menuDict.AppendSeparator()
 
       idAddDict = wx.NewId()
-      self.menuDict.Append(idAddDict, _("&Install Dictionary From File"))
+      self.menuDict.Append(idAddDict, _("&Install Dictionary From File..."))
       
       menuBar.Append(self.menuDict, _("&Dictionaries"))
 
@@ -263,8 +263,7 @@ class MainWindow(wxFrame):
 
       idManageDict = wx.NewId()
       menuTools.Append(idManageDict, _("Manage Dictionaries...\tCtrl-M"),
-                      _("Install, remove dictionaries and get " \
-                        "information about them"))
+                      _("Install or remove dictionaries"))
 
       menuTools.AppendSeparator()
 
@@ -274,8 +273,8 @@ class MainWindow(wxFrame):
 
       menuTools.AppendSeparator()
       
-      menuTools.Append(5002, _("Dictionary Editor"),
-                       _("Make your own dictionary"))  
+      menuTools.Append(5002, _("Edit Dictionaries..."),
+                       _("Create and edit dictionaries"))  
                            
       menuBar.Append(menuTools, _("Tools"))
 
@@ -447,7 +446,7 @@ class MainWindow(wxFrame):
       EVT_MENU(self, idPrefs, self.onShowPrefsWindow)
 
       # Help menu events
-      EVT_MENU(self, idLicence, self.onLicense)
+      EVT_MENU(self, idLicence, self.onLicence)
       EVT_MENU(self, idAbout, self.onAbout)
 
       # Other events
@@ -484,10 +483,6 @@ class MainWindow(wxFrame):
   from <i><b>Dictionaries</b></i> menu.
   </li>
 </ul>
-<p>
-  For more information visit project's homepage on
-  <i>http://sourceforge.net/projects/opendict</i>.
-</p>
 </body>
 </html>
 """)
@@ -985,7 +980,7 @@ class MainWindow(wxFrame):
 
 
    def onShowDictEditor(self, event):
-      editor = DictEditorWindow(self, -1, _("Dictionary Editor"),
+      editor = DictEditorWindow(self, -1, _("Edit Dictionaries"),
                                      size=(400, 500),
                                      style=wxDEFAULT_FRAME_STYLE)
       editor.CentreOnScreen()
@@ -1097,7 +1092,6 @@ class MainWindow(wxFrame):
          try:
             index = plaindict.loadIndex(dictInstance)
             self.activeDictionary.setIndex(index)
-            #debugLog(INFO, "Index loaded: %s" % index)
          except Exception, e:
             traceback.print_exc()
             title = _("Error")
@@ -1114,6 +1108,11 @@ class MainWindow(wxFrame):
                                     % dictInstance.getName())))
 
       self.entry.SetFocus()
+
+      try:
+         self.checkEncMenuItem(self.activeDictionary.getEncoding())
+      except Exception, e:
+         systemLog(ERROR, "Unable to select encoding menu item: %s" % e)
       
 
    def loadPlugin(self, name):
@@ -1310,7 +1309,7 @@ class MainWindow(wxFrame):
       systemLog(WARNING, "Manual function is not impelemented yet")
       
 
-   def onLicense(self, event):
+   def onLicence(self, event):
       """Shows 'License' window"""
 
       licenseWindow = LicenseWindow(self, -1,

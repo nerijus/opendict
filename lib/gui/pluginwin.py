@@ -25,7 +25,7 @@ import wx
 from shutil import rmtree
 import os
 import traceback
-import urllib2
+import time
 
 from gui import errorwin
 import installer
@@ -34,13 +34,14 @@ import enc
 import info
 import misc
 import xmltools
+import util
 from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
 _ = wxGetTranslation
 
-#_addOnsListURL = 'file:///home/mjoc/opendict-add-ons.xml'
-_addOnsListURL = 'http://files.akl.lt/~mjoc/OpenDict/Data/opendict-add-ons.xml'
+_addOnsListURL = 'http://localhost/~mjoc/OpenDict/opendict-add-ons.xml'
+#_addOnsListURL = 'http://files.akl.lt/~mjoc/OpenDict/Data/opendict-add-ons.xml'
 
 
 class DictListCtrl(wx.ListCtrl):
@@ -443,8 +444,7 @@ class PluginManagerWindow(wxFrame):
        """Clear the list of installed dictionaries and set new items"""
        
        for dictionary in dictNames:
-           index = self.installedList.InsertStringItem(0, dictionary)
-           
+           index = self.installedList.InsertStringItem(0, dictionary)          
            self.installedList.SetItemData(index, index+1)
 
        self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
@@ -479,63 +479,58 @@ class PluginManagerWindow(wxFrame):
        """Update dictionaries list"""
 
        title = _("Downloading List")
-       msg = _("Downloading list of available dictionaries...")
+       downloader = util.DownloadThread(_addOnsListURL)
 
        progressDialog = wx.ProgressDialog(title,
-                                          msg,
+                                          '',
                                           maximum=100,
                                           parent=self,
                                           style=wx.PD_CAN_ABORT
                                           | wx.PD_APP_MODAL)
        keepGoing = True
-       count = 2
-
-       progressDialog.Update(0)
+       error = None
 
        try:
            systemLog(INFO, "Opening %s..." % _addOnsListURL)
-           up = urllib2.urlopen(_addOnsListURL)
-           dataChunks = []
-           count = 0
-           percents = 0
-           fileSize = up.info().getheader('Content-length')
-
-           systemLog(INFO, "Reading file...")
+           downloader.start()
+           xmlData = ''
            
-           while keepGoing and count < fileSize:
-               percents = int(float(count) / float(fileSize) * 100)
-               
-               if percents == 100:
-                   progressDialog.Destroy()
-                   break
-           
-               keepGoing = progressDialog.Update(percents)
+           while keepGoing and not downloader.finished():
+               keepGoing = progressDialog.Update(downloader.getPercentage(),
+                                                 downloader.getMessage())
                if not keepGoing:
-                   progressDialog.Destroy()
+                   downloader.stop()
                    break
-           
-               chunk = up.read(1024)
-               dataChunks.append(chunk)
-               count += len(chunk)
 
-           systemLog(INFO, "Closing connection...")
-           up.close()
-           
-           xmlData = ''.join(dataChunks)
+               xmlData += downloader.getBytes()
+               time.sleep(0.1)
+
+           progressDialog.Destroy()
+           xmlData += downloader.getBytes()
+
+           systemLog(INFO, "Finished downloading list")
        except Exception, e:
            traceback.print_exc()
            progressDialog.Destroy()
-           systemLog(ERROR, "Unable to fetch add-ons list from %s: %s" \
+           error = _("Unable to download list from %s: %s" \
                      % (_addOnsListURL, e))
-           title = _("Error")
-           msg = _("Unable to download list of available dictionaries " \
-                   "(error message: %s)" % e)
-           errorwin.showErrorMessage(title, msg)
+
+       if not error:
+           error = downloader.getErrorMessage()
+
+       if error:
+           systemLog(ERROR, error)
+           title = _("Unable to donwload list")
+           errorwin.showErrorMessage(title, error)
+           return
+
+       if len(xmlData) == 0:
            return
        
        if hasattr(self, "addons"):
            del self.addons
        allAddons = xmltools.parseAddOns(xmlData)
+
        self.addons = {}
 
        for name, obj in allAddons.items():
@@ -597,8 +592,8 @@ class PluginManagerWindow(wxFrame):
            removeDictionary(dictInstance)
        except Exception, e:
            traceback.print_exc()
-           title = _("Error")
-           msg = _("Unable to remove dictionary '%s'" % dictName)
+           title = _("Unable to remove")
+           msg = _("Unable to remove dictionary \"%s\"" % dictName)
            errorwin.showErrorMessage(title, msg)
            return
 
@@ -611,6 +606,10 @@ class PluginManagerWindow(wxFrame):
 
        if idDictMenuItem is not None:
            self.mainWin.menuDict.Delete(idDictMenuItem)
+
+       parent = self.GetParent()
+       if dictName == parent.activeDictionary.getName():
+           parent.onCloseDict(None)
                
        self.buttonRemove.Disable()
        del self.app.dictionaries[dictName]
@@ -625,82 +624,88 @@ class PluginManagerWindow(wxFrame):
    def _fetchAddon(self, dictInfo):
        """Fetch add-on using progress bar"""
 
-       print "Fetching %s from %s (%d, %s)" % (dictInfo.getName(),
-                                               dictInfo.getLocation(),
-                                               dictInfo.getSize(),
-                                               dictInfo.getChecksum())
-
        downloadsDir = os.path.join(info.LOCAL_HOME, 'downloads')
        if not os.path.exists(downloadsDir):
            os.mkdir(downloadsDir)
        localPath = os.path.join(downloadsDir,
                                 os.path.basename(dictInfo.getLocation()))
 
-       title = _("Downloading '%s'" % dictInfo.getName())
-       msg = _("Downloading '%s'\nfrom %s..." % (dictInfo.getName(),
-                                              dictInfo.getLocation()))
+       title = _("Downloading")
 
        progressDialog = wx.ProgressDialog(title,
-                                          msg,
+                                          '',
                                           maximum=100,
                                           parent=self,
                                           style=wx.PD_CAN_ABORT
                                           | wx.PD_APP_MODAL)
        keepGoing = True
-       count = 2
+       error = None
 
-       progressDialog.Update(0)
+       downloader = util.DownloadThread(dictInfo.getLocation())
 
        try:
-           up = urllib2.urlopen(dictInfo.getLocation())
-
            fd = open(localPath, 'w')
-           count = 0
-           percents = 0
-           fileSize = up.info().getheader('Content-length')
+           downloader.start()
            
-           while keepGoing and count < fileSize:
-               percents = int(float(count) / float(fileSize) * 100)
-               
-               if percents == 100:
-                   progressDialog.Destroy()
-                   break
-           
-               keepGoing = progressDialog.Update(percents)
-               if not keepGoing:
-                   progressDialog.Destroy()
-                   break
-           
-               chunk = up.read(1024)
-               fd.write(chunk)
-               count += len(chunk)
-               print "%d bytes writeen (RX:%d" % (len(chunk), count)
+           while keepGoing and not downloader.finished():
+               keepGoing = progressDialog.Update(downloader.getPercentage(),
+                                                 downloader.getMessage())
 
+               if not keepGoing:
+                   downloader.stop()
+                   break
+
+               chunk = downloader.getBytes()
+               fd.write(chunk)
+               time.sleep(0.1)
+
+           progressDialog.Destroy()
+
+           bytes = downloader.getBytes()
+           
+           if len(bytes):
+               fd.write(bytes)
 
        except Exception, e:
            traceback.print_exc()
            progressDialog.Destroy()
-           systemLog(ERROR, "Unable to fetch %s list from %s: %s" \
-                     % (dictInfo.getName(), dictInfo.getLocation(), e))
-           title = _("Error")
-           msg = _("Unable to download '%s' " \
-                   "(error message: %s)" % (dictInfo.getName(), e))
+
+           error = "Unable to fetch \"%s\" from %s: %s" \
+                   % (dictInfo.getName(), dictInfo.getLocation(), e)
+           systemLog(ERROR, error)
+
+       fd.close()
+
+       if not error:
+           error = downloader.getErrorMessage()
+
+       if error:
+           systemLog(ERROR, error)
+           title = _("Unable to donwload")
+           errorwin.showErrorMessage(title, error)
+           return
+
+       md5sum = util.getMD5Sum(localPath)
+       if md5sum != dictInfo.getChecksum():
+           title = _("File is damaged")
+           msg = _("Downloaded file is damaged and cannot be installed. " \
+                   "Please try again.")
            errorwin.showErrorMessage(title, msg)
            return
-       else:
-           fd.close()
-           up.close()
-
 
        try:
-           print "Installing..."
            inst = installer.Installer(self.mainWin, self.app.config)
            inst.install(localPath)
+           
+           index = self.installedList.InsertStringItem(0, dictInfo.getName())
+           self.installedList.SetItemData(index, index+1)
+           self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+           
        except Exception, e:
            traceback.print_exc()
-           title = _("Error")
-           msg = _("Unable to install dictionary '%s' (Error occured: %s" \
-                   % (dictInfo.getName(), e))
+           title = _("Unable to install")
+           msg = _("Unable to install dictionary \"%s\"." \
+                   % dictInfo.getName())
            errorwin.showErrorMessage(title, msg)
 
 

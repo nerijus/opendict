@@ -20,7 +20,6 @@
 
 import xml.dom.minidom
 import xml.dom.ext
-import xml.sax.saxutils # need this?
 
 import meta
 

@@ -290,11 +290,9 @@ def _loadDictionaryPlugin(directory):
     plugin = None
 
     try:
-        systemLog(INFO, "Loading %s..." % directory)
         plugin = DictionaryPlugin(directory)
     except InvalidPluginException, e:
         systemLog(ERROR, "Unable to load plugin from %s (%s)" % (directory, e))
-        #traceback.print_exc()
 
     return plugin
 
@@ -309,7 +307,7 @@ def loadDictionaryPlugins():
     localPluginPath = os.path.join(info.LOCAL_HOME,
                                    info.__DICT_DIR,
                                    info.__PLUGIN_DICT_DIR)
-    
+
     if os.path.exists(localPluginPath):
         pluginDirs = [os.path.join(localPluginPath, fileName) \
                       for fileName in os.listdir(localPluginPath) \
@@ -320,7 +318,7 @@ def loadDictionaryPlugins():
         for fileName in os.listdir(globalPluginPath):
             if os.path.isdir(os.path.join(globalPluginPath, fileName)) \
                and not fileName in pluginDirs:
-                pluginDirs.append(fileName)
+                pluginDirs.append(os.path.join(globalPluginPath, fileName))
 
     plugins = []
 

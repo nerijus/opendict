@@ -87,9 +87,16 @@ class PlainDictionary(meta.Dictionary):
     def getConfigDir(self):
        """Return configuration directory path"""
 
-       path = os.path.join(info.LOCAL_HOME,
-                           info.PLAIN_DICT_DIR,
-                           os.path.basename(self.getPath()))
+       if os.path.exists(os.path.join(info.LOCAL_HOME,
+                                      info.PLAIN_DICT_DIR,
+                                      os.path.basename(self.getPath()))):
+           path = os.path.join(info.LOCAL_HOME,
+                                      info.PLAIN_DICT_DIR,
+                                      os.path.basename(self.getPath()))
+       else:
+           path = os.path.join(info.GLOBAL_HOME,
+                               info.PLAIN_DICT_DIR,
+                               os.path.basename(self.getPath()))
 
        return path
 
@@ -247,23 +254,13 @@ def makeIndex(dictionary, currentlySetEncoding):
 def loadIndex(dictionary):
     """Load index table"""
 
-    fileName = os.path.basename(dictionary.getPath())
-
-    dictLocalIndex = os.path.join(info.LOCAL_HOME,
-                                 info.PLAIN_DICT_DIR,
-                                 fileName, 'data', 'index.xml')
-    
-    dictGlobalIndex = os.path.join(info.LOCAL_HOME,
-                                 info.PLAIN_DICT_DIR,
-                                 fileName, 'data', 'index.xml')
+    dictIndex = os.path.join(dictionary.getConfigDir(),
+                                 'data', 'index.xml')
 
     index = None
 
-    if os.path.exists(dictLocalIndex):
-        index = xmltools.parseIndexFile(dictLocalIndex)
-    elif os.path.exists(dictGlobalIndex):
-        index = xmltoos.parserIndexFile(dictGlobalIndex)
-
+    if os.path.exists(dictIndex):
+        index = xmltools.parseIndexFile(dictIndex)
     if not index:
         raise Exception, "Index for %s does not exist" % dictionary.getName()
 

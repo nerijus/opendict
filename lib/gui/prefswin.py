@@ -1,3 +1,4 @@
+#
 # OpenDict
 # Copyright (c) 2003 Martynas Jocius <mjoc@akl.lt>
 #
@@ -16,7 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA
 #
-# Module: gui.prefswin
 
 from wxPython.wx import *
 
@@ -99,19 +99,13 @@ class PrefsWindow(wxDialog):
       self.listReg.SetValue(bool(self.app.config.get('useListWithRegs')))
       vboxMain.Add(self.listReg, 0, wxALL, 0)
 
-      # FIXME: Remove groups
-      #self.listGroup = wxCheckBox(self, 1107,
-      #                            _("Use word list with dictionary groups"))
-      #self.listGroup.SetValue(self.app.config.useListWithGroups)
-      #vboxMain.Add(self.listGroup, 0, wxALL, 0)
-
       vboxMain.Add(wxStaticLine(self, -1), 0, wxALL | wxEXPAND, 5)
 
       self.buttonOK = wxButton(self, 1104, _("OK"))
-      hboxButtons.Add(self.buttonOK, 0, wxALL | wxEXPAND, 2)
+      hboxButtons.Add(self.buttonOK, 0, wxALL | wxEXPAND, 1)
 
       self.buttonCancel = wxButton(self, 1105, _("Cancel"))
-      hboxButtons.Add(self.buttonCancel, 0, wxALL | wxEXPAND, 2)
+      hboxButtons.Add(self.buttonCancel, 0, wxALL | wxEXPAND, 1)
 
       vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 2)
 
@@ -132,7 +126,6 @@ class PrefsWindow(wxDialog):
       """This method is invoked when checkbox for window size
       is clicked"""
       
-      #print "WinSize:", event.Checked()
       if event.Checked() == 1:
          self.app.config.winSize = self.GetParent().GetSize()
          self.app.config.saveWinSize = 1
@@ -177,7 +170,7 @@ class PrefsWindow(wxDialog):
       is clicked"""
       self.app.config.useListWithGroups = event.Checked()
 
-       
+      
    def onOK(self, event):
       """Save configuration in the configuration object"""
       
@@ -202,12 +195,13 @@ class PrefsWindow(wxDialog):
       if self.app.config.get('saveWindowPos'):
          self.app.config.set('windowPosX', frame.GetPosition()[0])
          self.app.config.set('windowPosY', frame.GetPosition()[1])
+
       if self.app.config.get('saveSashPos'):
-         self.app.config.set('sashPos', frame.splitter.GetSashPosition())
+         if not frame.wordListHidden():
+            self.app.config.set('sashPos', frame.splitter.GetSashPosition())
 
       self.app.config.save()
       
-      #self.app.config.useListWithGroups = self.listGroup.GetValue()
       self.Destroy()
 
 

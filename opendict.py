@@ -77,11 +77,6 @@ class OpenDictApp(wxApp):
 
       _ = wxGetTranslation
 
-      from gui import errorwin
-      title = _("Warning")
-      msg = _("This OpenDict version is for developer use only")
-      #errorwin.showInfoMessage(title, msg)
-
       _start = time.time()
 
       if wxPython.__version__.split('.') < ['2', '5']:
@@ -127,12 +122,10 @@ class OpenDictApp(wxApp):
       
       # Load new-style plugins
       for plugin in newplugin.loadDictionaryPlugins():
-         systemLog(DEBUG, "Loading '%s'..." % plugin.getName())
          self.dictionaries[plugin.getName()] = plugin
          self.config.ids[wx.NewId()] = plugin.getName()
 
       for plain in plaindict.loadPlainDictionaries():
-         systemLog(DEBUG, "Loading '%s'..." % plain.getName())
          self.dictionaries[plain.getName()] = plain
          self.config.ids[wx.NewId()] = plain.getName()
 

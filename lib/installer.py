@@ -203,7 +203,6 @@ def installPlainDictionary(filePath):
                                            md5=md5sum,
                                            encoding='UTF-8')
 
-    print "DEBUG Writing dictionary configuration..."
     xmltools.writePlainDictConfig(doc, os.path.join(dictDir,
                                                     'conf',
                                                     'config.xml'))
@@ -333,20 +332,6 @@ def _installNormalPlugin(filePath):
 def _installPlainPlugin(filePath):
     """Install prepared plain dictionary and return directory path"""
 
-##     # Check if file exists
-##     if not os.path.exists(filePath):
-##         raise Exception, _("File %s does not exist") % filePath
-
-##     # Check if it is file
-##     if not os.path.isfile(filePath):
-##         raise Exception, _("%s is not a file") % filePath
-
-##     # Check if it is ZIP archive
-##     if os.path.splitext(filePath)[1].lower()[1:] != "zip":
-##         raise Exception, _("%s is not OpenDict dictionary" % filePath)
-
-##     util.makeDirectories()
-
     zipFile = zipfile.ZipFile(filePath, 'r')
     topDirectory = zipFile.namelist()[0]
 
@@ -357,14 +342,6 @@ def _installPlainPlugin(filePath):
     plainDictsPath = os.path.join(info.LOCAL_HOME,
                               info.PLAIN_DICT_DIR)
 
-    # Check if already installed
-    #if os.path.exists(os.path.join(info.LOCAL_HOME,
-    #                               info.PLUGIN_DICT_DIR,
-    #                               topDirectory)):
-    #    raise Exception, _("This plugin dictionary already installed. " \
-    #                       "If you want to upgrade it, please remove " \
-    #                       "old version first.")
-
     # Install
     try:
         for fileInZip in zipFile.namelist():
@@ -374,11 +351,9 @@ def _installPlainPlugin(filePath):
             if len(fileName) == 0:
                 dirToCreate = os.path.join(plainDictsPath, dirName)
                 if not os.path.exists(dirToCreate):
-                    #print "Creating", dirToCreate
                     os.mkdir(dirToCreate)
             else:
                 fileToWrite = os.path.join(plainDictsPath, dirName, fileName)
-                #print "Writing:", fileToWrite
                 fd = open(fileToWrite, 'w')
                 fd.write(zipFile.read(fileInZip))
                 fd.close()
@@ -386,12 +361,10 @@ def _installPlainPlugin(filePath):
         try:
             shutil.rmtree(os.path.join(plainDictsPath, topDirectory))
         except Exception, e:
-            #print "ERROR %s" % e
             raise _("Error while removing created directories after " \
                     "plugin installation failure. This may be " \
                     "permission or disk space error.")
 
-        #print "ERROR %s" % e
         raise _("Unable to install dictionary")
 
 
@@ -407,10 +380,10 @@ def removePlainDictionary(dictInstance):
     filePath = dictInstance.getPath()
     fileName = os.path.basename(filePath)
 
-    dictDir = os.path.join(info.LOCAL_HOME, info.PLAIN_DICT_DIR, fileName)
+    dictDir = dictInstance.getConfigDir()
+    #dictDir = os.path.join(info.LOCAL_HOME, info.PLAIN_DICT_DIR, fileName)
 
     try:
-        #print "DEBUG Removing %s..." % dictDir
         shutil.rmtree(dictDir)
     except Exception, e:
         raise Exception, str(e)
@@ -422,23 +395,10 @@ def removePluginDictionary(dictInstance):
     filePath = dictInstance.getPath()
     fileName = os.path.basename(filePath)
 
-    dictDir = os.path.join(info.LOCAL_HOME, info.PLUGIN_DICT_DIR, fileName)
+    dictDir = dictInstance.getPath()
 
     try:
-        #print "DEBUG Removing %s..." % dictDir
         shutil.rmtree(dictDir)
     except Exception, e:
         raise Exception, str(e)
     
-
-## if __name__ == "__main__":
-##     #try:
-##     #    installPlainDictionary("/home/mjoc/")
-##     #except Exception, e:
-##     #    print "ERROR %s" % e
-
-##     try:
-##         installDictionaryPlugin("/home/mjoc/sampleplugin2.zip")
-##     except Exception, e:
-##         print "ERROR %s" % e
-        
