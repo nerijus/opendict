@@ -286,7 +286,7 @@ class MainWindow(wxFrame):
       menuHelp = wxMenu()
 
       idLicence = wx.NewId()
-      menuHelp.Append(117, _("&License"))
+      menuHelp.Append(idLicence, _("&License"))
 
       idAbout = wx.NewId()
       menuHelp.Append(idAbout, _("&About\tCtrl-A"))
