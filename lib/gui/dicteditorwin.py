@@ -27,13 +27,13 @@ import os
 import codecs
 import traceback
 
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-from misc import encodings, printError
-from parser import TMXParser
-from gui import errorwin
-import info
-import dicteditor
-import enc
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib.misc import encodings, printError
+from lib.parser import TMXParser
+from lib.gui import errorwin
+from lib import info
+from lib import dicteditor
+from lib import enc
 
 _ = wxGetTranslation
 

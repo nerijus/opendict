@@ -22,12 +22,12 @@ from wxPython.wx import *
 from wxPython.lib.rcsizer import RowColSizer
 import traceback
 
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-from parser import DictConnection
-from extra import dictclient
-from threads import Process
-from gui import errorwin
-import misc
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib.parser import DictConnection
+from lib.extra import dictclient
+from lib.threads import Process
+from lib.gui import errorwin
+from lib import misc
 
 _ = wxGetTranslation
 

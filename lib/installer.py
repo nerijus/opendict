@@ -25,16 +25,16 @@ import zipfile
 import shutil
 import traceback
 
-from gui.dictaddwin import DictAddWindow
-from gui import errorwin
-import misc
-import info
-import dicttype
-import xmltools
-import util
-import enc
-import plaindict
-import newplugin
+from lib.gui.dictaddwin import DictAddWindow
+from lib.gui import errorwin
+from lib import misc
+from lib import info
+from lib import dicttype
+from lib import xmltools
+from lib import util
+from lib import enc
+from lib import plaindict
+from lib import newplugin
 
 _ = wxGetTranslation
 

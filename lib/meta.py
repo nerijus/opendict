@@ -22,7 +22,7 @@
 Metaclasses
 """
 
-import errortype
+from lib import errortype
 
 
 class SearchResult:

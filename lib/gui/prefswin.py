@@ -20,8 +20,8 @@
 
 from wxPython.wx import *
 
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-from misc import encodings
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib.misc import encodings
 
 _ = wxGetTranslation
 

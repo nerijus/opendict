@@ -29,9 +29,9 @@ import sys
 import traceback
 import xml.dom.minidom
 
-import info
-import meta
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib import info
+from lib import meta
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
 class PluginInfo:
@@ -161,7 +161,7 @@ class DictionaryPlugin(meta.Dictionary):
     def getType(self):
         """Return dictionary type"""
 
-        import dicttype
+        from lib import dicttype
         return dicttype.PLUGIN
 
 

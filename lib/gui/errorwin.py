@@ -26,7 +26,7 @@ import traceback
 _ = wxGetTranslation
 
 
-import info
+from lib import info
 
 
 def showErrorMessage(title, msg):

@@ -22,8 +22,8 @@ from wxPython.wx import *
 from wxPython.html import *
 import wx
 
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-import enc
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib import enc
 
 _ = wxGetTranslation
 

@@ -21,7 +21,7 @@
 import os
 import time
 
-import info
+from lib import info
 
 
 INFO = 0

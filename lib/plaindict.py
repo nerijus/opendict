@@ -25,11 +25,11 @@ Module for plain dictionaries
 import os
 import traceback
 
-import info
-import meta
-import util
-import xmltools
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib import info
+from lib import meta
+from lib import util
+from lib import xmltools
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
 class PlainDictInfo:
@@ -244,7 +244,7 @@ class PlainDictionary(meta.Dictionary):
 def _loadPlainDictionary(directory):
     """Load one dictionary and returns dictionary object"""
 
-    import dicttype
+    from lib import dicttype
     dictionary = None
 
     try:
@@ -429,7 +429,7 @@ def loadIndex(dictionary):
 def savePlainConfiguration(dictionary):
     """Write configuration to disk"""
 
-    import dicttype
+    from lib import dicttype
 
     if not dictionary.getType() in dicttype.plainTypes:
        systemLog(ERROR, "Request to write configuration to %s of type %s" \

@@ -29,8 +29,8 @@ import time
 import urllib2
 import traceback
 
-import info
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib import info
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
 class UniqueIdGenerator:

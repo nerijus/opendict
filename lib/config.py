@@ -22,12 +22,12 @@ import os
 import string
 import codecs
 
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-from misc import numVersion
-import info
-import util
-import parser
-import xmltools
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib.misc import numVersion
+from lib import info
+from lib import util
+from lib import parser
+from lib import xmltools
 
 
 class Configuration:

@@ -26,19 +26,17 @@ import traceback
 import xml.parsers.expat
 from wxPython.wx import wxGetApp
 
-from extra import dictclient
-from extra import dictdlib
-import info
-import misc
-import errortype
-import meta
-import plaindict
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib.extra import dictclient
+from lib.extra import dictdlib
+from lib import info
+from lib import misc
+from lib import errortype
+from lib import meta
+from lib import plaindict
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
-#WORD_BG = "#cad1e5" # Normal blue
 WORD_BG = "#dde2f1" # Bright blue
-#DICT_BG = "#cad1e5"
 DICT_BG = "#b4bedb"
 
 class SlowoParser(plaindict.PlainDictionary):
@@ -112,7 +110,7 @@ class SlowoParser(plaindict.PlainDictionary):
    def getType(self):
       """Return dictionary type"""
 
-      import dicttype
+      from lib import dicttype
       return dicttype.SLOWO
 
 
@@ -354,7 +352,7 @@ class MovaParser(plaindict.PlainDictionary):
    def getType(self):
       """Return dictionary type"""
 
-      import dicttype
+      from lib import dicttype
       return dicttype.MOVA
 
 
@@ -694,7 +692,7 @@ class DictParser(plaindict.PlainDictionary):
    def getType(self):
       """Return dictionary type"""
 
-      import dicttype
+      from lib import dicttype
       return dicttype.DICT
 
    

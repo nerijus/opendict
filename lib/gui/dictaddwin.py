@@ -22,8 +22,7 @@
 
 from wxPython.wx import *
 
-#import plugin
-import misc
+from lib import misc
 
 _ = wxGetTranslation
 

@@ -21,7 +21,7 @@
 import xml.dom.minidom
 import xml.dom.ext
 
-import meta
+from lib import meta
 
 
 def _textData(element):

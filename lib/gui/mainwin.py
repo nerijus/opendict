@@ -29,32 +29,32 @@ import os
 import cStringIO
 import traceback
 
-import info
-from gui.dictconnwin import DictConnWindow
-from gui.pluginwin import PluginManagerWindow
-from gui.dicteditorwin import DictEditorWindow
-from gui.dictaddwin import DictAddWindow
-from gui.prefswin import PrefsWindow
-from gui.helpwin import LicenseWindow, AboutWindow
-from gui import errorwin
-from gui import miscwin
-from parser import SlowoParser
-from parser import MovaParser
-from parser import TMXParser
-from parser import DictParser
-from threads import Process
-from history import History
-from installer import Installer
-from extra.html2text import html2text
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-import misc
-import info
-import util
-import meta
-import enc
-import errortype
-import dicttype
-import plaindict
+from lib import info
+from lib.gui.dictconnwin import DictConnWindow
+from lib.gui.pluginwin import PluginManagerWindow
+from lib.gui.dicteditorwin import DictEditorWindow
+from lib.gui.dictaddwin import DictAddWindow
+from lib.gui.prefswin import PrefsWindow
+from lib.gui.helpwin import LicenseWindow, AboutWindow
+from lib.gui import errorwin
+from lib.gui import miscwin
+from lib.parser import SlowoParser
+from lib.parser import MovaParser
+from lib.parser import TMXParser
+from lib.parser import DictParser
+from lib.threads import Process
+from lib.history import History
+from lib.installer import Installer
+from lib.extra.html2text import html2text
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib import misc
+from lib import info
+from lib import util
+from lib import meta
+from lib import enc
+from lib import errortype
+from lib import dicttype
+from lib import plaindict
 
 _ = wxGetTranslation
 

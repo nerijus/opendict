@@ -27,15 +27,15 @@ import os
 import traceback
 import time
 
-from gui import errorwin
-import installer
-import dicttype
-import enc
-import info
-import misc
-import xmltools
-import util
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib.gui import errorwin
+from lib import installer
+from lib import dicttype
+from lib import enc
+from lib import info
+from lib import misc
+from lib import xmltools
+from lib import util
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
 _ = wxGetTranslation

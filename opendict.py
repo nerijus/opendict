@@ -49,20 +49,19 @@ except ImportError:
 #
 # Initial path
 #
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                'lib'))
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
 
 # OpenDict Modules
-import info
-from gui.mainwin import MainWindow
-from gui.errorwin import ErrorWindow
-from config import Configuration
-from logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-import misc
-import info
-import newplugin
-import plaindict
-import util
+from lib import info
+from lib.gui.mainwin import MainWindow
+from lib.gui.errorwin import ErrorWindow
+from lib.config import Configuration
+from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib import misc
+from lib import info
+from lib import newplugin
+from lib import plaindict
+from lib import util
 
 
 class OpenDictApp(wxApp):

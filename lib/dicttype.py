@@ -22,7 +22,7 @@
 Dictionary types
 """
 
-import newplugin # FIXME: rename
+from lib import newplugin
 
 
 class DictionaryType:
