@@ -280,9 +280,19 @@ class AgreementsManager:
 
         try:
             fd = open(self.filePath)
+            update = False
+            
             for line in fd:
-                self.dictPaths.append(line.strip())
+                line = line.strip()
+                if os.path.exists(line):
+                    self.dictPaths.append(line)
+                else:
+                    update = True
             fd.close()
+
+            # Rewrite contents if non-existent directories exist
+            if update:
+                self._updateFile()
         except:
             pass
 
