@@ -51,8 +51,8 @@ class Configuration:
       # Default values
       #
       self.set('saveWindowSize', '1')
-      self.set('saveWindowPos', '0')
-      self.set('saveSashPos', '0')
+      self.set('saveWindowPos', '1')
+      self.set('saveSashPos', '1')
       self.set('useListWithRegs', '1')
       self.set('useListWithGroups', '1')
 
