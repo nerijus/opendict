@@ -68,18 +68,70 @@ class SlowoParser(meta.Dictionary):
    """
    Built-in Slowo Parser
 
-   Parses file in Slowo dictionary format and does
-   the search.
+   Parses file in Slowo format.
    """
 
-   def __init__(self, file):
+   def __init__(self, filePath):
+      """Initialize"""
 
-      #self.window = window
-      self.needsList = wxGetApp().config.useListWithRegs
+      self.filePath = filePath
+      self.needsList = True
+      
       self.fd = open(file)
 
       self.encoding = None
-      self.name = os.path.split(file)[1]
+      self.name = os.path.splitext(os.path.basename(filePath))[0]
+
+      # Additional information
+      self.encoding = None
+      self.checksum = None
+      self.index = None
+
+      self.configChanged = False
+
+
+   def start(self):
+      """Open file handle"""
+
+      print "DEBUG Opening file %s" % self.filePath
+      self.fd = open(self.filePath)
+
+
+   def stop(self):
+      """Close file handle"""
+
+      try:
+         print "DEBUG Closing file..."
+         self.fd.close()
+      except:
+         pass
+
+
+   def setIndex(self, index):
+      """Set index table"""
+
+      self.index = index
+
+
+   def getPath(self):
+      """Return full file path"""
+
+      return self.filePath
+
+
+   def setChecksum(self, newSum, first=False):
+      """Set checksum. Used after checksum change"""
+
+      if self.checksum == None:
+         self.configChanged = True
+
+      self.checksum = newSum
+
+
+   def getChecksum(self):
+      """Return checksum"""
+
+      return self.checksum
 
 
    def getType(self):
@@ -98,6 +150,7 @@ class SlowoParser(meta.Dictionary):
       """Set encoding"""
 
       self.encoding = encoding
+      self.configChanged = True
 
 
    def getEncoding(self):
@@ -276,13 +329,13 @@ class MovaParser(meta.Dictionary):
 
       # Additional variables
       self.encoding = None
-      self.checkSum = ""
+      self.checksum = None
       self.index = None
       
 
       # If this is True when closing, the new configuration will be
       # written to disk
-      self.confChanged = False
+      self.configChanged = False
 
 
    def start(self):
@@ -321,12 +374,15 @@ class MovaParser(meta.Dictionary):
    def setChecksum(self, newSum, first=False):
       """Set checksum. Used after chekcsum change"""
 
+      if self.checksum == None:
+         self.configChanged = True
+
       self.checksum = newSum
 
       # If checksum is set not for the first time, remember to
       # update configuration
-      if not first:
-         self.configChanged = True
+      #if not first:
+      #   self.configChanged = True
 
 
    def getChecksum(self):
