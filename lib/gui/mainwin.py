@@ -1423,7 +1423,8 @@ class MainWindow(wxFrame):
          self.app.config.set('windowPosX', self.GetPosition()[0])
          self.app.config.set('windowPosY', self.GetPosition()[1])
       if self.app.config.get('saveSashPos'):
-         self.app.config.set('sashPos', self.splitter.GetSashPosition())
+         if not self.wordListHidden():
+             self.app.config.set('sashPos', self.splitter.GetSashPosition())
 
       try:
          self.app.config.save()
