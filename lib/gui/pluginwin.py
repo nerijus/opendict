@@ -53,345 +53,460 @@ class PluginManagerWindow(wxFrame):
       self.app = wxGetApp()
 
       vboxMain = wxBoxSizer(wxVERTICAL)
-      
-      grid = wxFlexGridSizer(4, 2, 1, 1)
-      
-      #self.dictMap = {}
-      #for name in self.app.config.plugins.keys():
-      #    self.dictMap[name] = "plugin"
-      #for name in self.app.config.registers.keys():
-      #    self.dictMap[name] = "register"
+
+      self.allDictionaries = {}
+      installed = True
+
+      for dictName in self.app.dictionaries.keys():
+          self.allDictionaries[dictName] = installed
+
+      for xxx in [u'Vienas pienas', u'Du kartu', u'Trys kas nors']:
+          self.allDictionaries[xxx] = not installed
 
 
-      installedDictionaries = self.app.dictionaries.keys()
-      #print self.app.dictionaries
-      #for d in self.app.dictionaries:
-         #print d
-      #   installedDictionaries.append(d.getName())
-      
-      #allDicts = self.app.config.plugins.keys() + \
-      #           self.app.config.registers.keys()
-      #allDicts.sort()
+      # Add 'installed' panel
+      panelInstalled = self._makeInstalledPanel()
+      vboxMain.Add(panelInstalled, 1, wxALL | wxEXPAND, 2)
 
-      #self.dictListCtrl = wxListBox(self, 160,
-      #                              wxPoint(-1, -1),
-      #                              wxSize(-1, -1),
-      #                              installedDictinaries,
-      #                              wxLB_SINGLE | wxSUNKEN_BORDER)
-      idDictList = wx.NewId()
-      
-      self.dictListCtrl = DictListCtrl(self, idDictList,
-                                       style=wx.LC_REPORT)
-                                       #| wx.LC_SORT_ASCENDING
-                                       #| wx.LC_EDIT_LABELS)
+      # Add 'available' panel
+      panelAvailable = self._makeAvailablePanel()
+      vboxMain.Add(panelAvailable, 1, wxALL | wxEXPAND, 2)
 
-
-      #self.dictListCtrl.InsertColumn(0, "Name")
-      #self.dictListCtrl.InsertColumn(1, "Size")
-
-      #
-      # Make columns
-      #
-      info = wx.ListItem()
-      info.m_mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE \
-      #              | wx.LIST_MASK_FORMAT
-      info.m_image = -1
-      info.m_format = 0
-      info.m_text = "Dictionary name"
-      self.dictListCtrl.InsertColumnInfo(0, info)
-
-      info.m_image = -1
-      info.m_format = 0
-      info.m_text = "Size"
-      self.dictListCtrl.InsertColumnInfo(1, info)
-
-      info.m_image = -1
-      info.m_format = 0
-      info.m_text = "Status"
-      self.dictListCtrl.InsertColumnInfo(2, info)
-      
-      #
-      # TODO: neveikia si vieta
-      # 
-      #index = 0
-      for dictionary in installedDictionaries:
-         #print index
-         #print dictionary
-         index = self.dictListCtrl.InsertStringItem(0, dictionary)
-         self.dictListCtrl.SetStringItem(index, 1, "1243 KB")
-         self.dictListCtrl.SetStringItem(index, 2, "Installed")
-         self.dictListCtrl.SetItemData(index, index+1)
-
-         item = self.dictListCtrl.GetItem(index)
-         #print item
-         item.SetTextColour(wx.BLUE)
-         self.dictListCtrl.SetItem(item)
-         #index += 1
-
-      #print dir(self.dictListCtrl)
-      
-      #self.itemDataMap = {0: ('dfsdf', 'sdfsf')}
-      #listmix.ColumnSorterMixin.__init__(self, 2)
-
-      self.dictListCtrl.SetColumnWidth(0, wx.LIST_AUTOSIZE)
-      self.dictListCtrl.SetColumnWidth(1, wx.LIST_AUTOSIZE)
-      self.dictListCtrl.SetColumnWidth(2, wx.LIST_AUTOSIZE)
-
-      vboxMain.Add(self.dictListCtrl, 1, wxALL | wxEXPAND, 3)
-
-      vboxInfo = wxBoxSizer(wxVERTICAL)
-      
-      self.labelName = wxStaticText(self, -1, "")
-      self.labelVersion = wxStaticText(self, -1, "")
-      self.labelFormat = wxStaticText(self, -1, "")
-      self.labelAuthor = wxStaticText(self, -1, "")
-      self.labelSize = wxStaticText(self, -1, "")
-      
-      # Adding description into separate static box
-      self.panelDesc = wxPanel(self, -1)
-      sbSizerDesc = wxStaticBoxSizer(wxStaticBox(self.panelDesc, -1, 
-                                                 _("Description")),
-                                     wxVERTICAL)
-
-      self.textAbout = wxTextCtrl(self.panelDesc, -1, size=(-1, 60),
-                       style=wxTE_MULTILINE | wxTE_READONLY)
-      sbSizerDesc.Add(self.textAbout, 1, wxALL | wxEXPAND, 0)
-      self.panelDesc.SetSizer(sbSizerDesc)
-      self.panelDesc.SetAutoLayout(true)
-      sbSizerDesc.Fit(self.panelDesc)
-
-##       if len(allDicts) > 0:
-##          self.pluginList.SetSelection(0)
-         
-##          # Simulating event
-##          simEvent = wxCommandEvent()
-##          simEvent.SetString(self.pluginList.GetStringSelection())
-         
-##          self.onPluginSelected(simEvent)
-         
-##          #if name in self.app.config.plugins.keys():
-##          #    plugin = self.app.config.plugins[name]
-##          #    version = plugin.version
-##          #    format = "OpenDict plugin"
-##          #    author = plugin.author
-##          #    about = plugin.about
-##          #else:
-##          #    regFile = self.app.config.registers[name]
-##          #    version = ""
-##          #    format = misc.dictFormats[regFile[1]]
-##          #    author = ""
-##          #    about = ""
-##       else:
-##          # There's no installed plugins
-##          name = ""
-##          version = ""
-##          format = ""
-##          author = ""
-##          about = ""
-      
-      grid.Add(wxStaticText(self, -1, _("Name: ")),
-               0, wxALL)
-      grid.Add(self.labelName, 0, wxALL)
-      
-      grid.Add(wxStaticText(self, -1, _("Version: ")),
-               0, wxALL)
-      grid.Add(self.labelVersion, 0, wxALL)
-      
-      grid.Add(wxStaticText(self, -1, _("Author: ")),
-               0, wxALL)
-      grid.Add(self.labelAuthor, 0, wxALL)
-      
-      grid.Add(wxStaticText(self, -1, _("Format: ")),
-               0, wxALL)
-      grid.Add(self.labelFormat, 0, wxALL)
-      
-      grid.Add(wxStaticText(self, -1, _("Size: ")),
-               0, wxALL)
-      grid.Add(self.labelSize, 0, wxALL)
-      
-      vboxInfo.Add(grid, 1, wxALL | wxEXPAND, 1)
-      
-      vboxInfo.Add(self.panelDesc, 1, wxALL | wxEXPAND, 1)
-      #self.textAbout.WriteText(about)
-
-      vboxMain.Add(vboxInfo, 0, wxALL | wxEXPAND, 10)
+      # Add info panel
+      panelInfo = self._makeInfoPanel()
+      vboxMain.Add(panelInfo, 0, wxALL | wxEXPAND, 2)
 
       hboxButtons = wxBoxSizer(wxHORIZONTAL)
 
-      self.buttonInstall = wxButton(self, 161, _("Install new..."))
-      hboxButtons.Add(self.buttonInstall, 1, wxALL | wxEXPAND, 1)
-
-      self.buttonRemove = wxButton(self, 162, _("Remove selected"))
-      hboxButtons.Add(self.buttonRemove, 1, wxALL | wxEXPAND, 1)
-
       self.buttonClose = wxButton(self, 163, _("Close"))
-      hboxButtons.Add(self.buttonClose, 1, wxALL | wxEXPAND, 1)
+      hboxButtons.Add(self.buttonClose, 0, wxALL | wxALIGN_RIGHT, 3)
 
-      vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
+      vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
 
       self.SetSizer(vboxMain)
-      #self.Fit()
-
-      EVT_LISTBOX(self, 160, self.onPluginSelected)
+      
+      self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onAvailableSelected,
+                self.availableList)
+      
       EVT_BUTTON(self, 161, self.onInstall)
       EVT_BUTTON(self, 162, self.onRemove)
       EVT_BUTTON(self, 163, self.onClose)
 
 
+   def _makeInstalledPanel(self):
+       """Creates panel with for controlling installed dictionaries"""
+       
+       #
+       # Boxes
+       # 
+       panelInstalled = wxPanel(self, -1)
+       vboxInstalled = wxBoxSizer(wxVERTICAL)
+       vboxInstalledBox = wxBoxSizer(wxVERTICAL)
+       sbSizerInstalled = wxStaticBoxSizer(\
+          wxStaticBox(panelInstalled, -1, 
+                      _("Installed Dictionaries")),
+          wxVERTICAL)
+       
+       #
+       # Installed list
+       #
+       idDictList = wx.NewId()
+       self.installedList = DictListCtrl(panelInstalled, idDictList,
+                                         style=wx.LC_REPORT)# | wx.BORDER_SUNKEN)
+       vboxInstalledBox.Add(self.installedList, 1, wxALL | wxEXPAND, 1)
+       
+       #
+       # "Remove" button
+       #
+       idRemove = wx.NewId()
+       self.buttonRemove = wxButton(panelInstalled, idRemove, "Remove")
+       vboxInstalledBox.Add(self.buttonRemove, 0, wxALL | wxALIGN_RIGHT, 2)
+       
+       sbSizerInstalled.Add(vboxInstalledBox, 1, wxALL | wxEXPAND, 0)
+       panelInstalled.SetSizer(vboxInstalled)
+       vboxInstalled.Fit(panelInstalled)
+       
+       vboxInstalled.Add(sbSizerInstalled, 1, wxALL | wxEXPAND, 0)
+       
+       #
+       # Make columns
+       #
+       self.installedList.InsertColumn(0, "Dictionary Name")
+       self.installedList.InsertColumn(1, "Size")
+       
+       size = 100
+       
+       dictNames = self.allDictionaries.keys()
+       dictNames.sort()
+       
+       print dictNames
+       
+       for dictionary in dictNames:
+           installed = self.allDictionaries.get(dictionary)
+           
+           index = self.installedList.InsertStringItem(0, dictionary)
+           
+           sizeString = "%d KB"
+           
+           #if not installed:
+           #    sizeString = "%d KB"
+               
+           self.installedList.SetStringItem(index, 1,
+                                            sizeString % size)
+           size += 100
+           
+
+           #status = None
+           #if installed:
+           #    status = "Installed"
+           #else:
+           #    status = "Not installed"
+         
+           #self.installedList.SetStringItem(index, 2, status)
+           self.installedList.SetItemData(index, index+1)
+           
+           #if installed:
+           item = self.installedList.GetItem(index)
+           item.SetTextColour(wx.BLUE)
+           self.installedList.SetItem(item)
+
+               
+       self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+       self.installedList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+       #self.installedList.SetColumnWidth(2, wx.LIST_AUTOSIZE)
+
+       self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onInstalledSelected,
+                 self.installedList)
+
+       return panelInstalled
+
+
+   def _makeAvailablePanel(self):
+       """Creates panel with for controlling installed dictionaries"""
+       
+       #
+       # Boxes
+       # 
+       panelAvailable = wxPanel(self, -1)
+       vboxAvailable = wxBoxSizer(wxVERTICAL)
+       vboxAvailableBox = wxBoxSizer(wxVERTICAL)
+       sbSizerAvailable = wxStaticBoxSizer(\
+          wxStaticBox(panelAvailable, -1, 
+                      _("Available Dictionaries")),
+          wxVERTICAL)
+       
+       #
+       # Installed list
+       #
+       idAvailList = wx.NewId()
+       self.availableList = DictListCtrl(panelAvailable, idAvailList,
+                                         style=wx.LC_REPORT)# | wx.BORDER_SUNKEN)
+       vboxAvailableBox.Add(self.availableList, 1, wxALL | wxEXPAND, 1)
+
+
+       # Horizontal box for buttons
+       hboxButtons = wxBoxSizer(wxHORIZONTAL)
+       
+       #
+       # "Install" button
+       #
+       idInstall = wx.NewId()
+       self.buttonInstall = wxButton(panelAvailable, idInstall, _("Install"))
+       hboxButtons.Add(self.buttonInstall, 0, wxALL | wxALIGN_RIGHT, 2)
+
+       #
+       # "Update" button
+       #
+       idUpdate = wx.NewId()
+       self.buttonUpdate = wxButton(panelAvailable, idInstall, _("Update List"))
+       hboxButtons.Add(self.buttonUpdate, 0, wxALL | wxALIGN_RIGHT, 2)
+
+       vboxAvailableBox.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
+       
+       sbSizerAvailable.Add(vboxAvailableBox, 1, wxALL | wxEXPAND, 0)
+       panelAvailable.SetSizer(vboxAvailable)
+       vboxAvailable.Fit(panelAvailable)
+       
+       vboxAvailable.Add(sbSizerAvailable, 1, wxALL | wxEXPAND, 0)
+       
+       #
+       # Make columns
+       #
+       self.availableList.InsertColumn(0, _("Dictionary Name"))
+       self.availableList.InsertColumn(1, _("Size Of Download"))
+       
+       size = 100
+       
+       dictNames = self.allDictionaries.keys()
+       dictNames.sort()
+       
+       print dictNames
+       
+       for dictionary in dictNames:
+           installed = self.allDictionaries.get(dictionary)
+           
+           index = self.availableList.InsertStringItem(0, dictionary)
+           
+           sizeString = "%d KB"
+           
+           #if not installed:
+           #    sizeString = "%d KB (to download)"
+               
+           self.availableList.SetStringItem(index, 1,
+                                            sizeString % size)
+           size += 100
+           
+
+           #status = None
+           #if installed:
+           #    status = "Installed"
+           #else:
+           #    status = "Not installed"
+         
+           #self.availableList.SetStringItem(index, 2, status)
+           self.availableList.SetItemData(index, index+1)
+           
+           #if installed:
+           #    item = self.availableList.GetItem(index)
+           #    item.SetTextColour(wx.BLUE)
+           #    self.availableList.SetItem(item)
+
+               
+       self.availableList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+       self.availableList.SetColumnWidth(1, 180)
+       #self.availableList.SetColumnWidth(2, wx.LIST_AUTOSIZE)
+
+       self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onAvailableSelected,
+                 self.availableList)
+
+       return panelAvailable
+
+
+   def _makeInfoPanel(self):
+       """Create information panel"""
+
+       #
+       # Boxes
+       # 
+       panelInfo = wxPanel(self, -1)
+       vboxInfo = wxBoxSizer(wxVERTICAL)
+       vboxInfoBox = wxBoxSizer(wxVERTICAL)
+       sbSizerInfo = wxStaticBoxSizer(\
+          wxStaticBox(panelInfo, -1, 
+                      _("Information")),
+          wxVERTICAL)
+
+       grid = wxFlexGridSizer(3, 2, 1, 1)
+       
+       self.labelName = wxStaticText(panelInfo, -1, "")
+       self.labelVersion = wxStaticText(panelInfo, -1, "")
+       self.labelFormat = wxStaticText(panelInfo, -1, "")
+       self.labelAuthor = wxStaticText(panelInfo, -1, "")
+       self.labelSize = wxStaticText(panelInfo, -1, "")
+       
+       self.textAbout = wxTextCtrl(panelInfo, -1, size=(-1, 100),
+                                   style=wxTE_MULTILINE | wxTE_READONLY)
+       
+       grid.Add(wxStaticText(panelInfo, -1, _("Name: ")),
+                0, wxALL)
+       grid.Add(self.labelName, 0, wxALL)
+       
+       grid.Add(wxStaticText(panelInfo, -1, _("Version: ")),
+                0, wxALL)
+       grid.Add(self.labelVersion, 0, wxALL)
+       
+       grid.Add(wxStaticText(panelInfo, -1, _("Author: ")),
+                0, wxALL)
+       grid.Add(self.labelAuthor, 0, wxALL)
+
+       vboxInfoBox.Add(grid, 1, wxALL | wxEXPAND, 1)
+       vboxInfoBox.Add(self.textAbout, 0, wxALL | wxEXPAND, 1)
+       
+       sbSizerInfo.Add(vboxInfoBox, 1, wxALL | wxEXPAND, 0)
+       
+       vboxInfo.Add(sbSizerInfo, 1, wxALL | wxEXPAND, 0)
+
+       panelInfo.SetSizer(vboxInfo)
+       vboxInfo.Fit(panelInfo)
+
+       return panelInfo
+       
+
    def GetListCtrl(self):
         return self.list
 
-   def onPluginSelected(self, event):
+
+   def onInstalledSelected(self, event):
       #plugin = self.app.config.plugins[event.GetString()]
-      name = event.GetString()
-      size = -1
+      self.currentItem = event.m_itemIndex
+
+      print self.installedList.GetItemText(self.currentItem)
       
-      #if self.dictMap[name] == "plugin":
-      if name in self.app.config.plugins.keys():
-             plugin = self.app.config.plugins[name]
+##       name = event.GetString()
+##       size = -1
+      
+##       #if self.dictMap[name] == "plugin":
+##       if name in self.app.config.plugins.keys():
+##              plugin = self.app.config.plugins[name]
 
-             try:
-                self.labelName.SetLabel(plugin.name.decode('UTF-8'))
-             except Exception, e:
-                print "ERROR Unable to set label '%s' (%s)" \
-                      % (plugin.name, e)
+##              try:
+##                 self.labelName.SetLabel(plugin.name.decode('UTF-8'))
+##              except Exception, e:
+##                 print "ERROR Unable to set label '%s' (%s)" \
+##                       % (plugin.name, e)
 
-             try:
-                self.labelVersion.SetLabel(plugin.version.decode('UTF-8'))
-             except Exception, e:
-                print "ERROR: Unable to set label '%s' (%s)" \
-                      % (plugin.version, e)
+##              try:
+##                 self.labelVersion.SetLabel(plugin.version.decode('UTF-8'))
+##              except Exception, e:
+##                 print "ERROR: Unable to set label '%s' (%s)" \
+##                       % (plugin.version, e)
 
-             self.labelFormat.SetLabel(_("OpenDict plugin"))
+##              self.labelFormat.SetLabel(_("OpenDict plugin"))
                 
-             try:
-                self.labelAuthor.SetLabel(plugin.author.decode('UTF-8'))
-             except Exception, e:
-                print "ERROR: Unable to set label '%s' (%s)" \
-                      % (plugin.author, e)
+##              try:
+##                 self.labelAuthor.SetLabel(plugin.author.decode('UTF-8'))
+##              except Exception, e:
+##                 print "ERROR: Unable to set label '%s' (%s)" \
+##                       % (plugin.author, e)
                 
-             self.textAbout.Clear()
+##              self.textAbout.Clear()
 
-             try:
-                self.textAbout.WriteText(plugin.about.decode('UTF-8'))
-             except Exception, e:
-                print "ERROR: Unable to set label '%s' (%s)" \
-                      % (plugin.about, e)
+##              try:
+##                 self.textAbout.WriteText(plugin.about.decode('UTF-8'))
+##              except Exception, e:
+##                 print "ERROR: Unable to set label '%s' (%s)" \
+##                       % (plugin.about, e)
              
-             path = self.app.config.plugins[name].dir
+##              path = self.app.config.plugins[name].dir
 
-             pluginDirPath = os.path.join(info.LOCAL_HOME,
-                                          info.__DICT_DIR,
-                                          info.__PLUGIN_DICT_DIR,
-                                          path)
-             if os.path.exists(pluginDirPath):
-                 size = misc.getDirSize(pluginDirPath,
-                                        0, 0, 10)
-             else:
-                 size = misc.getDirSize(os.path.join(info.GLOBAL_HOME,
-                                                     info.__DICT_DIR,
-                                                     info.__PLUGIN_DICT_DIR,
-                                                     path),
-                                        0, 0, 10)
+##              pluginDirPath = os.path.join(info.LOCAL_HOME,
+##                                           info.__DICT_DIR,
+##                                           info.__PLUGIN_DICT_DIR,
+##                                           path)
+##              if os.path.exists(pluginDirPath):
+##                  size = misc.getDirSize(pluginDirPath,
+##                                         0, 0, 10)
+##              else:
+##                  size = misc.getDirSize(os.path.join(info.GLOBAL_HOME,
+##                                                      info.__DICT_DIR,
+##                                                      info.__PLUGIN_DICT_DIR,
+##                                                      path),
+##                                         0, 0, 10)
                  
-      elif name in self.app.config.registers.keys():
-             regFile = self.app.config.registers[name]
-             self.labelName.SetLabel(name)
-             self.labelVersion.SetLabel("--")
-             self.labelFormat.SetLabel(misc.dictFormats[regFile[1]])
-             self.labelAuthor.SetLabel("--")
-             self.textAbout.Clear()
+##       elif name in self.app.config.registers.keys():
+##              regFile = self.app.config.registers[name]
+##              self.labelName.SetLabel(name)
+##              self.labelVersion.SetLabel("--")
+##              self.labelFormat.SetLabel(misc.dictFormats[regFile[1]])
+##              self.labelAuthor.SetLabel("--")
+##              self.textAbout.Clear()
              
-             size = misc.getFileSize(self.app.config.registers[name][0])
-      else:
-          print "onPluginSelected(): misunderstood"
+##              size = misc.getFileSize(self.app.config.registers[name][0])
+##       else:
+##           print "onPluginSelected(): misunderstood"
       
-      self.labelSize.SetLabel(str(size/1000.)+" KB")
+##       self.labelSize.SetLabel(str(size/1000.)+" KB")
+
+
+   def onAvailableSelected(self, event):
+
+      self.currentItem = event.m_itemIndex
+      print self.availableList.GetItemText(self.currentItem)
+      
 
    def onInstall(self, event):
-      from installer import Installer # FIXME: bug with imports
-      installer = Installer(self.app.config.window, self.app.config)
-      installer.showGUI()
-      
-      if self.app.config.window.lastInstalledDictName != None:
-          self.pluginList.Append(self.app.config.window.lastInstalledDictName)
-          self.app.config.window.lastInstalledDictName = None
+       """Install button pressed"""
+       
+       from installer import Installer # FIXME: bug with imports
+       installer = Installer(self.app.config.window, self.app.config)
+       installer.showGUI()
+       
+       if self.app.config.window.lastInstalledDictName != None:
+           self.pluginList.Append(self.app.config.window.lastInstalledDictName)
+           self.app.config.window.lastInstalledDictName = None
+
 
    def onRemove(self, event):
-      self.app.window.onCloseDict(None)
-      item = self.pluginList.GetStringSelection()
-      pos = self.pluginList.GetSelection()
-
-      if item in self.app.config.plugins.keys():
-          # This is a plugin
-          pluginDirPath = os.path.join(info.LOCAL_HOME,
+       """Remove button pressed"""
+       
+       self.app.window.onCloseDict(None)
+       item = self.pluginList.GetStringSelection()
+       pos = self.pluginList.GetSelection()
+       
+       if item in self.app.config.plugins.keys():
+           # This is a plugin
+           pluginDirPath = os.path.join(info.LOCAL_HOME,
+                                        info.__DICT_DIR,
+                                        info.__PLUGIN_DICT_DIR,
+                                        self.app.config.plugins[item].dir)
+           if os.path.exists(pluginDirPath):
+               try:
+                   rmtree(pluginDirPath)
+               except:
+                   self.app.window.SetStatusText(_("Error removing \"%s\"") % item)
+                   errDialog()
+                   printError()
+                   return
+           elif os.path.exists(os.path.join(info.GLOBAL_HOME,
+                                            info.__DICT_DIR,
+                                            info.__PLUGIN_DICT_DIR,
+                                            self.app.config.plugins[item].dir)):
+               try:
+                   rmtree(os.path.join(info.GLOBAL_HOME,
                                        info.__DICT_DIR,
                                        info.__PLUGIN_DICT_DIR,
-                                       self.app.config.plugins[item].dir)
-          if os.path.exists(pluginDirPath):
-              try:
-                  rmtree(pluginDirPath)
-              except:
-                  self.app.window.SetStatusText(_("Error removing \"%s\"") % item)
-                  errDialog()
-                  printError()
-                  return
-          elif os.path.exists(os.path.join(info.GLOBAL_HOME,
-                                           info.__DICT_DIR,
-                                           info.__PLUGIN_DICT_DIR,
-                                           self.app.config.plugins[item].dir)):
-              try:
-                  rmtree(os.path.join(info.GLOBAL_HOME,
-                                           info.__DICT_DIR,
-                                           info.__PLUGIN_DICT_DIR,
-                                           self.app.config.plugins[item].dir))
-              except:
-                  self.app.window.SetStatusText(_("Error removing \"%s\"") % item)
-                  errDialog()
-                  printError()
-                  return
+                                       self.app.config.plugins[item].dir))
+               except:
+                   self.app.window.SetStatusText(_("Error removing \"%s\"") % item)
+                   errDialog()
+                   printError()
+                   return
           
-          del self.app.config.plugins[item]
-
-      elif item in self.app.config.registers.keys():
-          # This is a register
-          if self.app.config.registers[item][1] != "Dict":
-              if os.path.exists(os.path.join(uhome, "register", item+".hash")):
-                  try:
-                      os.remove(os.path.join(uhome, "register", item+".hash"))
-                  except:
-                      self.app.window.SetStatusText(_("Error while deleting \"%s\"") \
-                                               % (item+".hash"))
-                      return
-              elif os.path.exists(os.path.join(home, "register", item+".hash")):
-                  try:
-                      os.remove(os.path.join(home, "register", item+".hash"))
-                  except:
-                      self.app.window.SetStatusText(_("Error while deleting \"%s\"") \
-                                             % (item+".hash"))
-                  return
-                  
-          del self.app.config.registers[item]
-          
-      for list in self.app.config.groups.values():
-         names = group.filesToNames(list, self.app.config)
-         if item in names:
-            list.pop(names.index(item))
-
-      del self.app.config.ids[item]
-      self.pluginList.Delete(pos)
-
-      parent = self.GetParent()
-      parent.menuDict.Delete(parent.menuDict.FindItem(item))
-      self.labelName.SetLabel("")
-      self.labelVersion.SetLabel("")
-      self.labelAuthor.SetLabel("")
-      self.labelFormat.SetLabel("")
-      self.labelSize.SetLabel("")
-      self.textAbout.Clear()
+           del self.app.config.plugins[item]
+           
+       elif item in self.app.config.registers.keys():
+           # This is a register
+           if self.app.config.registers[item][1] != "Dict":
+               if os.path.exists(os.path.join(uhome, "register", item+".hash")):
+                   try:
+                       os.remove(os.path.join(uhome, "register", item+".hash"))
+                   except:
+                       self.app.window.SetStatusText(_("Error while deleting \"%s\"") \
+                                                     % (item+".hash"))
+                       return
+               elif os.path.exists(os.path.join(home, "register",
+                                                item+".hash")):
+                   try:
+                       os.remove(os.path.join(home, "register", item+".hash"))
+                   except:
+                       self.app.window.SetStatusText(_("Error while deleting \"%s\"") \
+                                                     % (item+".hash"))
+                   return
+               
+           del self.app.config.registers[item]
+           
+       for list in self.app.config.groups.values():
+           names = group.filesToNames(list, self.app.config)
+           if item in names:
+               list.pop(names.index(item))
+               
+       del self.app.config.ids[item]
+       self.pluginList.Delete(pos)
+       
+       parent = self.GetParent()
+       parent.menuDict.Delete(parent.menuDict.FindItem(item))
+       self.labelName.SetLabel("")
+       self.labelVersion.SetLabel("")
+       self.labelAuthor.SetLabel("")
+       self.labelFormat.SetLabel("")
+       self.labelSize.SetLabel("")
+       self.textAbout.Clear()
+       
 
    def onClose(self, event):
-      self.Destroy()
+       """Close event occured"""
+       
+       self.Destroy()
 
 
 class PluginLicenseWindow(wxDialog):

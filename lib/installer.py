@@ -23,6 +23,7 @@ from wxPython.wx import *
 import os
 import zipfile
 import shutil
+import traceback
 
 from gui.dictaddwin import DictAddWindow
 from gui import errorwin
@@ -98,6 +99,7 @@ class Installer:
                         print "Installed dict:", dictionary
                         self.mainWin.addDictionary(dictionary)
                 except Exception, e:
+                    traceback.print_exc()
                     errorwin.showErrorMessage(_("Installation failed"),
                                               enc.toWX(str(e)))
                     self.mainWin.SetStatusText(_("Installation failed"))
@@ -111,6 +113,7 @@ class Installer:
                         print "Installed dict:", dictionary
                         self.mainWin.addDictionary(dictionary)
                 except Exception, e:
+                    traceback.print_exc()
                     errorwin.showErrorMessage(_("Installation failed"),
                                               enc.toWX(str(e)))
                     self.mainWin.SetStatusText(_("Installation failed"))

@@ -987,11 +987,12 @@ For more information visit project's homepage on
       try:
          self.pmWindow = PluginManagerWindow(self, -1,
                                              _("Manage Dictionaries"),
-                                             size=(500, 400),
+                                             size=(500, 600),
                                              style=wxDEFAULT_FRAME_STYLE)
          self.pmWindow.CentreOnScreen()
          self.pmWindow.Show(True)
       except Exception, e:
+         traceback.print_exc()
          print "ERROR Unable to show prefs window: %s" % e
          self.SetStatusText("Error occured, please contact developers (%s)" \
                             % e)

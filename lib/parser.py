@@ -28,7 +28,7 @@ import traceback
 import xml.parsers.expat
 from wxPython.wx import wxGetApp
 
-from misc import errors
+#from misc import errors
 from extra import dictclient
 from extra import dictdlib
 import info

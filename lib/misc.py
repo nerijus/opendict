@@ -27,6 +27,10 @@ import os
 
 _ = wxGetTranslation
 
+
+#
+# FIXME: Remove
+#
 errors = {1: _("Not found"),
           2: _("Dictionary error, please report to its author"),
           3: _("Syntax error"),
@@ -35,34 +39,39 @@ errors = {1: _("Not found"),
           6: _("Bad encoding is set for this dictionary, try another")}
 
 
-# There encodings will work only if the system has installed fonts
-# for them.
-encodings = {"Unicode (UTF-8)": "utf-8",
-             "Western (ISO-8859-1)": "iso-8859-1",
-             "Central European (ISO-8859-2)": "iso-8859-2",
-             "Nordic (ISO-8859-10)": "iso-8859-10",
-             "South European (ISO-8859-3)": "iso-8859-3",
-             "Greek (ISO-8859-7)": "iso-8859-7",
-             "Baltic (ISO-8859-13)": "iso-8859-13",
-             "Cyrilic (KOI8-R)": "koi8-r",
-             "Arabic (ISO-8859-6)": "iso-8859-6"}
+#
+# Character Encodings
+#
+encodings = {"Unicode (UTF-8)": "UTF-8",
+             "Western (ISO-8859-1)": "ISO-8859-1",
+             "Central European (ISO-8859-2)": "ISO-8859-2",
+             "Nordic (ISO-8859-10)": "ISO-8859-10",
+             "South European (ISO-8859-3)": "ISO-8859-3",
+             "Greek (ISO-8859-7)": "ISO-8859-7",
+             "Baltic (ISO-8859-13)": "ISO-8859-13",
+             "Cyrilic (KOI8-R)": "KOI8-R",
+             "Arabic (ISO-8859-6)": "ISO-8859-6"}
 
+#
+# Font faces
+#
 fontFaces = {"Fixed": "fixed",
-             #"Arial": "Arial",
              "Helvetica": "helvetica",
              "Courier": "courier",
              "Times": "Times",
              "Verdana": "Verdana",
              "Lucida": "Lucida"}
 
-fontSizes = ["1", "2", "3", "4", "6", "8", "10", "12"]
 
-dictFormats = {"dwa": "Slowo",
-               "mova": "Mova",
-               "tmx": "TMX",
-               "dz": "DICT",
-               "dict": "DICT",
-               "zip": _("OpenDict plugin")}
+#fontSizes = ["1", "2", "3", "4", "6", "8", "10", "12"]
+
+
+#dictFormats = {"dwa": "Slowo",
+#               "mova": "Mova",
+#               "tmx": "TMX",
+#               "dz": "DICT",
+#               "dict": "DICT",
+#               "zip": _("OpenDict plugin")}
 
 def numVersion(str):
     """Return a float number made from x.y.z[-preV] version number"""
@@ -114,27 +123,33 @@ def getFileSize(path):
     
     return size
 
-def getDirSize(start, follow_links, my_depth, max_depth):
-	total = 0L
-	try:
-		dir_list = os.listdir (start)
-	except:
-		if isdir (start):
-			print 'ERROR: Cannot list directory %s' % start
-		return 0
-	for item in dir_list:
-		path = '%s/%s' % (start, item)
-		try:
-			stats = os.stat (path)
-		except:
-			print 'ERROR: Cannot stat %s' % path
-			continue
-		total += stats[6]
-		if isdir (path) and (follow_links or \
-			(not follow_links and not islink (path))):
-			bytes = getDirSize(path, follow_links, my_depth + 1, max_depth)
-			total += bytes
-			#if (my_depth < max_depth):
-		    #		print_path (path, bytes)
-	return total
+
+def getDirSize(start, followLinks, myDepth, maxDepth):
+    """Return total directory size"""
+    
+    total = 0L
+    try:
+        dirList = os.listdir(start)
+    except:
+        if isdir(start):
+            print 'ERROR: Cannot list directory %s' % start
+        return 0
+    
+    for item in dirList:
+        path = '%s/%s' % (start, item)
+        try:
+            stats = os.stat(path)
+        except:
+            print 'ERROR: Cannot stat %s' % path
+            continue
+        
+        total += stats[6]
+        if isdir(path) and (followLinks or \
+                             (not followLinks and not islink(path))):
+            bytes = getDirSize(path, followLinks,
+                               myDepth + 1,
+                               maxDepth)
+            total += bytes
+
+    return total
     
