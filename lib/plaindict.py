@@ -101,7 +101,7 @@ def _loadPlainDictionary(directory):
 
         dictionary = Parser(config.get('path'))
         dictionary.setEncoding(config.get('encoding'))
-        dictionary.setChecksum(config.get('md5'), True)
+        dictionary.setChecksum(config.get('md5'))
         
     except Exception, e:
         traceback.print_exc()
@@ -186,17 +186,11 @@ def makeIndex(dictionary):
     count = 0L
     
     for line in fd:
-        #print "%s -- %d" % (repr(line), len(line))
         literal = unicode(line[:2].lower(), dictionary.getEncoding())
-        #count += len(line)
-
-        #if len(start) == 0:
-        #    continue
 
         if not literal in index.keys():
             index[literal] = count
 
-        #print "%d += %d" % (count, len(line)-2)
         count += len(line)
 
 
@@ -209,25 +203,9 @@ def makeIndex(dictionary):
 
     toUnicode = lambda s: unicode(s, dictionary.getEncoding())
 
-    #try:
-    #    map(toUnicode, index)
-
     doc = xmltools.generateIndexFile(index)
     xmltools.writeIndexFile(doc, os.path.join(dictHome, 'data', 'index.xml'))
 
-    #fd = open(os.path.join(dictHome, 'data', 'index.xml'), 'w')
-    #fd.write(xmlData)
-    #doc.write(fd)
-    #fd.close()
-    #fd.close()
-    
-    #print index
-    
-    #keys = index.keys()
-    #keys.sort()
-    #for k in keys:
-    #    print "'%s' -> %d" % (k, index[k])
-    
 
 def loadIndex(dictionary):
     """Load index table"""

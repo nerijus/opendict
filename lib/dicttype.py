@@ -112,14 +112,14 @@ class TypeDict(DictionaryType):
 PLUGIN = TypePlugin()
 SLOWO = TypeSlowo()
 MOVA = TypeMova()
-TMX = TypeTMX()
+#TMX = TypeTMX()
 DICT = TypeDict()
 
 # Supported types tuple
-supportedTypes = (PLUGIN, SLOWO, MOVA, TMX, DICT)
+supportedTypes = (PLUGIN, SLOWO, MOVA, DICT)
 
 # Plain dictionary types (data file)
-plainTypes = (SLOWO, MOVA, TMX, DICT)
+plainTypes = (SLOWO, MOVA, DICT)
 
 # Types for which index table is made
 indexableTypes = (SLOWO, MOVA)

@@ -37,7 +37,8 @@ import errortype
 import meta
 
 
-WORD_BG = "#cad1e5"
+#WORD_BG = "#cad1e5" # Normal blue
+WORD_BG = "#dde2f1" # Bright blue
 
 # TODO:
 # 1. Remove wx from this module
@@ -448,18 +449,12 @@ class MovaParser(meta.Dictionary):
 
       for line in self.fd.xreadlines():
          _linesRead += 1
-         #print "DEBUG Line:", line
          line = line.strip()
          try:
             orig, trans = line.split("  ", 1)
          except:
             continue
 
-         #if orig > word_lowered:
-         #   break
-         #if orig[:1] > word_lowered[:1]:
-         #   break
-         
          if line.lower().startswith(word_lowered):   
             
             if not orig.lower().startswith(word_lowered):
@@ -501,13 +496,18 @@ class MovaParser(meta.Dictionary):
 
 
 
-# TODO: Rewrite this one
+# FIXME: Deprecated
 class TMXParser(meta.Dictionary):
     """Built-in TMX parser.
     Reads TMX files and does the search.
     """
 
     def __init__(self, filePath):
+
+       print "***"
+       print "*** WARNING:"
+       print "*** TMX implementation is fuzzy and should not be used yet!"
+       print "***"
 
        #self.window = window
        self.name = os.path.splitext(os.path.basename(filePath))[0]
@@ -653,32 +653,52 @@ class TMXParser(meta.Dictionary):
        pass
          
 
+
 class DictParser(meta.Dictionary):
    """Built-in dictd dictionaries parser.
    Reads dictd dictionaries and does the search.
    """
 
-   def __init__(self, path):
+   def __init__(self, filePath):
+      """Initialize"""
 
-      #self.window = window
-      self.needsList = 0
+      self.filePath = filePath
+      self.needsList = True
+      self.name = os.path.splitext(os.path.splitext(os.path.basename(filePath))[0])[0]
+      self.encoding = 'UTF-8'
+      self.checksum = None
 
-      # Hrrr!!!
-      if path.find(".dict.dz") > -1:
-         self.name = path.replace(".dict.dz", "")
-      else:
-         self.name = path.replace(".dict", "")
+      self.configChanged = False
 
-      self.encoding = None
+      self.dict = None
+      self.definitions = None
 
-      self.dict = dictdlib.DictDB(self.name)
 
-      self.name = os.path.split(self.name)[1]
+   def start(self):
+      """Allocate resources"""
+
+      indexFile = os.path.join(os.path.dirname(self.filePath),
+                               self.name)
+      self.dict = dictdlib.DictDB(indexFile)
+
+
+   def stop(self):
+      """Free resources"""
+
+      if self.dict:
+         del self.dict
+
+
+   def getPath(self):
+      """Return full file path"""
+
+      return self.filePath
 
 
    def getType(self):
       """Return dictionary type"""
 
+      import dicttype
       return dicttype.DICT
 
 
@@ -692,12 +712,22 @@ class DictParser(meta.Dictionary):
       """Set encoding"""
 
       self.encoding = encoding
+      #pass
    
 
    def getEncoding(self):
       """Return encoding set for that dictionary"""
 
-      return wxGetApp().config.encoding
+      return self.encoding
+
+
+   def setChecksum(self, newSum):
+      """Set checksum. Used after chekcsum change"""
+
+      if self.checksum == None:
+         self.configChanged = True
+
+      self.checksum = newSum
 
 
    def getUsesWordList(self):
@@ -706,55 +736,116 @@ class DictParser(meta.Dictionary):
       return self.needsList
 
 
+   def _getTranslation(self, word):
+      """Return word and translation code without formatting
+      full HTML document"""
+
+
+      translations = self.dict.getdef(word)
+
+      orig = None
+      translation = None
+      
+      for source in translations:
+         try:
+            source = source.encode(self.encoding, 'replace')
+         except:
+            result.setError(errortype.INVALID_ENCODING)
+            break
+         
+         chunks = source.split('\n')
+         map(string.strip, chunks)
+         
+         orig = chunks[0]
+         pron = re.findall("\[(.*?)\]", orig)
+         if len(pron) > 0:
+            orig = "<b>%s</b> [<i>%s</i>]" % \
+                   (orig.replace(" [%s]" % pron[0], ""), pron[0])
+         else:
+            orig = "<b>%s</b>" % orig
+
+         translation = ['<ul>']
+         for c in chunks[1:]:
+            if len(c) > 0:
+               translation.append("<li>%s</li>" % c)
+         translation.append('</ul>')
+
+         translation = "".join(translation)
+         
+         links = re.findall("{(.*?)}", translation)
+         for link in links:
+            translation = translation.replace("{%s}" % link,
+                                              "<a href=\"%s\">%s</a>" \
+                                              % (link, link))
+
+      return (orig, translation)
+
+
    def search(self, word):
       """Lookup word"""
 
-      word_lowered = word.lower()
-      errno = 0
+      _start = time.time()
 
-      result = "<html><head>" \
-               "<meta http-equiv=\"Content-Type\" " \
-               "content=\"text/html; charset=%s\">" \
-               "</head><body>"
-               #"<font face=\"%s\" size=\"%s\">" % (self.window.encoding,
-               #                                    self.window.app.config.fontFace,
-               #                                    self.window.app.config.fontSize)
+      result = meta.SearchResult()
 
+      try:
+         word_lowered = word.lower().encode(self.getEncoding())
+      except:
+         result.setError(errortype.INVALID_ENCODING)
+         return result
+      
 
-      list = self.dict.getdef(word)
-      if len(list) == 0:
-         list = self.dict.getdef(word.lower())
-         if len(list) == 0:
-            list = self.dict.getdef(word.title())
-      for defstr in list:
-         trans = defstr.split("\n")
-         orig = trans[0]
-         pron = re.findall("\[(.*?)\]", orig)
-         if len(pron) > 0:
-            orig = "<b><u>%s</u></b> [<i>%s</i>]<br>" % \
-                   (orig.replace(" [%s]"%pron[0], ""), pron[0])
+      if self.definitions is None:
+         self.definitions = self.dict.getdeflist()
+         self.definitions.sort()
+
+      words = []
+
+      for definition in self.definitions:
+         if definition.lower().startswith(word_lowered):
+            words.append(definition)
+
+      html = []
+
+      html.append("<html><head>")
+      html.append("<meta http-equiv=\"Content-Type\" " \
+                  "content=\"text/html; charset=%s\">" \
+                  % str(self.getEncoding()))
+      html.append("<head><body>")
+
+      (orig, translation) = self._getTranslation(word)
+
+      if not translation:
+         if len(words):
+            print "Retrying search..."
+            _word = words[0]
+            orig, translation = self._getTranslation(_word)
+            if not translation:
+               result.setError(errortype.NOT_FOUND)
          else:
-            orig = "<b><u>%s</u></b><br>" % orig
+            result.setError(errortype.NOT_FOUND)
+            translation = ""
 
-         result += orig + "&nbsp;"*4
-         str = string.join(trans[1:], "<br>"+"&nbsp;"*4)
-         links = re.findall("{(.*?)}", str)
-         for link in links:
-            str = str.replace("{%s}"%link,
-                              "<a href=\"%s\">%s</a>"%(link, link))
-         result += str.replace(" ", "&nbsp;")+ "<p>"
+      html.append("<table width=\"100%\"><tr>")
+      html.append("<td bgcolor=\"%s\">" % WORD_BG)
+      html.append("<b>%s</b></td></tr>" % orig)
+      html.append("<tr><td>")
+      html.append("<p>%s</p>" % translation)
+      html.append("</td></tr></table>")
+      html.append("</body></html>")
 
-      if len(list) == 0:
-         errno = 1
+      result.setTranslation("".join(html))
+      result.setWordList(words)
 
-      result += "</font></body></html>"
+      print "DEBUG DictParser: Search took % f seconds" \
+            % (time.time() - _start)
 
-      return (result, [], errno)
+      return result
 
 
 # TODO:
 # 1. This is not a parser, move to another module
-# 2. Add needee methods
+# 2. Add needed methods
 # 
 class DictConnection(meta.Dictionary):
    """Built-in DICT client
@@ -763,7 +854,6 @@ class DictConnection(meta.Dictionary):
 
    def __init__(self, server, port, db, strategy):
 
-      #self.window = window
       self.server = server
       self.port = port
       self.db = db
@@ -844,13 +934,13 @@ class DictConnection(meta.Dictionary):
             orig = "<b><u>%s</u></b><br>" % orig
 
          result += orig + "&nbsp;"*4
-         str = string.join(trans[1:], "<br>"+"&nbsp;"*4)
+         translation = string.join(trans[1:], "<br>"+"&nbsp;"*4)
 
          links = re.findall("{(.*?)}", str)
          for link in links:
-            str = str.replace("{%s}"%link,
+            translation = str.replace("{%s}"%link,
                               "<a href=\"%s\">%s</a>"%(link, link))
-         result += "%s<p>" % str
+         result += "%s<p>" % translation
 
       #return (result, alt, 0)
          

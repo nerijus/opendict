@@ -55,7 +55,7 @@ class Installer:
                    "OpenDict plugins (*.zip)|*.zip|" \
                    "Slowo dictionaries (*.dwa)|*.dwa|" \
                    "Mova dictionaries (*.mova)|*.mova|" \
-                   "TMX dictionaries (*.tmx)|*.tmx"
+                   "DICT dictionaries (*.dz)|*.dz"
         
         fileDialog = wxFileDialog(self.mainWin,
                                   message=_("Choose dictionary file"),
@@ -188,9 +188,14 @@ def installPlainDictionary(filePath):
                                            md5=md5sum,
                                            encoding='UTF-8')
 
+    print "DEBUG Writing dictionary configuration..."
     xmltools.writePlainDictConfig(doc, os.path.join(dictDir,
                                                     'conf',
                                                     'config.xml'))
+
+
+    print "DEBUG Indexing dictionary..."
+    plaindict.makeIndex(filePath)
 
     return dictDir
 

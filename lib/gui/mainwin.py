@@ -29,14 +29,11 @@ import os
 import cStringIO
 import traceback
 
-#from info import info.GLOBAL_HOME, info.LOCAL_HOME, __version__
 import info
 from gui.dictconnwin import DictConnWindow
-#from gui.groupswin import GroupsWindow
 from gui.pluginwin import PluginManagerWindow
 from gui.registerwin import FileRegistryWindow
 from gui.dicteditorwin import DictEditorWindow
-#from gui.mywordswin import MyWordsWindow
 from gui.dictaddwin import DictAddWindow
 from gui.prefswin import PrefsWindow
 from gui.helpwin import LicenseWindow, AboutWindow
@@ -45,9 +42,7 @@ from parser import SlowoParser
 from parser import MovaParser
 from parser import TMXParser
 from parser import DictParser
-#from group import DictionaryGroup
 from threads import Process
-#from mywords import MyWords
 from history import History
 from installer import Installer
 from extra.html2text import html2text
@@ -69,13 +64,10 @@ class HtmlWindow(wxHtmlWindow):
    link-clicking"""
 
    def OnLinkClicked(self, linkinfo):
-      #self.base_OnLinkClicked(linkinfo)
       print "DEBUG LinkInfo: searching for '%s'" % linkinfo.GetHref()
-      #print linkinfo.GetTarget()
       wxBeginBusyCursor()
       parent = self.GetParent().GetParent().GetParent()
       parent.SetStatusText(_("Searching..."))
-      #parent.buttonStop.Enable(1)
       parent.timerSearch.Start(parent.delay)
       parent.search = Process(parent.dict.search, linkinfo.GetHref())
 
@@ -92,27 +84,11 @@ class MainWindow(wxFrame):
       self.history = History()
       self.htmlCode = ""
       self.dictName = ""
-      #self.encoding = self.app.config.defaultEnc
       self.activeDictionary = None
       self.words = []
       self.delay = 10 # miliseconds
       
       self.lastInstalledDictName = None
-
-      # My words list
-      #self.myWords = MyWords()
-       
-      #try: 
-      #    self.myWords.read()
-      #except Exception, e:
-      #    print "INFO Warning: Unable to read mywords.txt file"
-
-
-      # GUI instances
-      #self.myWordsWindow = None
-
-      # Activation values
-      #self.activeMyWordsWindow = False 
 
       # This var is used by onTimerSearch to recognize search method.
       # If search was done by selecting a word in a list, then word list
@@ -135,6 +111,7 @@ class MainWindow(wxFrame):
 
       menuFile = wxMenu()
       menuFileOpen = wxMenu()
+      
       menuFileOpen.Append(101, "Slowo dictionary",
                           _("Slowo dictionaries usually have 'dwa' extention"))
       menuFileOpen.Append(102, "Mova dictionary",
@@ -460,6 +437,7 @@ class MainWindow(wxFrame):
       #
       # Events
       #
+      # TODO: New-style event definition
 
       # File menu events
       EVT_MENU(self, 101, self.onOpenSlowo)
@@ -574,8 +552,6 @@ For more information visit project's homepage on
          
          result = self.search()
 
-         print "Search result: %s" % result, result.getError()
-
          # Check if search result is SerachResult object.
          # SearchResult class is used by new-type plugins.
          try:
@@ -584,17 +560,18 @@ For more information visit project's homepage on
             self.SetStatusText(_(errortype.INTERNAL_ERROR.getMessage()))
             self.entry.Enable(1)
             self.entry.SetFocus()
-            
-            title = _("Dictionary Error")
-            message = _("The dictionary you currently use has internal " \
-                        "errors, so OpenDict cannot work with it.")
+
+            if self.activeDictionary.getType() == dicttype.PLUGIN:
+               title = errortype.INTERNAL_ERROR.getMessage()
+               message = errortype.INTERNAL_ERROR.getLongMessage()
+            else:
+               title = errortype.OPENDICT_BUG.getMessage()
+               message = errortype.OPENDICT_BUG.getLongMessage()
+               message += "\n\n" + misc.getTraceback()
             
             errorwin.showErrorMessage(title, message)
 
             return
-
-
-         print "Translation type:", type(result.getTranslation())
 
          self.SetStatusText("")
          self.entry.Enable(1)
@@ -607,7 +584,8 @@ For more information visit project's homepage on
             self.htmlWin.SetPage("")
             self.wordList.Clear()
 
-            if result.getError() == errortype.INTERNAL_ERROR:
+            if result.getError() in \
+                   [errortype.INTERNAL_ERROR, errortype.INVALID_ENCODING]:
                errorwin.showErrorMessage(result.getError().getMessage(),
                                          result.getError().getLongMessage())
             else:
@@ -1008,7 +986,8 @@ For more information visit project's homepage on
       menu item is selected"""
       try:
          self.pmWindow = PluginManagerWindow(self, -1,
-                                             _("Dictionaries Manager"),
+                                             _("Manage Dictionaries"),
+                                             size=(500, 400),
                                              style=wxDEFAULT_FRAME_STYLE)
          self.pmWindow.CentreOnScreen()
          self.pmWindow.Show(True)
@@ -1127,8 +1106,7 @@ For more information visit project's homepage on
                     "has been changed on disk since last indexing. " \
                     "Indexing is used to make search more efficient. " \
                     "The dictionary will be indexed now. It can take a few " \
-                    "seconds or more depending on the size of the " \
-                    "dictionary. "
+                    "or more seconds.\n\n" \
                     "Press OK to continue...")
             errorwin.showInfoMessage(title, msg)
 

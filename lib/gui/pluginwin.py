@@ -1,5 +1,6 @@
+#
 # OpenDict
-# Copyright (c) 2003 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,20 +17,29 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA
 #
-# Module: gui.pluginwin
 
 from wxPython.wx import *
+import  wx.lib.mixins.listctrl  as  listmix
+import wx
 from shutil import rmtree
 import os
 
-#from info import home, uhome
 from misc import printError
 from gui import errorwin
 
-import group
+#import group
 import misc
 
 _ = wxGetTranslation
+
+
+class DictListCtrl(wx.ListCtrl):
+    def __init__(self, parent, ID, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=0):
+        wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
+        #listmix.ListCtrlAutoWidthMixin.__init__(self)
+
+        
 
 class PluginManagerWindow(wxFrame):
 
@@ -51,18 +61,83 @@ class PluginManagerWindow(wxFrame):
       #    self.dictMap[name] = "plugin"
       #for name in self.app.config.registers.keys():
       #    self.dictMap[name] = "register"
+
+
+      installedDictionaries = self.app.dictionaries.keys()
+      #print self.app.dictionaries
+      #for d in self.app.dictionaries:
+         #print d
+      #   installedDictionaries.append(d.getName())
       
-      allDicts = self.app.config.plugins.keys() + \
-                 self.app.config.registers.keys()
-      allDicts.sort()
+      #allDicts = self.app.config.plugins.keys() + \
+      #           self.app.config.registers.keys()
+      #allDicts.sort()
 
-      self.pluginList = wxListBox(self, 160,
-                                  wxPoint(-1, -1),
-                                  wxSize(-1, -1),
-                                  allDicts,
-                                  wxLB_SINGLE | wxSUNKEN_BORDER)
+      #self.dictListCtrl = wxListBox(self, 160,
+      #                              wxPoint(-1, -1),
+      #                              wxSize(-1, -1),
+      #                              installedDictinaries,
+      #                              wxLB_SINGLE | wxSUNKEN_BORDER)
+      idDictList = wx.NewId()
+      
+      self.dictListCtrl = DictListCtrl(self, idDictList,
+                                       style=wx.LC_REPORT)
+                                       #| wx.LC_SORT_ASCENDING
+                                       #| wx.LC_EDIT_LABELS)
 
-      vboxMain.Add(self.pluginList, 1, wxALL | wxEXPAND, 3)
+
+      #self.dictListCtrl.InsertColumn(0, "Name")
+      #self.dictListCtrl.InsertColumn(1, "Size")
+
+      #
+      # Make columns
+      #
+      info = wx.ListItem()
+      info.m_mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE \
+      #              | wx.LIST_MASK_FORMAT
+      info.m_image = -1
+      info.m_format = 0
+      info.m_text = "Dictionary name"
+      self.dictListCtrl.InsertColumnInfo(0, info)
+
+      info.m_image = -1
+      info.m_format = 0
+      info.m_text = "Size"
+      self.dictListCtrl.InsertColumnInfo(1, info)
+
+      info.m_image = -1
+      info.m_format = 0
+      info.m_text = "Status"
+      self.dictListCtrl.InsertColumnInfo(2, info)
+      
+      #
+      # TODO: neveikia si vieta
+      # 
+      #index = 0
+      for dictionary in installedDictionaries:
+         #print index
+         #print dictionary
+         index = self.dictListCtrl.InsertStringItem(0, dictionary)
+         self.dictListCtrl.SetStringItem(index, 1, "1243 KB")
+         self.dictListCtrl.SetStringItem(index, 2, "Installed")
+         self.dictListCtrl.SetItemData(index, index+1)
+
+         item = self.dictListCtrl.GetItem(index)
+         #print item
+         item.SetTextColour(wx.BLUE)
+         self.dictListCtrl.SetItem(item)
+         #index += 1
+
+      #print dir(self.dictListCtrl)
+      
+      #self.itemDataMap = {0: ('dfsdf', 'sdfsf')}
+      #listmix.ColumnSorterMixin.__init__(self, 2)
+
+      self.dictListCtrl.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+      self.dictListCtrl.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+      self.dictListCtrl.SetColumnWidth(2, wx.LIST_AUTOSIZE)
+
+      vboxMain.Add(self.dictListCtrl, 1, wxALL | wxEXPAND, 3)
 
       vboxInfo = wxBoxSizer(wxVERTICAL)
       
@@ -85,34 +160,34 @@ class PluginManagerWindow(wxFrame):
       self.panelDesc.SetAutoLayout(true)
       sbSizerDesc.Fit(self.panelDesc)
 
-      if len(allDicts) > 0:
-         self.pluginList.SetSelection(0)
+##       if len(allDicts) > 0:
+##          self.pluginList.SetSelection(0)
          
-         # Simulating event
-         simEvent = wxCommandEvent()
-         simEvent.SetString(self.pluginList.GetStringSelection())
+##          # Simulating event
+##          simEvent = wxCommandEvent()
+##          simEvent.SetString(self.pluginList.GetStringSelection())
          
-         self.onPluginSelected(simEvent)
+##          self.onPluginSelected(simEvent)
          
-         #if name in self.app.config.plugins.keys():
-         #    plugin = self.app.config.plugins[name]
-         #    version = plugin.version
-         #    format = "OpenDict plugin"
-         #    author = plugin.author
-         #    about = plugin.about
-         #else:
-         #    regFile = self.app.config.registers[name]
-         #    version = ""
-         #    format = misc.dictFormats[regFile[1]]
-         #    author = ""
-         #    about = ""
-      else:
-         # There's no installed plugins
-         name = ""
-         version = ""
-         format = ""
-         author = ""
-         about = ""
+##          #if name in self.app.config.plugins.keys():
+##          #    plugin = self.app.config.plugins[name]
+##          #    version = plugin.version
+##          #    format = "OpenDict plugin"
+##          #    author = plugin.author
+##          #    about = plugin.about
+##          #else:
+##          #    regFile = self.app.config.registers[name]
+##          #    version = ""
+##          #    format = misc.dictFormats[regFile[1]]
+##          #    author = ""
+##          #    about = ""
+##       else:
+##          # There's no installed plugins
+##          name = ""
+##          version = ""
+##          format = ""
+##          author = ""
+##          about = ""
       
       grid.Add(wxStaticText(self, -1, _("Name: ")),
                0, wxALL)
@@ -155,12 +230,16 @@ class PluginManagerWindow(wxFrame):
       vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
 
       self.SetSizer(vboxMain)
-      self.Fit()
+      #self.Fit()
 
       EVT_LISTBOX(self, 160, self.onPluginSelected)
       EVT_BUTTON(self, 161, self.onInstall)
       EVT_BUTTON(self, 162, self.onRemove)
       EVT_BUTTON(self, 163, self.onClose)
+
+
+   def GetListCtrl(self):
+        return self.list
 
    def onPluginSelected(self, event):
       #plugin = self.app.config.plugins[event.GetString()]

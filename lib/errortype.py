@@ -104,6 +104,15 @@ class ErrorInvalidEncoding(ErrorType):
 
 
 
+class ErrorOpenDict(ErrorType):
+    """OpenDict bug class"""
+
+    shortMessage = u"OpenDict Bug"
+    longMessage = u"Internal error occured. Please send bug report to " \
+                  "OpenDict authors to prevent this error in the future. " \
+                  "Thank you!"
+
+
 # Error constant instances
 OK = ErrorOk()
 NOT_FOUND = ErrorNotFound()
@@ -111,3 +120,4 @@ INTERNAL_ERROR = ErrorInternal()
 NOT_CONNECTED = ErrorNotConnected()
 CONNECTION_TIMEOUT = ErrorConnectionTimeout()
 INVALID_ENCODING = ErrorInvalidEncoding()
+OPENDICT_BUG = ErrorOpenDict()
