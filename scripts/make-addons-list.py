@@ -22,7 +22,7 @@ def parsePluginConfig(xmlData):
     name = None
     version = None
     authors = []
-    desc = None
+    description = None
     
     pluginElement = doc.getElementsByTagName('plugin')[0]
     pluginType = pluginElement.getAttribute('type')
@@ -60,7 +60,7 @@ def parsePluginConfig(xmlData):
     result['name'] = name
     result['version'] = version
     result['authors'] = authors
-    result['desc'] = desc
+    result['desc'] = description
 
     return result
 
@@ -157,6 +157,32 @@ def generateElement(**args):
     return addonElement
 
 
+def listFiles(start, followLinks, myDepth, maxDepth):
+    """Return file list"""
+    
+    files = []
+    
+    try:
+        dirList = os.listdir(start)
+    except:
+        if os.path.isdir(start):
+            print 'ERROR: Cannot list directory %s' % start
+        return files
+    
+    for item in dirList:
+        path = os.path.join(start, item)
+        
+        if os.path.isdir(path) and (followLinks or \
+                             (not followLinks and not islink(path))):
+            files.extend(listFiles(path, followLinks,
+                                  myDepth + 1,
+                                  maxDepth))
+        else:
+            files.append(path)
+
+    return files
+
+
 def makeDocument(addons):
     """Connect add-on elements to one XML document"""
 
@@ -180,14 +206,15 @@ def main():
 
     d = sys.argv[1]
     baseURL = sys.argv[2]
-
-    files = os.listdir(d)
-
     xmlElements = []
 
-    for fileName in files:
-        filePath = os.path.join(d, fileName)
-        zipFile = zipfile.ZipFile(filePath, 'r')
+    for filePath in listFiles(d, True, 0, None):
+
+        try:
+            zipFile = zipfile.ZipFile(filePath, 'r')
+        except Exception, e:
+            print "ERROR: %s: %s" % (filePath, e)
+            continue
         
         # Test CRC
         if zipFile.testzip():
@@ -213,10 +240,10 @@ def main():
 
         if plainConfigPath in zipFile.namelist():
             info.update(parsePlainConfig(zipFile.read(plainConfigPath)))
-            info['type'] = 'plugin-dictionary'
+            info['type'] = 'plain-dictionary'
         elif pluginConfigPath in zipFile.namelist():
             info.update(parsePluginConfig(zipFile.read(pluginConfigPath)))
-            info['type'] = 'plain-dictionary'
+            info['type'] = 'plugin-dictionary'
 
         sz = os.stat(filePath)[6] / 1000
 
@@ -231,10 +258,12 @@ def main():
                                            name=info.get('name'),
                                            version=info.get('version'),
                                            authors=info.get('authors'),
-                                           description=info.get('desc'),
+                                           description=info.get('description'),
                                            url=location,
                                            md5sum=checksum,
                                            size=sz))
+
+        print "* %s" % filePath
 
     doc = makeDocument(xmlElements)
     fd = open('opendict-addons.xml', 'w')
