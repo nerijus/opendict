@@ -24,8 +24,10 @@ from wxPython.wx import *
 from wxPython.html import *
 import wx
 import os
+import sys
 
 from info import home, __version__
+import enc
 
 _ = wxGetTranslation
 
@@ -78,8 +80,8 @@ class CreditsWindow(wxDialog):
       # "Written by" panel
       writePanel = wxPanel(nb, -1)
       vboxWrite = wxBoxSizer(wxVERTICAL)
-      written = _(unicode("Martynas Jocius <mjoc@akl.lt>\n" \
-                "Mantas Kriaučiūnas <mantas@akl.lt>", 'UTF-8'))
+      written = _(enc.toWX("Martynas Jocius <mjoc@akl.lt>\n" \
+                "Mantas Kriaučiūnas <mantas@akl.lt>"))
       labelWrite = wxStaticText(writePanel, -1, written)
       vboxWrite.Add(labelWrite, 0, wxALL, 10)
       writePanel.SetSizer(vboxWrite)
@@ -89,9 +91,9 @@ class CreditsWindow(wxDialog):
       # "Translations" panel
       tPanel = wxPanel(nb, -1)
       vboxTP = wxBoxSizer(wxVERTICAL)
-      trans = _(unicode("Lithuanian:\n" \
+      trans = _(enc.toWX("Lithuanian:\n" \
                 "   Irena Baliukonytė <irena.baliukonyte@mif.vu.lt>\n" \
-                "   Martynas Jocius <mjoc@akl.lt>", 'UTF-8'))
+                "   Martynas Jocius <mjoc@akl.lt>"))
       labelTP = wxStaticText(tPanel, -1, trans)
       vboxTP.Add(labelTP, 0, wxALL, 10)
       tPanel.SetSizer(vboxTP)
@@ -131,7 +133,7 @@ class AboutWindow(wxDialog):
       title = _("OpenDict %s" % __version__)
       copy = "Copyright %s 2003-2005 Martynas Jocius <mjoc@akl.lt>" % \
              unicode("\302\251", "UTF-8")
-      desc = _("OpenDict is multiplatform dictionary program.")
+      desc = _("OpenDict is multiplatform dictionary.")
       page = "http://opendict.sourceforge.net"
 
       titleLabel = wxStaticText(self, -1, title,

@@ -179,19 +179,19 @@ class MainWindow(wxFrame):
       
       menuView = wxMenu()
 
-      self.menuEncodings = wxMenu()
-      i = 0
-      keys = misc.encodings.keys()
-      keys.sort()
-      for encoding in keys:
-         self.menuEncodings.AppendRadioItem(2100+i , encoding, "")
-         EVT_MENU(self, 2100+i, self.onDefault)
-         if self.app.config.encoding == misc.encodings[encoding]:
-            self.menuEncodings.FindItemById(2100+i).Check(1)
-         i+=1
-         
-      menuView.AppendMenu(2000, _("Character Encoding"), self.menuEncodings)
+      # Font size
+      self.menuFontSize = wxMenu()
+      self.menuFontSize.Append(2007, _("Increase\tCtrl-+"),
+                               _("Increase text size"))
+      self.menuFontSize.Append(2008, _("Decrease\tCtrl--"),
+                               _("Decrease text size"))
+      self.menuFontSize.AppendSeparator()
+      self.menuFontSize.Append(2009, _("Normal\tCtrl-0"),
+                               _("Set normal text size"))
+      menuView.AppendMenu(2002, _("Font Size"), self.menuFontSize)
       
+
+      # Font face
       self.menuFontFace = wxMenu()
       i = 0
       keys = misc.fontFaces.keys()
@@ -206,24 +206,20 @@ class MainWindow(wxFrame):
          
       menuView.AppendMenu(2001, _("Font Face"), self.menuFontFace)
       
-      self.menuFontSize = wxMenu()
-      
-      #i = 0
-      #for size in misc.fontSizes:
-      #   self.menuFontSize.AppendRadioItem(2600+i, size, "")
-      #   EVT_MENU(self, 2600+i, self.onDefault)
-      #   if self.app.config.fontSize == size:
-      #      self.menuFontSize.FindItemById(2600+i).Check(1)
-      #   i+=1
-      #
-      self.menuFontSize.Append(2007, _("Increase\tCtrl-+"),
-                               _("Increase text size"))
-      self.menuFontSize.Append(2008, _("Decrease\tCtrl--"),
-                               _("Decrease text size"))
-      self.menuFontSize.AppendSeparator()
-      self.menuFontSize.Append(2009, _("Normal\tCtrl-0"),
-                               _("Set normal text size"))
-      menuView.AppendMenu(2002, _("Font Size"), self.menuFontSize)
+
+      # Font encoding
+      self.menuEncodings = wxMenu()
+      i = 0
+      keys = misc.encodings.keys()
+      keys.sort()
+      for encoding in keys:
+         self.menuEncodings.AppendRadioItem(2100+i , encoding, "")
+         EVT_MENU(self, 2100+i, self.onDefault)
+         if self.app.config.encoding == misc.encodings[encoding]:
+            self.menuEncodings.FindItemById(2100+i).Check(1)
+         i+=1
+         
+      menuView.AppendMenu(2000, _("Character Encoding"), self.menuEncodings)
 
       menuBar.Append(menuView, _("&View"))
 
@@ -237,11 +233,12 @@ class MainWindow(wxFrame):
       dictNames = self.app.dictionaries.keys()
       dictNames.sort()
       for name in dictNames:
-         print "Without trans: %s, %s" % (name, type(name))
+         #print "Without trans: %s, %s" % (name, type(name))
          encoded = enc.toWX(name)
-         print "With toWX: %s, %s" % (encoded, type(encoded))
+         #print "With toWX: %s, %s" % (encoded, type(encoded))
          #print self.app.config.ids[name]
-         itemID = self.app.config.ids.keys()[self.app.config.ids.values().index(encoded)]
+         itemID = self.app.config.ids.keys()[\
+            self.app.config.ids.values().index(encoded)]
 
          try:
             item = wxMenuItem(self.menuDict,
@@ -1094,12 +1091,13 @@ For more information visit project's homepage on
 
       self.entry.Disable()
       self.dictName = name
-      self.activeDictionary = self.app.config.plugins[name]
+      self.activeDictionary = self.app.dictionaries.get(name)
       self.checkIfNeedsList()
       print "Dictionary instance: %s" % self.activeDictionary
       self.SetTitle("%s - OpenDict" % name)
       self.entry.Enable(1)
       self.SetStatusText("Done") # TODO: Set something more useful
+      
 
 
    # FIXME: deprecated, update!

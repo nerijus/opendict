@@ -74,6 +74,7 @@ class Configuration:
       self.dictServerPort = "2628"
 
 
+   # Deprecated
    def readConfigFile(self):
       try:
          fd = open(os.path.join(uhome, self.configFile), "r")
