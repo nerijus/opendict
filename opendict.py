@@ -82,7 +82,7 @@ class OpenDictApp(wxApp):
          # plugin there.
          self.installPlugin = installPlugin
 
-         initPlugins(self.config)
+         #initPlugins(self.config)
 
          # Load new-style plugins
          for plugin in newplugin.loadPlugins():

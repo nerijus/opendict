@@ -62,7 +62,7 @@ class Configuration:
       self.defaultEnc = "utf-8"
       self.encoding = self.defaultEnc
       self.fontFace = "Fixed"
-      self.fontSize = "1"
+      self.fontSize = 10
       
       self.dictServer = "dict.org"
       self.dictServerPort = "2628"
@@ -124,7 +124,10 @@ class Configuration:
          elif line.find("FONTFACE=") == 0:
             self.fontFace = line.replace("FONTFACE=", "").strip()
          elif line.find("FONTSIZE=") == 0:
-            self.fontSize = line.replace("FONTSIZE=", "").strip()
+            try:
+               self.fontSize = int(line.replace("FONTSIZE=", "").strip())
+            except:
+               pass
          elif line.find("LISTREG=") == 0:
             self.useListWithRegs = int(bool(line.replace("LISTREG=","")))
          elif line.find("LISTGROUP=") == 0:

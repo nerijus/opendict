@@ -27,7 +27,7 @@ import imp
 import string
 import traceback
 
-from info import home, uhome, __version__, __enc__
+from info import home, uhome, __version__
 from misc import numVersion, printError
 from gui.pluginwin import PluginLicenseWindow
 from gui.errorwin import errDialog

@@ -23,6 +23,7 @@ import os
 
 from wxPython.wx import wxGetTranslation
 import wxPython.wx
+import wx
 
 _ = wxPython.wx.wxGetTranslation
 
@@ -30,14 +31,15 @@ _ = wxPython.wx.wxGetTranslation
 __version__ = "0.5.7"
 
 # Unicode support
-if wxPython.wx.__version__[-1] == "u":
-    __unicode__ = True
-else:
-    __unicode__ = False
+#if wxPython.wx.__version__[-1] == "u":
+#    __unicode__ = True
+#else:
+#    __unicode__ = False
+__unicode__ = wx.USE_UNICODE
 
 # FIXME: bad idea
 # Default encoding for non-unicode string conversion to unicode
-__enc__ = "iso-8859-13"
+#__enc__ = "iso-8859-13"
 
 # Home Directory
 #if len(sys.argv) >= 2 and sys.argv[1] != "--splash":

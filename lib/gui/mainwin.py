@@ -1,3 +1,4 @@
+#
 # OpenDict
 # Copyright (c) 2003-2005 Martynas Jocius <mjoc at akl.lt>
 #
@@ -16,7 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 # 02111-1307 USA
 #
-# Module: gui.mainwin
 
 """
 Main window GUI module
@@ -27,7 +27,7 @@ from wxPython.html import *
 import os
 import cStringIO
 
-from info import home, uhome, __version__, __enc__
+from info import home, uhome, __version__
 from gui.dictconnwin import DictConnWindow
 from gui.groupswin import GroupsWindow
 from gui.pluginwin import PluginManagerWindow
@@ -50,8 +50,9 @@ from extra.html2text import html2text
 import plugin
 import misc
 import info
-import util
+#import util
 import meta
+import enc
 import errortype
 
 _ = wxGetTranslation
@@ -116,8 +117,15 @@ class MainWindow(wxFrame):
       vboxMain = wxBoxSizer(wxVERTICAL)
       hboxToolbar = wxBoxSizer(wxHORIZONTAL)
 
+      #
       # Menu Bar
+      #
+      
       menuBar = wxMenuBar()
+
+      #
+      # File menu
+      #
 
       menuFile = wxMenu()
       menuFileOpen = wxMenu()
@@ -130,9 +138,7 @@ class MainWindow(wxFrame):
       menuFileOpen.Append(104, "DICT dictionary",
                           _("DICT dictionaries usually have " \
                             "'dict' or 'dz' extention"))
-      #menuFile.AppendMenu(105, _("Load Dictionary From File"), menuFileOpen)
 
-      #menuFile.AppendSeparator()
       menuFile.Append(2004, _("Print Translation"), "")
       menuFile.Append(2006, _("Print Preview"), "")
       menuFile.AppendSeparator()
@@ -162,58 +168,83 @@ class MainWindow(wxFrame):
                       _("Paste clipboard text into the search entry"))
       
       menuEdit.AppendSeparator()
+      menuEdit.Append(111, _("Preferences...\tCtrl-P"), _("Edit preferences"))
+
+      menuBar.Append(menuEdit, _("&Edit"))
+
+
+      #
+      # View menu
+      #
       
+      menuView = wxMenu()
+
       self.menuEncodings = wxMenu()
       i = 0
       keys = misc.encodings.keys()
       keys.sort()
-      for enc in keys:
-         self.menuEncodings.AppendRadioItem(2100+i , enc, "")
+      for encoding in keys:
+         self.menuEncodings.AppendRadioItem(2100+i , encoding, "")
          EVT_MENU(self, 2100+i, self.onDefault)
-         if self.app.config.defaultEnc == misc.encodings[enc]:
+         if self.app.config.defaultEnc == misc.encodings[encoding]:
             self.menuEncodings.FindItemById(2100+i).Check(1)
          i+=1
-      menuEdit.AppendMenu(2000, _("Character Encoding"), self.menuEncodings)
+         
+      menuView.AppendMenu(2000, _("Character Encoding"), self.menuEncodings)
+      
       self.menuFontFace = wxMenu()
       i = 0
       keys = misc.fontFaces.keys()
       keys.sort()
+      
       for face in keys:
          self.menuFontFace.AppendRadioItem(2500+i, face, "")
          EVT_MENU(self, 2500+i, self.onDefault)
          if self.app.config.fontFace == misc.fontFaces[face]:
             self.menuFontFace.FindItemById(2500+i).Check(1)
          i+=1
-      menuEdit.AppendMenu(2001, _("Font Face"), self.menuFontFace)
+         
+      menuView.AppendMenu(2001, _("Font Face"), self.menuFontFace)
+      
       self.menuFontSize = wxMenu()
-      i = 0
-      for size in misc.fontSizes:
-         self.menuFontSize.AppendRadioItem(2600+i, size, "")
-         EVT_MENU(self, 2600+i, self.onDefault)
-         if self.app.config.fontSize == size:
-            self.menuFontSize.FindItemById(2600+i).Check(1)
-         i+=1
-      menuEdit.AppendMenu(2002, _("Font Size"), self.menuFontSize)
-      menuEdit.AppendSeparator()
-      menuEdit.Append(111, _("Preferences...\tCtrl-P"), _("Edit preferences"))
+      
+      #i = 0
+      #for size in misc.fontSizes:
+      #   self.menuFontSize.AppendRadioItem(2600+i, size, "")
+      #   EVT_MENU(self, 2600+i, self.onDefault)
+      #   if self.app.config.fontSize == size:
+      #      self.menuFontSize.FindItemById(2600+i).Check(1)
+      #   i+=1
+      #
+      self.menuFontSize.Append(2007, _("Increase\tCtrl-+"),
+                               _("Increase text size"))
+      self.menuFontSize.Append(2008, _("Decrease\tCtrl--"),
+                               _("Decrease text size"))
+      self.menuFontSize.AppendSeparator()
+      self.menuFontSize.Append(2009, _("Normal\tCtrl-0"),
+                               _("Set normal text size"))
+      menuView.AppendMenu(2002, _("Font Size"), self.menuFontSize)
 
-      menuBar.Append(menuEdit, _("&Edit"))
+      menuBar.Append(menuView, _("&View"))
+
+      
+      #
+      # Dictionaries menu
+      #
 
       self.menuDict = wxMenu()
 
       keys = self.app.config.plugins.keys()
       keys.sort()
       for name in keys:
-         #try:
-         #   name = name.decode('UTF-8')
-         #except Exception, e:
-         #   print "ERROR Dictionary names must be in UTF-8 ('%s' failed)" \
-         #         % (name)
+         print "Without trans: %s, %s" % (name, type(name))
+         encoded = enc.toWX(name)
+         print "With toWX: %s, %s" % (encoded, type(encoded))
 
          try:
             item = wxMenuItem(self.menuDict,
                               self.app.config.ids[name],
-                              util.toWX(name))
+                              enc.toWX(name))
             self.menuDict.AppendItem(item)
             EVT_MENU(self, self.app.config.ids[name], self.onDefault)
          except Exception, e:
@@ -244,6 +275,11 @@ class MainWindow(wxFrame):
       
       menuBar.Append(self.menuDict, _("&Dictionaries"))
 
+
+      #
+      # Tools menu
+      #
+
       menuTools = wxMenu()
       menuTools.Append(110, _("Manage Dictionaries...\tCtrl-M"),
                       _("Install, remove dictionaries and get " \
@@ -271,6 +307,11 @@ class MainWindow(wxFrame):
       #                    _("Your significant words list"))
                            
       menuBar.Append(menuTools, _("Tools"))
+
+
+      #
+      # Help menu
+      #
 
       menuHelp = wxMenu()
       menuHelp.Append(117, _("&License"))
@@ -411,31 +452,49 @@ class MainWindow(wxFrame):
                              wxBITMAP_TYPE_XPM))
 
 
+      #
       # Events
+      #
+
+      # File menu events
       EVT_MENU(self, 101, self.onOpenSlowo)
       EVT_MENU(self, 102, self.onOpenMova)
       EVT_MENU(self, 103, self.onOpenTMX)
       EVT_MENU(self, 104, self.onOpenDictFile)
       EVT_MENU(self, 2004, self.onPrint)
       EVT_MENU(self, 2006, self.onPreview)
-      EVT_MENU(self, 123, self.onOpenDictConn)
       EVT_MENU(self, 106, self.onCloseDict)
       EVT_MENU(self, 107, self.onExit)
+
+      # Edit menu events
+      EVT_MENU(self, 121, self.onClearHistory)
       EVT_MENU(self, 108, self.onCopy)
       EVT_MENU(self, 2005, self.onPaste)
       EVT_MENU(self, 109, self.onClean)
+
+      # View menu events
+      EVT_MENU(self, 2007, self.onIncreaseFontSize)
+      EVT_MENU(self, 2008, self.onDecreaseFontSize)
+      EVT_MENU(self, 2009, self.onNormalFontSize)
+
+      # Dictionaries menu events
       EVT_MENU(self, 112, self.onAddDict)
-      #EVT_MENU(self, 113, self.onAddFromPlugin)
-      EVT_MENU(self, 121, self.onClearHistory)
+
+      # Tools menu events
+      EVT_MENU(self, 123, self.onOpenDictConn)
       EVT_MENU(self, 122, self.onShowGroupsWindow)
       EVT_MENU(self, 110, self.onShowPluginManager)
       EVT_MENU(self, 120, self.onShowFileRegistry)
       EVT_MENU(self, 5002, self.onShowDictEditor)
       EVT_MENU(self, 5003, self.onShowMyWordList)
       EVT_MENU(self, 111, self.onShowPrefsWindow)
-      EVT_MENU(self, 115, self.onManual)
+
+      # Help menu events
+      #EVT_MENU(self, 115, self.onManual)
       EVT_MENU(self, 117, self.onLicense)
       EVT_MENU(self, 116, self.onAbout)
+
+      # Other events
       EVT_BUTTON(self, wx.ID_FIND, self.onSearch)
       EVT_BUTTON(self, 2010, self.onBack)
       EVT_BUTTON(self, 2011, self.onForward)
@@ -444,14 +503,13 @@ class MainWindow(wxFrame):
       EVT_BUTTON(self, 5004, self.onAddMyWord)
       EVT_BUTTON(self, 152, self.onHideUnhide)
       EVT_TEXT_ENTER(self, 153, self.onSearch)
-      #EVT_TEXT(self, 153, self.onEntryUpdate)
       EVT_LISTBOX(self, 154, self.onWordSelected)
       EVT_TIMER(self, 5000, self.onTimerSearch)
       EVT_TIMER(self, 5001, self.onTimerLoad)
       EVT_CLOSE(self, self.onCloseWindow)
 
       # Prepare help message
-      helpMessage = _("""
+      self.htmlCode = _("""
 <html>
 <head>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">
@@ -475,7 +533,9 @@ For more information visit project's homepage on
 """)
 
       # Set startup help message
-      self.htmlWin.SetPage(helpMessage)
+      #self.htmlWin.SetPage(self.htmlCode)
+
+      self.updateHtmlScreen()
      
 
    # Callback functions
@@ -518,13 +578,12 @@ For more information visit project's homepage on
             self.entry.SetFocus()
             return
 
+         #print "Translation: '%s'" % result.translation
+         #print "Error: %s" % result.status
+
          self.SetStatusText("")
          self.entry.Enable(1)
          self.search = None
-
-         # ??? What is this?
-         #if self.entry.FindString(word) == -1:
-         #   self.entry.Append(word)
 
          # Check status code
          if result.status != errortype.OK:
@@ -535,37 +594,26 @@ For more information visit project's homepage on
             misc.printError()
             return
 
-         self.htmlCode = result.translation
-         
-         if type(self.htmlCode) != type(u''):
+         transUnicode = unicode(result.translation, self.dict.getEncoding())
+         transPreparedForWX = enc.toWX(transUnicode)
 
-            if hasattr(self.dict, "encoding"):
-               enc = self.dict.encoding
-            else:
-               enc = info.__enc__ # FIXME: Avoid this!!!
-               self.htmlWin.SetPage(self.htmlCode.decode(enc))
-               self.history.add(self.htmlCode.decode(enc))
-               print "DEBUG Setting page (encoded in %s)" % enc
-         else:
-            print "DEBUG Setting unicode page"
-            try:
-               self.htmlWin.SetPage(self.htmlCode)
+         self.htmlWin.SetPage(transPreparedForWX)
+         self.history.add(transPreparedForWX)
 
-               self.history.add(self.htmlCode)
-            except:
-               print "ERROR Failed to encode '%s'... to %s, iso-8859-1 used" \
-                     % (self.htmlCode[:10], self.encoding)
-               misc.printError()
-               self.htmlWin.SetPage(self.htmlCode.encode("iso-8859-1", "replace"))
-               self.history.add(self.htmlCode.encode("iso-8859-1", "replace"))
+         # FIXME: Nasty names
+         # Where it is used? htmlWin.GetPage
+         self.htmlCode = transPreparedForWX
          
          if not self.wordListHidden():
             if not self.__searchedBySelecting:
                self.wordList.Clear()
 
-               print "INFO Appending list..."
-               self.wordList.InsertItems(result.words, 0)
-               self.list = result.words
+               toUnicode = lambda s: unicode(s, self.dict.getEncoding())
+               wordsInUnicode = map(toUnicode, result.words)
+               wordsPreparedForWX = map(enc.toWX, wordsInUnicode)
+               
+               self.wordList.InsertItems(wordsPreparedForWX, 0)
+               self.list = wordsPreparedForWX
 
          if not self.__searchedBySelecting:
             matches = self.wordList.GetCount()
@@ -663,7 +711,9 @@ For more information visit project's homepage on
       #self.buttonStop.Enable(1)
       self.entry.Disable()
       self.timerSearch.Start(self.delay)
-      
+
+      word = enc.fromWX(word)
+      word = word.encode(self.dict.getEncoding())
       self.search = Process(self.dict.search, word)
 
 
@@ -1084,16 +1134,54 @@ For more information visit project's homepage on
 
 
    def changeFontFace(self, name):
+      """Save font face changes"""
+      
       self.app.config.fontFace = misc.fontFaces[name]
-      self.SetStatusText(_("New font face will be applied for the next search results"))
+      self.updateHtmlScreen()
 
 
    def changeFontSize(self, name):
-      self.app.config.fontSize = name
-      self.SetStatusText(_("New font size will be applied for the next search results"))
+      
+      fontSize = int(name) * 10
+      print "INFO Setting font size %d" % fontSize
+      self.app.config.fontSize = fontSize
+      self.updateHtmlScreen()
+
+
+   def updateHtmlScreen(self):
+      """Update HtmlWindow screen"""
+
+      self.htmlWin.SetFonts(self.app.config.fontFace, "Fixed",
+                            [self.app.config.fontSize]*5)
+      self.htmlWin.SetPage(self.htmlCode)
+
+
+   def onIncreaseFontSize(self, event):
+      """Increase font size"""
+
+      print "Increase"
+      self.app.config.fontSize += 2
+      self.updateHtmlScreen()
+
+
+   def onDecreaseFontSize(self, event):
+      """Decrease font size"""
+
+      print "Decrease"
+      self.app.config.fontSize -= 2
+      self.updateHtmlScreen()
+
+
+   def onNormalFontSize(self, event):
+      """Set normal font size"""
+
+      print "Normal"
+      self.app.config.fontSize = 12
+      self.updateHtmlScreen()
 
 
    def checkEncMenuItem(self, name):
+      
       ename = ""
       for key in misc.encodings:
          if name == misc.encodings[key]:
@@ -1137,7 +1225,8 @@ For more information visit project's homepage on
       fileDialog.Destroy()
       formatDialog.Destroy()
 
-      return self.app.reg.registerDictionary(file, format, self.app.config.defaultEnc)
+      return self.app.reg.registerDictionary(file, format,
+                                             self.app.config.defaultEnc)
 
    def onAddFromPlugin(self, event):
       """Starts plugin installation process"""
@@ -1185,8 +1274,10 @@ For more information visit project's homepage on
       #self.buttonStop.Enable(1)
       self.timerSearch.Start(self.delay)
       word = event.GetString()
-      self.entry.SetValue(word) 
-      self.search = Process(self.dict.search, event.GetString())
+      self.entry.SetValue(word)
+      word = enc.fromWX(word)
+      word = word.encode(self.dict.getEncoding())
+      self.search = Process(self.dict.search, word)
 
 
    def createListPanel(self):
