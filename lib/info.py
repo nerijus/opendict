@@ -55,7 +55,7 @@ if sys.platform == "win32":
 else:
    if not os.path.exists(os.path.join(os.environ.get("HOME"),
                                       __OPENDICT_LOCAL_DIR)):
-      os.mkdir(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR)
+      os.mkdir(os.path.join(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR))
       
    LOCAL_HOME = os.path.join(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR)
    GLOBAL_HOME = "/usr/share/opendict"

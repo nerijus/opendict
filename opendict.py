@@ -36,6 +36,16 @@ except ImportError:
     print >> sys.stderr, "**"
     sys.exit(1)
 
+
+try:
+    import xml.dom.ext
+except ImportError:
+    print >> sys.stderr, "**"
+    print >> sys.stderr, "** Error: Python/XML library not found"
+    print >> sys.stderr, "** Please install python-xml to run OpenDict"
+    print >> sys.stderr, "**"
+    sys.exit(1)
+
 if sys.platform == "win32":
    # MS Windows user
    sys.path = [os.path.join(os.curdir, "lib")] + sys.path
