@@ -200,7 +200,7 @@ def installPlainDictionary(filePath):
     return dictDir
 
 
-def installDictionaryPlugin(filePath):
+def installPlugin(filePath):
     """Install dictionary plugin and return directory path"""
 
     # Check if file exists
@@ -230,6 +230,8 @@ def installDictionaryPlugin(filePath):
         raise Exception, _("Plugin file is empty (%s)" % e)
 
     configFileExists = False
+    pluginConfigExists = False
+    plainConfigExists = False
     topLevelDirExists = False
 
     # Check for validity
@@ -238,15 +240,30 @@ def installDictionaryPlugin(filePath):
         fileName = os.path.basename(fileInZip)
 
         if fileName == "plugin.xml":
-            configFileExists = True
+            pluginConfigExists = True
+
+        if fileName == 'config.xml':
+            plainConfigExists = True
 
         if len(fileName) == 0 \
            and len(dirName.split('/')) == 1:
             topLevelDirExists = True
 
-    if not configFileExists \
+    if not plainConfigExists or not pluginConfigExists\
        or not topLevelDirExists:
         raise Exception, _("Selected file is not valid OpenDict plugin")
+
+
+    if plainConfigExists:
+        _installPlainPlugin(filePath)
+    elif pluginConfigExists:
+        _installNormalPlugin(filePath)
+        
+
+def _installNormalPlugin(filePath):
+    """Install 'normal' OpenDict plugin"""
+
+    zipFile = zipfile.ZipFile(filePath, 'r')
 
     pluginsPath = os.path.join(info.LOCAL_HOME,
                               info.PLUGIN_DICT_DIR)
@@ -292,6 +309,77 @@ def installDictionaryPlugin(filePath):
     return os.path.join(info.LOCAL_HOME,
                         info.PLUGIN_DICT_DIR,
                         topDirectory)
+
+
+
+def _installPlainPlugin(filePath):
+    """Install prepared plain dictionary and return directory path"""
+
+##     # Check if file exists
+##     if not os.path.exists(filePath):
+##         raise Exception, _("File %s does not exist") % filePath
+
+##     # Check if it is file
+##     if not os.path.isfile(filePath):
+##         raise Exception, _("%s is not a file") % filePath
+
+##     # Check if it is ZIP archive
+##     if os.path.splitext(filePath)[1].lower()[1:] != "zip":
+##         raise Exception, _("%s is not OpenDict dictionary" % filePath)
+
+##     util.makeDirectories()
+
+    zipFile = zipfile.ZipFile(filePath, 'r')
+
+    # Test CRC
+    if zipFile.testzip():
+        raise Exception, _("Compressed dictionary file is corrupted")
+
+    plainDictsPath = os.path.join(info.LOCAL_HOME,
+                              info.PLAIN_DICT_DIR)
+
+    # Check if already installed
+    if os.path.exists(os.path.join(info.LOCAL_HOME,
+                                   info.PLUGIN_DICT_DIR,
+                                   topDirectory)):
+        raise Exception, _("This plugin dictionary already installed. " \
+                           "If you want to upgrade it, please remove " \
+                           "old version first.")
+
+    # Install
+    try:
+        for fileInZip in zipFile.namelist():
+            dirName = os.path.dirname(fileInZip)
+            fileName = os.path.basename(fileInZip)
+
+            if len(fileName) == 0:
+                dirToCreate = os.path.join(plainDictsPath, dirName)
+                if not os.path.exists(dirToCreate):
+                    print "Creating", dirToCreate
+                    os.mkdir(dirToCreate)
+            else:
+                fileToWrite = os.path.join(plainDictsPath, dirName, fileName)
+                print "Writing:", fileToWrite
+                fd = open(fileToWrite, 'w')
+                fd.write(zipFile.read(fileInZip))
+                fd.close()
+    except Exception, e:
+        try:
+            shutil.rmtree(os.path.join(plainDictsPath, topLevelDir))
+        except Exception, e:
+            print "ERROR %s" % e
+            raise _("Error while removing created directories after " \
+                    "plugin installation failure. This may be " \
+                    "permission or disk space error.")
+
+        print "ERROR %s" % e
+        raise _("Unable to install dictionary")
+
+
+    return os.path.join(info.LOCAL_HOME,
+                        info.PLAIN_DICT_DIR,
+                        topDirectory)
+
 
 
 def removePlainDictionary(dictInstance):

@@ -86,9 +86,9 @@ class ErrorNotConnected(ErrorType):
 class ErrorConnectionTimeout(ErrorType):
     """Not connected error class"""
 
-    shortMessage = u"Connection timeout"
-    longMessage = u"Timed out while waiting for response. " \
-                  "Check if your Internet connection is alive."
+    shortMessage = u"Connection Error"
+    longMessage = u"Could not connect to host. " \
+                  "Check your Internet connection or try later."
 
 
 
@@ -116,6 +116,7 @@ OK = ErrorOk()
 NOT_FOUND = ErrorNotFound()
 INTERNAL_ERROR = ErrorInternal()
 NOT_CONNECTED = ErrorNotConnected()
-CONNECTION_TIMEOUT = ErrorConnectionTimeout()
+CONNECTION_ERROR = ErrorConnectionTimeout()
+CONNECTION_TIMEOUT = CONNECTION_ERROR
 INVALID_ENCODING = ErrorInvalidEncoding()
 OPENDICT_BUG = ErrorOpenDict()

@@ -860,6 +860,7 @@ For more information visit project's homepage on
 
       dialog.Destroy()
 
+
    def onOpenMova(self, event):
 
       raise Exception, "mainwin.py:onOpenSlowo() is deprecated"

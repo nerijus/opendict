@@ -114,6 +114,12 @@ class SlowoParser(meta.Dictionary):
       return dicttype.SLOWO
 
 
+   def setName(self, name):
+      """Set new name"""
+
+      self.name = name
+
+
    def getName(self):
       """Return file name"""
 
@@ -345,6 +351,12 @@ class MovaParser(meta.Dictionary):
       return dicttype.MOVA
 
 
+   def setName(self, name):
+      """Set new name"""
+
+      self.name = name
+
+
    def getName(self):
       """Return file name"""
 
@@ -510,6 +522,12 @@ class TMXParser(meta.Dictionary):
       return dicttype.TMX
 
 
+    def setName(self, name):
+      """Set new name"""
+
+      self.name = name
+
+
     def getName(self):
        """Return file name"""
 
@@ -641,8 +659,10 @@ class DictParser(meta.Dictionary):
    def start(self):
       """Allocate resources"""
 
+      name = os.path.splitext(os.path.splitext(\
+         os.path.basename(self.filePath))[0])[0]
       indexFile = os.path.join(os.path.dirname(self.filePath),
-                               self.name)
+                               name)
       self.dict = dictdlib.DictDB(indexFile)
 
 
@@ -664,6 +684,12 @@ class DictParser(meta.Dictionary):
 
       import dicttype
       return dicttype.DICT
+
+   
+   def setName(self, name):
+      """Set new name"""
+
+      self.name = name
 
 
    def getName(self):
@@ -824,12 +850,25 @@ class DictConnection(meta.Dictionary):
       self.strategy = strategy
       self.encoding = "UTF-8"
       self.needsList = 0
+      self.name = 'Connection to DICT server'
 
 
    def getUsesWordList(self):
       """Return True if uses word list, False otherwise"""
 
       return self.needsList
+
+
+   def setName(self, name):
+      """Set new name"""
+
+      self.name = name
+
+
+   def getName(self):
+      """Return name"""
+
+      return self.name
 
 
    def setEncoding(self, encoding):

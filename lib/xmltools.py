@@ -232,6 +232,7 @@ class AddOnsParser:
         name = None
         version = None
         size = None
+        checksum = None
         authors = []
         location = None
         desc = None
@@ -277,6 +278,16 @@ class AddOnsParser:
             return self.size
 
 
+        def setChecksum(self, checksum):
+
+            self.checksum = checksum
+
+
+        def getChecksum(self):
+
+            return self.checksum
+
+
         def addAuthor(self, author):
 
             self.authors.append(author)
@@ -292,7 +303,7 @@ class AddOnsParser:
             self.location = location
 
 
-        def getLocaltion(self):
+        def getLocation(self):
 
             return self.location
 
@@ -321,6 +332,7 @@ class AddOnsParser:
             description = None
             size = None
             url = None
+            checksum = None
 
             addonType = addonElement.getAttribute('type')
 
@@ -343,6 +355,9 @@ class AddOnsParser:
 
             for sizeElement in addonElement.getElementsByTagName('size'):
                 size = long(_textData(sizeElement))
+                
+            for sumElement in addonElement.getElementsByTagName('checksum'):
+                checksum = _textData(sumElement)
 
 
             emptyDict = self.EmptyDictionary()
@@ -354,6 +369,7 @@ class AddOnsParser:
             emptyDict.setDescription(description)
             emptyDict.setLocation(url)
             emptyDict.setSize(size)
+            emptyDict.setChecksum(checksum)
 
             addons[name] = emptyDict
 
