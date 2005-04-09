@@ -91,6 +91,7 @@ class OpenDictApp(wxApp):
          errorwin.showErrorMessage(title, msg)
          return False
       
+      util.makeDirectories()
       
       systemLog(DEBUG, "Unicode version: %s" % wx.USE_UNICODE)
       
@@ -142,6 +143,10 @@ class OpenDictApp(wxApp):
       # FIXME: Avoid this
       self.config.window = self.window
 
+      systemLog(INFO, "OpenDict %s" % info.VERSION)
+      systemLog(INFO, "Global home: %s:" % info.GLOBAL_HOME)
+      systemLog(INFO, "Local home: %s" % info.LOCAL_HOME)
+
       systemLog(DEBUG, "Loaded in %f seconds" % (time.time() - _start))
       
       self.window.Show(True)
@@ -151,10 +156,6 @@ class OpenDictApp(wxApp):
 
 if __name__ == "__main__":
    
-   systemLog(INFO, "OpenDict %s" % info.VERSION)
-   systemLog(INFO, "Global home: %s:" % info.GLOBAL_HOME)
-   systemLog(INFO, "Local home: %s" % info.LOCAL_HOME)
-
    openDictApp = OpenDictApp(0)
    openDictApp.MainLoop()
 

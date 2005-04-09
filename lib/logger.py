@@ -29,10 +29,7 @@ WARNING = 1
 ERROR = 2
 DEBUG = 3
 
-_logDir = os.path.join(info.LOCAL_HOME, 'log')
-
-if not os.path.exists(_logDir):
-    os.mkdir(_logDir)
+_logDir = os.path.join(info.LOCAL_HOME, info.LOG_DIR)
 
 _systemLogFile = os.path.join(_logDir, 'system.log')
 _debugLogFile = os.path.join(_logDir, 'debug.log')
@@ -52,11 +49,11 @@ def systemLog(messageType, message):
         typeStr = 'DEBUG'
 
     try:
-        fd = open(_systemLogFile, 'a')
+        fd = open(_systemLogFile, 'a+')
         print >> fd, dateStr, typeStr, message
         fd.close()
     except Exception, e:
-        print "LOGGER ERROR: Unable to write message"
+        print "LOGGER ERROR: Unable to write message '%s'" % repr(message)
 
 
 def debugLog(messageType, message):

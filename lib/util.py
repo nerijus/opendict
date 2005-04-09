@@ -92,7 +92,13 @@ def getMD5Sum(filePath):
 def makeDirectories():
     """Make needed directories if not exist"""
 
-    
+    if not os.path.exists(info.LOCAL_HOME):
+        os.mkdir(info.LOCAL_HOME)
+
+    logDir = os.path.join(info.LOCAL_HOME, info.LOG_DIR)
+
+    if not os.path.exists(logDir):
+        os.mkdir(logDir)
 
     plainDir = os.path.join(info.LOCAL_HOME,
                             info.PLAIN_DICT_DIR)
@@ -127,11 +133,9 @@ def makeDirectories():
     
     if not os.path.exists(pluginDir):
         try:
-            print "DEBUG %s does not exist, creating..." % pluginDir
             os.mkdir(pluginDir)
         except Exception, e:
-            print "ERROR Unable to create %s (%s)" % (pluginDir, e)
-
+            systemLog(ERROR, "Unable to create %s (%s)" % (pluginDir, e))
 
 
 class DownloadThread:

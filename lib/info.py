@@ -35,6 +35,8 @@ __PLAIN_DICT_CONFIG_DIR = "conf"
 __PLAIN_DICT_FILE_DIR = "file"
 _PLAIN_DICT_DATA_DIR = "data"
 
+LOG_DIR = 'log'
+
 PLAIN_DICT_DIR = os.path.join(__DICT_DIR, __PLAIN_DICT_DIR)
 PLUGIN_DICT_DIR = os.path.join(__DICT_DIR, __PLUGIN_DICT_DIR)
 
