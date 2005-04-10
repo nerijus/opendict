@@ -1,0 +1,884 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2005-04-10 10:59+EEST\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: ../lib/gui/dictaddwin.py:34
+msgid "Add new dictionary"
+msgstr ""
+
+#: ../lib/gui/dictaddwin.py:40
+msgid ""
+"The file format of \"%s\" could not be \n"
+"recognized by its extention. Please select one\n"
+"from the list:"
+msgstr ""
+
+#: ../lib/gui/dictaddwin.py:46 ../lib/gui/dictaddwin.py:47
+#: ../lib/gui/dictaddwin.py:48 ../lib/gui/dictaddwin.py:49
+msgid "\"%s\" dictionary format"
+msgstr ""
+
+#: ../lib/gui/dictaddwin.py:58 ../lib/gui/dicteditorwin.py:91
+#: ../lib/gui/prefswin.py:103
+msgid "OK"
+msgstr ""
+
+#: ../lib/gui/dictaddwin.py:61 ../lib/gui/dictconnwin.py:104
+#: ../lib/gui/dicteditorwin.py:94 ../lib/gui/dicteditorwin.py:255
+#: ../lib/gui/prefswin.py:106
+msgid "Cancel"
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:51
+msgid "Server: "
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:58
+msgid "Default Server"
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:61
+msgid "Port: "
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:64
+msgid "Default Port"
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:71
+msgid "Database: "
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:75
+msgid "Search in all databases"
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:82
+msgid "Fetch List"
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:101
+msgid "Connect"
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:146 ../lib/gui/mainwin.py:655
+msgid "Done"
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:150
+msgid "Receiving database list..."
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:155
+msgid "Connection Error"
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:156 ../lib/gui/dictconnwin.py:172
+msgid "Unable to connect to server"
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:171
+msgid "Connectio Error"
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:190
+msgid "Connecting..."
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:218
+msgid "Connecting to %s..."
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:53
+msgid "Word: "
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:88
+msgid "Add translation field"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:245
+msgid "Dictionary \"%s\" has been changed"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:249 ../lib/gui/dicteditorwin.py:337
+msgid "Save"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:252
+msgid "Do not save"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:305
+msgid "Dictionary editor"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:321
+msgid "Add"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:322
+msgid "Add word"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:325
+msgid "Edit"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:326
+msgid "Change translation"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:329
+msgid "Remove"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:330
+msgid "Remove selected word"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:333
+msgid "Sort"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:334
+msgid "Sort word list"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:338
+msgid "Save words to file"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:341
+msgid "Save As..."
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:342
+msgid "Save with a different file name"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:351 ../lib/gui/mainwin.py:1317
+msgid "Word List"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:370
+msgid "New..."
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:371
+msgid "Start new dictionary"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:374
+msgid "Open..."
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:375
+msgid "Open dictionary file"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:378 ../lib/gui/errorwin.py:82
+#: ../lib/gui/helpwin.py:68 ../lib/gui/helpwin.py:133
+#: ../lib/gui/helpwin.py:191 ../lib/gui/miscwin.py:62
+#: ../lib/gui/pluginwin.py:91 ../lib/gui/registerwin.py:87
+msgid "Close"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:379
+msgid "Close editor window"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:410
+msgid "New Word"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:425
+msgid "Edit Word"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:457
+msgid "List is empty"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:463
+msgid "List sorted"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:486
+msgid "Save file"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:507
+msgid "Dictionary saved"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:517
+msgid "Untitled"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:588 ../lib/gui/dicteditorwin.py:645
+msgid "Exit confirmation"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:600 ../lib/gui/mainwin.py:1231
+#: ../lib/installer.py:60
+msgid "Choose dictionary file"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:614
+msgid "Open Failed"
+msgstr ""
+
+#: ../lib/gui/dicteditorwin.py:630
+msgid "Dictionary loaded"
+msgstr ""
+
+#: ../lib/gui/errorwin.py:70
+msgid "An error occured:"
+msgstr ""
+
+#: ../lib/gui/helpwin.py:104
+msgid "Written By"
+msgstr ""
+
+#: ../lib/gui/helpwin.py:118
+msgid "Translated By"
+msgstr ""
+
+#: ../lib/gui/helpwin.py:129
+msgid "Thanks To"
+msgstr ""
+
+#: ../lib/gui/helpwin.py:166
+msgid "OpenDict is multiplatform dictionary."
+msgstr ""
+
+#: ../lib/gui/helpwin.py:188
+msgid "Credits"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:82 ../lib/gui/mainwin.py:731
+#: ../lib/gui/mainwin.py:1301
+msgid "Searching..."
+msgstr ""
+
+#: ../lib/gui/mainwin.py:134
+msgid "Look Up\tCtrl-U"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:135
+msgid "Lookup up word in the dictionary"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:140
+msgid "&Close Dictionary\tCtrl-W"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:141
+msgid "Close opened dicitonary"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:144
+msgid "E&xit\tCtrl-Q"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:145
+msgid "Exit program"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:147
+msgid "&File"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:155
+msgid "&Clear Search Entry\tCtrl-L"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:158
+msgid "Clear History"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:166
+msgid "Copy\tCtrl-C"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:167
+msgid "Copy selected translation text"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:170
+msgid "Paste\tCtrl-V"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:171
+msgid "Paste clipboard text into the search entry"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:176
+msgid "Edit preferences"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:176
+msgid "Preferences...\tCtrl-P"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:178
+msgid "&Edit"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:188
+msgid "Increase\tCtrl-="
+msgstr ""
+
+#: ../lib/gui/mainwin.py:189
+msgid "Increase text size"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:190
+msgid "Decrease\tCtrl--"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:191
+msgid "Decrease text size"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:193
+msgid "Normal\tCtrl-0"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:194
+msgid "Set normal text size"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:195
+msgid "Font Size"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:211
+msgid "Font Face"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:226
+msgid "Character Encoding"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:228
+msgid "&View"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:260
+msgid "&Install Dictionary From File..."
+msgstr ""
+
+#: ../lib/gui/mainwin.py:262
+msgid "&Dictionaries"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:271
+msgid "Manage Dictionaries...\tCtrl-M"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:272
+msgid "Install or remove dictionaries"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:277
+msgid "Take Words From Clipboard"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:278
+msgid "Scan the clipboard for text to translate"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:284
+msgid "Connect to DICT Server..."
+msgstr ""
+
+#: ../lib/gui/mainwin.py:285
+msgid "Open connection to DICT server"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:289
+msgid "Edit Dictionaries..."
+msgstr ""
+
+#: ../lib/gui/mainwin.py:290
+msgid "Create and edit dictionaries"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:292
+msgid "Tools"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:301
+msgid "&License"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:306
+msgid "&About\tCtrl-A"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:308
+msgid "&Help"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:313
+msgid "Word:"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:318
+msgid "Enter some text and press \"Look Up\" button or [ENTER] key on your keyboard"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:324
+msgid "Look Up"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:325
+msgid "Click this button to look up word in the dictionary"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:336
+msgid "History Back"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:345
+msgid "History Forward"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:355
+msgid "Stop searching"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:379
+msgid "Translation"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:484
+msgid ""
+"\n"
+"<html>\n"
+"<head>\n"
+"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"
+"</head>\n"
+"<body>\n"
+"<h3>Welcome to OpenDict</h3>\n"
+"<p><b>Short usage information:</b></p>\n"
+"<ul>\n"
+"  <li>To start using dictionary, select one from <i><b>Dictionaries</b></i>\n"
+"    menu.\n"
+"  </li>\n"
+"  <li>To install new dictionary from the Internet, select\n"
+"    <i><b>Manage Dictionaries</b></i>\n"
+"    from <i><b>Tools</b></i> menu and choose <i><b>Available</b></i> tab.</li>\n"
+"  <li>To install new dictionary from file, select <i><b>Add New Dictionary</b></i>\n"
+"  from <i><b>Dictionaries</b></i> menu.\n"
+"  </li>\n"
+"</ul>\n"
+"</body>\n"
+"</html>\n"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:514
+msgid "Invalid Dictionaries"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:651
+msgid "1 word matches"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:653
+msgid "%d words match"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:707
+msgid "No dictionary activated"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:708
+msgid "No dictionary activated. Please select one from \"Dictionaries\" menu and try again."
+msgstr ""
+
+#: ../lib/gui/mainwin.py:711
+msgid "No dictionaries installed"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:712
+msgid "There is no dictionaries installed. You can install one by selecting Tools > Manage Dictionaries > Available"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:722
+msgid "Please enter some text and try again"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:748 ../lib/gui/mainwin.py:786
+msgid "Stopped"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:753
+msgid "Encode Failed"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:834
+msgid "Connect to DICT server"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:861
+msgid "Choose a dictionary from \"Dictionaries\" menu"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:882
+msgid "Failed to copy text from the clipboard"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:884
+msgid "Clipboard contains no text data"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:891
+msgid "Groups"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:903
+msgid "Manage Dictionaries"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:917
+msgid "File Register"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:925
+msgid "Edit Dictionaries"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:934
+msgid "Preferences"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1014
+msgid "Licence Agreement Rejected"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1029
+msgid "Dictionary Index"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1030
+msgid ""
+"This is the first time you use this dictionary or it has been changed on disk since last indexing. Indexing is used to make search more efficient. The dictionary will be indexed now. It can take a few or more seconds.\n"
+"\n"
+"Press OK to continue..."
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1047
+msgid "Index Creation Error"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1068 ../lib/gui/pluginwin.py:734
+msgid "Error"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1138
+msgid "Error: not supported dictionary type"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1242
+msgid ""
+"Select dictionary format. If you can't find\n"
+"the format of your dictionary, the register\n"
+"system does not support it yet."
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1247
+msgid "Dictionary format"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1264
+msgid "Choose plugin file"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1280
+msgid "License"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1291
+msgid "About"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1340
+msgid "Show word list"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1357
+msgid "Hide word list"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1366
+msgid "Failed to print"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1378
+msgid "Page preview failed"
+msgstr ""
+
+#: ../lib/gui/miscwin.py:50
+msgid "Error: <i>unable to show licence text</i>"
+msgstr ""
+
+#: ../lib/gui/miscwin.py:56
+msgid "Do not accept"
+msgstr ""
+
+#: ../lib/gui/miscwin.py:59
+msgid "Accept"
+msgstr ""
+
+#: ../lib/gui/miscwin.py:73
+msgid "Licence Agreement"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:202
+msgid "Update List"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:209
+msgid "Install"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:221
+msgid "Name"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:222
+msgid "Size"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:268
+msgid "Information About Dictionary"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:282
+msgid "Name: "
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:287
+msgid "Version: "
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:292
+msgid "Maintainer: "
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:481
+msgid "List updated"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:482
+msgid "All your dictionaries are up to date."
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:489
+msgid "Downloading List"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:532
+msgid "Unable to donwload list"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:609
+msgid "Unable to remove"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:705
+msgid "Unable to donwload"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:715
+msgid "File is damaged"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:716
+msgid "Downloaded file is damaged and cannot be installed. Please try again."
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:757
+msgid "Unable to install"
+msgstr ""
+
+#: ../lib/gui/prefswin.py:46
+msgid "Default dictionary: "
+msgstr ""
+
+#: ../lib/gui/prefswin.py:64
+msgid "Default encoding: "
+msgstr ""
+
+#: ../lib/gui/prefswin.py:75
+msgid "Default DICT server: "
+msgstr ""
+
+#: ../lib/gui/prefswin.py:81
+msgid "Default DICT server port: "
+msgstr ""
+
+#: ../lib/gui/prefswin.py:89
+msgid "Save window size on exit"
+msgstr ""
+
+#: ../lib/gui/prefswin.py:93
+msgid "Save window position on exit"
+msgstr ""
+
+#: ../lib/gui/prefswin.py:97
+msgid "Save sash position on exit"
+msgstr ""
+
+#: ../lib/gui/registerwin.py:64 ../lib/gui/registerwin.py:104
+#: ../lib/gui/registerwin.py:150
+msgid "Name: %s"
+msgstr ""
+
+#: ../lib/gui/registerwin.py:67 ../lib/gui/registerwin.py:105
+#: ../lib/gui/registerwin.py:151
+msgid "Path: %s"
+msgstr ""
+
+#: ../lib/gui/registerwin.py:70 ../lib/gui/registerwin.py:106
+#: ../lib/gui/registerwin.py:152
+msgid "Format: %s"
+msgstr ""
+
+#: ../lib/gui/registerwin.py:73 ../lib/gui/registerwin.py:107
+#: ../lib/gui/registerwin.py:153
+msgid "Encoding: %s"
+msgstr ""
+
+#: ../lib/gui/registerwin.py:80
+msgid "Add new..."
+msgstr ""
+
+#: ../lib/gui/registerwin.py:84
+msgid "Remove selected"
+msgstr ""
+
+#: ../lib/gui/registerwin.py:132 ../lib/gui/registerwin.py:139
+msgid "Error while deleting \"%s\""
+msgstr ""
+
+#: ../lib/installer.py:80
+msgid "Recognition Error"
+msgstr ""
+
+#: ../lib/installer.py:108 ../lib/installer.py:110
+msgid "Installation failed"
+msgstr ""
+
+#: ../lib/installer.py:122 ../lib/installer.py:304 ../lib/installer.py:312
+msgid "Installation Error"
+msgstr ""
+
+#: ../lib/installer.py:124 ../lib/installer.py:128
+msgid "Error: Installation failed"
+msgstr ""
+
+#: ../lib/installer.py:132
+msgid "Dictionary installed"
+msgstr ""
+
+#: ../lib/installer.py:133
+msgid "Dictionary successfully installed. You can choose it from \"Dictionaries\" menu now."
+msgstr ""
+
+#: ../lib/installer.py:143 ../lib/installer.py:218
+msgid "File %s does not exist"
+msgstr ""
+
+#: ../lib/installer.py:146 ../lib/installer.py:222
+msgid "%s is not a file"
+msgstr ""
+
+#: ../lib/installer.py:160
+msgid "Dictionary \"%s\" is already installed"
+msgstr ""
+
+#: ../lib/installer.py:234
+msgid "Dictionary plugin file is corrupted"
+msgstr ""
+
+#: ../lib/installer.py:264
+msgid "Selected file is not valid OpenDict plugin"
+msgstr ""
+
+#: ../lib/installer.py:291
+msgid "This dictionary already installed. If you want to upgrade it, please remove old version first."
+msgstr ""
+
+#: ../lib/installer.py:305 ../lib/installer.py:313
+msgid "Installation tool for this dictionary failed to start. Please report this problem to developers."
+msgstr ""
+
+#: ../lib/installer.py:319
+msgid "Installation Aborted"
+msgstr ""
+
+#: ../lib/installer.py:320
+msgid "Dictionary installation has been aborted."
+msgstr ""
+
+#: ../lib/installer.py:346 ../lib/installer.py:392
+msgid "Error while removing created directories after plugin installation failure. This may be permission or disk space error."
+msgstr ""
+
+#: ../lib/installer.py:351
+msgid "Unable to install plugin"
+msgstr ""
+
+#: ../lib/installer.py:368
+msgid "Compressed dictionary file is corrupted"
+msgstr ""
+
+#: ../lib/installer.py:396
+msgid "Unable to install dictionary"
+msgstr ""
+
+#: ../lib/misc.py:34
+msgid "Not found"
+msgstr ""
+
+#: ../lib/misc.py:35
+msgid "Dictionary error, please report to its author"
+msgstr ""
+
+#: ../lib/misc.py:36
+msgid "Syntax error"
+msgstr ""
+
+#: ../lib/misc.py:37
+msgid "You must be connected to the internet to use this dictionary"
+msgstr ""
+
+#: ../lib/misc.py:38
+msgid "Time out"
+msgstr ""
+
+#: ../lib/misc.py:39
+msgid "Bad encoding is set for this dictionary, try another"
+msgstr ""
+
+#: ../opendict.py:82
+msgid "wxPython Version Error"
+msgstr ""
+
