@@ -1,7 +1,7 @@
 POFILES=$(wildcard *.po)
 MOFILES=$(POFILES:.po=.mo)
 
-all: opendict.pot $(MOFILES)
+all: messages.pot $(MOFILES)
 
 install: all
 	for file in $(MOFILES); do \
@@ -10,7 +10,7 @@ install: all
 		install -m 0644 $$file $(prefix)/usr/share/locale/$$lang/LC_MESSAGES/opendict.mo; \
 	done
 
-opendict.pot:
+messages.pot:
 	@echo "Rebuilding the pot file"
 	rm -f *.pot
 	pygettext -v ../opendict.py ../lib/*.py ../lib/gui/*.py
@@ -20,7 +20,7 @@ opendict.pot:
 %.mo: %.po
 	msgfmt --verbose --check -o $@ $<
 
-%.po: opendict.pot
+%.po: messages.pot
 	@echo -n "Merging opendict.pot and $@"
 	@msgmerge $@ opendict.pot -o $@.new
 	@if [ "`diff $@ $@.new | grep '[<>]' | wc -l`" -ne 2 ]; then \
@@ -31,7 +31,7 @@ opendict.pot:
 	@msgfmt --statistics $@
 
 clean:
-	rm -f opendict.pot $(MOFILES) messages messages.mo
+	rm -f $(MOFILES) messages messages.mo
 
 uninstall:
 	for file in $(MOFILES); do \
