@@ -12,6 +12,3 @@ DICT Connections" for that.
 
 [ ] Ability to merge dictionaries in editor
 
-[ ] After installing dictionary, it is kept in available list in memory.
-After closing PluginManagerWinddow and reopening it, recently installed 
-dictionaries can be seen as available.

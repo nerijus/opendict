@@ -15,7 +15,7 @@ Requirements
 ------------
 
    - python >=2.2
-   - wxPython 2.4 or 2.5 for python >=2.2
+   - wxPython 2.5 for python >=2.2
    - python-xml for python >=2.2
 
 
@@ -37,11 +37,10 @@ Bugs
 ----
 
 There are some known bugs and lots of unknown. Because of lack of
-developers, it is quite hard to find and fix them.
+developers, it is quite hard to find and fix them quickly.
 
 
 For developers
 --------------
 
-OpenDict works, but to be a better piece of software it should be
-redesigned and rewritten.
+OpenDict can be better piece of software. Your contribution is welcome!
