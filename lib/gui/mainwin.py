@@ -1013,7 +1013,7 @@ class MainWindow(wxFrame):
             from lib.gui import errorwin
             title = _("Licence Agreement Rejected")
             msg = _("You cannot use dictionary \"%s\" without accepting "\
-                    "licence agreement" % dictInstance.getName())
+                    "licence agreement") % dictInstance.getName()
             errorwin.showErrorMessage(title, msg)
             return
          else:
@@ -1076,7 +1076,7 @@ class MainWindow(wxFrame):
       self.activeDictionary.start()
       self.checkIfNeedsList()
       self.SetTitle(titleTemplate % dictInstance.getName())
-      self.SetStatusText(_(enc.toWX("Dictionary \"%s\" loaded" \
+      self.SetStatusText(enc.toWX(_("Dictionary \"%s\" loaded" \
                                     % dictInstance.getName())))
 
       self.entry.SetFocus()

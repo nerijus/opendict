@@ -53,16 +53,16 @@ class ErrorType:
 class ErrorOk(ErrorType):
     """No error class"""
 
-    shortMessage = _(u"Success")
-    longMessage = _(u"Search successfully finished.")
+    shortMessage = _("Success")
+    longMessage = _("Search successfully finished.")
 
 
 
 class ErrorNotFound(ErrorType):
     """Not found error class"""
 
-    shortMessage = _(u"Not found")
-    longMessage = _(u"Word or phrase not found. Try less letters or " \
+    shortMessage = _("Not found")
+    longMessage = _("Word or phrase not found. Try less letters or " \
                   "fewer words.")
 
 
@@ -70,8 +70,8 @@ class ErrorNotFound(ErrorType):
 class ErrorInternal(ErrorType):
     """Internal error class"""
 
-    shortMessage = _(u"Internal error")
-    longMessage = _(u"Internal error occured. Please send bug report to " \
+    shortMessage = _("Internal error")
+    longMessage = _("Internal error occured. Please send bug report to " \
                   "the dictionary's of current use authors. Thank you.")
 
 
@@ -79,8 +79,8 @@ class ErrorInternal(ErrorType):
 class ErrorNotConnected(ErrorType):
     """Not connected error class"""
 
-    shortMessage = _(u"Not connected")
-    longMessage = _(u"This dictionary uses Internet connection " \
+    shortMessage = _("Not connected")
+    longMessage = _("This dictionary uses Internet connection " \
                   "to translate words. Please connect to the Internet and " \
                   "try again.")
 
@@ -89,8 +89,8 @@ class ErrorNotConnected(ErrorType):
 class ErrorConnectionTimeout(ErrorType):
     """Not connected error class"""
 
-    shortMessage = _(u"Connection Error")
-    longMessage = _(u"Could not connect to host. " \
+    shortMessage = _("Connection Error")
+    longMessage = _("Could not connect to host. " \
                   "Check your Internet connection or try later.")
 
 
@@ -98,8 +98,8 @@ class ErrorConnectionTimeout(ErrorType):
 class ErrorInvalidEncoding(ErrorType):
     """Invalid encoding error class"""
 
-    shortMessage = _(u"Invalid encoding")
-    longMessage = _(u"Selected encoding is not correct for " \
+    shortMessage = _("Invalid encoding")
+    longMessage = _("Selected encoding is not correct for " \
                   "this dictionary. Please select another from Edit > " \
                   "Character Encoding menu")
 
@@ -108,8 +108,8 @@ class ErrorInvalidEncoding(ErrorType):
 class ErrorOpenDict(ErrorType):
     """OpenDict bug class"""
 
-    shortMessage = _(u"OpenDict Bug")
-    longMessage = _(u"Internal error occured. Please send bug report to " \
+    shortMessage = _("OpenDict Bug")
+    longMessage = _("Internal error occured. Please send bug report to " \
                   "OpenDict authors to prevent this error in the future. " \
                   "Thank you!")
 
@@ -117,8 +117,8 @@ class ErrorOpenDict(ErrorType):
 class ErrorCustom(ErrorType):
     """Custom error"""
 
-    shortMessage = _(u"Unknown Error")
-    longMessage = _(u"Unknown error occured.")
+    shortMessage = _("Unknown Error")
+    longMessage = _("Unknown error occured.")
 
     def setMessage(self, msg):
         """Set custom message"""

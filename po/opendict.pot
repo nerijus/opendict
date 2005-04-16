@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-04-17 01:31+EEST\n"
+"POT-Creation-Date: 2005-04-17 01:54+EEST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -627,6 +627,10 @@ msgstr ""
 
 #: ../lib/gui/mainwin.py:1014
 msgid "Licence Agreement Rejected"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:1015
+msgid "You cannot use dictionary \"%s\" without accepting licence agreement"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:1029

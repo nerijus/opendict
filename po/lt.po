@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenDict 0.3.0\n"
-"POT-Creation-Date: 2005-04-17 01:30+EEST\n"
-"PO-Revision-Date: 2005-04-17 01:27+0300\n"
+"POT-Creation-Date: 2005-04-17 01:53+EEST\n"
+"PO-Revision-Date: 2005-04-17 01:53+0300\n"
 "Last-Translator: Martynas Jocius <mjoc@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konf.lt>\n"
 "MIME-Version: 1.0\n"
@@ -679,6 +679,11 @@ msgstr "Nustatymai"
 #: ../lib/gui/mainwin.py:1014
 msgid "Licence Agreement Rejected"
 msgstr "Licencija atmesta"
+
+#: ../lib/gui/mainwin.py:1015
+msgid "You cannot use dictionary \"%s\" without accepting licence agreement"
+msgstr ""
+"Jûs negalite naudotis þodynu \"%s\", jei nesutinkate su licencijos sàlygomis"
 
 #: ../lib/gui/mainwin.py:1029
 msgid "Dictionary Index"

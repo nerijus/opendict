@@ -259,6 +259,8 @@ class AgreementsManager:
     def addAgreement(self, dictConfigPath):
         """Mark dictionary licence as accepted"""
 
+	dictConfigPath = os.path.realpath(dictConfigPath)
+
         if not dictConfigPath in self.dictPaths:
             self.dictPaths.append(dictConfigPath)
             self._updateFile()
@@ -268,6 +270,8 @@ class AgreementsManager:
         """Mark dictionary licence as rejected,
         i.e. remove from accepted list"""
 
+	dictConfigPath = os.path.realpath(dictConfigPath)
+
         if dictConfigPath in self.dictPaths:
             self.dictPaths.remove(dictConfigPath)
             self._updateFile()
@@ -275,6 +279,8 @@ class AgreementsManager:
 
     def getAccepted(self, dictConfigPath):
         """Return True if dictionary licence is marked as accepted"""
+
+	dictConfigPath = os.path.realpath(dictConfigPath)
 
         if dictConfigPath in self.dictPaths:
             return True
@@ -291,7 +297,7 @@ class AgreementsManager:
             
             for line in fd:
                 line = line.strip()
-                if os.path.exists(line):
+                if os.path.exists(line) and not line in self.dictPaths:
                     self.dictPaths.append(line)
                 else:
                     update = True
