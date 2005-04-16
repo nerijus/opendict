@@ -22,6 +22,9 @@
 Utility functions
 """
 
+import wx
+_ = wx.GetTranslation
+
 import os
 import md5
 import threading
@@ -212,7 +215,7 @@ class DownloadThread:
             serverName = self.url
 
         try:
-            self.statusMessage = "Connecting to %s..." % serverName
+            self.statusMessage = _("Connecting to %s...") % serverName
             self.up = urllib2.urlopen(self.url)
             fileSize = int(self.up.info().getheader('Content-length'))
         except Exception, e:
@@ -228,12 +231,12 @@ class DownloadThread:
                 count += len(bytes)
                 self.buffer += bytes
                 self.percents = int(float(count) / fileSize * 100)
-                self.statusMessage = "Downloading... %d%%" % self.percents
+                self.statusMessage = _("Downloading... %d%%") % self.percents
                 time.sleep(0.005) # To lower CPU usage
                 
             self.up.close()
             self.done = True
-            self.statusMessage = "Done"
+            self.statusMessage = _("Done")
         except Exception, e:
             self.errorMessage = "Error while fetching data from %s: %s" \
                                 % (self.url, e)

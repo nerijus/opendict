@@ -22,6 +22,9 @@
 Error types
 """
 
+import wx
+_ = wx.GetTranslation
+
 class ErrorType:
     """Error type interface"""
 
@@ -50,72 +53,72 @@ class ErrorType:
 class ErrorOk(ErrorType):
     """No error class"""
 
-    shortMessage = u"Success"
-    longMessage = u"Search successfully finished."
+    shortMessage = _(u"Success")
+    longMessage = _(u"Search successfully finished.")
 
 
 
 class ErrorNotFound(ErrorType):
     """Not found error class"""
 
-    shortMessage = u"Not found"
-    longMessage = u"Word or phrase not found. Try less letters or " \
-                  "fewer words."
+    shortMessage = _(u"Not found")
+    longMessage = _(u"Word or phrase not found. Try less letters or " \
+                  "fewer words.")
 
 
 
 class ErrorInternal(ErrorType):
     """Internal error class"""
 
-    shortMessage = u"Internal error"
-    longMessage = u"Internal error occured. Please send bug report to " \
-                  "the dictionary's of current use authors. Thank you."
+    shortMessage = _(u"Internal error")
+    longMessage = _(u"Internal error occured. Please send bug report to " \
+                  "the dictionary's of current use authors. Thank you.")
 
 
 
 class ErrorNotConnected(ErrorType):
     """Not connected error class"""
 
-    shortMessage = u"Not connected"
-    longMessage = u"This dictionary uses Internet connection " \
+    shortMessage = _(u"Not connected")
+    longMessage = _(u"This dictionary uses Internet connection " \
                   "to translate words. Please connect to the Internet and " \
-                  "try again."
+                  "try again.")
 
 
 
 class ErrorConnectionTimeout(ErrorType):
     """Not connected error class"""
 
-    shortMessage = u"Connection Error"
-    longMessage = u"Could not connect to host. " \
-                  "Check your Internet connection or try later."
+    shortMessage = _(u"Connection Error")
+    longMessage = _(u"Could not connect to host. " \
+                  "Check your Internet connection or try later.")
 
 
 
 class ErrorInvalidEncoding(ErrorType):
     """Invalid encoding error class"""
 
-    shortMessage = u"Invalid encoding"
-    longMessage = u"Selected encoding is not correct for " \
+    shortMessage = _(u"Invalid encoding")
+    longMessage = _(u"Selected encoding is not correct for " \
                   "this dictionary. Please select another from Edit > " \
-                  "Character Encoding menu"
+                  "Character Encoding menu")
 
 
 
 class ErrorOpenDict(ErrorType):
     """OpenDict bug class"""
 
-    shortMessage = u"OpenDict Bug"
-    longMessage = u"Internal error occured. Please send bug report to " \
+    shortMessage = _(u"OpenDict Bug")
+    longMessage = _(u"Internal error occured. Please send bug report to " \
                   "OpenDict authors to prevent this error in the future. " \
-                  "Thank you!"
+                  "Thank you!")
 
 
 class ErrorCustom(ErrorType):
     """Custom error"""
 
-    shortMessage = u"Unknown Error"
-    longMessage = u"Unknown error occured."
+    shortMessage = _(u"Unknown Error")
+    longMessage = _(u"Unknown error occured.")
 
     def setMessage(self, msg):
         """Set custom message"""

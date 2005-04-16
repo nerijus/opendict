@@ -74,11 +74,11 @@ class PluginManagerWindow(wxFrame):
 
       # Add 'installed' panel
       panelInstalled = self._makeInstalledPanel(tabbedPanel)
-      tabbedPanel.AddPage(panelInstalled, "Installed")
+      tabbedPanel.AddPage(panelInstalled, _("Installed"))
 
       # Add 'available' panel
       panelAvailable = self._makeAvailablePanel(tabbedPanel)
-      tabbedPanel.AddPage(panelAvailable, "Available")
+      tabbedPanel.AddPage(panelAvailable, _("Available"))
 
       vboxMain.Add(tabbedPanel, 1, wxALL | wxEXPAND, 2)
 
@@ -135,14 +135,14 @@ class PluginManagerWindow(wxFrame):
        #
        idInstallFile = wx.NewId()
        self.buttonInstallFile = wxButton(panelInstalled, idInstallFile, 
-                                         "Install From File")
+                                         _("Install From File"))
        hboxButtons.Add(self.buttonInstallFile, 0, wxALL | wxALIGN_RIGHT, 2)
        
        #
        # "Remove" button
        #
        idRemove = wx.NewId()
-       self.buttonRemove = wxButton(panelInstalled, idRemove, "Remove")
+       self.buttonRemove = wxButton(panelInstalled, idRemove, _("Remove"))
        self.buttonRemove.Disable()
        hboxButtons.Add(self.buttonRemove, 0, wxALL | wxALIGN_RIGHT, 2)
        
@@ -154,7 +154,7 @@ class PluginManagerWindow(wxFrame):
        #
        # Make columns
        #
-       self.installedList.InsertColumn(0, "Name")
+       self.installedList.InsertColumn(0, _("Name"))
        
        dictNames = self.installedDictionaries.keys()
        dictNames.sort()
@@ -529,7 +529,7 @@ class PluginManagerWindow(wxFrame):
 
        if error:
            systemLog(ERROR, error)
-           title = _("Unable to donwload list")
+           title = _("Unable to download list")
            errorwin.showErrorMessage(title, error)
            return
 
@@ -645,7 +645,7 @@ class PluginManagerWindow(wxFrame):
        localPath = os.path.join(downloadsDir,
                                 os.path.basename(dictInfo.getLocation()))
 
-       title = _("Downloading %s..." % dictInfo.getName())
+       title = _("Downloading %s...") % dictInfo.getName()
 
        progressDialog = wx.ProgressDialog(title,
                                           '',
@@ -702,7 +702,7 @@ class PluginManagerWindow(wxFrame):
 
        if error:
            systemLog(ERROR, error)
-           title = _("Unable to donwload")
+           title = _("Unable to download")
            errorwin.showErrorMessage(title, error)
            return
 

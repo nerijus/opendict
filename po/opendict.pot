@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-04-16 23:13+EEST\n"
+"POT-Creation-Date: 2005-04-17 01:31+EEST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,6 +14,71 @@ msgstr ""
 "Content-Transfer-Encoding: ENCODING\n"
 "Generated-By: pygettext.py 1.5\n"
 
+
+#: ../lib/errortype.py:56
+msgid "Success"
+msgstr ""
+
+#: ../lib/errortype.py:57
+msgid "Search successfully finished."
+msgstr ""
+
+#: ../lib/errortype.py:64 ../lib/misc.py:34
+msgid "Not found"
+msgstr ""
+
+#: ../lib/errortype.py:65
+msgid "Word or phrase not found. Try less letters or fewer words."
+msgstr ""
+
+#: ../lib/errortype.py:73
+msgid "Internal error"
+msgstr ""
+
+#: ../lib/errortype.py:74
+msgid "Internal error occured. Please send bug report to the dictionary's of current use authors. Thank you."
+msgstr ""
+
+#: ../lib/errortype.py:82
+msgid "Not connected"
+msgstr ""
+
+#: ../lib/errortype.py:83
+msgid "This dictionary uses Internet connection to translate words. Please connect to the Internet and try again."
+msgstr ""
+
+#: ../lib/errortype.py:92 ../lib/gui/dictconnwin.py:155
+#: ../lib/gui/dictconnwin.py:171
+msgid "Connection Error"
+msgstr ""
+
+#: ../lib/errortype.py:93
+msgid "Could not connect to host. Check your Internet connection or try later."
+msgstr ""
+
+#: ../lib/errortype.py:101
+msgid "Invalid encoding"
+msgstr ""
+
+#: ../lib/errortype.py:102
+msgid "Selected encoding is not correct for this dictionary. Please select another from Edit > Character Encoding menu"
+msgstr ""
+
+#: ../lib/errortype.py:111
+msgid "OpenDict Bug"
+msgstr ""
+
+#: ../lib/errortype.py:112
+msgid "Internal error occured. Please send bug report to OpenDict authors to prevent this error in the future. Thank you!"
+msgstr ""
+
+#: ../lib/errortype.py:120
+msgid "Unknown Error"
+msgstr ""
+
+#: ../lib/errortype.py:121
+msgid "Unknown error occured."
+msgstr ""
 
 #: ../lib/gui/dictaddwin.py:34
 msgid "Add new dictionary"
@@ -74,7 +139,7 @@ msgstr ""
 msgid "Connect"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:146 ../lib/gui/mainwin.py:655
+#: ../lib/gui/dictconnwin.py:146 ../lib/gui/mainwin.py:655 ../lib/util.py:239
 msgid "Done"
 msgstr ""
 
@@ -82,23 +147,15 @@ msgstr ""
 msgid "Receiving database list..."
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:155
-msgid "Connection Error"
-msgstr ""
-
 #: ../lib/gui/dictconnwin.py:156 ../lib/gui/dictconnwin.py:172
 msgid "Unable to connect to server"
-msgstr ""
-
-#: ../lib/gui/dictconnwin.py:171
-msgid "Connectio Error"
 msgstr ""
 
 #: ../lib/gui/dictconnwin.py:190
 msgid "Connecting..."
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:218
+#: ../lib/gui/dictconnwin.py:218 ../lib/util.py:218
 msgid "Connecting to %s..."
 msgstr ""
 
@@ -142,7 +199,7 @@ msgstr ""
 msgid "Change translation"
 msgstr ""
 
-#: ../lib/gui/dicteditorwin.py:329
+#: ../lib/gui/dicteditorwin.py:329 ../lib/gui/pluginwin.py:145
 msgid "Remove"
 msgstr ""
 
@@ -650,16 +707,28 @@ msgstr ""
 msgid "Licence Agreement"
 msgstr ""
 
+#: ../lib/gui/pluginwin.py:77
+msgid "Installed"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:81
+msgid "Available"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:138
+msgid "Install From File"
+msgstr ""
+
+#: ../lib/gui/pluginwin.py:157 ../lib/gui/pluginwin.py:221
+msgid "Name"
+msgstr ""
+
 #: ../lib/gui/pluginwin.py:202
 msgid "Update List"
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:209
 msgid "Install"
-msgstr ""
-
-#: ../lib/gui/pluginwin.py:221
-msgid "Name"
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:222
@@ -695,15 +764,19 @@ msgid "Downloading List"
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:532
-msgid "Unable to donwload list"
+msgid "Unable to download list"
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:609
 msgid "Unable to remove"
 msgstr ""
 
+#: ../lib/gui/pluginwin.py:648
+msgid "Downloading %s..."
+msgstr ""
+
 #: ../lib/gui/pluginwin.py:705
-msgid "Unable to donwload"
+msgid "Unable to download"
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:715
@@ -854,10 +927,6 @@ msgstr ""
 msgid "Unable to install dictionary"
 msgstr ""
 
-#: ../lib/misc.py:34
-msgid "Not found"
-msgstr ""
-
 #: ../lib/misc.py:35
 msgid "Dictionary error, please report to its author"
 msgstr ""
@@ -876,6 +945,10 @@ msgstr ""
 
 #: ../lib/misc.py:39
 msgid "Bad encoding is set for this dictionary, try another"
+msgstr ""
+
+#: ../lib/util.py:234
+msgid "Downloading... %d%%"
 msgstr ""
 
 #: ../opendict.py:82
