@@ -168,7 +168,7 @@ class DictConnWindow(wxFrame):
             
             if self.conn == None:
                 self.SetStatusText('')
-                title = _("Connectio Error")
+                title = _("Connection Error")
                 msg = _("Unable to connect to server")
                 errorwin.showErrorMessage(title, msg)
             else:
