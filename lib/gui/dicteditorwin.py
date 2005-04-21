@@ -108,8 +108,8 @@ class EditWordWindow(wxFrame):
     def onAddEmptyField(self, event):
         """Add empty translation field"""
 
-        transLabel = wxStaticText(self, -1, _("Translation #%d: " \
-                                              % (len(self.textEntries)+1)))
+        transLabel = wxStaticText(self, -1, _("Translation #%d: ") \
+                                              % (len(self.textEntries)+1))
         self.transLabels[len(self.transLabels)] = transLabel
         self.boxInfo.Add(transLabel,
                          flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
