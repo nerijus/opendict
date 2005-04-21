@@ -79,10 +79,34 @@ class HtmlWindow(wxHtmlWindow):
       debugLog(DEBUG, "LinkInfo: searching for '%s'" % lastLookupWord)
       wxBeginBusyCursor()
       parent = self.GetParent().GetParent().GetParent()
+
+      word = enc.fromWX(lastLookupWord)
+      try:
+         word = word.encode(parent.activeDictionary.getEncoding())
+      except Exception, e:
+         # FIXME: Code duplicates
+         traceback.print_exc()
+         parent.buttonStop.Disable()
+         parent.entry.Enable(True)
+         parent.timerSearch.Stop()
+         parent.SetStatusText(_('Stopped'))
+         wxEndBusyCursor()
+         
+         systemLog(ERROR, "Unable to decode '%s': %s" % (word.encode('UTF-8'),
+                                                         e))
+         title = _("Encode Failed")
+         msg = _("Unable to encode text \"%s\" in %s for \"%s\"." \
+                 % (enc.toWX(word), parent.activeDictionary.getEncoding(),
+                 parent.activeDictionary.getName()))
+                    
+         errorwin.showErrorMessage(title, msg)
+
+         return
+      
       parent.SetStatusText(_("Searching..."))
       parent.timerSearch.Start(parent.delay)
       parent.search = Process(parent.activeDictionary.search,
-                              lastLookupWord)
+                              word)
 
       
 

@@ -628,6 +628,9 @@ class PluginManagerWindow(wxFrame):
                
        self.buttonRemove.Disable()
        del self.app.dictionaries[dictName]
+
+       self.clearInfo()
+       self.disableInfo()
        
 
    def onClose(self, event):
@@ -762,3 +765,7 @@ class PluginManagerWindow(wxFrame):
 
        self.availableList.DeleteItem(self.currentAvailItemSelection)
        del self.addons[dictInfo.getName()]
+       self.buttonInstall.Disable()
+
+       self.clearInfo()
+       self.disableInfo()

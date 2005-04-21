@@ -143,11 +143,15 @@ class OpenDictApp(wxApp):
       # FIXME: Avoid this
       self.config.window = self.window
 
-      systemLog(INFO, "OpenDict %s" % info.VERSION)
-      systemLog(INFO, "Global home: %s:" % info.GLOBAL_HOME)
-      systemLog(INFO, "Local home: %s" % info.LOCAL_HOME)
+      try:
+          systemLog(INFO, "OpenDict %s" % info.VERSION)
+          systemLog(INFO, "wxPython %s" % wx.__version__)
+          systemLog(INFO, "Global home: %s:" % info.GLOBAL_HOME)
+          systemLog(INFO, "Local home: %s" % info.LOCAL_HOME)
 
-      systemLog(DEBUG, "Loaded in %f seconds" % (time.time() - _start))
+          systemLog(DEBUG, "Loaded in %f seconds" % (time.time() - _start))
+      except Exception, e:
+          print "Logger Error: Unable to write to log (%s)" % e
       
       self.window.Show(True)
 
