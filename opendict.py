@@ -26,9 +26,7 @@ import string
 import time
 
 try:
-    from wxPython.wx import *
     import wx
-    import wxPython
 except ImportError:
     print >> sys.stderr, "**"
     print >> sys.stderr, "** Error: wxPython library not found"
@@ -65,17 +63,17 @@ from lib import plaindict
 from lib import util
 
 
-class OpenDictApp(wxApp):
+class OpenDictApp(wx.App):
    """Top-level class of wxWindows application"""
 
-   l = wxLocale()
+   locale = wx.Locale()
 
    def OnInit(self):
 
-      _ = wxGetTranslation
+      _ = wx.GetTranslation
       _start = time.time()
 
-      if wxPython.__version__.split('.') < ['2', '5']:
+      if wx.__version__.split('.') < ['2', '5']:
          from lib.gui import errorwin
 
          # Go away, wxPython 2.4!
@@ -87,7 +85,7 @@ class OpenDictApp(wxApp):
                  "bugs.\n\n" \
                  "Please get wxPython 2.5 from " \
                  "http://www.wxpython.org/download.php" \
-                 % (wxPython.__version__, info.VERSION))
+                 % (wx.__version__, info.VERSION))
          errorwin.showErrorMessage(title, msg)
          return False
       
@@ -96,10 +94,10 @@ class OpenDictApp(wxApp):
       systemLog(DEBUG, "Unicode version: %s" % wx.USE_UNICODE)
       
       # Init gettext support
-      wxLocale_AddCatalogLookupPathPrefix(os.path.join(info.GLOBAL_HOME,
-                                                       'locale'))
-      self.l.Init(wxLANGUAGE_DEFAULT)
-      self.l.AddCatalog('opendict')
+      wx.Locale_AddCatalogLookupPathPrefix(os.path.join(info.GLOBAL_HOME,
+                                                       'po'))
+      self.locale.Init(wx.LANGUAGE_DEFAULT)
+      self.locale.AddCatalog('opendict')
 
       # Data cache instance
       self.cache = {}
@@ -138,7 +136,7 @@ class OpenDictApp(wxApp):
       self.window = MainWindow(None, -1, "OpenDict",
                                windowPos,
                                windowSize,
-                               style=wxDEFAULT_FRAME_STYLE)
+                               style=wx.DEFAULT_FRAME_STYLE)
       
       # FIXME: Avoid this
       self.config.window = self.window

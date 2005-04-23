@@ -8,9 +8,9 @@ import unittest
 import os
 import sys
 
-sys.path.append('..')
+sys.path.append('../..')
 
-import newplugin
+from lib import newplugin
 
 
 class TestPluginInfo(unittest.TestCase):
