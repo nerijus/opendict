@@ -1,0 +1,18 @@
+                              OpenDict ChangeLog
+			      ==================
+
+0.5.7
+-----
+o Dictionaries editor improved
+o Dictionaries manager improved
+o Ability to install dictionaries from the Internet added
+o Better unicode support
+o Works only using wxPython 2.5
+o Lots of bug fixes
+
+
+0.5.8
+-----
+o Makefile tries both pygettext and pygettext.py (for Fedora linux)
+o Small bug fixes
+
