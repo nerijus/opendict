@@ -23,7 +23,7 @@ import sys
 import os
 
 # OpenDict version
-VERSION = "0.5.7-CVS"
+VERSION = "0.5.8-CVS"
 
 # File system objects
 __OPENDICT_LOCAL_DIR = ".opendict"

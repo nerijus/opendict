@@ -52,8 +52,8 @@ class Configuration:
       self.set('saveSashPos', 'True')
 
       self.set('defaultDict', '')
-      self.set('windowWidth', '600')
-      self.set('windowHeight', '400')
+      self.set('windowWidth', '550')
+      self.set('windowHeight', '370')
       self.set('windowPosX', '-1')
       self.set('windowPosY', '-1')
       self.set('sashPos', '160')
