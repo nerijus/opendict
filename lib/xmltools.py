@@ -491,7 +491,9 @@ class MainConfigGenerator:
         for key, value in props.items():
             elem = doc.createElement(key)
             mainElement.appendChild(elem)
-            elem.appendChild(doc.createTextNode(unicode(str(value), 'UTF-8')))
+            if type(value) != unicode:
+                value = str(value)
+            elem.appendChild(doc.createTextNode(value))
 
         return doc
     
@@ -512,24 +514,3 @@ def writeConfig(doc, path):
     xml.dom.ext.PrettyPrint(doc, fd)
     fd.close()
 
-
-
-if __name__ == "__main__":
-    #print generatePlainDictConfig(name='Test', format='Nonsense',
-    #                             path='/home/mjoc/xxx/',
-    #                             md5='34kj34lk5j3lkj345',
-    #                             encoding='UTF-8')
-    #
-    #print parsePlainDictConfig('/home/mjoc/config.xml')
-
-    #print generateIndexFile({'a': 3, 'b': 100})
-    #print parseIndexFile('/home/mjoc/test.xml')
-
-    #fd = open('/home/mjoc/opendict-add-ons.xml')
-    #xmlData = fd.read()
-    #print parseAddOns(xmlData)
-    #fd.close()
-    
-    doc = generateMainConfig({'vienas': 1, 'du': u'2'})
-    writeConfig(doc, '/home/mjoc/test.xml')
-    print parseMainConfig('/home/mjoc/test.xml')

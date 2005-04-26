@@ -27,6 +27,7 @@ import time
 
 try:
     import wx
+    import wxPython
 except ImportError:
     print >> sys.stderr, "**"
     print >> sys.stderr, "** Error: wxPython library not found"
@@ -73,7 +74,16 @@ class OpenDictApp(wx.App):
       _ = wx.GetTranslation
       _start = time.time()
 
-      if wx.__version__.split('.') < ['2', '5']:
+      wxVersion = []
+      try:
+          wxVersion = wx.__version__
+      except Exception, e:
+          try:
+              wxVersion = wxPython.__version__
+          except:
+              pass
+
+      if wxVersion.split('.') < ['2', '5']:
          from lib.gui import errorwin
 
          # Go away, wxPython 2.4!
@@ -85,7 +95,7 @@ class OpenDictApp(wx.App):
                  "bugs.\n\n" \
                  "Please get wxPython 2.5 from " \
                  "http://www.wxpython.org/download.php" \
-                 % (wx.__version__, info.VERSION))
+                 % (wxVersion, info.VERSION))
          errorwin.showErrorMessage(title, msg)
          return False
       
@@ -143,7 +153,7 @@ class OpenDictApp(wx.App):
 
       try:
           systemLog(INFO, "OpenDict %s" % info.VERSION)
-          systemLog(INFO, "wxPython %s" % wx.__version__)
+          systemLog(INFO, "wxPython %s" % wxVersion)
           systemLog(INFO, "Global home: %s:" % info.GLOBAL_HOME)
           systemLog(INFO, "Local home: %s" % info.LOCAL_HOME)
 

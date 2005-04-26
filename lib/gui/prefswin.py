@@ -56,7 +56,7 @@ class PrefsWindow(wxDialog):
          systemLog(ERROR, "Unable to decode titles to UTF-8 (%s)" % e)
       
       self.dictChooser = wxComboBox(self, 1100,
-                                    self.app.config.get('defaultDict'),
+                                    enc.toWX(self.app.config.get('defaultDict')),
                                     wxPoint(-1, -1),
                                     wxSize(-1, -1), dictNames, wxTE_READONLY)
       grid.Add(self.dictChooser, 0, wxEXPAND)
@@ -154,8 +154,9 @@ class PrefsWindow(wxDialog):
 
    def onOK(self, event):
       """Save configuration in the configuration object"""
-      
-      self.app.config.set('defaultDict', self.dictChooser.GetValue())
+
+      self.app.config.set('defaultDict',
+                          enc.fromWX(self.dictChooser.GetValue()))
 
       self.app.config.set('encoding', encodings[self.encChooser.GetValue()])
       if self.app.window.activeDictionary == None:

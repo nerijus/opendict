@@ -126,7 +126,7 @@ class Installer:
         except:
             # Can this happen?
             self.mainWin.SetStatusText(_("Error: Installation failed"))
-            tranceback.print_exc()
+            traceback.print_exc()
 
         if succeeded:
             title = _("Dictionary installed")

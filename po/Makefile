@@ -13,7 +13,8 @@ install: all
 messages.pot:
 	@echo "Rebuilding the pot file"
 	rm -f *.pot
-	pygettext -v ../opendict.py ../lib/*.py ../lib/gui/*.py
+	test -f /usr/bin/pygettext && /usr/bin/pygettext -v ../opendict.py ../lib/*.py ../lib/gui/*.py || echo
+	test -f /usr/bin/pygettext.py && /usr/bin/pygettext.py -v ../opendict.py ../lib/*.py ../lib/gui/*.py || echo
 	cp messages.pot opendict.pot
 	rm -f messages.pot
 

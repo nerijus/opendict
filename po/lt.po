@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenDict 0.3.0\n"
-"POT-Creation-Date: 2005-04-22 00:45+EEST\n"
+"POT-Creation-Date: 2005-04-26 18:51+EEST\n"
 "PO-Revision-Date: 2005-04-22 00:44+0300\n"
 "Last-Translator: Martynas Jocius <mjoc@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konf.lt>\n"
@@ -1039,6 +1039,6 @@ msgstr "Ðiam þodynui nustatyta neteisinga koduotë, pasirinkite kità"
 msgid "Downloading... %d%%"
 msgstr "Parsiunèiama... %d%%"
 
-#: ../opendict.py:82
+#: ../opendict.py:90
 msgid "wxPython Version Error"
 msgstr "wxPython versijos klaida"
