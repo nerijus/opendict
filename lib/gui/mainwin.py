@@ -535,15 +535,7 @@ class MainWindow(wxFrame):
 
 
       if self.app.invalidDictionaries:
-         title = _("Invalid Dictionaries")
-         msg = _("The following dictionaries are invalid and cannot be " \
-                 "loaded:\n\n%s\n\nThis may be because of critical changes "\
-                 "in OpenDict architecture. Update these dictionaries or " \
-                 "remove listed directories " \
-                 "manually to avoid this message in the future." \
-                 % '\n'.join(self.app.invalidDictionaries))
-         from lib.gui import errorwin
-         errorwin.showErrorMessage(title, msg)
+         miscwin.showInvalidDicts(self, self.app.invalidDictionaries)
 
 
    def onExit(self, event):
@@ -1100,8 +1092,8 @@ class MainWindow(wxFrame):
       self.activeDictionary.start()
       self.checkIfNeedsList()
       self.SetTitle(titleTemplate % dictInstance.getName())
-      self.SetStatusText(enc.toWX(_("Dictionary \"%s\" loaded" \
-                                    % dictInstance.getName())))
+      self.SetStatusText(enc.toWX(_("Dictionary \"%s\" loaded") \
+                                    % dictInstance.getName()))
 
       self.entry.SetFocus()
 
@@ -1111,12 +1103,6 @@ class MainWindow(wxFrame):
          systemLog(ERROR, "Unable to select encoding menu item: %s" % e)
 
       wxEndBusyCursor()
-
-      #if bool(self.app.config.get('scan-clipboard')):
-      #   print 'starting scan'
-      #   self.timerClipboard.Start(self.scanTimeout)
-      #else:
-      #   print 'not starting scan'
       
 
    def loadPlugin(self, name):

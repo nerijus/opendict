@@ -29,6 +29,7 @@ from lib import info
 from lib import meta
 from lib import util
 from lib import xmltools
+from lib import util
 from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
@@ -292,10 +293,11 @@ def _loadPlainDictionary(directory):
     except Exception, e:
         traceback.print_exc()
 
+    util.correctDictName(dictionary)
     return dictionary
 
 
-def loadPlainDictionaries():
+def loadPlainDictionaries(dictionaries):
     """Load dictionaries and return a list of dictionary objects"""
 
 
@@ -317,14 +319,15 @@ def loadPlainDictionaries():
                 dirs.append(os.path.join(localDictDir, directory))
 
 
-    dictionaries = []
+    plainDicts = []
 
     for directory in dirs:
         dictionary = _loadPlainDictionary(directory)
         if dictionary:
-            dictionaries.append(dictionary)
+            plainDicts.append(dictionary)
+            dictionaries[dictionary.getName()] = dictionary
         
-    return dictionaries
+    return plainDicts
 
 
 

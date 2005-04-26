@@ -129,12 +129,14 @@ class OpenDictApp(wx.App):
       
       
       # Load new-style plugins
-      for plugin in newplugin.loadDictionaryPlugins(self.invalidDictionaries):
-         self.dictionaries[plugin.getName()] = plugin
+      # Set unique ids
+      for plugin in newplugin.loadDictionaryPlugins(self.dictionaries,
+                                                    self.invalidDictionaries):
+         #self.dictionaries[plugin.getName()] = plugin
          self.config.ids[wx.NewId()] = plugin.getName()
 
-      for plain in plaindict.loadPlainDictionaries():
-         self.dictionaries[plain.getName()] = plain
+      for plain in plaindict.loadPlainDictionaries(self.dictionaries):
+         #self.dictionaries[plain.getName()] = plain
          self.config.ids[wx.NewId()] = plain.getName()
 
 

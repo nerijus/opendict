@@ -317,3 +317,27 @@ class AgreementsManager:
         for path in self.dictPaths:
             print >> fd, path
         fd.close()
+
+
+
+def correctDictName(dictInstance):
+    """Set name to 'Name (X)', where X is Xth occurance of the name"""
+
+    def _nameMatches(name, nameList):
+        matches = 0
+        for n in nameList:
+            try:
+                if n.startswith(name):
+                    matches += 1
+            except Exception, e:
+                print "WARNING:", e
+        return matches
+
+    import wx
+    dictionaries = wx.GetApp().dictionaries # Sucks!
+
+    matches = _nameMatches(dictInstance.getName(), dictionaries.keys())
+
+    if matches:
+        dictInstance.setName("%s (%d)" % (dictInstance.getName(), matches+1))
+

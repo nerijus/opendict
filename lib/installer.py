@@ -78,7 +78,7 @@ class Installer:
 
         if not extention.lower() in extMapping.keys():
             title = _("Recognition Error")
-            msg = _("File %s is not supported by OpenDict" % fileName)
+            msg = _("File %s is not supported by OpenDict") % fileName
             errorwin.showErrorMessage(title, msg)
             return
         else:
@@ -104,9 +104,8 @@ class Installer:
                         succeeded = True
                         
                 except Exception, e:
-                    traceback.print_exc()
                     errorwin.showErrorMessage(_("Installation failed"),
-                                              enc.toWX(str(e)))
+                                              e.args[0] or '')
                     self.mainWin.SetStatusText(_("Installation failed"))
                     return
 
@@ -120,7 +119,7 @@ class Installer:
                 except Exception, e:
                     traceback.print_exc()
                     errorwin.showErrorMessage(_("Installation Error"),
-                                              enc.toWX(str(e)))
+                                              e.args[0] or '')
                     self.mainWin.SetStatusText(_("Error: Installation failed"))
                     return
         except:
@@ -223,11 +222,15 @@ def installPlugin(filePath):
 
     # Check if it is ZIP archive
     if os.path.splitext(filePath)[1].lower()[1:] != "zip":
-        raise Exception, _("%s is not OpenDict dictionary plugin" % filePath)
+        raise Exception, _("%s is not OpenDict dictionary plugin") % filePath
 
     util.makeDirectories()
 
-    zipFile = zipfile.ZipFile(filePath, 'r')
+    try:
+        zipFile = zipfile.ZipFile(filePath, 'r')
+    except Exception, e:
+        raise Exception, _("File \"%s\" is not valid ZIP file") % \
+              os.path.basename(filePath)
 
     # Test CRC
     if zipFile.testzip():
@@ -237,7 +240,7 @@ def installPlugin(filePath):
     try:
         topDirectory = zipFile.namelist()[0]
     except Exception, e:
-        raise Exception, _("Plugin file is empty (%s)" % e)
+        raise Exception, _("Plugin file is empty (%s)") % e
 
     configFileExists = False
     pluginConfigExists = False
@@ -342,12 +345,10 @@ def _installNormalPlugin(filePath):
         try:
             shutil.rmtree(os.path.join(pluginsPath, topLevelDir))
         except Exception, e:
-            #print "ERROR %s" % e
             raise _("Error while removing created directories after " \
                     "plugin installation failure. This may be " \
                     "permission or disk space error.")
 
-        #print "ERROR %s" % e
         raise _("Unable to install plugin")
 
 
@@ -369,6 +370,13 @@ def _installPlainPlugin(filePath):
 
     plainDictsPath = os.path.join(info.LOCAL_HOME,
                               info.PLAIN_DICT_DIR)
+
+    # Check if already installed
+    if os.path.exists(os.path.join(plainDictsPath,
+                                   topDirectory)):
+        raise Exception, _("This dictionary already installed. " \
+                           "If you want to upgrade it, please remove " \
+                           "old version first.")
 
     # Install
     try:
@@ -409,7 +417,6 @@ def removePlainDictionary(dictInstance):
     fileName = os.path.basename(filePath)
 
     dictDir = dictInstance.getConfigDir()
-    #dictDir = os.path.join(info.LOCAL_HOME, info.PLAIN_DICT_DIR, fileName)
 
     try:
         shutil.rmtree(dictDir)

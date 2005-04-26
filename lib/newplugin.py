@@ -32,6 +32,7 @@ import xml.dom.minidom
 from lib import info
 from lib import meta
 from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
+from lib import util
 
 
 class PluginInfo:
@@ -278,6 +279,7 @@ class DictionaryPlugin(meta.Dictionary):
         sys.path.insert(0, path)
         module =  __import__(moduleName)
         sys.path.remove(path)
+        del sys.modules[moduleName]
 
         instance = module.init(info.GLOBAL_HOME)
 
@@ -315,13 +317,14 @@ def _loadDictionaryPlugin(directory):
 
     try:
         plugin = DictionaryPlugin(directory)
+        util.correctDictName(plugin)
     except InvalidPluginException, e:
         systemLog(ERROR, "Unable to load plugin from %s (%s)" % (directory, e))
 
     return plugin
 
 
-def loadDictionaryPlugins(invalidDictionaries):
+def loadDictionaryPlugins(dictionaries, invalidDictionaries):
     """Load plugins. Returns list of PluginHandler objects"""
 
     pluginDirs = []
@@ -347,9 +350,17 @@ def loadDictionaryPlugins(invalidDictionaries):
     plugins = []
 
     for dirName in pluginDirs:
+        #print dirName,
         plugin = _loadDictionaryPlugin(dirName)
+        #print plugin
         if plugin:
+            #nameList = _pluginNames(plugins)
+            #if plugin.getName() in nameList:
+            #    plugin.setName("%s (%d)" % (plugin.getName(),
+            #                                _nameMatches(plugin.getName(),
+            #                                             nameList)))
             plugins.append(plugin)
+            dictionaries[plugin.getName()] = plugin
         else:
             invalidDictionaries.append(dirName)
 

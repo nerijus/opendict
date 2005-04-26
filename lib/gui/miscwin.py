@@ -21,9 +21,12 @@
 from wxPython.wx import *
 from wxPython.html import *
 import wx
+import shutil
+import traceback
 
 from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 from lib import enc
+from lib.gui import errorwin
 
 _ = wxGetTranslation
 
@@ -80,3 +83,74 @@ def showLicenceAgreement(parentWindow, licenceText):
 
     return False
 
+
+
+class InvalidDictWindow(wxDialog):
+
+   def __init__(self, parent, id, title, dicts, pos=wxDefaultPosition,
+                size=wxDefaultSize, style=wxDEFAULT_DIALOG_STYLE):
+      wxDialog.__init__(self, parent, id, title, pos, size, style)
+
+      self.dicts = {}
+      self.buttons = {}
+
+      vbox = wx.BoxSizer(wx.VERTICAL)
+      vboxButtons = wx.BoxSizer(wx.HORIZONTAL)
+      vboxDicts = wx.BoxSizer(wx.VERTICAL)
+
+      grid = wxFlexGridSizer(2, 2, 5, 5)
+
+      msg =  _("You have directories that containt invalid dictionaries " \
+               "and cannot be loaded. \nYou can try to remove these " \
+               "directories right now.")
+
+      vbox.Add(wx.StaticText(self, -1, msg),
+               0, wxALL, 5)
+
+      row = 0
+      for d in dicts:
+         grid.Add(wxStaticText(self, -1, d),
+                  0, wxALIGN_CENTER_VERTICAL)
+         rid = wx.NewId()
+         self.dicts[rid] = d
+         b = wx.Button(self, rid, _("Remove"))
+         self.buttons[rid] = b
+         grid.Add(b, 1, wxALIGN_CENTER_VERTICAL)
+         EVT_BUTTON(self, rid, self.onRemove)
+         #print d
+
+      vbox.Add(grid, 0, wxALL, 10)
+      vbox.Add(wx.StaticLine(self, -1), 1, wxALL | wxEXPAND, 1)
+
+      self.buttonClose = wxButton(self, wx.ID_CANCEL, _("Close"))
+      vboxButtons.Add(self.buttonClose, 0, wxALL, 5)
+
+      vbox.Add(vboxButtons, 0, wxALL | wxALIGN_RIGHT, 5)
+      self.SetSizer(vbox)
+
+      self.Fit()
+
+
+   def onRemove(self, event):
+
+      path = self.dicts[event.GetId()]
+
+      try:
+         shutil.rmtree(path)
+         self.buttons[event.GetId()].Disable()
+      except Exception, e:
+         traceback.print_exc()
+         title = _("Unable to remove")
+         msg = _("Unable to remove directory \"%s\": %s") % (path, e)
+         errorwin.showErrorMessage(title, msg)
+
+
+
+def showInvalidDicts(parentWin, invalidDicts):
+    """Show licence agreement window"""
+
+    dialog = InvalidDictWindow(None, -1,  _("Invalid Dictionaries"),
+                               invalidDicts)
+    result = dialog.ShowModal()
+    dialog.Destroy()
+    
