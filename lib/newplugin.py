@@ -276,10 +276,13 @@ class DictionaryPlugin(meta.Dictionary):
         moduleName = os.path.splitext(self.info.module.get('name'))[0]
         fullPath = os.path.join(path, moduleName)
 
+        try:
+           del sys.modules[moduleName]
+        except:
+           pass
         sys.path.insert(0, path)
         module =  __import__(moduleName)
         sys.path.remove(path)
-        del sys.modules[moduleName]
 
         instance = module.init(info.GLOBAL_HOME)
 
