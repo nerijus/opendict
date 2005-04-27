@@ -25,12 +25,15 @@ import traceback
 import string
 import time
 
-try:
-    import wxversion
-    wxversion.select('2.5')
-except Exception, e:
-    print "You seem to have wxPython 2.4: %s" \
-          % e
+# If application is not frozen to binary, try selecting wxPython 2.5
+# on multiversioned wxPython installation.
+if not hasattr(sys, 'frozen'):
+    try:
+        import wxversion
+        wxversion.select('2.5')
+    except Exception, e:
+        print "You seem to have wxPython 2.4: %s" \
+              % e
 
 try:
     import wx
