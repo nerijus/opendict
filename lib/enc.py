@@ -29,7 +29,6 @@ if wx.USE_UNICODE:
 else:
     import locale
     localeCharset = locale.getpreferredencoding()
-    print localeCharset
     
     def toWX(s):
         return s.encode(localeCharset, 'replace')

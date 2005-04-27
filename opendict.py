@@ -26,6 +26,13 @@ import string
 import time
 
 try:
+    import wxversion
+    wxversion.select('2.5')
+except Exception, e:
+    print "You seem to have wxPython 2.4: %s" \
+          % e
+
+try:
     import wx
     import wxPython
 except ImportError:
@@ -49,7 +56,6 @@ except ImportError:
 # Initial path
 #
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
-
 
 # OpenDict Modules
 from lib import info
@@ -84,20 +90,21 @@ class OpenDictApp(wx.App):
               pass
 
       if wxVersion.split('.') < ['2', '5']:
-         from lib.gui import errorwin
-
-         # Go away, wxPython 2.4!
-         title = _("wxPython Version Error")
-         msg = _("wxPython %s is installed on this system.\n\n" \
+          from lib.gui import errorwin
+          
+          # Go away, wxPython 2.4!
+          title = _("wxPython Version Error")
+          msg = _("wxPython %s is installed on this system.\n\n" \
                  "OpenDict %s requires wxPython 2.5 to run smoothly. " \
-                 "wxPython 2.4\n" \
-                 "is not supported anymore because of huge number of " \
-                 "bugs.\n\n" \
-                 "Please get wxPython 2.5 from " \
-                 "http://www.wxpython.org/download.php" \
-                 % (wxVersion, info.VERSION))
-         errorwin.showErrorMessage(title, msg)
-         return False
+                  "wxPython 2.4\n" \
+                  "is not supported anymore because of huge number of " \
+                  "bugs.\n\n" \
+                  "Please get wxPython 2.5 from " \
+                  "http://www.wxpython.org/download.php" \
+                  % (wxVersion, info.VERSION))
+          errorwin.showErrorMessage(title, msg)
+          return False
+
       
       util.makeDirectories()
       
@@ -128,15 +135,12 @@ class OpenDictApp(wx.App):
       
       
       
-      # Load new-style plugins
       # Set unique ids
       for plugin in newplugin.loadDictionaryPlugins(self.dictionaries,
                                                     self.invalidDictionaries):
-         #self.dictionaries[plugin.getName()] = plugin
          self.config.ids[wx.NewId()] = plugin.getName()
 
       for plain in plaindict.loadPlainDictionaries(self.dictionaries):
-         #self.dictionaries[plain.getName()] = plain
          self.config.ids[wx.NewId()] = plain.getName()
 
 
@@ -150,15 +154,11 @@ class OpenDictApp(wx.App):
                                windowSize,
                                style=wx.DEFAULT_FRAME_STYLE)
       
-      # FIXME: Avoid this
-      self.config.window = self.window
-
       try:
           systemLog(INFO, "OpenDict %s" % info.VERSION)
           systemLog(INFO, "wxPython %s" % wxVersion)
           systemLog(INFO, "Global home: %s:" % info.GLOBAL_HOME)
           systemLog(INFO, "Local home: %s" % info.LOCAL_HOME)
-
           systemLog(DEBUG, "Loaded in %f seconds" % (time.time() - _start))
       except Exception, e:
           print "Logger Error: Unable to write to log (%s)" % e
@@ -172,4 +172,3 @@ if __name__ == "__main__":
    
    openDictApp = OpenDictApp(0)
    openDictApp.MainLoop()
-
