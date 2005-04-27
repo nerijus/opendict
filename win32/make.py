@@ -13,7 +13,7 @@ list = "encodings,codecs,xml,ConfigParser,"\
 "locale,re,sgmllib,socket,stat,StringIO,threading,thread,"\
 "urllib,urllib2,urlparse,uu,warnings,webbrowser"
 
-command = "C:\\python23\\python.exe setup.py py2exe -w " \
+command = "C:\\python24\\python.exe setup.py py2exe -w " \
           "--icon ..\\pixmaps\\icon.ico -i %s " \
           "--packages encodings --force-imports encodings" % (odlist+list)
 #command = "C:\\python22\\python.exe setup.py py2exe  --icon ..\\pixmaps\\icon.ico"
