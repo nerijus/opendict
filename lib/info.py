@@ -21,6 +21,7 @@
 
 import sys
 import os
+import imp
 
 # OpenDict version
 VERSION = "0.5.8-CVS"
