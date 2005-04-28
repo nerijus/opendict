@@ -62,8 +62,20 @@ LOCAL_HOME = None
 ##    LOCAL_HOME = os.path.join(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR)
 ##    GLOBAL_HOME = "/usr/share/opendict"
 
-GLOBAL_HOME = os.path.realpath(os.path.join(os.path.dirname(\
-    os.path.realpath(__file__)), '..'))
+
+# main_is_frozen() returns True when running the exe, and False when 
+# running from a script. 
+def main_is_frozen():
+    return (hasattr(sys, "frozen") or # new py2exe 
+            hasattr(sys, "importers") # old py2exe 
+            or imp.is_frozen("__main__")) # tools/freeze 
+
+if main_is_frozen():
+    GLOBAL_HOME = os.path.realpath(os.path.join(os.path.dirname(\
+        os.path.realpath(__file__)), '../..'))
+else:
+    GLOBAL_HOME = os.path.realpath(os.path.join(os.path.dirname(\
+        os.path.realpath(__file__)), '..'))
 
 if sys.platform == 'win32':
    LOCAL_HOME = GLOBAL_HOME

@@ -1,11 +1,15 @@
-# setup.py
+# Copy compile.bat and setup.py to root directory and run compile.bat
+
 from distutils.core import setup
 import py2exe
 import sys
+import glob
 
-sys.path = ["C:\\Program files\\OpenDict-dev\Opendict-source\lib"] + sys.path
-#sys.argv[1] = "py2exe"
-
-setup(name="opendict",
-      scripts=["../opendict.py"],
+setup(
+      name="opendict",
+      version="0.5.8",
+      zipfile=None,
+      package_dir = {"": "lib"},
+      windows=["opendict.py"],
+      data_files=[("pixmaps", glob.glob("pixmaps/\\*.png"))],
 )

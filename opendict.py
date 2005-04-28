@@ -21,16 +21,24 @@
 
 import sys
 import os
+import imp
 import traceback
 import string
 import time
 
-# If application is not frozen to binary, try selecting wxPython 2.5
+# main_is_frozen() returns True when running the exe, and False when
+# running from a script.
+def main_is_frozen():
+    return (hasattr(sys, "frozen") or # new py2exe
+	    hasattr(sys, "importers") # old py2exe
+	    or imp.is_frozen("__main__")) # tools/freeze
+
+# If application is not frozen to binary, try selecting wxPython 2.6 or 2.5
 # on multiversioned wxPython installation.
-if not hasattr(sys, 'frozen'):
+if not main_is_frozen():
     try:
         import wxversion
-        wxversion.select('2.5')
+        wxversion.select(["2.5", "2.6"])
     except Exception, e:
         print "You seem to have wxPython 2.4: %s" \
               % e
@@ -55,10 +63,18 @@ except ImportError:
     print >> sys.stderr, "**"
     sys.exit(1)
 
+# get_main_dir() returns the directory name of the script or the
+# directory name of the exe
+def get_main_dir():
+    if main_is_frozen():
+	return os.path.dirname(sys.executable)
+    return os.path.dirname(os.path.realpath(__file__))
+    # or return os.path.dirname(sys.argv[0])
+
 #
 # Initial path
 #
-sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+sys.path.insert(0, get_main_dir())
 
 # OpenDict Modules
 from lib import info
