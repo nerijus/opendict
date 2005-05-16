@@ -555,7 +555,6 @@ class MainWindow(wxFrame):
       """Search timer. When finished, sets search results"""
       
       if self.search != None and self.search.isDone():
-         wxEndBusyCursor()
          self.timerSearch.Stop()
          self.search.stop()
 
@@ -731,6 +730,9 @@ class MainWindow(wxFrame):
 
          errorwin.showErrorMessage(title, msg)
          return
+
+      if self.search and not self.search.isDone():
+          self.onStop(None)
 
       word = self.entry.GetValue()
 
@@ -1306,6 +1308,9 @@ class MainWindow(wxFrame):
 
    def onWordSelected(self, event):
       """Is called when word list item is selected"""
+
+      if self.search and not self.search.isDone():
+          return
 
       self.__searchedBySelecting = 1
       self.SetStatusText(_("Searching..."))

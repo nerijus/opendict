@@ -319,9 +319,13 @@ class AgreementsManager:
         fd.close()
 
 
-
+#
+# FIXME: doesn't work correctly
+#
 def correctDictName(dictInstance):
     """Set name to 'Name (X)', where X is Xth occurance of the name"""
+
+    return
 
     def _nameMatches(name, nameList):
         matches = 0

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-04-27 00:19+EEST\n"
+"POT-Creation-Date: 2005-05-08 17:40+EEST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -253,8 +253,8 @@ msgid "Open dictionary file"
 msgstr ""
 
 #: ../lib/gui/dicteditorwin.py:378 ../lib/gui/errorwin.py:82
-#: ../lib/gui/helpwin.py:68 ../lib/gui/helpwin.py:133
-#: ../lib/gui/helpwin.py:191 ../lib/gui/miscwin.py:65
+#: ../lib/gui/helpwin.py:68 ../lib/gui/helpwin.py:134
+#: ../lib/gui/helpwin.py:192 ../lib/gui/miscwin.py:65
 #: ../lib/gui/miscwin.py:125 ../lib/gui/pluginwin.py:91
 #: ../lib/gui/registerwin.py:87
 msgid "Close"
@@ -321,15 +321,15 @@ msgstr ""
 msgid "Translated By"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:129
+#: ../lib/gui/helpwin.py:130
 msgid "Thanks To"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:166
+#: ../lib/gui/helpwin.py:167
 msgid "OpenDict is multiplatform dictionary."
 msgstr ""
 
-#: ../lib/gui/helpwin.py:188
+#: ../lib/gui/helpwin.py:189
 msgid "Credits"
 msgstr ""
 
@@ -992,7 +992,7 @@ msgstr ""
 msgid "Downloading... %d%%"
 msgstr ""
 
-#: ../opendict.py:90
+#: ../opendict.py:115
 msgid "wxPython Version Error"
 msgstr ""
 

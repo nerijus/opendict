@@ -172,6 +172,12 @@ class DictionaryPlugin(meta.Dictionary):
         return self.info.name
 
 
+    def setName(self, newName):
+        """Set plugin name"""
+
+        self.info.name = newName
+
+
     def getPath(self):
         """Return plugin location"""
 
