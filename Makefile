@@ -9,11 +9,9 @@ opendictdir = $(datadir)/opendict
 install:
 	mkdir -p $(DESTDIR)$(opendictdir)
 	cp -r lib/ $(DESTDIR)$(opendictdir)
-	chmod ugo+rx $(DESTDIR)$(opendictdir)/lib
-	chmod ugo+rx $(DESTDIR)$(opendictdir)/lib/*
+	chmod -R ugo+rX $(DESTDIR)$(opendictdir)/lib
 	cp -r pixmaps/ $(DESTDIR)$(opendictdir)	
-	chmod ugo+rx $(DESTDIR)$(opendictdir)/pixmaps
-	chmod ugo+rx $(DESTDIR)$(opendictdir)/pixmaps/*
+	chmod -R ugo+rX $(DESTDIR)$(opendictdir)/pixmaps
 
 	$(MAKE) -C po install prefix=$(DESTDIR)
 
@@ -27,9 +25,7 @@ install:
 	chmod ugo+r $(DESTDIR)$(datadir)/applications/opendict.desktop
 
 uninstall:
-	rm -rf $(DESTDIR)$(opendictdir)/*.*
-	rm -rf $(DESTDIR)$(opendictdir)/lib/
-	rm -rf $(DESTDIR)$(opendictdir)/pixmaps/
+	rm -rf $(DESTDIR)$(opendictdir)
 	rm -f $(DESTDIR)$(bindir)/opendict
 
 	$(MAKE) -C po uninstall prefix=$(DESTDIR)
