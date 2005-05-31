@@ -38,7 +38,7 @@ def main_is_frozen():
 if not main_is_frozen():
     try:
         import wxversion
-        wxversion.select(["2.5", "2.6"])
+        wxversion.select(["2.5", "2.6-unicode"])
     except Exception, e:
         print "You seem to have wxPython 2.4: %s" \
               % e
