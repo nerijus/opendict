@@ -32,7 +32,7 @@ def init(libraryPath):
     method returns plugin instance."""
 
     sys.path.insert(0, libraryPath)
-
+    
     return SampleDictionary()
 
 
@@ -42,7 +42,7 @@ class SampleDictionary:
     def __init__(self):
         """Import and save needed modules"""
 
-        import errortype, meta
+        from lib import errortype, meta
 
         self.errorModule = errortype
         self.metaModule = meta
