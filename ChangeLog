@@ -1,18 +1,1790 @@
-                              OpenDict ChangeLog
-			      ==================
+2005-04-29 03:18  nerijus
 
-0.5.7
------
-o Dictionaries editor improved
-o Dictionaries manager improved
-o Ability to install dictionaries from the Internet added
-o Better unicode support
-o Works only using wxPython 2.5
-o Lots of bug fixes
+	* win32/setup.py: no changes
 
+2005-04-29 03:16  nerijus
 
-0.5.8
------
-o Makefile tries both pygettext and pygettext.py (for Fedora linux)
-o Small bug fixes
+	* win32/: compile.bat, setup.manifest.py: added setup script with
+	  manifest
+
+2005-04-29 02:27  nerijus
+
+	* win32/compile.bat: copy license file manually
+
+2005-04-29 02:09  nerijus
+
+	* win32/compile.bat: encodings work with py2exe
+
+2005-04-28 06:03  nerijus
+
+	* lib/info.py: py2exe now works
+
+2005-04-28 05:58  nerijus
+
+	* opendict.py, lib/info.py, win32/compile.bat, win32/setup.py:
+	  py2exe now works
+
+2005-04-27 18:56  mjoc
+
+	* opendict.py: wxPython 2.5 is selected only if application is not
+	  frozen (i.e. compiled using py2exe)
+
+2005-04-27 18:46  mjoc
+
+	* opendict.py, lib/enc.py: OpenDict now supports wxPython
+	  multiversioning. If both wxPython 2.4 and 2.5 are installed on
+	  the same system, version 2.5 is used.
+
+2005-04-27 15:54  nerijus
+
+	* win32/make.py: use python24
+
+2005-04-27 01:02  mjoc
+
+	* lib/gui/helpwin.py: One more developer Nerijus Baliunas added to
+	  "Thanks" window.
+
+2005-04-27 00:43  mjoc
+
+	* lib/newplugin.py: Some plugins were not working because of
+	  deleted sys.modules item after loading plugin. Now just old item
+	  is deleted _before_ loding it.
+
+2005-04-27 00:25  mjoc
+
+	* lib/config.py, lib/info.py, po/opendict.pot: Version changed to
+	  0.5.8-CVS, default window size smaller (370x550)
+
+2005-04-27 00:08  mjoc
+
+	* opendict.py, lib/installer.py, lib/newplugin.py,
+	  lib/plaindict.py, lib/util.py, lib/gui/mainwin.py,
+	  lib/gui/miscwin.py, po/lt.po, po/opendict.pot: InvalidDictWindow
+	  improved: one can remove invalid directories by pressing Remove
+	  button. Small bug fixes.
+
+2005-04-26 19:13  mjoc
+
+	* ChangeLog: ChangeLog added.
+
+2005-04-26 19:10  mjoc
+
+	* opendict.py, lib/installer.py, lib/xmltools.py,
+	  lib/gui/prefswin.py, po/Makefile, po/lt.po, po/opendict.pot: 1.
+	  Default dictionary value encoding fixed.  2. wxPython version is
+	  checked using wx module and wxPython on failure.
+
+2005-04-24 14:21  mjoc
+
+	* README.txt: New information for Windows users added.
+
+2005-04-23 21:17  mjoc
+
+	* opendict.py, lib/tests/test_editor.py, lib/tests/test_plugin.py,
+	  po/opendict.pot: Removed code using "from wxPython import *"
+	  imported objects.
+
+2005-04-23 21:02  mjoc
+
+	* win32/compile.bat: Windows batch file for simplifying py2exe
+	  process added.
+
+2005-04-22 00:45  mjoc
+
+	* lib/gui/mainwin.py, po/lt.po, po/opendict.pot: LT translation
+	  updated, small changes.
+
+2005-04-22 00:37  mjoc
+
+	* lib/gui/dicteditorwin.py, po/lt.po, po/opendict.pot: Lithuanian
+	  translation updated.
+
+2005-04-21 22:49  mjoc
+
+	* opendict.py, lib/gui/mainwin.py, lib/gui/pluginwin.py: 1. After
+	  dict installation Install button is disabled.  2. wxPython
+	  version is written to log when starting 3. Dict manager clears
+	  info about dict after removing it
+
+2005-04-17 01:59  mjoc
+
+	* README.txt, TODO.txt: README and TODO updated.
+
+2005-04-17 01:55  mjoc
+
+	* lib/errortype.py, lib/util.py, lib/gui/mainwin.py, po/lt.po,
+	  po/opendict.pot: Additional translating strings updated.
+
+2005-04-17 01:36  mjoc
+
+	* lib/errortype.py, lib/util.py, lib/gui/pluginwin.py, po/lt.po,
+	  po/opendict.pot: Lithuanian translation updated. Few bus fixed.
+
+2005-04-17 00:50  mjoc
+
+	* lib/gui/dictconnwin.py: Grammar mistake fixed: Connectio
+
+2005-04-16 23:16  mjoc
+
+	* po/: lt.po, opendict.pot: Translation updated.
+
+2005-04-11 13:12  mjoc
+
+	* lib/gui/mainwin.py, po/opendict.pot: Trailing '\r' removed from
+	  mainwin.py, opendict.pot updated.
+
+2005-04-10 11:30  mjoc
+
+	* po/unix_proceed.sh: Removed.
+
+2005-04-10 11:08  mjoc
+
+	* po/: messages.pot, opendict.pot, lt/opendict.mo: po/lt/ directory
+	  removed, message.pot removed, opendict.pot added.
+
+2005-04-10 11:03  mjoc
+
+	* po/: Makefile, lt.po: opendict.po not removed.
+
+2005-04-09 23:48  mjoc
+
+	* opendict.py, lib/info.py, lib/logger.py, lib/util.py: Needed
+	  directories are created before proceeding with app load.
+
+2005-04-02 19:54  mjoc
+
+	* opendict.py: Import error bug fix for showing error message about
+	  old wxPython version.
+
+2005-04-02 00:25  mjoc
+
+	* lib/util.py: AgreementManager removes non existent directories.
+
+2005-04-01 20:49  mjoc
+
+	* lib/: config.py, gui/mainwin.py, gui/pluginwin.py,
+	  gui/prefswin.py: URL for dictionaries list file is taken from
+	  configuration file now. Small improvements of output messages.
+
+2005-03-31 22:14  mjoc
+
+	* lib/gui/mainwin.py: MainWindow.loadDictionary(): returns if
+	  dictInstance is None.
+
+2005-03-31 20:49  mjoc
+
+	* lib/gui/mainwin.py: Error message about invalid dictinaries
+	  enhanced.
+
+2005-03-29 19:56  mjoc
+
+	* opendict.py, lib/gui/mainwin.py: Very small bug fix in grammar
+	  (message about invalid dictionaries).
+
+2005-03-28 00:29  mjoc
+
+	* lib/gui/: dicteditorwin.py, mainwin.py: "Save As" button added to
+	  DictEditor.
+
+2005-03-27 23:38  mjoc
+
+	* Makefile: New Makefile style.
+
+2005-03-27 23:36  mjoc
+
+	* po/: Makefile, lt.po: Makefile for translation files added.
+
+2005-03-27 23:28  mjoc
+
+	* lib/: installer.py, gui/mainwin.py: Error message is shown when
+	  word fails to be encoded in dictionary's own encoding.
+
+2005-03-27 16:51  mjoc
+
+	* lib/gui/pluginwin.py: Dictionaries are sorted by name in both
+	  views.
+
+2005-03-27 16:41  mjoc
+
+	* lib/gui/mainwin.py: Menu item form scanning clipboard renamed to
+	  "Take ..."
+
+2005-03-27 16:33  mjoc
+
+	* lib/gui/prefswin.py: Dictionary list is sorted in
+	  PreferencesWindow.
+
+2005-03-27 15:58  mjoc
+
+	* lib/gui/mainwin.py: Font size is increased using Ctrl-= instead
+	  of Ctrl-+.
+
+2005-03-27 15:25  mjoc
+
+	* lib/: config.py, gui/prefswin.py: Removed groups and registers
+	  setting from configuration as it is outdated and not used
+	  anymore.
+
+2005-03-27 15:13  mjoc
+
+	* lib/gui/mainwin.py: Tooltips added from text entry and lookup
+	  button.
+
+2005-03-27 14:50  mjoc
+
+	* lib/gui/: helpwin.py, mainwin.py: Minimal window width is a bit
+	  smaller (320 pixels), "Lookup Up" menu item bug fixed,
+	  LicenceWindow widget arrangement improved.
+
+2005-03-27 14:17  mjoc
+
+	* lib/gui/mainwin.py: MainWindow can be resized to even more
+	  smaller window, "Search" button renamed to "Lookup Up" button.
+	  "Not Found" message is shown even if plugin does not return error
+	  code.
+
+2005-03-27 04:00  mjoc
+
+	* lib/gui/helpwin.py: Thanks page added to CreditsWindow.
+
+2005-03-27 02:39  mjoc
+
+	* lib/: xmltools.py, gui/helpwin.py: 1. Buttons made smaller in
+	  AboutWindow.	2. Index is written in binary mode.
+
+2005-03-27 02:33  mjoc
+
+	* lib/gui/: mainwin.py, pluginwin.py: Clipboard scan feature added.
+
+2005-03-26 23:47  mjoc
+
+	* pixmaps/icon-32x32.png: 32x32 size icon added, for Windows
+	  platform.
+
+2005-03-26 21:52  mjoc
+
+	* scripts/make-addons-list.py: [no log message]
+
+2005-03-26 21:29  mjoc
+
+	* scripts/make-addons-list.py: Bug fix, didn't fetched description
+	  from plugins.
+
+2005-03-26 21:06  mjoc
+
+	* opendict.py, lib/newplugin.py, lib/gui/dicteditorwin.py,
+	  lib/gui/mainwin.py, lib/gui/pluginwin.py: 1. Error dialog added
+	  to notify about failed dictionaries 2. Wildcard bug fixed for
+	  DictEditor
+
+2005-03-26 20:37  mjoc
+
+	* lib/: util.py, gui/helpwin.py, gui/mainwin.py, gui/pluginwin.py:
+	  1. Font style fixed for AboutWindow, didn't work on Windows
+	  platform.  2. Plugin ZIP files are opened in binary mode, didn't
+	  work on Windows too.
+
+2005-03-26 20:31  mjoc
+
+	* lib/gui/mainwin.py: After selecting a word busy cursor is
+	  started.
+
+2005-03-26 20:27  mjoc
+
+	* pixmaps/hide.png: Forgotten to upload in the past.
+
+2005-03-26 18:33  mjoc
+
+	* opendict.py, lib/config.py, lib/dicttype.py, lib/encodings.py,
+	  lib/group.py, lib/installer.py, lib/logger.py, lib/meta.py,
+	  lib/mywords.py, lib/newplugin.py, lib/parser.py,
+	  lib/plaindict.py, lib/util.py, lib/xmltools.py,
+	  lib/gui/dictaddwin.py, lib/gui/dictconnwin.py,
+	  lib/gui/dicteditorwin.py, lib/gui/errorwin.py,
+	  lib/gui/groupswin.py, lib/gui/helpwin.py, lib/gui/mainwin.py,
+	  lib/gui/miscwin.py, lib/gui/mywordswin.py, lib/gui/pluginwin.py,
+	  lib/gui/prefswin.py: Now lib/ dir is imported before any module
+	  because of problems with some same named built-in modules (i.e.
+	  parser) on Windows platform.	Old files removed.
+
+2005-03-26 18:06  mjoc
+
+	* lib/__init__.py: Added, as lib dir is going to be imported
+	  itself.
+
+2005-03-26 17:08  mjoc
+
+	* lib/tests/test_editor.py: test_save changed to compare lengths.
+
+2005-03-26 17:04  mjoc
+
+	* lib/: plugin.py, register.py: Removed, not usable anymore.
+
+2005-03-26 17:02  mjoc
+
+	* opendict.py, lib/config.py, lib/info.py, lib/installer.py,
+	  lib/newplugin.py, lib/gui/helpwin.py, lib/gui/mainwin.py: 1.
+	  Global home directory is now the directory where opendict.py is
+	  located.  2. Old plugin.py and register.py are not imported
+	  anywhere.
+
+2005-03-23 00:06  mjoc
+
+	* lib/gui/pluginwin.py, scripts/make-addons-list.py: PluginWindow
+	  remembers addons variable after closing. Addons script outputs to
+	  opendict-add-ons.xml.
+
+2005-03-22 23:47  mjoc
+
+	* scripts/make-addons-list.py: Several bug fixes and improvements.
+
+2005-03-22 23:10  mjoc
+
+	* scripts/make-addons-list.py: Script for auto-generating addons
+	  list added.
+
+2005-03-22 14:37  mjoc
+
+	* TODO.txt: New TODO entry.
+
+2005-03-22 02:34  mjoc
+
+	* lib/gui/pluginwin.py: I'm not sure if this is fixed now, but
+	  sometime download progress dialog does not close. For the moment
+	  it works correctly.
+
+2005-03-22 02:15  mjoc
+
+	* lib/: util.py, gui/pluginwin.py: Status messages improved.
+
+2005-03-22 01:29  mjoc
+
+	* lib/installer.py: Custom installation support for dictionaries
+	  added. Runs install.install() if founds install.py.
+
+2005-03-21 22:58  mjoc
+
+	* TODO.txt, lib/errortype.py, lib/installer.py, lib/parser.py,
+	  lib/gui/mainwin.py: DictParser fixed, word is not encoded twice
+	  anymore.
+
+2005-03-21 21:10  mjoc
+
+	* lib/: util.py, gui/pluginwin.py: 1. "Done" is shown when
+	  DownloadManager finishes download.  2. No message is shown after
+	  cancelling file download.
+
+2005-03-21 21:05  mjoc
+
+	* lib/gui/: dicteditorwin.py, mainwin.py: Busy cursor is shown
+	  while loading dictionary in main window and opening file in
+	  editor window.
+
+2005-03-21 20:55  mjoc
+
+	* lib/gui/dictconnwin.py: Error dialog is shown if unable to
+	  connect to server.
+
+2005-03-21 20:39  mjoc
+
+	* lib/parser.py: MovaParser fixed, word is not encoded
+
+2005-03-21 11:40  mjoc
+
+	* lib/: parser.py, plaindict.py, gui/mainwin.py: Small
+	  improvements.
+
+2005-03-20 18:30  mjoc
+
+	* lib/gui/mainwin.py: Standard "Find" stock button replaced with
+	  simple "Search" button.
+
+2005-03-20 18:12  mjoc
+
+	* lib/: config.py, gui/mainwin.py: "Find" item added to "File"
+	  menu.
+
+2005-03-16 20:57  mjoc
+
+	* lib/: installer.py, gui/mainwin.py, gui/pluginwin.py: Dictionary
+	  name is added to installed list on PluginWindow after installing
+	  new dictionary from PluginWindow.
+
+2005-03-16 19:52  mjoc
+
+	* lib/: installer.py, plaindict.py, xmltools.py, gui/pluginwin.py:
+	  Description support for registers added.
+
+2005-03-16 19:09  mjoc
+
+	* Makefile, lib/installer.py, lib/newplugin.py, lib/plaindict.py,
+	  lib/xmltools.py, lib/gui/mainwin.py, lib/gui/pluginwin.py: 1.
+	  Version and authors info support to registers added.	2. Bugfixes
+	  and improvements in PluginWindow.
+
+2005-03-16 17:03  mjoc
+
+	* lib/gui/miscwin.py: Miscellaneous GUI classes.
+
+2005-03-11 22:58  mjoc
+
+	* lib/gui/: helpwin.py, prefswin.py: Very small GUI improvements.
+
+2005-03-11 21:28  mjoc
+
+	* copying.html, copying.txt, lib/gui/helpwin.py: 1. GNU GPL is
+	  shown in HTML window 2. Removed licence text version 3. Added
+	  licence HTML version
+
+2005-03-11 21:09  mjoc
+
+	* opendict.py, lib/info.py, lib/meta.py, lib/newplugin.py,
+	  lib/plaindict.py, lib/util.py, lib/xmltools.py,
+	  lib/gui/mainwin.py, lib/gui/pluginwin.py: 1. Licence agreement
+	  subsystem added for ability to add licence agreement for register
+	  or plugin.  2. File path is made to be found automatically when
+	  not defined for registered ddictionaries and plugins.
+
+2005-03-11 18:28  mjoc
+
+	* ChangeLog: Changelog file is generated from CVS logs.
+
+2005-03-11 18:16  mjoc
+
+	* lib/gui/: mainwin.py, pluginwin.py, prefswin.py: Loads default
+	  dictionary on startup. Normal font bug fixed.
+
+2005-03-07 11:25  mjoc
+
+	* ChangeLog, opendict.py, lib/installer.py, lib/newplugin.py,
+	  lib/plaindict.py, lib/util.py, lib/xmltools.py,
+	  lib/gui/dicteditorwin.py, lib/gui/helpwin.py, lib/gui/mainwin.py,
+	  lib/gui/pluginwin.py, lib/gui/prefswin.py: Lots of small changes.
+
+2005-03-04 17:31  mjoc
+
+	* ChangeLog, lib/gui/mainwin.py: Small changes.
+
+2005-03-04 17:29  mjoc
+
+	* lib/gui/: helpwin.py, mainwin.py: Close button in LicenceWindow
+	  right-aligned.
+
+2005-03-04 17:26  mjoc
+
+	* lib/gui/prefswin.py: Buttons are right-aligned in
+	  PreferencesWindow.
+
+2005-03-04 17:24  mjoc
+
+	* lib/gui/prefswin.py: "Save" button removed from
+	  PreferencesWindow.
+
+2005-03-04 17:15  mjoc
+
+	* lib/: installer.py, gui/mainwin.py, gui/pluginwin.py: "Install
+	  From File" button added to PluginManager.
+
+2005-03-04 16:59  mjoc
+
+	* TODO.txt, lib/dicttype.py, lib/meta.py, lib/parser.py,
+	  lib/plaindict.py, lib/gui/mainwin.py: New function added for
+	  writing current dictionary configuration to disk.  It is used
+	  after indexing and changing text encoding now.
+
+2005-03-04 15:47  mjoc
+
+	* lib/config.py: Window size/position are now saved by default.
+
+2005-03-04 15:46  mjoc
+
+	* lib/gui/mainwin.py: Font face/size changing fixed after damage
+	  while rewriting configuration hanfler.
+
+2005-03-04 13:32  mjoc
+
+	* lib/gui/mainwin.py: Sash position is saved only if word list is
+	  not hidden when exiting.
+
+2005-03-04 11:36  mjoc
+
+	* lib/gui/pluginwin.py: OpenDict repository opendict-addons.xml
+	  file URL changed to
+	  http://files.akl.lt/~mjoc/OpenDict/Data/opendict-addons.xml.
+	  Temporarily.
+
+2005-03-03 09:27  mjoc
+
+	* lib/: config.py, gui/mainwin.py: Small fixes.
+
+2005-03-03 09:15  mjoc
+
+	* pixmaps/stop.png: Stop PNG icon added.
+
+2005-03-03 08:52  mjoc
+
+	* lib/: config.py, gui/dictconnwin.py, gui/prefswin.py: Finished
+	  with DictConnectionWindow after reimpelenting new configuration
+	  handler.
+
+2005-03-03 01:49  mjoc
+
+	* lib/misc.py: Unsaved changes commited.
+
+2005-03-03 01:34  mjoc
+
+	* opendict.py, lib/config.py, lib/misc.py, lib/xmltools.py,
+	  lib/gui/mainwin.py, lib/gui/prefswin.py: Configuration subsystem
+	  rewritten. Now configuration is stored in XML file.
+
+2005-03-02 23:44  mjoc
+
+	* lib/gui/mainwin.py: Stop button added.
+
+2005-03-02 23:33  mjoc
+
+	* lib/gui/mainwin.py: Search history for entry field enabled.
+
+2005-03-02 23:21  mjoc
+
+	* lib/gui/helpwin.py: About window Credits section unicode problem
+	  fixed.
+
+2005-03-02 23:15  mjoc
+
+	* lib/: errortype.py, parser.py, gui/dictconnwin.py,
+	  gui/mainwin.py: 1. DictConnectionWindow fixed and improved.  2.
+	  Other small changes.
+
+2005-03-01 00:28  mjoc
+
+	* lib/gui/pluginwin.py: [no log message]
+
+2005-03-01 00:26  mjoc
+
+	* lib/: dicteditor.py, gui/dicteditorwin.py, gui/pluginwin.py:
+	  Editor window almost read for real using.
+
+2005-02-28 22:29  mjoc
+
+	* opendict.py, lib/installer.py, lib/gui/pluginwin.py: 1. Installer
+	  notificates about successful installation 2. PluginManager
+	  remembers available dictionaries list for one session
+
+2005-02-27 22:24  mjoc
+
+	* lib/gui/: dicteditorwin.py, mainwin.py, pluginwin.py: 1.
+	  PluginManager and DictEditor uses icon 2. Main window title is
+	  set using titleTemplate
+
+2005-02-27 14:59  mjoc
+
+	* lib/: dicteditor.py, gui/dicteditorwin.py, gui/mainwin.py,
+	  tests/test_editor.py: 1. New editor tests 2. Small MainWindow
+	  changes 3. EditorWindow improvements
+
+2005-02-23 23:32  mjoc
+
+	* lib/gui/dicteditorwin.py: [no log message]
+
+2005-02-23 23:32  mjoc
+
+	* TODO.txt, lib/installer.py, lib/newplugin.py: Editor window
+	  improved, some other small improvements.
+
+2005-02-22 23:18  mjoc
+
+	* lib/: dicteditor.py, gui/dicteditorwin.py, gui/mainwin.py,
+	  tests/test_editor.py, tests/test_plugin.py,
+	  tests/data/plugin.xml, tests/data/sampleplugin/plugin.xml: Editor
+	  window interface uses Editor class (not finished), tests fixed.
+
+2005-02-22 22:23  mjoc
+
+	* lib/: dicteditor.py, gui/dicteditorwin.py, gui/mainwin.py: Editor
+	  class, separate from GUI, added
+
+2005-02-22 22:21  mjoc
+
+	* lib/tests/data/sampledict.dwa: Sample dict for testing added
+
+2005-02-22 22:20  mjoc
+
+	* lib/tests/test_editor.py: Editor test added.
+
+2005-02-18 18:16  mjoc
+
+	* lib/: installer.py, plaindict.py, gui/pluginwin.py: Installer
+	  fixed to recongnize normal and plain dict plugins.
+
+2005-02-17 10:23  mjoc
+
+	* pixmaps/: icon-24x24.png, icon-48x48.png, icon-620x620.png,
+	  icon-96x96.png, SVG/icon-rune.svg: Icon color is made to be more
+	  yellow.
+
+2005-02-16 21:00  mjoc
+
+	* opendict.py, lib/info.py: Error report is shown when Python/XML
+	  module is not found.
+
+2005-02-16 14:53  mjoc
+
+	* opendict.py: If wxPython library is not installed, user-friendly
+	  message is outputed now.
+
+2005-02-15 19:51  mjoc
+
+	* lib/: errortype.py, installer.py, parser.py, plaindict.py,
+	  xmltools.py, gui/mainwin.py, gui/pluginwin.py: Plain/normal
+	  plugin installation system started.
+
+2005-02-15 18:48  mjoc
+
+	* pixmaps/: icon-24x24.png, icon-48x48.png, icon-620x620.png,
+	  icon-96x96.png: New PNGs made.
+
+2005-02-15 18:45  mjoc
+
+	* pixmaps/SVG/icon-rune.svg: Pages edges thinned.
+
+2005-02-15 18:39  mjoc
+
+	* pixmaps/SVG/icon-rune.svg: New icon with rune (sun) added.
+
+2005-02-15 11:11  mjoc
+
+	* pixmaps/SVG/icon.svg: Borders are even stronger now.
+
+2005-02-15 10:57  mjoc
+
+	* pixmaps/SVG/icon.svg: Book border made stronger.
+
+2005-02-13 01:22  mjoc
+
+	* run-opendict: run-script removed.
+
+2005-02-13 01:21  mjoc
+
+	* lib/gui/: errorwin.py, pluginwin.py: Ability to fetch add-ons
+	  list added.
+
+2005-02-13 00:13  mjoc
+
+	* opendict.py, lib/meta.py, lib/newplugin.py, lib/xmltools.py,
+	  lib/gui/pluginwin.py: * Add-ons list XML parser written * This
+	  parser integrated into pluginwin.py * Small fixes
+
+2005-02-12 22:11  mjoc
+
+	* opendict.py, lib/installer.py, lib/newplugin.py, lib/parser.py,
+	  lib/plaindict.py, lib/gui/mainwin.py, lib/gui/pluginwin.py:
+	  Logger integrated in mainwin.py, newplugin.py, plaindict.py
+
+2005-02-12 21:09  mjoc
+
+	* opendict.py: Logger integrated.
+
+2005-02-12 21:08  mjoc
+
+	* lib/logger.py: Logger functions added.
+
+2005-02-12 18:30  mjoc
+
+	* lib/: errortype.py, gui/pluginwin.py: Information about
+	  dictionaries showing fixed.
+
+2005-02-11 20:23  mjoc
+
+	* opendict.py, lib/newplugin.py, lib/gui/mainwin.py: Some bug
+	  fixes.
+
+2005-02-11 09:49  mjoc
+
+	* pixmaps/: icon-24x24.png, icon-48x48.png, icon-620x620.png,
+	  icon-96x96.png, SVG/icon.svg: Icons renewed.
+
+2005-02-08 23:25  mjoc
+
+	* lib/gui/mainwin.py: Started using wx.NewId(), not finished
+
+2005-02-08 23:13  mjoc
+
+	* misc/opendict.desktop: .desktop file updated.
+
+2005-02-08 23:10  mjoc
+
+	* opendict.py, lib/installer.py, lib/newplugin.py,
+	  lib/plaindict.py, lib/plugin.py, lib/util.py,
+	  lib/gui/dictaddwin.py, lib/gui/mainwin.py, lib/gui/pluginwin.py:
+	  Ability to remove dictionaries added (new style)
+
+2005-02-08 20:10  mjoc
+
+	* opendict.py, lib/gui/mainwin.py, lib/gui/pluginwin.py:
+	  PluginManager window changes: installed and avail splitted using
+	  notebook.
+
+2005-02-08 08:54  mjoc
+
+	* lib/gui/pluginwin.py: Small changes on Plugin Manager.
+
+2005-02-08 00:06  mjoc
+
+	* lib/gui/pluginwin.py: Plugin window improved (buttons, list
+	  width)
+
+2005-02-07 23:07  mjoc
+
+	* lib/: installer.py, misc.py, parser.py, gui/mainwin.py,
+	  gui/pluginwin.py: Plugin manager window enhanced.
+
+2005-02-06 01:47  mjoc
+
+	* lib/: dicttype.py, errortype.py, installer.py, misc.py,
+	  parser.py, plaindict.py, gui/mainwin.py, gui/pluginwin.py: 1.
+	  DictParser rewritten to be more functional 2. TMXParser disabled
+	  3. Plugin manager started rewriting
+
+2005-02-05 20:15  mjoc
+
+	* lib/: installer.py, plaindict.py, xmltools.py: XML configs are
+	  now written using PrettyPrint.
+
+2005-02-05 19:25  mjoc
+
+	* lib/parser.py: SlowoParser rewritten.
+
+2005-02-04 16:32  mjoc
+
+	* lib/parser.py: Reimplementing SlowoParser.
+
+2005-02-04 13:40  mjoc
+
+	* TODO.txt: New ideas.
+
+2005-02-04 13:33  mjoc
+
+	* TODO.txt, lib/parser.py: Minor changes.
+
+2005-02-04 13:09  mjoc
+
+	* lib/: installer.py, util.py: Needed directories are checked and
+	  created before installing dictionaries.
+
+2005-02-04 12:35  mjoc
+
+	* opendict.py, lib/gui/mainwin.py: Minor changes.
+
+2005-02-04 11:25  mjoc
+
+	* opendict.py, lib/gui/mainwin.py: wxPython 2.4 is not supported
+	  anymore.
+
+2005-02-04 02:41  mjoc
+
+	* lib/: dicttype.py, parser.py, plaindict.py, xmltools.py,
+	  gui/errorwin.py, gui/mainwin.py: Serveral changes: 1. Indexing
+	  (not finished) 2. MovaParser
+
+2005-02-03 03:00  mjoc
+
+	* opendict.py, lib/meta.py, lib/parser.py, lib/gui/mainwin.py: 1.
+	  MovaParser almost fixed 2. Related changes
+
+2005-02-03 01:10  mjoc
+
+	* opendict.py, lib/installer.py, lib/meta.py, lib/newplugin.py,
+	  lib/plaindict.py, lib/plugin.py, lib/util.py, lib/gui/mainwin.py:
+	  Dictionaries installation unified
+
+2005-02-02 23:54  mjoc
+
+	* lib/tests/test_plugin.py: ./test_plugin.py added (tests suite)
+
+2005-02-02 23:53  mjoc
+
+	* lib/tests/data/plugin.xml: ./data/plugin.xml added (tests suite)
+
+2005-02-02 23:52  mjoc
+
+	* lib/tests/data/sampleplugin/plugin.xml:
+	  ./data/sampleplugin/plugin.xml added (tests suite)
+
+2005-02-02 23:52  mjoc
+
+	* lib/tests/data/sampleplugin/sample.py:
+	  ./data/sampleplugin/sample.py added (tests suite)
+
+2005-02-02 23:49  mjoc
+
+	* lib/util.py: Utility module added.
+
+2005-02-02 23:48  mjoc
+
+	* lib/plaindict.py: Plain dictionaries management module added.
+
+2005-02-02 23:47  mjoc
+
+	* lib/newplugin.py: New-type plugins module
+
+2005-02-02 23:46  mjoc
+
+	* lib/meta.py: Metaclass module added.
+
+2005-02-02 23:44  mjoc
+
+	* lib/enc.py: Encoding module for unicode string
+
+2005-02-02 23:43  mjoc
+
+	* opendict.py, lib/dicttype.py, lib/info.py, lib/installer.py,
+	  lib/parser.py, lib/plugin.py, lib/xmltools.py,
+	  lib/gui/errorwin.py, lib/gui/mainwin.py, lib/gui/pluginwin.py: 1.
+	  Plugin and plain dictionaries load unified 2. Lots of changes
+	  everywhere
+
+2005-02-02 00:39  mjoc
+
+	* lib/: dicttype.py, info.py, installer.py, register.py,
+	  xmltools.py, gui/dicteditorwin.py, gui/errorwin.py,
+	  gui/mainwin.py, gui/pluginwin.py: XML tools
+
+2005-02-01 19:58  mjoc
+
+	* lib/: config.py, info.py, gui/helpwin.py, gui/mainwin.py:
+	  Changing home path variables.
+
+2005-02-01 02:58  mjoc
+
+	* lib/: parser.py, gui/dictconnwin.py: Some bug fixes for DICT
+	  protocol support
+
+2005-02-01 02:50  mjoc
+
+	* opendict.py, lib/config.py, lib/parser.py, lib/gui/mainwin.py,
+	  misc/opendict.desktop: Started unifying dictionary load.
+
+2005-02-01 00:58  mjoc
+
+	* pixmaps/icon-620x620.png: Large scale image
+
+2005-02-01 00:53  mjoc
+
+	* pixmaps/: icon-24x24.png, icon-48x48.png, icon-600x600.png,
+	  icon-96x96.png, SVG/icon.svg: Removed
+
+2005-02-01 00:04  mjoc
+
+	* opendict.py, lib/config.py, lib/info.py, lib/plugin.py,
+	  lib/gui/mainwin.py: 1. Unicode support imporoved 2. View menu
+	  added 3. Font size change added 4. Fonts increase/decrease
+	  functions added
+
+2005-01-31 20:04  mjoc
+
+	* lib/: encodings.py, parser.py, gui/mainwin.py: Encodings module
+	  added.
+
+2005-01-31 00:14  mjoc
+
+	* misc/opendict.desktop: Comment changed
+
+2005-01-30 14:56  mjoc
+
+	* TODO.txt, opendict.py, lib/gui/mainwin.py: Working on new
+	  dictionary engine. OpenDict is damaged at the moment!
+
+2005-01-30 14:53  mjoc
+
+	* lib/dicttype.py: Dictionary type module added
+
+2005-01-30 14:52  mjoc
+
+	* lib/: config.py, errortype.py, info.py, parser.py, plugin.py,
+	  register.py, gui/mainwin.py: Error type module added
+
+2005-01-29 01:17  mjoc
+
+	* Makefile, TODO.txt, opendict.py, lib/gui/dicteditorwin.py,
+	  lib/gui/helpwin.py, lib/gui/mainwin.py, misc/opendict.desktop: 1.
+	  Some GUI improvements (i.e. button tooltips) 2. Something about
+	  writing new TMX parser 3. Small changes
+
+2005-01-28 23:55  mjoc
+
+	* lib/gui/helpwin.py: New icon added to About window, info text
+	  changed.
+
+2005-01-28 22:12  mjoc
+
+	* pixmaps/SVG/icon.svg: SVG source for icon pixmap added.
+
+2005-01-28 21:11  mjoc
+
+	* pixmaps/: icon-600x600.png, icon.png: icon.png ->
+	  icon-600x600.png
+
+2005-01-28 17:48  mjoc
+
+	* pixmaps/: splash.png, icon-old.xpm, icon.ico, logo.xpm: Not used
+	  anymore
+
+2005-01-28 16:55  mjoc
+
+	* pixmaps/search.xpm: This image is not used anymore
+
+2005-01-28 16:53  mjoc
+
+	* pixmaps/: icon-24x24.png, icon-48x48.png, icon-96x96.png,
+	  icon.png: New icon by mjoc
+
+2005-01-28 11:54  mjoc
+
+	* pixmaps/: left.xpm, right.xpm: Removed.
+
+2005-01-28 11:53  mjoc
+
+	* pixmaps/: add.png, add.xpm: Removed
+
+2005-01-28 11:52  mjoc
+
+	* pixmaps/unhide.png: unhide.png added.
+
+2005-01-28 11:52  mjoc
+
+	* pixmaps/hide.xpm: hide.xpm replaced with hide.png.
+
+2005-01-28 11:51  mjoc
+
+	* lib/gui/mainwin.py: Main window now swaps hide/unhide pixmaps
+	  when button clicked.
+
+2005-01-28 02:54  mjoc
+
+	* scripts/install-odp.sh: Plugin manual installer added.
+
+2005-01-28 02:53  mjoc
+
+	* lib/: config.py, gui/mainwin.py: Code cleanup.
+
+2005-01-28 02:44  mjoc
+
+	* README.txt: Micro bug fix :-).
+
+2005-01-28 02:40  mjoc
+
+	* README.txt: More info added.
+
+2005-01-28 02:35  mjoc
+
+	* BUGS, Makefile, TODO.txt, misc/opendict.desktop: BUGS -> BUGS.txt
+
+2005-01-28 02:30  mjoc
+
+	* doc/Specification.txt: Specification added.
+
+2005-01-28 02:27  mjoc
+
+	* lib/: config.py, installer.py, misc.py, parser.py,
+	  gui/mainwin.py, gui/pluginwin.py, gui/prefswin.py: Small code
+	  fixes to improve unicode support somehow...
+
+2005-01-27 23:54  mjoc
+
+	* lib/gui/: mainwin.py, pluginwin.py: 1. Copy function now copies
+	  inly selected text.  2. Paste pastes text into the search entry.
+	  3. Some small changes.
+
+2005-01-27 22:52  mjoc
+
+	* lib/gui/mainwin.py: Some main window menu improvements.
+
+2005-01-25 00:13  mjoc
+
+	* TODO.txt: New bug entry added.
+
+2005-01-15 01:55  mjoc
+
+	* opendict.py, lib/info.py, lib/plugin.py: Minor changes.
+
+2005-01-15 01:54  mjoc
+
+	* lib/gui/helpwin.py: About window info message reniewed.
+
+2005-01-15 01:53  mjoc
+
+	* lib/gui/mainwin.py: 1. Startup help message added.  2. Separator
+	  added to Tools menu.	3. About window info message reniewed.
+
+2005-01-14 22:53  mjoc
+
+	* lib/gui/: dictconnwin.py, helpwin.py, mainwin.py: 1. Title
+	  changed to "<dict name> - OpenDict" 2. Copyright year 2005 added
+	  3. Some small improvements
+
+2005-01-14 22:29  mjoc
+
+	* pixmaps/right.png: Forward button image added (PNG)
+
+2005-01-14 22:29  mjoc
+
+	* pixmaps/left.png: Back button image added.
+
+2005-01-14 22:16  mjoc
+
+	* lib/gui/mainwin.py: o Search bitmap button replaced with text
+	  button o Back and Forward button XPM pixmaps replaced with PNG
+	  images o stopButton commented out
+
+2005-01-14 21:39  mjoc
+
+	* lib/gui/mainwin.py: When dictionary is closed or another
+	  dictionary is opened, text entry is not cleared (this was
+	  requested by users).
+
+2005-01-14 00:45  mjoc
+
+	* scripts/make_hash.py: File ./scripts/make_hash.py added
+
+2005-01-14 00:45  mjoc
+
+	* scripts/unzip.py: File ./scripts/unzip.py added
+
+2005-01-14 00:44  mjoc
+
+	* scripts/msgfmt.py: File ./scripts/msgfmt.py added
+
+2005-01-14 00:44  mjoc
+
+	* scripts/w2u.py: File ./scripts/w2u.py added
+
+2005-01-14 00:44  mjoc
+
+	* scripts/zip.py: File ./scripts/zip.py added
+
+2005-01-14 00:44  mjoc
+
+	* scripts/make_hash2.py: File ./scripts/make_hash2.py added
+
+2005-01-14 00:43  mjoc
+
+	* scripts/slowo2mova.py: File ./scripts/slowo2mova.py added
+
+2005-01-14 00:43  mjoc
+
+	* scripts/count_code.py: File ./scripts/count_code.py added
+
+2005-01-14 00:43  mjoc
+
+	* copying.txt: File ./copying.txt added
+
+2005-01-14 00:42  mjoc
+
+	* pixmaps/icon.png: File ./pixmaps/icon.png added
+
+2005-01-14 00:42  mjoc
+
+	* pixmaps/icon-old.xpm: File ./pixmaps/icon-old.xpm added
+
+2005-01-14 00:42  mjoc
+
+	* pixmaps/icon.ico: File ./pixmaps/icon.ico added
+
+2005-01-14 00:41  mjoc
+
+	* pixmaps/splash.png: File ./pixmaps/splash.png added
+
+2005-01-14 00:41  mjoc
+
+	* pixmaps/add.png: File ./pixmaps/add.png added
+
+2005-01-14 00:39  mjoc
+
+	* pixmaps/logo.xpm: File ./pixmaps/logo.xpm added
+
+2005-01-14 00:39  mjoc
+
+	* pixmaps/left.xpm: File ./pixmaps/left.xpm added
+
+2005-01-14 00:39  mjoc
+
+	* pixmaps/hide.xpm: File ./pixmaps/hide.xpm added
+
+2005-01-14 00:39  mjoc
+
+	* pixmaps/search.xpm: File ./pixmaps/search.xpm added
+
+2005-01-14 00:38  mjoc
+
+	* pixmaps/right.xpm: File ./pixmaps/right.xpm added
+
+2005-01-14 00:38  mjoc
+
+	* pixmaps/add.xpm: File ./pixmaps/add.xpm added
+
+2005-01-14 00:38  mjoc
+
+	* Makefile: File ./Makefile added
+
+2005-01-14 00:37  mjoc
+
+	* misc/opendict.desktop: File ./misc/opendict.desktop added
+
+2005-01-14 00:36  mjoc
+
+	* ChangeLog: File ./ChangeLog added
+
+2005-01-14 00:32  mjoc
+
+	* doc/OpenDict_plugin_dev.txt: File ./doc/OpenDict_plugin_dev.txt
+	  added
+
+2005-01-14 00:31  mjoc
+
+	* win32/make.py: File ./win32/make.py added
+
+2005-01-14 00:30  mjoc
+
+	* win32/setup.py: File ./win32/setup.py added
+
+2005-01-14 00:30  mjoc
+
+	* win32/install_script.iss: File ./win32/install_script.iss added
+
+2005-01-14 00:28  mjoc
+
+	* po/lt/opendict.mo: File ./po/lt/opendict.mo added
+
+2005-01-14 00:27  mjoc
+
+	* po/lt.po: File ./po/lt.po added
+
+2005-01-14 00:27  mjoc
+
+	* po/messages.pot: File ./po/messages.pot added
+
+2005-01-14 00:26  mjoc
+
+	* po/unix_proceed.sh: File ./po/unix_proceed.sh added
+
+2005-01-14 00:26  mjoc
+
+	* lib/info.py: File ./lib/info.py added
+
+2005-01-14 00:26  mjoc
+
+	* lib/history.py: File ./lib/history.py added
+
+2005-01-14 00:25  mjoc
+
+	* lib/gui/mainwin.py: File ./lib/gui/mainwin.py added
+
+2005-01-14 00:25  mjoc
+
+	* lib/gui/dictconnwin.py: File ./lib/gui/dictconnwin.py added
+
+2005-01-14 00:24  mjoc
+
+	* lib/gui/dictaddwin.py: File ./lib/gui/dictaddwin.py added
+
+2005-01-14 00:24  mjoc
+
+	* lib/gui/pluginwin.py: File ./lib/gui/pluginwin.py added
+
+2005-01-14 00:23  mjoc
+
+	* lib/gui/mywordswin.py: File ./lib/gui/mywordswin.py added
+
+2005-01-14 00:23  mjoc
+
+	* lib/gui/helpwin.py: File ./lib/gui/helpwin.py added
+
+2005-01-14 00:22  mjoc
+
+	* lib/gui/registerwin.py: File ./lib/gui/registerwin.py added
+
+2005-01-14 00:22  mjoc
+
+	* lib/gui/groupswin.py: File ./lib/gui/groupswin.py added
+
+2005-01-14 00:21  mjoc
+
+	* lib/gui/dicteditorwin.py: File ./lib/gui/dicteditorwin.py added
+
+2005-01-14 00:21  mjoc
+
+	* lib/gui/prefswin.py: File ./lib/gui/prefswin.py added
+
+2005-01-14 00:21  mjoc
+
+	* lib/gui/errorwin.py: File ./lib/gui/errorwin.py added
+
+2005-01-14 00:20  mjoc
+
+	* lib/gui/__init__.py: File ./lib/gui/__init__.py added
+
+2005-01-14 00:20  mjoc
+
+	* lib/register.py: File ./lib/register.py added
+
+2005-01-14 00:18  mjoc
+
+	* lib/mywords.py: File ./lib/mywords.py added
+
+2005-01-14 00:18  mjoc
+
+	* lib/installer.py: File ./lib/installer.py added
+
+2005-01-14 00:17  mjoc
+
+	* lib/extra/dictdlib.py: File ./lib/extra/dictdlib.py added
+
+2005-01-14 00:16  mjoc
+
+	* lib/extra/dictclient.py: File ./lib/extra/dictclient.py added
+
+2005-01-14 00:15  mjoc
+
+	* lib/extra/html2text.py: File ./lib/extra/html2text.py added
+
+2005-01-14 00:15  mjoc
+
+	* lib/extra/__init__.py: File ./lib/extra/__init__.py added
+
+2005-01-14 00:14  mjoc
+
+	* lib/misc.py: File ./lib/misc.py added
+
+2005-01-14 00:13  mjoc
+
+	* lib/plugin.py: File ./lib/plugin.py added
+
+2005-01-14 00:13  mjoc
+
+	* lib/threads.py: File ./lib/threads.py added
+
+2005-01-14 00:12  mjoc
+
+	* lib/group.py: File ./lib/group.py added
+
+2005-01-14 00:11  mjoc
+
+	* lib/parser.py: File ./lib/parser.py added
+
+2005-01-14 00:11  mjoc
+
+	* lib/config.py: File ./lib/config.py added
+
+2005-01-14 00:10  mjoc
+
+	* BUGS: File ./BUGS added
+
+2005-01-14 00:10  mjoc
+
+	* run-opendict: File ./run-opendict added
+
+2005-01-14 00:10  mjoc
+
+	* README.txt, TODO.txt, opendict.py: File ./opendict.py added
+
+2005-01-13 23:49  mjoc
+
+	* lib/: misc.py, register.py, extra/__init__.py,
+	  extra/dictclient.py, extra/dictdlib.py, extra/html2text.py,
+	  gui/__init__.py: Removed.
+
+2005-01-13 23:47  mjoc
+
+	* win32/install_script.iss: File install_script.iss removed.
+
+2005-01-13 23:46  mjoc
+
+	* src/plugins/WebAlkonasPlugin/README: File README removed.
+
+2005-01-13 23:45  mjoc
+
+	* src/plugins/WebAlkonasPlugin/Makefile: File Makefile removed.
+
+2005-01-13 23:44  mjoc
+
+	* src/images/clear.xpm-old2: File clear.xpm-old2 removed.
+
+2005-01-13 23:41  mjoc
+
+	* src/images/tb_search.xpm: File tb_search.xpm removed.
+
+2005-01-13 23:41  mjoc
+
+	* src/images/logo.xpm: File logo.xpm removed.
+
+2005-01-13 23:41  mjoc
+
+	* src/images/clear.xpm-old: File clear.xpm-old removed.
+
+2005-01-13 23:40  mjoc
+
+	* src/images/clear.xpm: File clear.xpm removed.
+
+2005-01-13 23:40  mjoc
+
+	* src/Makefile: File Makefile removed.
+
+2005-01-13 23:39  mjoc
+
+	* po/lt/opendict.mo: File opendict.mo removed.
+
+2005-01-13 23:38  mjoc
+
+	* po/messages.pot: File messages.pot removed.
+
+2005-01-13 23:38  mjoc
+
+	* po/lt.po: File lt.po removed.
+
+2005-01-13 23:38  mjoc
+
+	* po/lt.mo: File lt.mo removed.
+
+2005-01-13 23:37  mjoc
+
+	* pixmaps/icon.ico: File icon.ico removed.
+
+2005-01-13 23:37  mjoc
+
+	* pixmaps/icon.png: File ./icon.png removed
+
+2005-01-13 23:37  mjoc
+
+	* pixmaps/clear2.png: File ./clear2.png removed
+
+2005-01-13 23:36  mjoc
+
+	* pixmaps/clear3.png: File ./clear3.png removed
+
+2005-01-13 23:35  mjoc
+
+	* pixmaps/icon.xpm: File ./icon.xpm removed
+
+2005-01-13 23:35  mjoc
+
+	* pixmaps/stop.xpm: File ./stop.xpm removed
+
+2005-01-13 23:35  mjoc
+
+	* pixmaps/plugin.xpm: File ./plugin.xpm removed
+
+2005-01-13 23:34  mjoc
+
+	* pixmaps/clear2.xpm: File ./clear2.xpm removed
+
+2005-01-13 23:34  mjoc
+
+	* pixmaps/clear3.xpm: File ./clear3.xpm removed
+
+2005-01-13 23:34  mjoc
+
+	* pixmaps/register.xpm: File ./register.xpm removed
+
+2005-01-13 23:33  mjoc
+
+	* pixmaps/clear4.xpm: File ./clear4.xpm removed
+
+2005-01-13 23:33  mjoc
+
+	* pixmaps/.xvpics/clear2.xpm: File ./.xvpics/clear2.xpm removed
+
+2005-01-13 23:33  mjoc
+
+	* pixmaps/.xvpics/clear3.xpm: File ./.xvpics/clear3.xpm removed
+
+2005-01-13 23:33  mjoc
+
+	* pixmaps/.xvpics/clear4.xpm: File ./.xvpics/clear4.xpm removed
+
+2005-01-13 23:32  mjoc
+
+	* pixmaps/.xvpics/clear.xpm: File ./.xvpics/clear.xpm removed
+
+2005-01-13 23:32  mjoc
+
+	* pixmaps/logo.xpm: File ./logo.xpm removed
+
+2005-01-13 23:32  mjoc
+
+	* pixmaps/left.xpm: File ./left.xpm removed
+
+2005-01-13 23:31  mjoc
+
+	* pixmaps/hide.xpm: File ./hide.xpm removed
+
+2005-01-13 23:31  mjoc
+
+	* pixmaps/group.xpm: File ./group.xpm removed
+
+2005-01-13 23:30  mjoc
+
+	* pixmaps/clear.xpm: File ./clear.xpm removed
+
+2005-01-13 23:30  mjoc
+
+	* pixmaps/search.xpm: File ./search.xpm removed
+
+2005-01-13 23:30  mjoc
+
+	* pixmaps/right.xpm: File ./right.xpm removed
+
+2005-01-13 23:28  mjoc
+
+	* misc/opendict.desktop: File opendict.desktop removed.
+
+2005-01-13 23:27  mjoc
+
+	* README: File README removed.
+
+2005-01-13 23:27  mjoc
+
+	* Makefile: File Makefile removed.
+
+2005-01-13 23:24  mjoc
+
+	* ChangeLog: File ChangeLog removed.
+
+2005-01-13 23:24  mjoc
+
+	* AUTHORS: [no log message]
+
+2005-01-13 23:19  mjoc
+
+	* src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.h: File
+	  ./src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.h removed
+
+2005-01-13 23:18  mjoc
+
+	* src/Fonts.h: File ./src/Fonts.h removed
+
+2005-01-13 23:18  mjoc
+
+	* src/MovaParser.h: File ./src/MovaParser.h removed
+
+2005-01-13 23:18  mjoc
+
+	* src/DictText.h: File ./src/DictText.h removed
+
+2005-01-13 23:17  mjoc
+
+	* src/About.h: File ./src/About.h removed
+
+2005-01-13 23:17  mjoc
+
+	* src/OpenDict.h: File ./src/OpenDict.h removed
+
+2005-01-13 23:17  mjoc
+
+	* src/DictParser.h: File ./src/DictParser.h removed
+
+2005-01-13 23:16  mjoc
+
+	* src/MainWindow.h: File ./src/MainWindow.h removed
+
+2005-01-13 23:16  mjoc
+
+	* src/DictLetterList.h: File ./src/DictLetterList.h removed
+
+2005-01-13 23:16  mjoc
+
+	* src/DictWordList.h: File ./src/DictWordList.h removed
+
+2005-01-13 23:16  mjoc
+
+	* src/SlowoParser.h: File ./src/SlowoParser.h removed
+
+2005-01-13 23:12  mjoc
+
+	* src/DictWordList.cc: File ./src/DictWordList.cc removed
+
+2005-01-13 23:12  mjoc
+
+	* src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc: File
+	  ./src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc removed
+
+2005-01-13 23:12  mjoc
+
+	* src/MovaParser.cc: File ./src/MovaParser.cc removed
+
+2005-01-13 23:12  mjoc
+
+	* src/MainWindow.cc: File ./src/MainWindow.cc removed
+
+2005-01-13 23:11  mjoc
+
+	* src/DictText.cc: File ./src/DictText.cc removed
+
+2005-01-13 23:11  mjoc
+
+	* src/About.cc: File ./src/About.cc removed
+
+2005-01-13 23:11  mjoc
+
+	* src/OpenDict.cc: File ./src/OpenDict.cc removed
+
+2005-01-13 23:11  mjoc
+
+	* src/DictParser.cc: File ./src/DictParser.cc removed
+
+2005-01-13 23:10  mjoc
+
+	* src/SlowoParser.cc: File ./src/SlowoParser.cc removed
+
+2005-01-13 23:09  mjoc
+
+	* src/DictLetterList.cc: File ./src/DictLetterList.cc removed
+
+2005-01-13 23:09  mjoc
+
+	* copying.txt: File ./copying.txt removed
+
+2005-01-13 23:08  mjoc
+
+	* config.txt: File ./config.txt removed
+
+2005-01-13 23:08  mjoc
+
+	* COPY_TEMP.txt: File ./COPY_TEMP.txt removed
+
+2005-01-13 23:08  mjoc
+
+	* src/plugins/WebAlkonasPlugin/copy.txt: File
+	  ./src/plugins/WebAlkonasPlugin/copy.txt removed
+
+2005-01-13 23:07  mjoc
+
+	* doc/OpenDict_plugin_dev.txt: File ./doc/OpenDict_plugin_dev.txt
+	  removed
+
+2005-01-13 23:07  mjoc
+
+	* po/unix_proceed.sh: File ./po/unix_proceed.sh removed
+
+2005-01-13 22:56  mjoc
+
+	* scripts/make_hash.py: File ./scripts/make_hash.py removed
+
+2005-01-13 22:55  mjoc
+
+	* scripts/unzip.py: File ./scripts/unzip.py removed
+
+2005-01-13 22:54  mjoc
+
+	* scripts/msgfmt.py: File ./scripts/msgfmt.py removed
+
+2005-01-13 22:54  mjoc
+
+	* scripts/w2u.py: File ./scripts/w2u.py removed
+
+2005-01-13 22:54  mjoc
+
+	* scripts/zip.py: File ./scripts/zip.py removed
+
+2005-01-13 22:53  mjoc
+
+	* scripts/make_hash2.py: File ./scripts/make_hash2.py removed
+
+2005-01-13 22:53  mjoc
+
+	* scripts/slowo2mova.py: File ./scripts/slowo2mova.py removed
+
+2005-01-13 22:52  mjoc
+
+	* scripts/count_code.py: File ./scripts/count_code.py removed
+
+2005-01-13 22:52  mjoc
+
+	* win32/make.py: File ./win32/make.py removed
+
+2005-01-13 22:52  mjoc
+
+	* win32/setup.py: File ./win32/setup.py removed
+
+2005-01-13 22:51  mjoc
+
+	* lib/info.py: File ./lib/info.py removed
+
+2005-01-13 22:51  mjoc
+
+	* lib/gui/mainwin.py: File ./lib/gui/mainwin.py removed
+
+2005-01-13 22:50  mjoc
+
+	* lib/gui/dictconnwin.py: File ./lib/gui/dictconnwin.py removed
+
+2005-01-13 22:50  mjoc
+
+	* lib/gui/pluginwin.py: File ./lib/gui/pluginwin.py removed
+
+2005-01-13 22:50  mjoc
+
+	* lib/gui/helpwin.py: File ./lib/gui/helpwin.py removed
+
+2005-01-13 22:49  mjoc
+
+	* lib/gui/registerwin.py: File ./lib/gui/registerwin.py removed
+
+2005-01-13 22:49  mjoc
+
+	* lib/gui/groupswin.py: File ./lib/gui/groupswin.py removed
+
+2005-01-13 22:48  mjoc
+
+	* lib/gui/dicteditorwin.py: File ./lib/gui/dicteditorwin.py removed
+
+2005-01-13 22:48  mjoc
+
+	* lib/gui/prefswin.py: File ./lib/gui/prefswin.py removed
+
+2005-01-13 22:47  mjoc
+
+	* lib/gui/errorwin.py: File ./lib/gui/errorwin.py removed
+
+2005-01-13 22:47  mjoc
+
+	* lib/: config.py, group.py, history.py, parser.py, plugin.py,
+	  threads.py: dsfs
+
+2005-01-13 22:13  mjoc
+
+	* opendict.py: File ./opendict.py removed.
+
+2005-01-13 22:12  mjoc
+
+	* TODO.txt: Removed.
+
+2005-01-13 21:29  mjoc
+
+	* TODO: [no log message]
+
+2005-01-13 20:53  mjoc
+
+	* README.txt: ./README.txt removed
+
+2003-12-21 22:35  mjoc
+
+	* Makefile, copying.txt, README.txt, TODO.txt, opendict.py,
+	  ChangeLog, config.txt, doc/OpenDict_plugin_dev.txt,
+	  lib/config.py, lib/group.py, lib/history.py, lib/info.py,
+	  lib/misc.py, lib/parser.py, lib/plugin.py, lib/register.py,
+	  lib/threads.py, lib/extra/__init__.py, lib/extra/dictclient.py,
+	  lib/extra/dictdlib.py, lib/extra/html2text.py,
+	  lib/gui/__init__.py, lib/gui/dictconnwin.py,
+	  lib/gui/dicteditorwin.py, lib/gui/errorwin.py,
+	  lib/gui/groupswin.py, lib/gui/helpwin.py, lib/gui/mainwin.py,
+	  lib/gui/pluginwin.py, lib/gui/prefswin.py,
+	  lib/gui/registerwin.py, misc/opendict.desktop, pixmaps/clear.xpm,
+	  pixmaps/group.xpm, pixmaps/hide.xpm, pixmaps/icon.ico,
+	  pixmaps/icon.png, pixmaps/icon.xpm, pixmaps/left.xpm,
+	  pixmaps/clear2.png, pixmaps/clear2.xpm, pixmaps/clear3.png,
+	  pixmaps/clear3.xpm, pixmaps/clear4.xpm, pixmaps/logo.xpm,
+	  pixmaps/plugin.xpm, pixmaps/register.xpm, pixmaps/right.xpm,
+	  pixmaps/search.xpm, pixmaps/stop.xpm, pixmaps/.xvpics/clear.xpm,
+	  pixmaps/.xvpics/clear2.xpm, pixmaps/.xvpics/clear3.xpm,
+	  pixmaps/.xvpics/clear4.xpm, po/lt.mo, po/lt.po, po/messages.pot,
+	  po/unix_proceed.sh, po/lt/opendict.mo, scripts/count_code.py,
+	  scripts/make_hash.py, scripts/make_hash2.py, scripts/msgfmt.py,
+	  scripts/slowo2mova.py, scripts/unzip.py, scripts/w2u.py,
+	  scripts/zip.py, win32/install_script.iss, win32/make.py,
+	  win32/setup.py: Initial import.
+
+2003-12-21 22:35  mjoc
+
+	* copying.txt, README.txt, TODO.txt, opendict.py, config.txt,
+	  doc/OpenDict_plugin_dev.txt, lib/config.py, lib/group.py,
+	  lib/history.py, lib/info.py, lib/misc.py, lib/parser.py,
+	  lib/plugin.py, lib/register.py, lib/threads.py,
+	  lib/extra/__init__.py, lib/extra/dictclient.py,
+	  lib/extra/dictdlib.py, lib/extra/html2text.py,
+	  lib/gui/__init__.py, lib/gui/dictconnwin.py,
+	  lib/gui/dicteditorwin.py, lib/gui/errorwin.py,
+	  lib/gui/groupswin.py, lib/gui/helpwin.py, lib/gui/mainwin.py,
+	  lib/gui/pluginwin.py, lib/gui/prefswin.py,
+	  lib/gui/registerwin.py, misc/opendict.desktop, pixmaps/clear.xpm,
+	  pixmaps/group.xpm, pixmaps/hide.xpm, pixmaps/icon.ico,
+	  pixmaps/icon.png, pixmaps/icon.xpm, pixmaps/left.xpm,
+	  pixmaps/clear2.png, pixmaps/clear2.xpm, pixmaps/clear3.png,
+	  pixmaps/clear3.xpm, pixmaps/clear4.xpm, pixmaps/logo.xpm,
+	  pixmaps/plugin.xpm, pixmaps/register.xpm, pixmaps/right.xpm,
+	  pixmaps/search.xpm, pixmaps/stop.xpm, pixmaps/.xvpics/clear.xpm,
+	  pixmaps/.xvpics/clear2.xpm, pixmaps/.xvpics/clear3.xpm,
+	  pixmaps/.xvpics/clear4.xpm, po/lt.mo, po/lt.po, po/messages.pot,
+	  po/unix_proceed.sh, po/lt/opendict.mo, scripts/count_code.py,
+	  scripts/make_hash.py, scripts/make_hash2.py, scripts/msgfmt.py,
+	  scripts/slowo2mova.py, scripts/unzip.py, scripts/w2u.py,
+	  scripts/zip.py, win32/install_script.iss, win32/make.py,
+	  win32/setup.py: Initial revision
+
+2003-01-02 21:19  nerijus
+
+	* src/About.cc: now compiles with wxUniv/X11 also
+
+2002-12-17 04:32  nerijus
+
+	* src/: About.cc, DictLetterList.h, DictParser.h, DictText.h,
+	  DictWordList.h, Fonts.h, MainWindow.cc, MainWindow.h, Makefile,
+	  MovaParser.cc, MovaParser.h, OpenDict.cc, SlowoParser.cc,
+	  plugins/WebAlkonasPlugin/Makefile,
+	  plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc,
+	  plugins/WebAlkonasPlugin/WebAlkonasPlugin.h: now compiles in
+	  Unicode mode
+
+2002-12-17 02:49  nerijus
+
+	* Makefile, src/DictLetterList.cc, src/DictParser.h,
+	  src/DictText.cc, src/DictWordList.cc, src/MainWindow.cc,
+	  src/Makefile, src/MovaParser.cc, src/MovaParser.h,
+	  src/SlowoParser.cc, src/SlowoParser.h,
+	  src/plugins/WebAlkonasPlugin/Makefile,
+	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc,
+	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.h: updated to
+	  compile with wxWin 2.4
+
+2002-12-16 23:41  nerijus
+
+	* src/: MainWindow.cc, MainWindow.h, Makefile, OpenDict.h,
+	  plugins/WebAlkonasPlugin/Makefile: fixed linking with gcc>=2.96
+
+2002-12-11 01:47  nerijus
+
+	* AUTHORS, COPY_TEMP.txt, ChangeLog, Makefile, README, TODO,
+	  src/About.cc, src/About.h, src/DictLetterList.cc,
+	  src/DictLetterList.h, src/DictParser.cc, src/DictParser.h,
+	  src/DictText.cc, src/DictText.h, src/DictWordList.cc,
+	  src/DictWordList.h, src/MainWindow.cc, src/MainWindow.h,
+	  src/Makefile, src/OpenDict.cc, src/OpenDict.h,
+	  src/SlowoParser.cc, src/SlowoParser.h, src/Fonts.h,
+	  src/MovaParser.cc, src/MovaParser.h, src/images/clear.xpm,
+	  src/images/clear.xpm-old, src/images/clear.xpm-old2,
+	  src/images/logo.xpm, src/images/tb_search.xpm,
+	  src/plugins/WebAlkonasPlugin/Makefile,
+	  src/plugins/WebAlkonasPlugin/README,
+	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc,
+	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.h,
+	  src/plugins/WebAlkonasPlugin/copy.txt: Initial revision
+
+2002-12-11 01:47  nerijus
+
+	* AUTHORS, COPY_TEMP.txt, ChangeLog, Makefile, README, TODO,
+	  src/About.cc, src/About.h, src/DictLetterList.cc,
+	  src/DictLetterList.h, src/DictParser.cc, src/DictParser.h,
+	  src/DictText.cc, src/DictText.h, src/DictWordList.cc,
+	  src/DictWordList.h, src/MainWindow.cc, src/MainWindow.h,
+	  src/Makefile, src/OpenDict.cc, src/OpenDict.h,
+	  src/SlowoParser.cc, src/SlowoParser.h, src/Fonts.h,
+	  src/MovaParser.cc, src/MovaParser.h, src/images/clear.xpm,
+	  src/images/clear.xpm-old, src/images/clear.xpm-old2,
+	  src/images/logo.xpm, src/images/tb_search.xpm,
+	  src/plugins/WebAlkonasPlugin/Makefile,
+	  src/plugins/WebAlkonasPlugin/README,
+	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc,
+	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.h,
+	  src/plugins/WebAlkonasPlugin/copy.txt: import opendict-0.1
+	  sources to cvs
 

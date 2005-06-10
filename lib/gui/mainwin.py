@@ -558,6 +558,13 @@ class MainWindow(wxFrame):
          self.timerSearch.Stop()
          self.search.stop()
 
+         #
+         # Turn back active interface elements state
+         wxEndBusyCursor()
+         self.SetStatusText("")
+         self.entry.Enable(1)
+         self.buttonStop.Disable()
+         
          global lastLookupWord
          word = lastLookupWord
 
@@ -572,9 +579,6 @@ class MainWindow(wxFrame):
             assert result.__class__ == meta.SearchResult
          except:
             self.SetStatusText(_(errortype.INTERNAL_ERROR.getMessage()))
-            self.entry.Enable(1)
-            self.buttonStop.Disable()
-            self.entry.SetFocus()
 
             if self.activeDictionary.getType() == dicttype.PLUGIN:
                title = errortype.INTERNAL_ERROR.getMessage()
@@ -587,11 +591,6 @@ class MainWindow(wxFrame):
             errorwin.showErrorMessage(title, message)
             
             return
-
-         self.SetStatusText("")
-         self.entry.Enable(1)
-         self.buttonStop.Disable()
-         self.search = None
 
          # Check status code
          if result.getError() != errortype.OK:
@@ -606,12 +605,8 @@ class MainWindow(wxFrame):
                                          result.getError().getLongMessage())
             else:
                self.SetStatusText(result.getError().getMessage())
-               self.entry.Enable(1)
-               self.entry.SetFocus()
-               self.buttonStop.Disable()
                
             return
-
 
          #
          # If dictionary (plugin) does not use NOT_FOUND notification,
@@ -671,10 +666,8 @@ class MainWindow(wxFrame):
 
          if self.history.canBack():
             self.buttonBack.Enable(1)
-         self.buttonForward.Disable()
-         self.entry.SetFocus()
-         self.buttonStop.Disable()
-         wxEndBusyCursor()
+            
+         self.search = None
 
 
    def onTimerClipboard(self, event):

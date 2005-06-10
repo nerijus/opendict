@@ -992,7 +992,11 @@ msgstr ""
 msgid "Downloading... %d%%"
 msgstr ""
 
+<<<<<<< opendict.pot
+#: ../opendict.py:99
+=======
 #: ../opendict.py:115
+>>>>>>> 1.12
 msgid "wxPython Version Error"
 msgstr ""
 

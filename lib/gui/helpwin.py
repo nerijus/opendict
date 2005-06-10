@@ -94,6 +94,7 @@ class CreditsWindow(wxDialog):
       writePanel = wxPanel(nb, -1)
       vboxWrite = wxBoxSizer(wxVERTICAL)
       writtenString = unicode("Martynas Jocius <mjoc@akl.lt>\n" \
+                              "Nerijus Baliūnas <nerijusb@dtiltas.lt>\n" \
                               "Mantas Kriaučiūnas <mantas@akl.lt>",
                               "UTF-8")
       written = _(enc.toWX(writtenString))
@@ -120,9 +121,8 @@ class CreditsWindow(wxDialog):
       # "Thanks" panel
       thPanel = wxPanel(nb, -1)
       vboxThP = wxBoxSizer(wxVERTICAL)
-      thanksString = unicode("Kęstutis Biliūnas <kebil@kaunas.init.lt>\n" \
-                             "Nerijus Baliūnas <nerijusb@dtiltas.lt>",
-                            "UTF-8")
+      thanksString = unicode("Kęstutis Biliūnas <kebil@kaunas.init.lt>\n",
+                             "UTF-8")
       thanks = _(enc.toWX(thanksString))
       labelThP = wxStaticText(thPanel, -1, thanks)
       vboxThP.Add(labelThP, 0, wxALL, 10)

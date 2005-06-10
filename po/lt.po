@@ -1074,6 +1074,10 @@ msgstr "Ðiam þodynui nustatyta neteisinga koduotë, pasirinkite kità"
 msgid "Downloading... %d%%"
 msgstr "Parsiunèiama... %d%%"
 
+<<<<<<< lt.po
+#: ../opendict.py:99
+=======
 #: ../opendict.py:115
+>>>>>>> 1.13
 msgid "wxPython Version Error"
 msgstr "wxPython versijos klaida"
