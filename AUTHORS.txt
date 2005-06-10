@@ -1,0 +1,13 @@
+OpenDict Authors
+================
+Last updated: 2005-06-10
+
+o Martynas Jocius <mjoc@akl.lt> 
+  Maintainer and main developer
+
+o Nerijus Baliūnas <nerijusb@dtiltas.lt>
+  Developer of better MS Windows platform support
+
+o Mantas Kriaučiūnas <mantas@akl.lt>
+  Past developer
+
