@@ -11,4 +11,3 @@ in Dictionaries menu. Let it have user defined names. Make "Manage
 DICT Connections" for that.
 
 [ ] Ability to merge dictionaries in editor
-
