@@ -59,7 +59,7 @@ try:
 except ImportError:
     print >> sys.stderr, "**"
     print >> sys.stderr, "** Error: Python/XML library not found"
-    print >> sys.stderr, "** Please install python-xml to run OpenDict"
+    print >> sys.stderr, "** Please install python-xml (PyXML) to run OpenDict"
     print >> sys.stderr, "**"
     sys.exit(1)
 
