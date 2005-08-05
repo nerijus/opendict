@@ -683,7 +683,7 @@ class MainWindow(wxFrame):
             except Exception, e:
                print e
          wxTheClipboard.Close()
-         return enc.toWX(text)
+         return enc.toWX(text.strip())
       
 
       def clear():
