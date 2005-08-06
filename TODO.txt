@@ -12,7 +12,7 @@ DICT Connections" for that.
 
 [ ] Ability to merge dictionaries in editor
 
-[ ] Clipboard scanner use option in preferences
+[*] Clipboard scanner use option in preferences
 
 [ ] Suggestions when search is unsuccessfull. Idea: if search gives no
 results, drop the last letter of the world (i.e. to make prular to

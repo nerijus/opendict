@@ -1,6 +1,6 @@
 #
 # OpenDict
-# Copyright (c) 2003 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -87,16 +87,21 @@ class PrefsWindow(wxDialog):
       vboxMain.Add(grid, 0, wxALL | wxEXPAND, 4)
 
       self.winSize = wxCheckBox(self, 1101, _("Save window size on exit"))
-      self.winSize.SetValue(bool(self.app.config.get('saveWindowSize')))
+      self.winSize.SetValue(self.app.config.get('saveWindowSize') == 'True')
       vboxMain.Add(self.winSize, 0, wxALL, 3)
 
       self.winPos = wxCheckBox(self, 1102, _("Save window position on exit"))
-      self.winPos.SetValue(bool(self.app.config.get('saveWindowPos')))
+      self.winPos.SetValue(self.app.config.get('saveWindowPos') == 'True')
       vboxMain.Add(self.winPos, 0, wxALL, 3)
 
       self.sashPos = wxCheckBox(self, 1103, _("Save sash position on exit"))
-      self.sashPos.SetValue(bool(self.app.config.get('saveSashPos')))
+      self.sashPos.SetValue(self.app.config.get('saveSashPos') == 'True')
       vboxMain.Add(self.sashPos, 0, wxALL, 3)
+
+      self.clipboard = wxCheckBox(self, 1103,
+                                  _("Take words from the clipboard by default"))
+      self.clipboard.SetValue(self.app.config.get('useClipboard') == 'True')
+      vboxMain.Add(self.clipboard, 0, wxALL, 3)
 
       vboxMain.Add(wxStaticLine(self, -1), 0, wxALL | wxEXPAND, 5)
 
@@ -165,9 +170,10 @@ class PrefsWindow(wxDialog):
       self.app.config.set('dictServer', self.serverEntry.GetValue())
       self.app.config.set('dictServerPort', self.portEntry.GetValue())
 
-      self.app.config.set('saveWindowSize', self.winSize.GetValue())
-      self.app.config.set('saveWindowPos', self.winPos.GetValue())
-      self.app.config.set('saveSashPos', self.sashPos.GetValue())
+      self.app.config.set('saveWindowSize', str(self.winSize.GetValue()))
+      self.app.config.set('saveWindowPos', str(self.winPos.GetValue()))
+      self.app.config.set('saveSashPos', str(self.sashPos.GetValue()))
+      self.app.config.set('useClipboard', str(self.clipboard.GetValue()))
 
       frame = self.GetParent()
       if self.app.config.get('saveWinSize'):

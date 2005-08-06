@@ -298,9 +298,13 @@ class MainWindow(wxFrame):
       menuTools.AppendSeparator()
 
       idUseScan = wx.NewId()
-      menuTools.Append(idUseScan, _("Take Words From Clipboard"),
-                       _("Scan the clipboard for text to translate"),
-                       wx.ITEM_CHECK)
+      item = wxMenuItem(menuTools,
+                        idUseScan,
+                        _("Take Words From Clipboard"),
+                        _("Scan the clipboard for text to translate"),
+                        wx.ITEM_CHECK)
+      menuTools.AppendItem(item)
+      menuTools.Check(idUseScan, self.app.config.get('useClipboard') == 'True')
 
       menuTools.AppendSeparator()
 
@@ -537,6 +541,9 @@ class MainWindow(wxFrame):
       if self.app.invalidDictionaries:
          miscwin.showInvalidDicts(self, self.app.invalidDictionaries)
 
+      if self.app.config.get('useClipboard') == 'True':
+         self.timerClipboard.Start(self.scanTimeout)
+
 
    def onExit(self, event):
 
@@ -679,11 +686,11 @@ class MainWindow(wxFrame):
          wxTheClipboard.Open()
          if wxTheClipboard.GetData(do):
             try:
-               text = do.GetText()
+               text = do.GetText().strip()
             except Exception, e:
                print e
          wxTheClipboard.Close()
-         return enc.toWX(text.strip())
+         return enc.toWX(text)
       
 
       def clear():
