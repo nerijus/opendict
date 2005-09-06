@@ -14,13 +14,16 @@ body
 
 h1
 {
+    font-size: 26px;
     text-align: center;
+    font-weight: normal;
+    color: #2b4d85;
 }
 
 h2
 {
-    color: green;
-    border-bottom: 1px dashed green;
+    color: #2b4d85;
+    border-bottom: 1px dashed #2b4d85;
     margin: 0px;
     margin-top: 20px;
     margin-bottom: 10px;
@@ -37,7 +40,12 @@ div.footer
 
 a
 {
-    color: green;
+    color: #2b4d85;
+}
+
+a:active, a:hover
+{
+    background-color: #DDD;
 }
 
 pre.file-contents
@@ -65,9 +73,6 @@ table td, table, th
 </style>
 <body>
 <h1>OpenDict Add-Ons Development HOWTO</h1>
-
-<div style="color: red; text-align: center">TODO: this document is not 
-finished</div>
 
 <h2>Introduction</h2>
 <p>
@@ -341,16 +346,204 @@ Install Dictionary from File</i> from the menu.
 
 <h2>Simple Plugin Example</h2>
 <p>
-...
+In this section I am going to give an example of simple OpenDict
+plugin dictionary. Good example is a network dictionary plugin that
+fetches translations from the web and processed them locally.
 </p>
+
+<p>
+At first we have to create file called <i>plugin.xml</i>. The contents
+of this file may be similar to this one:
+</p>
+
+<pre class="file-contents">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;plugin type="dictionary"&gt;
+   &lt;name&gt;Network Test&lt;/name&gt;
+   &lt;version&gt;0.1&lt;/version&gt;
+   &lt;authors&gt;
+      &lt;author name="Martynas Jocius" email="mjoc@akl.lt" /&gt;
+   &lt;/authors&gt;
+   &lt;module lang="Python"&gt;mydict.py&lt;/module&gt;
+   &lt;encoding&gt;UTF-8&lt;/encoding&gt;
+   &lt;uses-word-list&gt;False&lt;/uses-word-list&gt;
+   &lt;opendict-version&gt;0.5.7&lt;/opendict-version&gt;
+   &lt;python-version&gt;2.3&lt;/python-version&gt;
+   &lt;platforms&gt;
+      &lt;platform name="Linux" /&gt;
+      &lt;platform name="BSD" /&gt;
+      &lt;platform name="Windows" /&gt;
+   &lt;/platforms&gt;
+   &lt;description&gt;
+   Example plugin dictioary. Does nothing.
+   &lt;/description&gt;
+&lt;/plugin&gt;
+</pre>
+
+<p>
+As you may already noticed, some XML tags are the same as in the
+previous <i>config.xml</i> example. There is the description of new
+tags, like <i>encoding</i>, <i>module</i>, etc.
+</p>
+
+<table>
+<tr>
+    <th>XML tag</th>
+    <th>Description</th>
+</tr>
+<tr>
+    <td>module</td>
+    <td>Main <a href="http://www.python.org">Python</a> module file name.</td>
+</tr>
+<tr>
+    <td>encoding</td>
+    <td>Character encoding of the result string that plugin module
+    returns (examples include UTF-8, ISO-8859-15, etc)</td>
+</tr>
+<tr>
+    <td>uses-word-list</td>
+    <td>This should be set to <i>True</i> if dictionary needs word
+    list to be shown, <i>False</i> otherwise. If dictionary uses word
+    list, it must return a list of alternative words in addition with
+    translation string (<i>see below for more information</i>)</td>
+</tr>
+<tr>
+    <td>opendict-version</td>
+    <td>The lowest OpenDict version plugin requires, for example
+    0.5.1, 0.5.7, etc. This is important when plugin structure is
+    different from one that old OpenDict versions provide (for example 0.5.1
+    and 0.5.7 plugin structure differs a lot)</td>
+</tr>
+<tr>
+    <td>python-version</td>
+    <td>The lowest Python version that plugin requires.</td>
+</tr>
+<tr>
+    <td>python-version</td>
+    <td>The lowest Python version that plugin requires.</td>
+</tr>
+<tr>
+    <td>platforms</td>
+    <td>Parent node for <i>platform</i> tag.</td>
+</tr>
+<tr>
+    <td>platform</td>
+    <td>This tag with attribute <i>name</i> value X means that this
+    plugin is tested and works on platform X. For example, Linux, BSD,
+    MacOS. <i>Currently not used</i></td>
+</tr>
+</table>
+
+<p>
+Now we should write the main module in Python programming
+language. Module file name is <i>mydict.py</i> as we called it in
+<i>plugin.xml</i>. The following code might be correct OpenDict plugin:
+</p>
+
+<pre class="file-contents">
+#!/usr/bin/env python
+
+#
+# MyDict 0.1
+# Copyright (c) 2005 Matynas Jocius &lt;mjoc@akl.lt&gt;
+#
+# Simple plugin dictionary for OpenDict.
+#
+# This code is licensed under the GNU GPL v2.
+#
+
+"""
+Simple OpenDict plugin module
+"""
+
+import sys
+import httplib
+import urllib
+
+
+def init(libraryPath):
+    """Return dictionary instance"""
+
+    sys.path.insert(0, libraryPath)
+
+    return MyDict()
+
+
+
+class MyDict:
+    """MyDict plugin class"""
+    
+    def __init__(self):
+        """Initialize variables"""
+
+        # This trick is needed to have accessible modules from
+        # OpenDict library
+        from lib import errortype, meta
+
+        self.errorModule = errortype
+        self.metaModule = meta
+
+        
+    def search(self, word):
+        """Search and return HTML code."""
+
+        print type(word), len(word)
+
+        result = self.metaModule.SearchResult()
+
+        try:
+            self.conn = httplib.HTTPConnection("mjoc.sig.lt")
+            self.conn.request("GET", "/index.html")
+            response = self.conn.getresponse()
+            data = response.read()
+
+            trans = "&lt;html&gt;&lt;body&gt;&lt;h3&gt;"
+
+            if word in data:
+                trans += "Word &lt;i&gt;%s&lt;/i&gt; was found on " \
+                         "http://mjoc.sig.lt/index.html" % word
+            else:
+                trans += "Word &lt;i&gt;%s&lt;/i&gt; was not found on " \
+                         "http://mjoc.sig.lt/index.html" % word
+
+            trans += "&lt;/h3&gt;&lt;/body&gt;&lt;/html&gt;"
+
+            result.setTranslation(trans)
+
+        except Exception, e:
+            import traceback
+            traceback.print_exc()
+
+            result.setError(self.errorModule.INTERNAL_ERROR)
+
+            return result
+
+        return result
+
+</pre>
+
+<p>
+<i>TODO: describe how to write the class and other details.</i>
+</p>
+
+<p>
+To make an installable plugin file in ZIP archive format, move
+<i>plugin.xml</i> and <i>mydict.py</i> into some directory
+(i.e. <i>mydict-0.1</i>) and zip that directory. After performing
+these actions your new OpenDict plugin will be ready to be installed.
+</p>
+
 
 <h2>Conclusion</h2>
 <p>
-...
+<i>TODO: This document is very short and fuzzy. It must be improved in
+the future.</i>
 </p>
 
 <div class="footer">Copyright &copy; 2005 
-<a href="mailto:mjoc@akl.lt">Martynas Jocius</a></div>
+<a href="mailto:mjoc@akl.lt">Martynas Jocius</a>
+ -- Last modified: 2005-09-06 22:57
+</div>
 
 </body>
 </html>
