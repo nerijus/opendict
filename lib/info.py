@@ -24,7 +24,7 @@ import os
 import imp
 
 # OpenDict version
-VERSION = "0.5.9-CVS"
+VERSION = "0.6.0"
 
 # File system objects
 __OPENDICT_LOCAL_DIR = ".opendict"
