@@ -1,3 +1,100 @@
+2005-10-24 22:04  mjoc
+
+	* lib/gui/mainwin.py, po/lt.po, po/opendict.pot: Show/Hide button
+	  removed (hidden) from the main window, menu item of the same
+	  functionality added. Lithuanian translation updated.
+
+2005-10-20 18:26  mjoc
+
+	* lib/info.py: Version changed to 0.6.0. Going to release stable
+	  version 0.6.0.
+
+2005-10-20 18:22  mjoc
+
+	* misc/opendict.desktop: Name changed from "OpenDict" to
+	  "Dictionary OpenDict". More intuitive.
+
+2005-09-06 22:59  mjoc
+
+	* doc/Plugin-HOWTO.html: Simple plugin example section written.
+	  Needs more detailed instructions in the future.
+
+2005-08-31 11:39  mjoc
+
+	* doc/Plugin-HOWTO.html: Introduction, Types od OpenDict
+	  Dictionaries and Plain Dictionary Example sections written.
+
+2005-08-30 00:27  mjoc
+
+	* doc/: OpenDict_plugin_dev.txt, Plugin-HOWTO.html,
+	  Specification.txt: Old plugin-dev doc removed, spefication
+	  removed, new plugin-dev howto added (not finished yet).
+
+2005-08-17 19:46  mjoc
+
+	* pixmaps/: icon-24x24.png, icon-32x32.png, icon-48x48.png,
+	  icon-620x620.png, icon-96x96.png, SVG/icon-rune.svg: Icon
+	  improved a bit by adding some color transitioning.
+
+2005-08-06 23:37  mjoc
+
+	* TODO.txt, lib/gui/mainwin.py, lib/gui/prefswin.py, po/lt.po,
+	  po/opendict.pot: Option for default clipboard scanner use added
+	  into preferences window.
+
+2005-08-05 22:02  mjoc
+
+	* TODO.txt, lib/info.py, lib/gui/mainwin.py, po/opendict.pot:
+	  Version changed to 0.5.9-CVS, clipboard-scanned text is trimmed
+	  before searching for translation. New TODO entries added.
+
+2005-06-14 00:47  nerijus
+
+	* README.txt, TODO.txt: updated README; converted to unix line
+	  endings
+
+2005-06-13 23:58  nerijus
+
+	* README.txt, opendict.py, lib/info.py: improved error message when
+	  PyXML is missing, so thhat Fedora users know which package they
+	  are missing; bumped version to 0.5.8
+
+2005-06-10 23:35  mjoc
+
+	* lib/tests/data/sampleplugin/sample.py: Sample plugin for unit
+	  testing updated to work with new module tree after adding 'lib'
+	  to import path.
+
+2005-06-10 23:17  mjoc
+
+	* po/: lt.po, opendict.pot: lt.po merging conflict resolved.
+
+2005-06-10 23:10  mjoc
+
+	* AUTHORS.txt: Added authors file.
+
+2005-06-10 23:04  mjoc
+
+	* ChangeLog, lib/gui/helpwin.py, lib/gui/mainwin.py, po/lt.po,
+	  po/opendict.pot: 1. Controls are enabled before showing search
+	  results  2. Nerijus B. added to authors list.
+
+2005-05-31 14:34  nerijus
+
+	* opendict.py: ask unicode wx version; it still can use ansi
+	  version if unicode is not available
+
+2005-05-24 18:05  nerijus
+
+	* Makefile: simplified install/uninstall
+
+2005-05-16 21:53  mjoc
+
+	* lib/info.py, lib/newplugin.py, lib/util.py, lib/gui/mainwin.py,
+	  po/lt.po, po/opendict.pot: wx.EndBusyCursor bug fixed, no error
+	  message on Windows build. Name correction is not used until
+	  correct functionality is achieved.
+
 2005-04-29 03:18  nerijus
 
 	* win32/setup.py: no changes
