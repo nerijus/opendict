@@ -217,7 +217,6 @@ class MainWindow(wxFrame):
       self.menuFontSize.Append(2009, _("Normal\tCtrl-0"),
                                _("Set normal text size"))
       menuView.AppendMenu(2002, _("Font Size"), self.menuFontSize)
-      
 
       # Font face
       self.menuFontFace = wxMenu()
@@ -248,6 +247,13 @@ class MainWindow(wxFrame):
          i+=1
          
       menuView.AppendMenu(2000, _("Character Encoding"), self.menuEncodings)
+      
+      menuView.AppendSeparator()
+
+      idShowHide = wx.NewId()
+      menuView.Append(idShowHide, _("Show/Hide Word List...\tCtrl-H"), 
+            _("Show or hide word list"))
+      
 
       self.menuBar.Append(menuView, _("&View"))
 
@@ -478,6 +484,7 @@ class MainWindow(wxFrame):
       EVT_MENU(self, 2007, self.onIncreaseFontSize)
       EVT_MENU(self, 2008, self.onDecreaseFontSize)
       EVT_MENU(self, 2009, self.onNormalFontSize)
+      EVT_MENU(self, idShowHide, self.onHideUnhide)
 
       # Dictionaries menu events
       EVT_MENU(self, idAddDict, self.onAddDict)
@@ -1353,6 +1360,7 @@ class MainWindow(wxFrame):
                      wxBITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)
       self.buttonHide.SetToolTipString(_("Show word list"))
+      self.buttonHide.Show(False)
 
 
    def unhideWordList(self):
