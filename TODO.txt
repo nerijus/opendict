@@ -12,8 +12,6 @@ DICT Connections" for that.
 
 [ ] Ability to merge dictionaries in editor
 
-[*] Clipboard scanner use option in preferences
-
 [ ] Suggestions when search is unsuccessfull. Idea: if search gives no
 results, drop the last letter of the world (i.e. to make prular to
 single); drop another one if not results and repeat this for 3-4
@@ -22,3 +20,6 @@ in prefernces dialog. This by default should be turned on. A warning
 about slow search also should be added.
 
 [ ] Remove option entries for saving window size and position.
+
+[ ] Remember last used dictionary and load it on startup if no default
+dictionary specified.

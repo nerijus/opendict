@@ -49,7 +49,7 @@ try:
 except ImportError:
     print >> sys.stderr, "**"
     print >> sys.stderr, "** Error: wxPython library not found"
-    print >> sys.stderr, "** Please install wxPython 2.5 or newer to run OpenDict"
+    print >> sys.stderr, "** Please install wxPython 2.5 or later to run OpenDict"
     print >> sys.stderr, "**"
     sys.exit(1)
 
