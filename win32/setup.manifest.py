@@ -53,7 +53,7 @@ options = {"py2exe": {"compressed": 1,
 
 setup(
     name="OpenDict",
-    version="0.5.8",
+    version="0.6.0",
     options = options,
     zipfile = None,
     package_dir = {"": "lib"},
