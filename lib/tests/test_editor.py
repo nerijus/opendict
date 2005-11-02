@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 #
 # Unit Test for editor.py
 # Copyright (c) 2005 Martynas Jocius <mjoc@akl.lt>

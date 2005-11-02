@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 """
   html2text.py
 
