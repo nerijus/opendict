@@ -200,7 +200,10 @@ class SlowoParser(plaindict.PlainDictionary):
          _linesRead += 1
          line = line.strip()
          try:
-            orig, end = line.split('=', 1)
+            try:
+                orig, end = line.split('=', 1)
+            except ValueError, e:
+                systemLog(ERROR, '%s (line %s)' % (e, line))
             orig = orig.strip()
             chunks = end.split(';')
 
