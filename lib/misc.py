@@ -104,7 +104,7 @@ def getFileSize(path):
     try:
         size = os.stat(path)[6]
     except:
-        print "ERROR (misc.getFileSize): path '%s' does not exists" % path
+        print "ERROR (misc.getFileSize): path '%s' does not exist" % path
     
     return size
 

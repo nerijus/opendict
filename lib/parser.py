@@ -52,10 +52,10 @@ class SlowoParser(plaindict.PlainDictionary):
       self.filePath = filePath
       self.needsList = True
       
-      self.encoding = None
       self.name = os.path.splitext(os.path.basename(filePath))[0]
 
       # Additional information
+      self.encoding = None
       self.checksum = None
       self.index = None
 

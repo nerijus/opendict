@@ -778,7 +778,7 @@ class MainWindow(wxFrame):
          title = _("Encode Failed")
          msg = _("Unable to encode text \"%s\" in %s for \"%s\". " \
                  "That logically means the word " \
-                 "definition does not exists in the dictionary." \
+                 "definition does not exist in the dictionary." \
                  % (enc.toWX(word), self.activeDictionary.getEncoding(),
                  self.activeDictionary.getName()))
                     
