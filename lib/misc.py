@@ -49,7 +49,7 @@ encodings = {"Unicode (UTF-8)": "UTF-8",
              "South European (ISO-8859-3)": "ISO-8859-3",
              "Greek (ISO-8859-7)": "ISO-8859-7",
              "Baltic (ISO-8859-13)": "ISO-8859-13",
-             "Cyrilic (KOI8-R)": "KOI8-R",
+             "Cyrillic (KOI8-R)": "KOI8-R",
              "Arabic (ISO-8859-6)": "ISO-8859-6"}
 
 #
