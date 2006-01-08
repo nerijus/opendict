@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenDict 0.3.0\n"
-"POT-Creation-Date: 2005-10-24 22:01+EEST\n"
+"POT-Creation-Date: 2006-01-08 13:49+EET\n"
 "PO-Revision-Date: 2005-10-24 21:58+0300\n"
 "Last-Translator: Martynas Jocius <mjoc@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konf.lt>\n"
@@ -51,8 +51,8 @@ msgstr ""
 "Ðis þodynas paieðkà atlieka Internete. Prisijunkite prie Interneto ir "
 "bandykite dar kartà."
 
-#: ../lib/errortype.py:92 ../lib/gui/dictconnwin.py:155
-#: ../lib/gui/dictconnwin.py:171
+#: ../lib/errortype.py:92 ../lib/gui/dictconnwin.py:177
+#: ../lib/gui/dictconnwin.py:193
 msgid "Connection Error"
 msgstr "Prisijungimo klaida"
 
@@ -116,61 +116,66 @@ msgstr "¥%s´ þodyno formatas"
 msgid "OK"
 msgstr "Gerai"
 
-#: ../lib/gui/dictaddwin.py:61 ../lib/gui/dictconnwin.py:104
+#: ../lib/gui/dictaddwin.py:61 ../lib/gui/dictconnwin.py:127
 #: ../lib/gui/dicteditorwin.py:94 ../lib/gui/dicteditorwin.py:255
 #: ../lib/gui/prefswin.py:111
 msgid "Cancel"
 msgstr "Atðaukti"
 
-#: ../lib/gui/dictconnwin.py:51
+#: ../lib/gui/dictconnwin.py:53
 msgid "Server: "
 msgstr "Serveris: "
 
-#: ../lib/gui/dictconnwin.py:58
+#: ../lib/gui/dictconnwin.py:60
 msgid "Default Server"
 msgstr "Numatytas serveris"
 
-#: ../lib/gui/dictconnwin.py:61
+#: ../lib/gui/dictconnwin.py:66
 msgid "Port: "
 msgstr "Prievadas: "
 
-#: ../lib/gui/dictconnwin.py:64
+#: ../lib/gui/dictconnwin.py:69
 msgid "Default Port"
 msgstr "Numatytas prievadas"
 
-#: ../lib/gui/dictconnwin.py:71
+#: ../lib/gui/dictconnwin.py:79
 msgid "Database: "
 msgstr "Duomenø bazë: "
 
-#: ../lib/gui/dictconnwin.py:75
+#: ../lib/gui/dictconnwin.py:83
 msgid "Search in all databases"
 msgstr "Ieðkoti visose duomenø bazëse"
 
-#: ../lib/gui/dictconnwin.py:82
+#: ../lib/gui/dictconnwin.py:90
 msgid "Fetch List"
 msgstr "Parsiøsti sàraðà"
 
-#: ../lib/gui/dictconnwin.py:101
+#: ../lib/gui/dictconnwin.py:96
+#, fuzzy
+msgid "Character encoding: "
+msgstr "Simboliø koduotë"
+
+#: ../lib/gui/dictconnwin.py:124
 msgid "Connect"
 msgstr "Prisijungti"
 
-#: ../lib/gui/dictconnwin.py:146 ../lib/gui/mainwin.py:679 ../lib/util.py:239
+#: ../lib/gui/dictconnwin.py:168 ../lib/gui/mainwin.py:679 ../lib/util.py:239
 msgid "Done"
 msgstr "Atlikta"
 
-#: ../lib/gui/dictconnwin.py:150
+#: ../lib/gui/dictconnwin.py:172
 msgid "Receiving database list..."
 msgstr "Siunèiamas duomenø baziø sàraðas..."
 
-#: ../lib/gui/dictconnwin.py:156 ../lib/gui/dictconnwin.py:172
+#: ../lib/gui/dictconnwin.py:178 ../lib/gui/dictconnwin.py:194
 msgid "Unable to connect to server"
 msgstr "Nepavyko prisijungti prie serverio"
 
-#: ../lib/gui/dictconnwin.py:190
+#: ../lib/gui/dictconnwin.py:212
 msgid "Connecting..."
 msgstr "Jungiamasi..."
 
-#: ../lib/gui/dictconnwin.py:218 ../lib/util.py:218
+#: ../lib/gui/dictconnwin.py:246 ../lib/util.py:218
 msgid "Connecting to %s..."
 msgstr "Jungiamasi prie %s..."
 

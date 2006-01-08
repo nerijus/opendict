@@ -1,5 +1,5 @@
 # OpenDict
-# Copyright (c) 2003 Martynas Jocius <mjoc@delfi.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ class Configuration:
       
       self.set('dictServer', 'dict.org')
       self.set('dictServerPort', '2628')
+      self.set('dict-server-encoding', 'UTF-8')
 
       self.set('repository-list',
                'http://opendict.sf.net/Repository/Data/opendict-add-ons.xml')

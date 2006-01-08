@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-10-25 17:38+EEST\n"
+"POT-Creation-Date: 2006-01-08 13:49+EET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,8 +47,8 @@ msgstr ""
 msgid "This dictionary uses Internet connection to translate words. Please connect to the Internet and try again."
 msgstr ""
 
-#: ../lib/errortype.py:92 ../lib/gui/dictconnwin.py:155
-#: ../lib/gui/dictconnwin.py:171
+#: ../lib/errortype.py:92 ../lib/gui/dictconnwin.py:177
+#: ../lib/gui/dictconnwin.py:193
 msgid "Connection Error"
 msgstr ""
 
@@ -101,61 +101,65 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: ../lib/gui/dictaddwin.py:61 ../lib/gui/dictconnwin.py:104
+#: ../lib/gui/dictaddwin.py:61 ../lib/gui/dictconnwin.py:127
 #: ../lib/gui/dicteditorwin.py:94 ../lib/gui/dicteditorwin.py:255
 #: ../lib/gui/prefswin.py:111
 msgid "Cancel"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:51
+#: ../lib/gui/dictconnwin.py:53
 msgid "Server: "
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:58
+#: ../lib/gui/dictconnwin.py:60
 msgid "Default Server"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:61
+#: ../lib/gui/dictconnwin.py:66
 msgid "Port: "
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:64
+#: ../lib/gui/dictconnwin.py:69
 msgid "Default Port"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:71
+#: ../lib/gui/dictconnwin.py:79
 msgid "Database: "
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:75
+#: ../lib/gui/dictconnwin.py:83
 msgid "Search in all databases"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:82
+#: ../lib/gui/dictconnwin.py:90
 msgid "Fetch List"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:101
+#: ../lib/gui/dictconnwin.py:96
+msgid "Character encoding: "
+msgstr ""
+
+#: ../lib/gui/dictconnwin.py:124
 msgid "Connect"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:146 ../lib/gui/mainwin.py:679 ../lib/util.py:239
+#: ../lib/gui/dictconnwin.py:168 ../lib/gui/mainwin.py:679 ../lib/util.py:239
 msgid "Done"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:150
+#: ../lib/gui/dictconnwin.py:172
 msgid "Receiving database list..."
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:156 ../lib/gui/dictconnwin.py:172
+#: ../lib/gui/dictconnwin.py:178 ../lib/gui/dictconnwin.py:194
 msgid "Unable to connect to server"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:190
+#: ../lib/gui/dictconnwin.py:212
 msgid "Connecting..."
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:218 ../lib/util.py:218
+#: ../lib/gui/dictconnwin.py:246 ../lib/util.py:218
 msgid "Connecting to %s..."
 msgstr ""
 

@@ -1,6 +1,6 @@
 #
 # OpenDict
-# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,7 +47,9 @@ class DictConnWindow(wxFrame):
       hboxButtons = wxBoxSizer(wxHORIZONTAL)
       hboxServer = RowColSizer()
 
-
+      #
+      # Server address row
+      #
       hboxServer.Add(wxStaticText(self, -1, _("Server: ")),
                      flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
                      row=0, col=0, border=1)
@@ -58,6 +60,9 @@ class DictConnWindow(wxFrame):
       hboxServer.Add(wxButton(self, 1000, _("Default Server")),
                      flag=wxEXPAND, row=0, col=2, border=5)
 
+      #
+      # Port entry row
+      #
       hboxServer.Add(wxStaticText(self, -1, _("Port: ")),
                      flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
                      row=1, col=0, border=1)
@@ -68,6 +73,9 @@ class DictConnWindow(wxFrame):
                                   self.app.config.get('dictServerPort'))
       hboxServer.Add(self.entryPort, flag=wxEXPAND, row=1, col=1, border=1)
 
+      #
+      # Database selection row
+      #
       hboxServer.Add(wxStaticText(self, -1, _("Database: ")),
                      flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
                      row=2, col=0, border=1)
@@ -81,6 +89,21 @@ class DictConnWindow(wxFrame):
 
       hboxServer.Add(wxButton(self, 1003, _("Fetch List")), #size=(-1, 18)),
                      flag=wxEXPAND, row=2, col=2, border=1)
+
+      #
+      # Encoding selection row
+      #
+      hboxServer.Add(wxStaticText(self, -1, _("Character encoding: ")),
+                     flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
+                     row=3, col=0, border=1)
+
+      self.entryEncoding = wxComboBox(self, 1006,
+                              misc.encodings.keys()[
+                                misc.encodings.values().index(
+                                    self.app.config.get('dict-server-encoding'))],
+                              wxPoint(-1, -1),
+                              wxSize(-1, -1), misc.encodings.keys(), wxCB_DROPDOWN)
+      hboxServer.Add(self.entryEncoding, flag=wxEXPAND, row=3, col=1, border=1)
 
       #hboxServer.Add(wxStaticText(self, -1, _("Strategy: ")),
       #               flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
@@ -118,7 +141,6 @@ class DictConnWindow(wxFrame):
       self.update = None
       self.connection = None
 
-      EVT_CHOICE(self, 1002, self.onDBSelected)
       EVT_BUTTON(self, 1000, self.onDefaultServer)
       EVT_BUTTON(self, 1001, self.onDefaultPort)
       EVT_BUTTON(self, 1003, self.onUpdateDB)
@@ -202,16 +224,22 @@ class DictConnWindow(wxFrame):
          self.choiceStrat.Append(name)
 
 
-   def onDBSelected(self, event):
-      pass
-
-   
    # Thread is not used there, because program don't hang if can't
    # connect. Otherwise, it may hang for a second depending on the
    # connection speed. TODO: better solution?
    def onOK(self, event):
       self.server = self.entryServer.GetValue()
+      self.app.config.set('dictServer', self.server)
+
       self.port = self.entryPort.GetValue()
+
+      try:
+          enc = misc.encodings[self.entryEncoding.GetValue()]
+      except KeyError:
+          print 'Error: invalid encoding name "%s", defaulting to UTF-8' % \
+              self.entryEncoding.GetValue()
+          enc = 'UTF-8'
+      self.app.config.set('dict-server-encoding', enc)
           
       self.timerConnect.Stop()
       self.timerUpdateDB.Stop()
