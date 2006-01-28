@@ -162,7 +162,7 @@ class AboutWindow(wxDialog):
       wxCENTRE, 5)
 
       title = _("OpenDict %s" % info.VERSION)
-      copy = "Copyright %s 2003-2005 Martynas Jocius <mjoc@akl.lt>" % \
+      copy = "Copyright %s 2003-2006 Martynas Jocius <mjoc@akl.lt>" % \
              unicode("\302\251", "UTF-8")
       desc = _("OpenDict is multiplatform dictionary.")
       page = "http://opendict.sourceforge.net"

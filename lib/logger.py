@@ -1,6 +1,6 @@
 #
 # OpenDict
-# Copyright (c) 2005 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2005-2006 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -69,10 +69,11 @@ def debugLog(messageType, message):
     elif messageType == DEBUG:
         typeStr = 'DEBUG'
 
-    try:
-        fd = open(_debugLogFile, 'a')
-        print >> fd, dateStr, typeStr, message
-        fd.close()
-    except Exception, e:
-        print "LOGGER ERROR: Unable to write message"
+    print dateStr, typeStr, message
+    #try:
+    #    fd = open(_debugLogFile, 'a')
+    #    print >> fd, dateStr, typeStr, message
+    #    fd.close()
+    #except Exception, e:
+    #    print "LOGGER ERROR: Unable to write message"
     

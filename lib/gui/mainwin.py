@@ -1,6 +1,6 @@
 #
 # OpenDict
-# Copyright (c) 2003-2005 Martynas Jocius <mjoc at akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <mjoc at akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -76,7 +76,6 @@ class HtmlWindow(wxHtmlWindow):
 
       global lastLookupWord
       lastLookupWord = linkInfo.GetHref()
-      debugLog(DEBUG, "LinkInfo: searching for '%s'" % lastLookupWord)
       wxBeginBusyCursor()
       parent = self.GetParent().GetParent().GetParent()
 
@@ -631,8 +630,6 @@ class MainWindow(wxFrame):
             
 
          try:
-            debugLog(DEBUG, "Decoding translation in %s" \
-                  % self.activeDictionary.getEncoding())
             transUnicode = unicode(result.translation,
                                    self.activeDictionary.getEncoding())
          except Exception, e:
@@ -974,7 +971,6 @@ class MainWindow(wxFrame):
       # of dictionary and then check this type instead of IDs.
 
       eventID = event.GetId()
-      debugLog(DEBUG, "Event ID = %d" % eventID)
       
       if eventID in self.app.config.ids.keys():
          dictionary = self.app.dictionaries.get(self.app.config.ids.get(eventID))
@@ -1122,7 +1118,6 @@ class MainWindow(wxFrame):
       self.dictName = name
       self.activeDictionary = self.app.dictionaries.get(name)
       self.checkIfNeedsList()
-      debugLog(INFO, "Dictionary instance: %s" % self.activeDictionary)
       self.SetTitle(titleTemplate % name)
       self.entry.Enable(1)
       self.SetStatusText("Done") # TODO: Set something more useful
@@ -1224,7 +1219,6 @@ class MainWindow(wxFrame):
             ename = key
             break
          
-      debugLog(DEBUG, "Encoding name to select: '%s'" % ename)
       if len(ename) == 0:
          systemLog(ERROR, "Something wrong with encodings (name == None)")
          return
@@ -1355,7 +1349,6 @@ class MainWindow(wxFrame):
       self.wlHidden = True
 
       # And change the button pixmap
-      debugLog(DEBUG, "Setting unhide.png icon...")
       bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "unhide.png"),
                      wxBITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)
@@ -1373,7 +1366,6 @@ class MainWindow(wxFrame):
       self.wlHidden = False
 
       # And change the pixmap
-      debugLog(DEBUG, "Setting hide.png icon...")
       bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "hide.png"),
                      wxBITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)

@@ -40,6 +40,7 @@ class DictConnWindow(wxFrame):
                 size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
       wxFrame.__init__(self, parent, id, title, pos, size, style)
 
+      self.parent = parent
       self.app = wxGetApp()
 
       vboxMain = wxBoxSizer(wxVERTICAL)
@@ -54,8 +55,10 @@ class DictConnWindow(wxFrame):
                      flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
                      row=0, col=0, border=1)
 
-      self.entryServer = wxTextCtrl(self, -1,
-                                    self.app.config.get('dictServer'))
+      servers = ['dict.org', 'localhost']
+      self.entryServer = wxComboBox(self, -1,
+          self.app.config.get('dictServer'), wxPoint(-1, -1),
+                              wxSize(-1, -1), servers, wxCB_DROPDOWN)
       hboxServer.Add(self.entryServer, flag=wxEXPAND, row=0, col=1, border=1)
       hboxServer.Add(wxButton(self, 1000, _("Default Server")),
                      flag=wxEXPAND, row=0, col=2, border=5)
@@ -233,13 +236,15 @@ class DictConnWindow(wxFrame):
 
       self.port = self.entryPort.GetValue()
 
+      encName = self.entryEncoding.GetValue()
       try:
-          enc = misc.encodings[self.entryEncoding.GetValue()]
+          enc = misc.encodings[encName]
       except KeyError:
           print 'Error: invalid encoding name "%s", defaulting to UTF-8' % \
-              self.entryEncoding.GetValue()
+              encName
           enc = 'UTF-8'
       self.app.config.set('dict-server-encoding', enc)
+      self.parent.changeEncoding(encName)
           
       self.timerConnect.Stop()
       self.timerUpdateDB.Stop()
