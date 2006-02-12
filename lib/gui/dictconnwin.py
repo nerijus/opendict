@@ -105,7 +105,9 @@ class DictConnWindow(wxFrame):
                                 misc.encodings.values().index(
                                     self.app.config.get('dict-server-encoding'))],
                               wxPoint(-1, -1),
-                              wxSize(-1, -1), misc.encodings.keys(), wxCB_DROPDOWN)
+                              wxSize(-1, -1), misc.encodings.keys(), 
+                              wxCB_DROPDOWN | wxCB_READONLY)
+
       hboxServer.Add(self.entryEncoding, flag=wxEXPAND, row=3, col=1, border=1)
 
       #hboxServer.Add(wxStaticText(self, -1, _("Strategy: ")),
@@ -243,8 +245,8 @@ class DictConnWindow(wxFrame):
           print 'Error: invalid encoding name "%s", defaulting to UTF-8' % \
               encName
           enc = 'UTF-8'
-      self.app.config.set('dict-server-encoding', enc)
-      self.parent.changeEncoding(encName)
+          
+      self.encoding = (enc, encName)
           
       self.timerConnect.Stop()
       self.timerUpdateDB.Stop()
@@ -279,6 +281,9 @@ class DictConnWindow(wxFrame):
       self.app.window.activeDictionary = DictConnection(self.server,
                                                         int(self.port), 
                                             db, "")
+                                            
+      self.app.config.set('dict-server-encoding', self.encoding[0])
+      self.parent.changeEncoding(self.encoding[1])
 
       if db_name != "":
          title = "OpenDict - %s (%s)" % (self.server, db_name)
@@ -286,7 +291,7 @@ class DictConnWindow(wxFrame):
          title = "OpenDict - %s" % self.server
       self.app.window.SetTitle(title)
 
-      self.app.window.checkEncMenuItem(self.app.config.get('encoding'))
+      self.app.window.checkEncMenuItem(self.encoding[0])
 
       if not self.app.window.activeDictionary.getUsesWordList():
           self.app.window.hideWordList()
@@ -294,6 +299,7 @@ class DictConnWindow(wxFrame):
       self.app.window.SetStatusText("")
       self.timerUpdateDB.Stop()
       self.Destroy()
+
 
    def onCancel(self, event):
       self.timerUpdateDB.Stop()
