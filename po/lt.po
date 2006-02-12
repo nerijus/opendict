@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenDict 0.3.0\n"
+"Project-Id-Version: OpenDict 0.6.1\n"
 "POT-Creation-Date: 2006-02-12 20:58+EET\n"
 "PO-Revision-Date: 2005-10-24 21:58+0300\n"
 "Last-Translator: Martynas Jocius <mjoc@akl.lt>\n"
