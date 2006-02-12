@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-02-12 02:54+EET\n"
+"POT-Creation-Date: 2006-02-12 20:58+EET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,8 +47,8 @@ msgstr ""
 msgid "This dictionary uses Internet connection to translate words. Please connect to the Internet and try again."
 msgstr ""
 
-#: ../lib/errortype.py:92 ../lib/gui/dictconnwin.py:180
-#: ../lib/gui/dictconnwin.py:196
+#: ../lib/errortype.py:92 ../lib/gui/dictconnwin.py:182
+#: ../lib/gui/dictconnwin.py:198
 msgid "Connection Error"
 msgstr ""
 
@@ -101,7 +101,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: ../lib/gui/dictaddwin.py:61 ../lib/gui/dictconnwin.py:130
+#: ../lib/gui/dictaddwin.py:61 ../lib/gui/dictconnwin.py:132
 #: ../lib/gui/dicteditorwin.py:94 ../lib/gui/dicteditorwin.py:255
 #: ../lib/gui/prefswin.py:111
 msgid "Cancel"
@@ -139,27 +139,27 @@ msgstr ""
 msgid "Character encoding: "
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:127
+#: ../lib/gui/dictconnwin.py:129
 msgid "Connect"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:171 ../lib/gui/mainwin.py:676 ../lib/util.py:239
+#: ../lib/gui/dictconnwin.py:173 ../lib/gui/mainwin.py:676 ../lib/util.py:239
 msgid "Done"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:175
+#: ../lib/gui/dictconnwin.py:177
 msgid "Receiving database list..."
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:181 ../lib/gui/dictconnwin.py:197
+#: ../lib/gui/dictconnwin.py:183 ../lib/gui/dictconnwin.py:199
 msgid "Unable to connect to server"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:215
+#: ../lib/gui/dictconnwin.py:217
 msgid "Connecting..."
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:251 ../lib/util.py:218
+#: ../lib/gui/dictconnwin.py:253 ../lib/util.py:218
 msgid "Connecting to %s..."
 msgstr ""
 

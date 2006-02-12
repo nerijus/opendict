@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenDict 0.3.0\n"
-"POT-Creation-Date: 2006-01-30 23:07+EET\n"
+"POT-Creation-Date: 2006-02-12 20:58+EET\n"
 "PO-Revision-Date: 2005-10-24 21:58+0300\n"
 "Last-Translator: Martynas Jocius <mjoc@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konf.lt>\n"
@@ -51,8 +51,8 @@ msgstr ""
 "Ðis þodynas paieðkà atlieka Internete. Prisijunkite prie Interneto ir "
 "bandykite dar kartà."
 
-#: ../lib/errortype.py:92 ../lib/gui/dictconnwin.py:180
-#: ../lib/gui/dictconnwin.py:196
+#: ../lib/errortype.py:92 ../lib/gui/dictconnwin.py:182
+#: ../lib/gui/dictconnwin.py:198
 msgid "Connection Error"
 msgstr "Prisijungimo klaida"
 
@@ -116,7 +116,7 @@ msgstr "¥%s´ þodyno formatas"
 msgid "OK"
 msgstr "Gerai"
 
-#: ../lib/gui/dictaddwin.py:61 ../lib/gui/dictconnwin.py:130
+#: ../lib/gui/dictaddwin.py:61 ../lib/gui/dictconnwin.py:132
 #: ../lib/gui/dicteditorwin.py:94 ../lib/gui/dicteditorwin.py:255
 #: ../lib/gui/prefswin.py:111
 msgid "Cancel"
@@ -155,27 +155,27 @@ msgstr "Parsiøsti sàraðà"
 msgid "Character encoding: "
 msgstr "Simboliø koduotë"
 
-#: ../lib/gui/dictconnwin.py:127
+#: ../lib/gui/dictconnwin.py:129
 msgid "Connect"
 msgstr "Prisijungti"
 
-#: ../lib/gui/dictconnwin.py:171 ../lib/gui/mainwin.py:676 ../lib/util.py:239
+#: ../lib/gui/dictconnwin.py:173 ../lib/gui/mainwin.py:676 ../lib/util.py:239
 msgid "Done"
 msgstr "Atlikta"
 
-#: ../lib/gui/dictconnwin.py:175
+#: ../lib/gui/dictconnwin.py:177
 msgid "Receiving database list..."
 msgstr "Siunèiamas duomenø baziø sàraðas..."
 
-#: ../lib/gui/dictconnwin.py:181 ../lib/gui/dictconnwin.py:197
+#: ../lib/gui/dictconnwin.py:183 ../lib/gui/dictconnwin.py:199
 msgid "Unable to connect to server"
 msgstr "Nepavyko prisijungti prie serverio"
 
-#: ../lib/gui/dictconnwin.py:215
+#: ../lib/gui/dictconnwin.py:217
 msgid "Connecting..."
 msgstr "Jungiamasi..."
 
-#: ../lib/gui/dictconnwin.py:251 ../lib/util.py:218
+#: ../lib/gui/dictconnwin.py:253 ../lib/util.py:218
 msgid "Connecting to %s..."
 msgstr "Jungiamasi prie %s..."
 
