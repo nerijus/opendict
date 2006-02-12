@@ -1,3 +1,60 @@
+2006-01-28 16:45  mjoc
+
+	* opendict.py, lib/info.py, lib/logger.py, lib/gui/dictconnwin.py,
+	  lib/gui/helpwin.py, lib/gui/mainwin.py: 1. Debug logger messages
+	  minimized; 2. DICT connection window sets encoding on the main
+	  window menu; 3. Version changed to 0.6.1;
+
+2006-01-08 23:12  nerijus
+
+	* lib/misc.py: fixed spelling
+
+2006-01-08 14:14  mjoc
+
+	* lib/config.py, lib/gui/dictconnwin.py, po/lt.po, po/opendict.pot:
+	  DICT connection window changes: 1) New encoding selection entry
+	  added. 2) Windows remembers last server and encoding used.
+
+2005-12-26 20:04  nerijus
+
+	* lib/: misc.py, parser.py, gui/mainwin.py: fixed grammar
+
+2005-12-26 19:42  nerijus
+
+	* lib/parser.py: removed duplicated line
+
+2005-11-10 13:45  mjoc
+
+	* lib/parser.py: If invalid line is found while parsing Slowo
+	  format dictionary, error message is written to system.log. Until
+	  this bug fix exception had not been cached.
+
+2005-11-02 22:12  mjoc
+
+	* copying.html: FSF address updated.
+
+2005-11-02 21:58  mjoc
+
+	* lib/: tests/test_editor.py, extra/html2text.py: First line with
+	  #!/exec/path removed.
+
+2005-10-26 00:19  nerijus
+
+	* win32/compile.bat: copy msvcr71.dll
+
+2005-10-25 17:42  mjoc
+
+	* TODO.txt, opendict.py, po/opendict.pot: Very small changes: one
+	  more todo item, etc.
+
+2005-10-25 16:51  nerijus
+
+	* win32/: setup.manifest.py, setup.py: updated version to 0.6.0
+
+2005-10-24 22:39  mjoc
+
+	* ChangeLog: New ChangeLog generated using cvs2cl utility.
+
 2005-10-24 22:04  mjoc
 
 	* lib/gui/mainwin.py, po/lt.po, po/opendict.pot: Show/Hide button
@@ -236,8 +293,8 @@
 
 2005-04-10 11:08  mjoc
 
-	* po/: messages.pot, opendict.pot, lt/opendict.mo: po/lt/ directory
-	  removed, message.pot removed, opendict.pot added.
+	* po/: messages.pot, opendict.pot: po/lt/ directory removed,
+	  message.pot removed, opendict.pot added.
 
 2005-04-10 11:03  mjoc
 
@@ -1249,10 +1306,6 @@
 
 	* win32/install_script.iss: File ./win32/install_script.iss added
 
-2005-01-14 00:28  mjoc
-
-	* po/lt/opendict.mo: File ./po/lt/opendict.mo added
-
 2005-01-14 00:27  mjoc
 
 	* po/lt.po: File ./po/lt.po added
@@ -1395,42 +1448,6 @@
 
 	* win32/install_script.iss: File install_script.iss removed.
 
-2005-01-13 23:46  mjoc
-
-	* src/plugins/WebAlkonasPlugin/README: File README removed.
-
-2005-01-13 23:45  mjoc
-
-	* src/plugins/WebAlkonasPlugin/Makefile: File Makefile removed.
-
-2005-01-13 23:44  mjoc
-
-	* src/images/clear.xpm-old2: File clear.xpm-old2 removed.
-
-2005-01-13 23:41  mjoc
-
-	* src/images/tb_search.xpm: File tb_search.xpm removed.
-
-2005-01-13 23:41  mjoc
-
-	* src/images/logo.xpm: File logo.xpm removed.
-
-2005-01-13 23:41  mjoc
-
-	* src/images/clear.xpm-old: File clear.xpm-old removed.
-
-2005-01-13 23:40  mjoc
-
-	* src/images/clear.xpm: File clear.xpm removed.
-
-2005-01-13 23:40  mjoc
-
-	* src/Makefile: File Makefile removed.
-
-2005-01-13 23:39  mjoc
-
-	* po/lt/opendict.mo: File opendict.mo removed.
-
 2005-01-13 23:38  mjoc
 
 	* po/messages.pot: File messages.pot removed.
@@ -1487,22 +1504,6 @@
 
 	* pixmaps/clear4.xpm: File ./clear4.xpm removed
 
-2005-01-13 23:33  mjoc
-
-	* pixmaps/.xvpics/clear2.xpm: File ./.xvpics/clear2.xpm removed
-
-2005-01-13 23:33  mjoc
-
-	* pixmaps/.xvpics/clear3.xpm: File ./.xvpics/clear3.xpm removed
-
-2005-01-13 23:33  mjoc
-
-	* pixmaps/.xvpics/clear4.xpm: File ./.xvpics/clear4.xpm removed
-
-2005-01-13 23:32  mjoc
-
-	* pixmaps/.xvpics/clear.xpm: File ./.xvpics/clear.xpm removed
-
 2005-01-13 23:32  mjoc
 
 	* pixmaps/logo.xpm: File ./logo.xpm removed
@@ -1551,92 +1552,6 @@
 
 	* AUTHORS: [no log message]
 
-2005-01-13 23:19  mjoc
-
-	* src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.h: File
-	  ./src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.h removed
-
-2005-01-13 23:18  mjoc
-
-	* src/Fonts.h: File ./src/Fonts.h removed
-
-2005-01-13 23:18  mjoc
-
-	* src/MovaParser.h: File ./src/MovaParser.h removed
-
-2005-01-13 23:18  mjoc
-
-	* src/DictText.h: File ./src/DictText.h removed
-
-2005-01-13 23:17  mjoc
-
-	* src/About.h: File ./src/About.h removed
-
-2005-01-13 23:17  mjoc
-
-	* src/OpenDict.h: File ./src/OpenDict.h removed
-
-2005-01-13 23:17  mjoc
-
-	* src/DictParser.h: File ./src/DictParser.h removed
-
-2005-01-13 23:16  mjoc
-
-	* src/MainWindow.h: File ./src/MainWindow.h removed
-
-2005-01-13 23:16  mjoc
-
-	* src/DictLetterList.h: File ./src/DictLetterList.h removed
-
-2005-01-13 23:16  mjoc
-
-	* src/DictWordList.h: File ./src/DictWordList.h removed
-
-2005-01-13 23:16  mjoc
-
-	* src/SlowoParser.h: File ./src/SlowoParser.h removed
-
-2005-01-13 23:12  mjoc
-
-	* src/DictWordList.cc: File ./src/DictWordList.cc removed
-
-2005-01-13 23:12  mjoc
-
-	* src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc: File
-	  ./src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc removed
-
-2005-01-13 23:12  mjoc
-
-	* src/MovaParser.cc: File ./src/MovaParser.cc removed
-
-2005-01-13 23:12  mjoc
-
-	* src/MainWindow.cc: File ./src/MainWindow.cc removed
-
-2005-01-13 23:11  mjoc
-
-	* src/DictText.cc: File ./src/DictText.cc removed
-
-2005-01-13 23:11  mjoc
-
-	* src/About.cc: File ./src/About.cc removed
-
-2005-01-13 23:11  mjoc
-
-	* src/OpenDict.cc: File ./src/OpenDict.cc removed
-
-2005-01-13 23:11  mjoc
-
-	* src/DictParser.cc: File ./src/DictParser.cc removed
-
-2005-01-13 23:10  mjoc
-
-	* src/SlowoParser.cc: File ./src/SlowoParser.cc removed
-
-2005-01-13 23:09  mjoc
-
-	* src/DictLetterList.cc: File ./src/DictLetterList.cc removed
-
 2005-01-13 23:09  mjoc
 
 	* copying.txt: File ./copying.txt removed
@@ -1648,11 +1563,6 @@
 2005-01-13 23:08  mjoc
 
 	* COPY_TEMP.txt: File ./COPY_TEMP.txt removed
-
-2005-01-13 23:08  mjoc
-
-	* src/plugins/WebAlkonasPlugin/copy.txt: File
-	  ./src/plugins/WebAlkonasPlugin/copy.txt removed
 
 2005-01-13 23:07  mjoc
 
@@ -1782,10 +1692,8 @@
 	  pixmaps/clear2.png, pixmaps/clear2.xpm, pixmaps/clear3.png,
 	  pixmaps/clear3.xpm, pixmaps/clear4.xpm, pixmaps/logo.xpm,
 	  pixmaps/plugin.xpm, pixmaps/register.xpm, pixmaps/right.xpm,
-	  pixmaps/search.xpm, pixmaps/stop.xpm, pixmaps/.xvpics/clear.xpm,
-	  pixmaps/.xvpics/clear2.xpm, pixmaps/.xvpics/clear3.xpm,
-	  pixmaps/.xvpics/clear4.xpm, po/lt.mo, po/lt.po, po/messages.pot,
-	  po/unix_proceed.sh, po/lt/opendict.mo, scripts/count_code.py,
+	  pixmaps/search.xpm, pixmaps/stop.xpm, po/lt.mo, po/lt.po,
+	  po/messages.pot, po/unix_proceed.sh, scripts/count_code.py,
 	  scripts/make_hash.py, scripts/make_hash2.py, scripts/msgfmt.py,
 	  scripts/slowo2mova.py, scripts/unzip.py, scripts/w2u.py,
 	  scripts/zip.py, win32/install_script.iss, win32/make.py,
@@ -1809,79 +1717,24 @@
 	  pixmaps/clear2.png, pixmaps/clear2.xpm, pixmaps/clear3.png,
 	  pixmaps/clear3.xpm, pixmaps/clear4.xpm, pixmaps/logo.xpm,
 	  pixmaps/plugin.xpm, pixmaps/register.xpm, pixmaps/right.xpm,
-	  pixmaps/search.xpm, pixmaps/stop.xpm, pixmaps/.xvpics/clear.xpm,
-	  pixmaps/.xvpics/clear2.xpm, pixmaps/.xvpics/clear3.xpm,
-	  pixmaps/.xvpics/clear4.xpm, po/lt.mo, po/lt.po, po/messages.pot,
-	  po/unix_proceed.sh, po/lt/opendict.mo, scripts/count_code.py,
+	  pixmaps/search.xpm, pixmaps/stop.xpm, po/lt.mo, po/lt.po,
+	  po/messages.pot, po/unix_proceed.sh, scripts/count_code.py,
 	  scripts/make_hash.py, scripts/make_hash2.py, scripts/msgfmt.py,
 	  scripts/slowo2mova.py, scripts/unzip.py, scripts/w2u.py,
 	  scripts/zip.py, win32/install_script.iss, win32/make.py,
 	  win32/setup.py: Initial revision
 
-2003-01-02 21:19  nerijus
-
-	* src/About.cc: now compiles with wxUniv/X11 also
-
-2002-12-17 04:32  nerijus
-
-	* src/: About.cc, DictLetterList.h, DictParser.h, DictText.h,
-	  DictWordList.h, Fonts.h, MainWindow.cc, MainWindow.h, Makefile,
-	  MovaParser.cc, MovaParser.h, OpenDict.cc, SlowoParser.cc,
-	  plugins/WebAlkonasPlugin/Makefile,
-	  plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc,
-	  plugins/WebAlkonasPlugin/WebAlkonasPlugin.h: now compiles in
-	  Unicode mode
-
 2002-12-17 02:49  nerijus
 
-	* Makefile, src/DictLetterList.cc, src/DictParser.h,
-	  src/DictText.cc, src/DictWordList.cc, src/MainWindow.cc,
-	  src/Makefile, src/MovaParser.cc, src/MovaParser.h,
-	  src/SlowoParser.cc, src/SlowoParser.h,
-	  src/plugins/WebAlkonasPlugin/Makefile,
-	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc,
-	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.h: updated to
-	  compile with wxWin 2.4
-
-2002-12-16 23:41  nerijus
-
-	* src/: MainWindow.cc, MainWindow.h, Makefile, OpenDict.h,
-	  plugins/WebAlkonasPlugin/Makefile: fixed linking with gcc>=2.96
+	* Makefile: updated to compile with wxWin 2.4
 
 2002-12-11 01:47  nerijus
 
-	* AUTHORS, COPY_TEMP.txt, ChangeLog, Makefile, README, TODO,
-	  src/About.cc, src/About.h, src/DictLetterList.cc,
-	  src/DictLetterList.h, src/DictParser.cc, src/DictParser.h,
-	  src/DictText.cc, src/DictText.h, src/DictWordList.cc,
-	  src/DictWordList.h, src/MainWindow.cc, src/MainWindow.h,
-	  src/Makefile, src/OpenDict.cc, src/OpenDict.h,
-	  src/SlowoParser.cc, src/SlowoParser.h, src/Fonts.h,
-	  src/MovaParser.cc, src/MovaParser.h, src/images/clear.xpm,
-	  src/images/clear.xpm-old, src/images/clear.xpm-old2,
-	  src/images/logo.xpm, src/images/tb_search.xpm,
-	  src/plugins/WebAlkonasPlugin/Makefile,
-	  src/plugins/WebAlkonasPlugin/README,
-	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc,
-	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.h,
-	  src/plugins/WebAlkonasPlugin/copy.txt: Initial revision
+	* AUTHORS, COPY_TEMP.txt, ChangeLog, Makefile, README, TODO:
+	  Initial revision
 
 2002-12-11 01:47  nerijus
 
-	* AUTHORS, COPY_TEMP.txt, ChangeLog, Makefile, README, TODO,
-	  src/About.cc, src/About.h, src/DictLetterList.cc,
-	  src/DictLetterList.h, src/DictParser.cc, src/DictParser.h,
-	  src/DictText.cc, src/DictText.h, src/DictWordList.cc,
-	  src/DictWordList.h, src/MainWindow.cc, src/MainWindow.h,
-	  src/Makefile, src/OpenDict.cc, src/OpenDict.h,
-	  src/SlowoParser.cc, src/SlowoParser.h, src/Fonts.h,
-	  src/MovaParser.cc, src/MovaParser.h, src/images/clear.xpm,
-	  src/images/clear.xpm-old, src/images/clear.xpm-old2,
-	  src/images/logo.xpm, src/images/tb_search.xpm,
-	  src/plugins/WebAlkonasPlugin/Makefile,
-	  src/plugins/WebAlkonasPlugin/README,
-	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.cc,
-	  src/plugins/WebAlkonasPlugin/WebAlkonasPlugin.h,
-	  src/plugins/WebAlkonasPlugin/copy.txt: import opendict-0.1
-	  sources to cvs
+	* AUTHORS, COPY_TEMP.txt, ChangeLog, Makefile, README, TODO: import
+	  opendict-0.1 sources to cvs
 
