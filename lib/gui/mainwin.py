@@ -514,6 +514,8 @@ class MainWindow(wxFrame):
       EVT_TIMER(self, idClipboard, self.onTimerClipboard)
       EVT_CLOSE(self, self.onCloseWindow)
 
+      EVT_KEY_DOWN(self, self.onKeyDown)
+
       # Prepare help message
       self.htmlCode = _("""
 <html>
@@ -824,6 +826,14 @@ class MainWindow(wxFrame):
    def onClean(self, event):
       self.entry.SetValue("")
          
+
+   def onKeyDown(self, event):
+      """Key down event handler."""
+      key = event.KeyCode()
+      if key == wx.WXK_ESCAPE:
+         self.entry.SetValue("")
+      return
+
 
    def onClearHistory(self, event):
       self.entry.Clear()
