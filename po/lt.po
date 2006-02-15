@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenDict 0.6.1\n"
-"POT-Creation-Date: 2006-02-14 15:13+EET\n"
-"PO-Revision-Date: 2006-02-14 15:15+0300\n"
+"POT-Creation-Date: 2006-02-15 14:06+EET\n"
+"PO-Revision-Date: 2006-02-15 14:05+0300\n"
 "Last-Translator: Martynas Jocius <mjoc@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konf.lt>\n"
 "MIME-Version: 1.0\n"
@@ -18,56 +18,72 @@ msgstr "Sëkmë"
 msgid "Search successfully finished."
 msgstr "Paieðka sëkmingai baigta"
 
-#: ../lib/errortype.py:64
-#: ../lib/misc.py:34
+#: ../lib/errortype.py:64 ../lib/misc.py:34
 msgid "Not found"
 msgstr "Nerasta"
 
 #: ../lib/errortype.py:65
 msgid "Word or phrase not found. Try less letters or fewer words."
-msgstr "Þodis arba frazë nebuvo rasti. Bandykite ávesti maþiau raidþiø arba þodþiø."
+msgstr ""
+"Þodis arba frazë nebuvo rasti. Bandykite ávesti maþiau raidþiø arba þodþiø."
 
 #: ../lib/errortype.py:73
 msgid "Internal error"
 msgstr "Vidinë klaida"
 
 #: ../lib/errortype.py:74
-msgid "Internal error occured. Please send bug report to the dictionary's of current use authors. Thank you."
-msgstr "Ávyko vidinë klaida. Praðome iðsiøsti klaidos praneðimà apie aktyvuoto þodyno klaidà jo autoriams. Dëkojame."
+msgid ""
+"Internal error occured. Please send bug report to the dictionary's of "
+"current use authors. Thank you."
+msgstr ""
+"Ávyko vidinë klaida. Praðome iðsiøsti klaidos praneðimà apie aktyvuoto "
+"þodyno klaidà jo autoriams. Dëkojame."
 
 #: ../lib/errortype.py:82
 msgid "Not connected"
 msgstr "Nepavyko prisijungti"
 
 #: ../lib/errortype.py:83
-msgid "This dictionary uses Internet connection to translate words. Please connect to the Internet and try again."
-msgstr "Ðis þodynas paieðkà atlieka Internete. Prisijunkite prie Interneto ir bandykite dar kartà."
+msgid ""
+"This dictionary uses Internet connection to translate words. Please connect "
+"to the Internet and try again."
+msgstr ""
+"Ðis þodynas paieðkà atlieka Internete. Prisijunkite prie Interneto ir "
+"bandykite dar kartà."
 
-#: ../lib/errortype.py:92
-#: ../lib/gui/dictconnwin.py:182
+#: ../lib/errortype.py:92 ../lib/gui/dictconnwin.py:182
 #: ../lib/gui/dictconnwin.py:198
 msgid "Connection Error"
 msgstr "Prisijungimo klaida"
 
 #: ../lib/errortype.py:93
 msgid "Could not connect to host. Check your Internet connection or try later."
-msgstr "Nepavyko prisijungti. Patikrinkite Interneto ryðá arba pabandykite vëliau."
+msgstr ""
+"Nepavyko prisijungti. Patikrinkite Interneto ryðá arba pabandykite vëliau."
 
 #: ../lib/errortype.py:101
 msgid "Invalid encoding"
 msgstr "Netinkama koduotë"
 
 #: ../lib/errortype.py:102
-msgid "Selected encoding is not correct for this dictionary. Please select another from Edit > Character Encoding menu"
-msgstr "Pasirinkta koduotë nëra tinkama ðiam þodynui. Pasirinkite kità koduotæ ið meniu Keisti > Teksto koduotë"
+msgid ""
+"Selected encoding is not correct for this dictionary. Please select another "
+"from Edit > Character Encoding menu"
+msgstr ""
+"Pasirinkta koduotë nëra tinkama ðiam þodynui. Pasirinkite kità koduotæ ið "
+"meniu Keisti > Teksto koduotë"
 
 #: ../lib/errortype.py:111
 msgid "OpenDict Bug"
 msgstr "OpenDict klaida"
 
 #: ../lib/errortype.py:112
-msgid "Internal error occured. Please send bug report to OpenDict authors to prevent this error in the future. Thank you!"
-msgstr "Ávyko vidinë klaida. Kad tai nepasikartotø ateityje, praðome iðsiøsti praneðimà apie klaidà OpenDict autoriams. Dëkojame!"
+msgid ""
+"Internal error occured. Please send bug report to OpenDict authors to "
+"prevent this error in the future. Thank you!"
+msgstr ""
+"Ávyko vidinë klaida. Kad tai nepasikartotø ateityje, praðome iðsiøsti "
+"praneðimà apie klaidà OpenDict autoriams. Dëkojame!"
 
 #: ../lib/errortype.py:120
 msgid "Unknown Error"
@@ -90,23 +106,18 @@ msgstr ""
 "Bylos formatas ¥%s´ negali bûti atpaþintas\n"
 "pagal plëtiná. Pasirinkite ið sàraðo: "
 
-#: ../lib/gui/dictaddwin.py:46
-#: ../lib/gui/dictaddwin.py:47
-#: ../lib/gui/dictaddwin.py:48
-#: ../lib/gui/dictaddwin.py:49
+#: ../lib/gui/dictaddwin.py:46 ../lib/gui/dictaddwin.py:47
+#: ../lib/gui/dictaddwin.py:48 ../lib/gui/dictaddwin.py:49
 msgid "\"%s\" dictionary format"
 msgstr "¥%s´ þodyno formatas"
 
-#: ../lib/gui/dictaddwin.py:58
-#: ../lib/gui/dicteditorwin.py:91
+#: ../lib/gui/dictaddwin.py:58 ../lib/gui/dicteditorwin.py:91
 #: ../lib/gui/prefswin.py:108
 msgid "OK"
 msgstr "Gerai"
 
-#: ../lib/gui/dictaddwin.py:61
-#: ../lib/gui/dictconnwin.py:132
-#: ../lib/gui/dicteditorwin.py:94
-#: ../lib/gui/dicteditorwin.py:255
+#: ../lib/gui/dictaddwin.py:61 ../lib/gui/dictconnwin.py:132
+#: ../lib/gui/dicteditorwin.py:94 ../lib/gui/dicteditorwin.py:255
 #: ../lib/gui/prefswin.py:111
 msgid "Cancel"
 msgstr "Atðaukti"
@@ -147,9 +158,7 @@ msgstr "Simboliø koduotë:"
 msgid "Connect"
 msgstr "Prisijungti"
 
-#: ../lib/gui/dictconnwin.py:173
-#: ../lib/gui/mainwin.py:678
-#: ../lib/util.py:239
+#: ../lib/gui/dictconnwin.py:173 ../lib/gui/mainwin.py:678 ../lib/util.py:239
 msgid "Done"
 msgstr "Atlikta"
 
@@ -157,8 +166,7 @@ msgstr "Atlikta"
 msgid "Receiving database list..."
 msgstr "Siunèiamas duomenø baziø sàraðas..."
 
-#: ../lib/gui/dictconnwin.py:183
-#: ../lib/gui/dictconnwin.py:199
+#: ../lib/gui/dictconnwin.py:183 ../lib/gui/dictconnwin.py:199
 msgid "Unable to connect to server"
 msgstr "Nepavyko prisijungti prie serverio"
 
@@ -166,8 +174,7 @@ msgstr "Nepavyko prisijungti prie serverio"
 msgid "Connecting..."
 msgstr "Jungiamasi..."
 
-#: ../lib/gui/dictconnwin.py:253
-#: ../lib/util.py:218
+#: ../lib/gui/dictconnwin.py:253 ../lib/util.py:218
 msgid "Connecting to %s..."
 msgstr "Jungiamasi prie %s..."
 
@@ -187,8 +194,7 @@ msgstr "Vertimas #%d: "
 msgid "Dictionary \"%s\" has been changed"
 msgstr "Þodynas ¥%s´ buvo pakeistas"
 
-#: ../lib/gui/dicteditorwin.py:249
-#: ../lib/gui/dicteditorwin.py:337
+#: ../lib/gui/dicteditorwin.py:249 ../lib/gui/dicteditorwin.py:337
 msgid "Save"
 msgstr "Iðsaugoti"
 
@@ -216,8 +222,7 @@ msgstr "Keisti"
 msgid "Change translation"
 msgstr "Keisti vertimà"
 
-#: ../lib/gui/dicteditorwin.py:329
-#: ../lib/gui/miscwin.py:116
+#: ../lib/gui/dicteditorwin.py:329 ../lib/gui/miscwin.py:116
 #: ../lib/gui/pluginwin.py:145
 msgid "Remove"
 msgstr "Paðalinti"
@@ -246,8 +251,7 @@ msgstr "Iðsaugoti kaip..."
 msgid "Save with a different file name"
 msgstr "Iðsaugoti kitu vardu"
 
-#: ../lib/gui/dicteditorwin.py:351
-#: ../lib/gui/mainwin.py:1343
+#: ../lib/gui/dicteditorwin.py:351 ../lib/gui/mainwin.py:1343
 msgid "Word List"
 msgstr "Þodþiø sàraðas"
 
@@ -267,14 +271,10 @@ msgstr "Atidaryti..."
 msgid "Open dictionary file"
 msgstr "Atidaryti þodyno bylà"
 
-#: ../lib/gui/dicteditorwin.py:378
-#: ../lib/gui/errorwin.py:82
-#: ../lib/gui/helpwin.py:68
-#: ../lib/gui/helpwin.py:134
-#: ../lib/gui/helpwin.py:192
-#: ../lib/gui/miscwin.py:65
-#: ../lib/gui/miscwin.py:125
-#: ../lib/gui/pluginwin.py:91
+#: ../lib/gui/dicteditorwin.py:378 ../lib/gui/errorwin.py:82
+#: ../lib/gui/helpwin.py:68 ../lib/gui/helpwin.py:134
+#: ../lib/gui/helpwin.py:192 ../lib/gui/miscwin.py:65
+#: ../lib/gui/miscwin.py:125 ../lib/gui/pluginwin.py:91
 #: ../lib/gui/registerwin.py:87
 msgid "Close"
 msgstr "Uþdaryti"
@@ -311,13 +311,11 @@ msgstr "Þodynas iðsaugotas"
 msgid "Untitled"
 msgstr "Be pavadinimo"
 
-#: ../lib/gui/dicteditorwin.py:588
-#: ../lib/gui/dicteditorwin.py:645
+#: ../lib/gui/dicteditorwin.py:588 ../lib/gui/dicteditorwin.py:645
 msgid "Exit confirmation"
 msgstr "Iðëjimo patvirtinimas"
 
-#: ../lib/gui/dicteditorwin.py:600
-#: ../lib/gui/mainwin.py:1254
+#: ../lib/gui/dicteditorwin.py:600 ../lib/gui/mainwin.py:1254
 #: ../lib/installer.py:60
 msgid "Choose dictionary file"
 msgstr "Pasirinkite þodyno bylà"
@@ -354,19 +352,16 @@ msgstr "OpenDict yra daugiaplatformis þodynas."
 msgid "Credits"
 msgstr "Padëkos"
 
-#: ../lib/gui/mainwin.py:91
-#: ../lib/gui/mainwin.py:772
+#: ../lib/gui/mainwin.py:91 ../lib/gui/mainwin.py:772
 #: ../lib/gui/mainwin.py:810
 msgid "Stopped"
 msgstr "Sustabdyta"
 
-#: ../lib/gui/mainwin.py:96
-#: ../lib/gui/mainwin.py:777
+#: ../lib/gui/mainwin.py:96 ../lib/gui/mainwin.py:777
 msgid "Encode Failed"
 msgstr "Nepavyko iðkoduoti"
 
-#: ../lib/gui/mainwin.py:105
-#: ../lib/gui/mainwin.py:755
+#: ../lib/gui/mainwin.py:105 ../lib/gui/mainwin.py:755
 #: ../lib/gui/mainwin.py:1327
 msgid "Searching..."
 msgstr "Ieðkoma..."
@@ -516,8 +511,8 @@ msgid "Open connection to DICT server"
 msgstr "Prisijungti prie DICT serverio"
 
 #: ../lib/gui/mainwin.py:322
-msgid "Edit Dictionaries..."
-msgstr "Taisyti þodynus..."
+msgid "Create Dictionaries..."
+msgstr "Kurti þodynus..."
 
 #: ../lib/gui/mainwin.py:323
 msgid "Create and edit dictionaries"
@@ -544,8 +539,11 @@ msgid "Word:"
 msgstr "Þodis: "
 
 #: ../lib/gui/mainwin.py:351
-msgid "Enter some text and press \"Look Up\" button or [ENTER] key on your keyboard"
-msgstr "Áveskite tekstà ir spauskite mygtukà ¥Ieðkoti´ arba [ENTER] klaviðà savo klaviatûroje "
+msgid ""
+"Enter some text and press \"Look Up\" button or [ENTER] key on your keyboard"
+msgstr ""
+"Áveskite tekstà ir spauskite mygtukà ¥Ieðkoti´ arba [ENTER] klaviðà savo "
+"klaviatûroje "
 
 #: ../lib/gui/mainwin.py:357
 msgid "Look Up"
@@ -587,8 +585,10 @@ msgid ""
 "  </li>\n"
 "  <li>To install new dictionary from the Internet, select\n"
 "    <i><b>Manage Dictionaries</b></i>\n"
-"    from <i><b>Tools</b></i> menu and choose <i><b>Available</b></i> tab.</li>\n"
-"  <li>To install new dictionary from file, select <i><b>Install Dictionary From File...</b></i>\n"
+"    from <i><b>Tools</b></i> menu and choose <i><b>Available</b></i> tab.</"
+"li>\n"
+"  <li>To install new dictionary from file, select <i><b>Install Dictionary "
+"From File...</b></i>\n"
 "  from <i><b>Dictionaries</b></i> menu.\n"
 "  </li>\n"
 "</ul>\n"
@@ -604,13 +604,16 @@ msgstr ""
 "<h3>Malonaus naudojimosi þodynø programa OpenDict</h3>\n"
 "<p><b>Trumpa naudojimo instrukcija:</b></p>\n"
 "<ul>\n"
-"  <li>Norëdami pradëti naudotis þodynu, pasirinkite tinkamà ið <i><b>Þodynai</b></i>\n"
+"  <li>Norëdami pradëti naudotis þodynu, pasirinkite tinkamà ið "
+"<i><b>Þodynai</b></i>\n"
 "    meniu.\n"
 "  </li>\n"
 "  <li>Norëdami ádiegti naujà þodynà ið Interneto, pasirinkite\n"
 "    <i><b>Tvarkyti þodynus</b></i>\n"
-"    ið <i><b>Árankiai</b></i> meniu, tada pasirinkite <i><b>Galimi</b></i> kortelæ.</li>\n"
-"  <li>Norëdami ádiegti naujà þodynà ið bylos, pasirinkite <i><b>Ádiegti þodynà ið bylos...</b></i>\n"
+"    ið <i><b>Árankiai</b></i> meniu, tada pasirinkite <i><b>Galimi</b></i> "
+"kortelæ.</li>\n"
+"  <li>Norëdami ádiegti naujà þodynà ið bylos, pasirinkite <i><b>Ádiegti "
+"þodynà ið bylos...</b></i>\n"
 "  ið <i><b>Þodynai</b></i> meniu.\n"
 "  </li>\n"
 "</ul>\n"
@@ -630,16 +633,24 @@ msgid "No dictionary activated"
 msgstr "Neaktyvuotas joks þodynas"
 
 #: ../lib/gui/mainwin.py:729
-msgid "No dictionary activated. Please select one from \"Dictionaries\" menu and try again."
-msgstr "Neaktyvuotas joks þodynas. Pasirinkite þodynà ið ¥Þodynai´ meniu ir bandykite dar kartà."
+msgid ""
+"No dictionary activated. Please select one from \"Dictionaries\" menu and "
+"try again."
+msgstr ""
+"Neaktyvuotas joks þodynas. Pasirinkite þodynà ið ¥Þodynai´ meniu ir "
+"bandykite dar kartà."
 
 #: ../lib/gui/mainwin.py:732
 msgid "No dictionaries installed"
 msgstr "Nëra ádiegtø þodynø"
 
 #: ../lib/gui/mainwin.py:733
-msgid "There is no dictionaries installed. You can install one by selecting Tools > Manage Dictionaries > Available"
-msgstr "Nëra ádiegtø þodynø. Ádiegti galite ið meniu pasirinkdami Árankiai > Tvarkyti þodynus > Galimi"
+msgid ""
+"There is no dictionaries installed. You can install one by selecting Tools > "
+"Manage Dictionaries > Available"
+msgstr ""
+"Nëra ádiegtø þodynø. Ádiegti galite ið meniu pasirinkdami Árankiai > "
+"Tvarkyti þodynus > Galimi"
 
 #: ../lib/gui/mainwin.py:746
 msgid "Please enter some text and try again"
@@ -674,8 +685,8 @@ msgid "File Register"
 msgstr "Bylø registras"
 
 #: ../lib/gui/mainwin.py:957
-msgid "Edit Dictionaries"
-msgstr "Taisyti þodynus"
+msgid "Create Dictionaries"
+msgstr "Kurti þodynus"
 
 #: ../lib/gui/mainwin.py:966
 msgid "Preferences"
@@ -687,7 +698,8 @@ msgstr "Licencija atmesta"
 
 #: ../lib/gui/mainwin.py:1046
 msgid "You cannot use dictionary \"%s\" without accepting licence agreement"
-msgstr "Jûs negalite naudotis þodynu ¥%s´, jei nesutinkate su licencijos sàlygomis"
+msgstr ""
+"Jûs negalite naudotis þodynu ¥%s´, jei nesutinkate su licencijos sàlygomis"
 
 #: ../lib/gui/mainwin.py:1060
 msgid "Dictionary Index"
@@ -695,11 +707,15 @@ msgstr "Þodyno indeksas"
 
 #: ../lib/gui/mainwin.py:1061
 msgid ""
-"This is the first time you use this dictionary or it has been changed on disk since last indexing. Indexing is used to make search more efficient. The dictionary will be indexed now. It can take a few or more seconds.\n"
+"This is the first time you use this dictionary or it has been changed on "
+"disk since last indexing. Indexing is used to make search more efficient. "
+"The dictionary will be indexed now. It can take a few or more seconds.\n"
 "\n"
 "Press OK to continue..."
 msgstr ""
-"Ðis þodynas naudojamas pirmà kartà arba buvo pakeistas po paskutinio indeksavimo. Indeksavimas naudojamas þodþiø paieðkai þodyne pagreitinti. Dabar þodynas bus perindeksuotas. Tai gali uþtrukti keletà sekudþiø.\n"
+"Ðis þodynas naudojamas pirmà kartà arba buvo pakeistas po paskutinio "
+"indeksavimo. Indeksavimas naudojamas þodþiø paieðkai þodyne pagreitinti. "
+"Dabar þodynas bus perindeksuotas. Tai gali uþtrukti keletà sekudþiø.\n"
 "\n"
 "Kad pratæstumëte, spauskite ¥Gerai´..."
 
@@ -707,8 +723,7 @@ msgstr ""
 msgid "Index Creation Error"
 msgstr "Indeksavimo klaida"
 
-#: ../lib/gui/mainwin.py:1099
-#: ../lib/gui/pluginwin.py:737
+#: ../lib/gui/mainwin.py:1099 ../lib/gui/pluginwin.py:737
 msgid "Error"
 msgstr "Klaida"
 
@@ -780,14 +795,14 @@ msgstr "Licencija"
 
 #: ../lib/gui/miscwin.py:103
 msgid ""
-"You have directories that containt invalid dictionaries and cannot be loaded. \n"
+"You have directories that containt invalid dictionaries and cannot be "
+"loaded. \n"
 "You can try to remove these directories right now."
 msgstr ""
 "Pas jus yra katalogø su blogais þodynais, kurie negali bûti ákrauti. \n"
 "Galite pabandyti tuojau pat paðalinti tuos katalogus."
 
-#: ../lib/gui/miscwin.py:143
-#: ../lib/gui/pluginwin.py:609
+#: ../lib/gui/miscwin.py:143 ../lib/gui/pluginwin.py:609
 msgid "Unable to remove"
 msgstr "Nepavyko paðalinti"
 
@@ -811,8 +826,7 @@ msgstr "Galimi"
 msgid "Install From File"
 msgstr "Ádiegti ið bylos..."
 
-#: ../lib/gui/pluginwin.py:157
-#: ../lib/gui/pluginwin.py:221
+#: ../lib/gui/pluginwin.py:157 ../lib/gui/pluginwin.py:221
 msgid "Name"
 msgstr "Pavadinimas"
 
@@ -874,7 +888,8 @@ msgstr "Byla yra sugadinta"
 
 #: ../lib/gui/pluginwin.py:719
 msgid "Downloaded file is damaged and cannot be installed. Please try again."
-msgstr "Parsiøsta byla yra sugadinta ir negali bûti ádiegta. Bandykite dar kartà."
+msgstr ""
+"Parsiøsta byla yra sugadinta ir negali bûti ádiegta. Bandykite dar kartà."
 
 #: ../lib/gui/pluginwin.py:760
 msgid "Unable to install"
@@ -912,26 +927,22 @@ msgstr "Iðeinant iðsaugoti skyriklio pozicijà"
 msgid "Take words from the clipboard by default"
 msgstr "Visada imti þodþius ið iðkarpinës"
 
-#: ../lib/gui/registerwin.py:64
-#: ../lib/gui/registerwin.py:104
+#: ../lib/gui/registerwin.py:64 ../lib/gui/registerwin.py:104
 #: ../lib/gui/registerwin.py:150
 msgid "Name: %s"
 msgstr "Pavadinimas: %s"
 
-#: ../lib/gui/registerwin.py:67
-#: ../lib/gui/registerwin.py:105
+#: ../lib/gui/registerwin.py:67 ../lib/gui/registerwin.py:105
 #: ../lib/gui/registerwin.py:151
 msgid "Path: %s"
 msgstr "Kelias: %s"
 
-#: ../lib/gui/registerwin.py:70
-#: ../lib/gui/registerwin.py:106
+#: ../lib/gui/registerwin.py:70 ../lib/gui/registerwin.py:106
 #: ../lib/gui/registerwin.py:152
 msgid "Format: %s"
 msgstr "Formatas: %s"
 
-#: ../lib/gui/registerwin.py:73
-#: ../lib/gui/registerwin.py:107
+#: ../lib/gui/registerwin.py:73 ../lib/gui/registerwin.py:107
 #: ../lib/gui/registerwin.py:153
 msgid "Encoding: %s"
 msgstr "Koduotë: %s"
@@ -944,8 +955,7 @@ msgstr "Pridëti naujà..."
 msgid "Remove selected"
 msgstr "Paðalinti paþymëtà"
 
-#: ../lib/gui/registerwin.py:132
-#: ../lib/gui/registerwin.py:139
+#: ../lib/gui/registerwin.py:132 ../lib/gui/registerwin.py:139
 msgid "Error while deleting \"%s\""
 msgstr "Klaida paðalinant ¥%s´"
 
@@ -957,19 +967,15 @@ msgstr "Atpaþinimo klaida"
 msgid "File %s is not supported by OpenDict"
 msgstr "Byla ¥%s´ nëra tinkama programai OpenDict"
 
-#: ../lib/installer.py:107
-#: ../lib/installer.py:109
+#: ../lib/installer.py:107 ../lib/installer.py:109
 msgid "Installation failed"
 msgstr "Nepavyko ádiegti"
 
-#: ../lib/installer.py:121
-#: ../lib/installer.py:307
-#: ../lib/installer.py:315
+#: ../lib/installer.py:121 ../lib/installer.py:307 ../lib/installer.py:315
 msgid "Installation Error"
 msgstr "Diegimo klaida"
 
-#: ../lib/installer.py:123
-#: ../lib/installer.py:127
+#: ../lib/installer.py:123 ../lib/installer.py:127
 msgid "Error: Installation failed"
 msgstr "Klaida: nepavyko ádiegti"
 
@@ -978,16 +984,17 @@ msgid "Dictionary installed"
 msgstr "Þodynas ádiegtas"
 
 #: ../lib/installer.py:132
-msgid "Dictionary successfully installed. You can choose it from \"Dictionaries\" menu now."
-msgstr "Þodynas sëkmingai ádiegtas. Dabar já galite pasirinkti ið ¥Þodynai´ meniu."
+msgid ""
+"Dictionary successfully installed. You can choose it from \"Dictionaries\" "
+"menu now."
+msgstr ""
+"Þodynas sëkmingai ádiegtas. Dabar já galite pasirinkti ið ¥Þodynai´ meniu."
 
-#: ../lib/installer.py:142
-#: ../lib/installer.py:217
+#: ../lib/installer.py:142 ../lib/installer.py:217
 msgid "File %s does not exist"
 msgstr "Byla %s neegzistuoja"
 
-#: ../lib/installer.py:145
-#: ../lib/installer.py:221
+#: ../lib/installer.py:145 ../lib/installer.py:221
 msgid "%s is not a file"
 msgstr "%s nëra byla"
 
@@ -1015,15 +1022,21 @@ msgstr "Áskiepio byla tuðèia (%s)"
 msgid "Selected file is not valid OpenDict plugin"
 msgstr "Nurodyta byla nëra teisingas OpenDict áskiepis"
 
-#: ../lib/installer.py:294
-#: ../lib/installer.py:377
-msgid "This dictionary already installed. If you want to upgrade it, please remove old version first."
-msgstr "Ðis þodynas jau ádiegtas. Norëdami atnaujinti, pirma paðalinkite senàjà versijà."
+#: ../lib/installer.py:294 ../lib/installer.py:377
+msgid ""
+"This dictionary already installed. If you want to upgrade it, please remove "
+"old version first."
+msgstr ""
+"Ðis þodynas jau ádiegtas. Norëdami atnaujinti, pirma paðalinkite senàjà "
+"versijà."
 
-#: ../lib/installer.py:308
-#: ../lib/installer.py:316
-msgid "Installation tool for this dictionary failed to start. Please report this problem to developers."
-msgstr "Ðiam þodynui diegimo árankio paleisti nepavyko. Praðome apie problemà praneðti kûrëjams.??"
+#: ../lib/installer.py:308 ../lib/installer.py:316
+msgid ""
+"Installation tool for this dictionary failed to start. Please report this "
+"problem to developers."
+msgstr ""
+"Ðiam þodynui diegimo árankio paleisti nepavyko. Praðome apie problemà "
+"praneðti kûrëjams.??"
 
 #: ../lib/installer.py:322
 msgid "Installation Aborted"
@@ -1033,10 +1046,13 @@ msgstr "Diegimas nutrauktas"
 msgid "Dictionary installation has been aborted."
 msgstr "Þodyno diegimas nutrauktas."
 
-#: ../lib/installer.py:348
-#: ../lib/installer.py:400
-msgid "Error while removing created directories after plugin installation failure. This may be permission or disk space error."
-msgstr "Po nesëkmës diegiant áskiepius nepavyko paðalinti sukurtø katalogø.  Klaida gali bûti susijusi su bylos leidimais."
+#: ../lib/installer.py:348 ../lib/installer.py:400
+msgid ""
+"Error while removing created directories after plugin installation failure. "
+"This may be permission or disk space error."
+msgstr ""
+"Po nesëkmës diegiant áskiepius nepavyko paðalinti sukurtø katalogø.  Klaida "
+"gali bûti susijusi su bylos leidimais."
 
 #: ../lib/installer.py:352
 msgid "Unable to install plugin"
@@ -1060,7 +1076,8 @@ msgstr "Sintaksës klaida"
 
 #: ../lib/misc.py:37
 msgid "You must be connected to the internet to use this dictionary"
-msgstr "Turite bûti prisijungæ prie interneto, kad galëtumëte naudoti ðá þodynà"
+msgstr ""
+"Turite bûti prisijungæ prie interneto, kad galëtumëte naudoti ðá þodynà"
 
 #: ../lib/misc.py:38
 msgid "Time out"
@@ -1078,3 +1095,5 @@ msgstr "Parsiunèiama... %d%%"
 msgid "wxPython Version Error"
 msgstr "wxPython versijos klaida"
 
+#~ msgid "Edit Dictionaries"
+#~ msgstr "Taisyti þodynus"

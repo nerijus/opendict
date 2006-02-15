@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-02-14 15:14+EET\n"
+"POT-Creation-Date: 2006-02-15 18:27+EET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -496,7 +496,7 @@ msgid "Open connection to DICT server"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:322
-msgid "Edit Dictionaries..."
+msgid "Create Dictionaries..."
 msgstr ""
 
 #: ../lib/gui/mainwin.py:323
@@ -633,7 +633,7 @@ msgid "File Register"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:957
-msgid "Edit Dictionaries"
+msgid "Create Dictionaries"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:966

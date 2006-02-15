@@ -319,7 +319,7 @@ class MainWindow(wxFrame):
 
       menuTools.AppendSeparator()
       
-      menuTools.Append(5002, _("Edit Dictionaries..."),
+      menuTools.Append(5002, _("Create Dictionaries..."),
                        _("Create and edit dictionaries"))  
                            
       self.menuBar.Append(menuTools, _("Tools"))
@@ -954,7 +954,7 @@ class MainWindow(wxFrame):
 
 
    def onShowDictEditor(self, event):
-      editor = DictEditorWindow(self, -1, _("Edit Dictionaries"),
+      editor = DictEditorWindow(self, -1, _("Create Dictionaries"),
                                      size=(400, 500),
                                      style=wxDEFAULT_FRAME_STYLE)
       editor.CentreOnScreen()
