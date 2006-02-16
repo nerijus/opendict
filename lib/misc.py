@@ -42,25 +42,25 @@ errors = {1: _("Not found"),
 #
 # Character Encodings
 #
-encodings = {"Unicode (UTF-8)": "UTF-8",
-             "Western (ISO-8859-1)": "ISO-8859-1",
-             "Central European (ISO-8859-2)": "ISO-8859-2",
-             "Nordic (ISO-8859-10)": "ISO-8859-10",
-             "South European (ISO-8859-3)": "ISO-8859-3",
-             "Greek (ISO-8859-7)": "ISO-8859-7",
-             "Baltic (ISO-8859-13)": "ISO-8859-13",
-             "Cyrillic (KOI8-R)": "KOI8-R",
-             "Arabic (ISO-8859-6)": "ISO-8859-6"}
+encodings = {_("Unicode (UTF-8)"): "UTF-8",
+             _("Western (ISO-8859-1)"): "ISO-8859-1",
+             _("Central European (ISO-8859-2)"): "ISO-8859-2",
+             _("Nordic (ISO-8859-10)"): "ISO-8859-10",
+             _("South European (ISO-8859-3)"): "ISO-8859-3",
+             _("Greek (ISO-8859-7)"): "ISO-8859-7",
+             _("Baltic (ISO-8859-13)"): "ISO-8859-13",
+             _("Cyrillic (KOI8-R)"): "KOI8-R",
+             _("Arabic (ISO-8859-6)"): "ISO-8859-6"}
 
 #
 # Font faces
 #
-fontFaces = {"Fixed": "fixed",
-             "Helvetica": "helvetica",
-             "Courier": "courier",
-             "Times": "Times",
-             "Verdana": "Verdana",
-             "Lucida": "Lucida"}
+fontFaces = {_("Fixed"): "fixed",
+             _("Helvetica"): "helvetica",
+             _("Courier"): "courier",
+             _("Times"): "Times",
+             _("Verdana"): "Verdana",
+             _("Lucida"): "Lucida"}
 
 
 #fontSizes = ["1", "2", "3", "4", "6", "8", "10", "12"]
