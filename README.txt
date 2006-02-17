@@ -15,7 +15,7 @@ Requirements
 ------------
 
    - python >= 2.3
-   - wxPython 2.5 or 2.6 for python
+   - wxPython 2.6 for python
    - python-xml (PyXML) for python
    - gettext >= 0.14
 
