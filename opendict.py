@@ -108,19 +108,17 @@ class OpenDictApp(wx.App):
           except:
               pass
 
-      if wxVersion.split('.') < ['2', '5']:
+      if wxVersion.split('.') < ['2', '6']:
           from lib.gui import errorwin
           
           # Go away, wxPython 2.4!
           title = _("wxPython Version Error")
-          msg = _("wxPython %s is installed on this system.\n\n" \
-                 "OpenDict %s requires wxPython 2.5 to run smoothly. " \
-                  "wxPython 2.4\n" \
-                  "is not supported anymore because of huge number of " \
-                  "bugs.\n\n" \
-                  "Please get wxPython 2.5 from " \
-                  "http://www.wxpython.org/download.php" \
-                  % (wxVersion, info.VERSION))
+          msg = _("wxPython %s is installed on this system.\n\n"
+                  "OpenDict %s requires wxPython 2.6 to run smoothly.\n\n"
+                  "You can find wxPython 2.6 at "
+                  "http://www.wxpython.org or you can "
+                  "install it using your system package manager.") \
+                  % (wxVersion, info.VERSION)
           errorwin.showErrorMessage(title, msg)
           return False
 

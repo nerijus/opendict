@@ -521,8 +521,8 @@ class PluginManagerWindow(wxFrame):
        except Exception, e:
            traceback.print_exc()
            progressDialog.Destroy()
-           error = _("Unable to download list from %s: %s" \
-                     % (self.app.config.get('repository-list'), e))
+           error = _("Unable to download list from %s: %s") \
+                     % (self.app.config.get('repository-list'), e)
 
        if not error:
            error = downloader.getErrorMessage()
@@ -607,7 +607,7 @@ class PluginManagerWindow(wxFrame):
        except Exception, e:
            traceback.print_exc()
            title = _("Unable to remove")
-           msg = _("Unable to remove dictionary \"%s\"" % dictName)
+           msg = _("Unable to remove dictionary \"%s\"") % dictName
            errorwin.showErrorMessage(title, msg)
            return
 
@@ -735,10 +735,10 @@ class PluginManagerWindow(wxFrame):
            except Exception, e:
                traceback.print_exc()
                title = _("Error")
-               msg = _("Unable to remove old version of \"%s\". " \
-                       "Error occured: \"<i>%s</i>\". New version " \
-                       "cannot be installed without removing old one." \
-                       % (dictInstance.getName(), e))
+               msg = _("Unable to remove old version of \"%s\". "
+                       "Error occured: \"<i>%s</i>\". New version "
+                       "cannot be installed without removing old one.") \
+                       % (dictInstance.getName(), e)
                errorwin.showErrorMessage(title, msg)
                return
        
@@ -758,8 +758,8 @@ class PluginManagerWindow(wxFrame):
        except Exception, e:
            traceback.print_exc()
            title = _("Unable to install")
-           msg = _("Unable to install dictionary \"%s\"." \
-                   % dictInfo.getName())
+           msg = _("Unable to install dictionary \"%s\".") \
+                   % dictInfo.getName()
            errorwin.showErrorMessage(title, msg)
            return
 

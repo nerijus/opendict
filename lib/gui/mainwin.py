@@ -94,9 +94,9 @@ class HtmlWindow(wxHtmlWindow):
          systemLog(ERROR, "Unable to decode '%s': %s" % (word.encode('UTF-8'),
                                                          e))
          title = _("Encode Failed")
-         msg = _("Unable to encode text \"%s\" in %s for \"%s\"." \
+         msg = _("Unable to encode text \"%s\" in %s for \"%s\".") \
                  % (enc.toWX(word), parent.activeDictionary.getEncoding(),
-                 parent.activeDictionary.getName()))
+                 parent.activeDictionary.getName())
                     
          errorwin.showErrorMessage(title, msg)
 
@@ -330,11 +330,6 @@ class MainWindow(wxFrame):
       #
       menuHelp = wxMenu()
 
-      idLicence = wx.NewId()
-      menuHelp.Append(idLicence, _("&License"))
-      
-      menuHelp.AppendSeparator()
-      
       idAbout = wx.NewId()
       menuHelp.Append(idAbout, _("&About\tCtrl-A"))
 
@@ -496,7 +491,6 @@ class MainWindow(wxFrame):
       EVT_MENU(self, idPrefs, self.onShowPrefsWindow)
 
       # Help menu events
-      EVT_MENU(self, idLicence, self.onLicence)
       EVT_MENU(self, idAbout, self.onAbout)
 
       # Other events
@@ -593,7 +587,7 @@ class MainWindow(wxFrame):
          try:
             assert result.__class__ == meta.SearchResult
          except:
-            self.SetStatusText(_(errortype.INTERNAL_ERROR.getMessage()))
+            self.SetStatusText(errortype.INTERNAL_ERROR.getMessage())
 
             if self.activeDictionary.getType() == dicttype.PLUGIN:
                title = errortype.INTERNAL_ERROR.getMessage()
@@ -638,11 +632,11 @@ class MainWindow(wxFrame):
             systemLog(ERROR, "Unable to decode translation in %s (%s)" \
                       % (self.activeDictionary.getEncoding(),
                          e))
-            title = _(errortype.INVALID_ENCODING.getMessage())
+            title = errortype.INVALID_ENCODING.getMessage()
             msg = _("Translation cannot be displayed using selected " \
                     "encoding %s. Please try another encoding from " \
-                    "View > Character Encoding menu." \
-                    % self.activeDictionary.getEncoding())
+                    "View > Character Encoding menu.") \
+                    % self.activeDictionary.getEncoding()
             self.SetStatusText(title)
             errorwin.showErrorMessage(title, msg)
             return 
@@ -775,11 +769,11 @@ class MainWindow(wxFrame):
          systemLog(ERROR, "Unable to decode '%s': %s" % (word.encode('UTF-8'),
                                                          e))
          title = _("Encode Failed")
-         msg = _("Unable to encode text \"%s\" in %s for \"%s\". " \
-                 "That logically means the word " \
-                 "definition does not exist in the dictionary." \
+         msg = _("Unable to encode text \"%s\" in %s for \"%s\". "
+                 "That logically means the word "
+                 "definition does not exist in the dictionary.") \
                  % (enc.toWX(word), self.activeDictionary.getEncoding(),
-                 self.activeDictionary.getName()))
+                 self.activeDictionary.getName())
                     
          errorwin.showErrorMessage(title, msg)
 
@@ -1081,7 +1075,7 @@ class MainWindow(wxFrame):
                        "character encoding %s is not correct for this " \
                        "dictionary. Try selecting " \
                        "another encoding from View > Character Encoding " \
-                       "menu" % self.app.config.get('encoding'))
+                       "menu") % self.app.config.get('encoding')
 
                from lib.gui import errorwin
                errorwin.showErrorMessage(title, msg)
@@ -1097,8 +1091,8 @@ class MainWindow(wxFrame):
             wx.EndBusyCursor()
             traceback.print_exc()
             title = _("Error")
-            msg = _("Unable to load dictionary index table. " \
-                    "Got error: %s" % e)
+            msg = _("Unable to load dictionary index table. "
+                    "Got error: %s") % e
             from lib.gui import errorwin
             errorwin.showErrorMessage(title, msg)
             return
@@ -1295,17 +1289,6 @@ class MainWindow(wxFrame):
 
       systemLog(WARNING, "Manual function is not impelemented yet")
       
-
-   def onLicence(self, event):
-      """Shows 'License' window"""
-
-      licenseWindow = LicenseWindow(self, -1,
-                                _("License"),
-                                size=(500, 400),
-                                style=wxDEFAULT_FRAME_STYLE)
-      licenseWindow.CenterOnScreen()
-      licenseWindow.Show(True)
-
 
    def onAbout(self, event):
       """Shows 'About' window"""

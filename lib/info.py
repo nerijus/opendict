@@ -1,7 +1,7 @@
 # OpenDict
 #
 # OpenDict
-# Copyright (c) 2003-20045Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ import os
 import imp
 
 # OpenDict version
-VERSION = "0.6.1"
+VERSION = "0.6.2"
 
 # File system objects
 __OPENDICT_LOCAL_DIR = ".opendict"

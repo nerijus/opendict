@@ -93,11 +93,11 @@ class CreditsWindow(wxDialog):
       # "Written by" panel
       writePanel = wxPanel(nb, -1)
       vboxWrite = wxBoxSizer(wxVERTICAL)
-      writtenString = unicode("Martynas Jocius <mjoc@akl.lt>\n" \
-                              "Nerijus Baliūnas <nerijusb@dtiltas.lt>\n" \
+      writtenString = unicode("Martynas Jocius <mjoc@akl.lt>\n"
+                              "Nerijus Baliūnas <nerijusb@dtiltas.lt>\n"
                               "Mantas Kriaučiūnas <mantas@akl.lt>",
                               "UTF-8")
-      written = _(enc.toWX(writtenString))
+      written = enc.toWX(writtenString)
       labelWrite = wxStaticText(writePanel, -1, written)
       vboxWrite.Add(labelWrite, 0, wxALL, 10)
       writePanel.SetSizer(vboxWrite)
@@ -111,7 +111,7 @@ class CreditsWindow(wxDialog):
                             "<irena.baliukonyte@mif.vu.lt>\n" \
                             "Martynas Jocius <mjoc@akl.lt>",
                             "UTF-8")
-      trans = _(enc.toWX(transString))
+      trans = enc.toWX(transString)
       labelTP = wxStaticText(tPanel, -1, trans)
       vboxTP.Add(labelTP, 0, wxALL, 10)
       tPanel.SetSizer(vboxTP)
@@ -123,7 +123,7 @@ class CreditsWindow(wxDialog):
       vboxThP = wxBoxSizer(wxVERTICAL)
       thanksString = unicode("Kęstutis Biliūnas <kebil@kaunas.init.lt>\n",
                              "UTF-8")
-      thanks = _(enc.toWX(thanksString))
+      thanks = enc.toWX(thanksString)
       labelThP = wxStaticText(thPanel, -1, thanks)
       vboxThP.Add(labelThP, 0, wxALL, 10)
       thPanel.SetSizer(vboxThP)
@@ -161,7 +161,7 @@ class AboutWindow(wxDialog):
       vbox.Add(wxStaticBitmap(self, -1, bmp, wxPoint(-1, -1)), 0, wxALL |
       wxCENTRE, 5)
 
-      title = _("OpenDict %s" % info.VERSION)
+      title = "OpenDict %s" % info.VERSION
       copy = "Copyright %s 2003-2006 Martynas Jocius <mjoc@akl.lt>" % \
              unicode("\302\251", "UTF-8")
       desc = _("OpenDict is multiplatform dictionary.")
@@ -189,6 +189,9 @@ class AboutWindow(wxDialog):
       self.buttonCredits = wxButton(self, 2004, _("Credits"))
       hboxButtons.Add(self.buttonCredits, 0, wxALL | wxALIGN_LEFT, 3)
       
+      self.buttonLicence = wxButton(self, 2006, _("Licence"))
+      hboxButtons.Add(self.buttonLicence, 0, wxALL | wxALIGN_LEFT, 3)
+      
       self.buttonOK = wxButton(self, 2003, _("Close"))
       hboxButtons.Add(self.buttonOK, 0, wxALL | wxALIGN_RIGHT, 3)
       
@@ -199,6 +202,7 @@ class AboutWindow(wxDialog):
 
       EVT_BUTTON(self, 2003, self.onClose)
       EVT_BUTTON(self, 2004, self.onCredits)
+      EVT_BUTTON(self, 2006, self.onLicence)
 
 
    def onClose(self, event):
@@ -210,3 +214,14 @@ class AboutWindow(wxDialog):
                                          size=(500, 150))
       creditsWindow.CentreOnScreen()
       creditsWindow.Show()
+
+      
+   def onLicence(self, event):
+      licenseWindow = LicenseWindow(self, -1,
+                                _("Licence"),
+                                size=(500, 400),
+                                style=wxDEFAULT_FRAME_STYLE)
+      licenseWindow.CenterOnScreen()
+      licenseWindow.Show(True)
+
+

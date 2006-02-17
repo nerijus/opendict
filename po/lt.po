@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenDict 0.6.1\n"
-"POT-Creation-Date: 2006-02-15 14:06+EET\n"
-"PO-Revision-Date: 2006-02-15 14:05+0300\n"
+"POT-Creation-Date: 2006-02-17 15:56+EET\n"
+"PO-Revision-Date: 2006-02-17 15:56+0300\n"
 "Last-Translator: Martynas Jocius <mjoc@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konf.lt>\n"
 "MIME-Version: 1.0\n"
@@ -158,7 +158,7 @@ msgstr "Simboliø koduotë:"
 msgid "Connect"
 msgstr "Prisijungti"
 
-#: ../lib/gui/dictconnwin.py:173 ../lib/gui/mainwin.py:678 ../lib/util.py:239
+#: ../lib/gui/dictconnwin.py:173 ../lib/gui/mainwin.py:672 ../lib/util.py:239
 msgid "Done"
 msgstr "Atlikta"
 
@@ -251,7 +251,7 @@ msgstr "Iðsaugoti kaip..."
 msgid "Save with a different file name"
 msgstr "Iðsaugoti kitu vardu"
 
-#: ../lib/gui/dicteditorwin.py:351 ../lib/gui/mainwin.py:1343
+#: ../lib/gui/dicteditorwin.py:351 ../lib/gui/mainwin.py:1326
 msgid "Word List"
 msgstr "Þodþiø sàraðas"
 
@@ -273,7 +273,7 @@ msgstr "Atidaryti þodyno bylà"
 
 #: ../lib/gui/dicteditorwin.py:378 ../lib/gui/errorwin.py:82
 #: ../lib/gui/helpwin.py:68 ../lib/gui/helpwin.py:134
-#: ../lib/gui/helpwin.py:192 ../lib/gui/miscwin.py:65
+#: ../lib/gui/helpwin.py:195 ../lib/gui/miscwin.py:65
 #: ../lib/gui/miscwin.py:125 ../lib/gui/pluginwin.py:91
 #: ../lib/gui/registerwin.py:87
 msgid "Close"
@@ -315,7 +315,7 @@ msgstr "Be pavadinimo"
 msgid "Exit confirmation"
 msgstr "Iðëjimo patvirtinimas"
 
-#: ../lib/gui/dicteditorwin.py:600 ../lib/gui/mainwin.py:1254
+#: ../lib/gui/dicteditorwin.py:600 ../lib/gui/mainwin.py:1248
 #: ../lib/installer.py:60
 msgid "Choose dictionary file"
 msgstr "Pasirinkite þodyno bylà"
@@ -323,6 +323,10 @@ msgstr "Pasirinkite þodyno bylà"
 #: ../lib/gui/dicteditorwin.py:614
 msgid "Open Failed"
 msgstr "Nepavyko atidaryti"
+
+#: ../lib/gui/dicteditorwin.py:615
+msgid "Unable to open dictionary (got message: %s)"
+msgstr "Nepavyko atidaryti þodyno (gautas praneðimas: %s)"
 
 #: ../lib/gui/dicteditorwin.py:630
 msgid "Dictionary loaded"
@@ -352,17 +356,25 @@ msgstr "OpenDict yra daugiaplatformis þodynas."
 msgid "Credits"
 msgstr "Padëkos"
 
-#: ../lib/gui/mainwin.py:91 ../lib/gui/mainwin.py:772
-#: ../lib/gui/mainwin.py:810
+#: ../lib/gui/helpwin.py:192 ../lib/gui/helpwin.py:221
+msgid "Licence"
+msgstr "Licencija"
+
+#: ../lib/gui/mainwin.py:91 ../lib/gui/mainwin.py:766
+#: ../lib/gui/mainwin.py:804
 msgid "Stopped"
 msgstr "Sustabdyta"
 
-#: ../lib/gui/mainwin.py:96 ../lib/gui/mainwin.py:777
+#: ../lib/gui/mainwin.py:96 ../lib/gui/mainwin.py:771
 msgid "Encode Failed"
 msgstr "Nepavyko iðkoduoti"
 
-#: ../lib/gui/mainwin.py:105 ../lib/gui/mainwin.py:755
-#: ../lib/gui/mainwin.py:1327
+#: ../lib/gui/mainwin.py:97
+msgid "Unable to encode text \"%s\" in %s for \"%s\"."
+msgstr "Nepavyko uþkoduoti teksto ¥%s´ koduote ¥%s´ þodynui ¥%s´."
+
+#: ../lib/gui/mainwin.py:105 ../lib/gui/mainwin.py:749
+#: ../lib/gui/mainwin.py:1310
 msgid "Searching..."
 msgstr "Ieðkoma..."
 
@@ -523,53 +535,49 @@ msgid "Tools"
 msgstr "Árankiai"
 
 #: ../lib/gui/mainwin.py:334
-msgid "&License"
-msgstr "Licencija"
-
-#: ../lib/gui/mainwin.py:339
 msgid "&About\tCtrl-A"
 msgstr "&Apie\tCtrl-A"
 
-#: ../lib/gui/mainwin.py:341
+#: ../lib/gui/mainwin.py:336
 msgid "&Help"
 msgstr "&Pagalba"
 
-#: ../lib/gui/mainwin.py:346
+#: ../lib/gui/mainwin.py:341
 msgid "Word:"
 msgstr "Þodis: "
 
-#: ../lib/gui/mainwin.py:351
+#: ../lib/gui/mainwin.py:346
 msgid ""
 "Enter some text and press \"Look Up\" button or [ENTER] key on your keyboard"
 msgstr ""
 "Áveskite tekstà ir spauskite mygtukà ¥Ieðkoti´ arba [ENTER] klaviðà savo "
 "klaviatûroje "
 
-#: ../lib/gui/mainwin.py:357
+#: ../lib/gui/mainwin.py:352
 msgid "Look Up"
 msgstr "Ieðkoti"
 
-#: ../lib/gui/mainwin.py:358
+#: ../lib/gui/mainwin.py:353
 msgid "Click this button to look up word in the dictionary"
 msgstr "Paspauskite ðá mygtukà þodþio paieðkai þodyne"
 
-#: ../lib/gui/mainwin.py:369
+#: ../lib/gui/mainwin.py:364
 msgid "History Back"
 msgstr "Atgal"
 
-#: ../lib/gui/mainwin.py:378
+#: ../lib/gui/mainwin.py:373
 msgid "History Forward"
 msgstr "Pirmyn"
 
-#: ../lib/gui/mainwin.py:388
+#: ../lib/gui/mainwin.py:383
 msgid "Stop searching"
 msgstr "Sustabdyti paieðkà"
 
-#: ../lib/gui/mainwin.py:412
+#: ../lib/gui/mainwin.py:407
 msgid "Translation"
 msgstr "Vertimas"
 
-#: ../lib/gui/mainwin.py:520
+#: ../lib/gui/mainwin.py:514
 msgid ""
 "\n"
 "<html>\n"
@@ -620,19 +628,27 @@ msgstr ""
 "</body>\n"
 "</html>\n"
 
-#: ../lib/gui/mainwin.py:674
+#: ../lib/gui/mainwin.py:636
+msgid ""
+"Translation cannot be displayed using selected encoding %s. Please try "
+"another encoding from View > Character Encoding menu."
+msgstr ""
+"Pasirinkta koduotë nëra tinkama ðiam þodynui. Pasirinkite kità koduotæ ið "
+"meniu Keisti > Teksto koduotë"
+
+#: ../lib/gui/mainwin.py:668
 msgid "1 word matches"
 msgstr "Atitikmenø skaièius: 1"
 
-#: ../lib/gui/mainwin.py:676
+#: ../lib/gui/mainwin.py:670
 msgid "%d words match"
 msgstr "Atitikmenø skaièius: %d"
 
-#: ../lib/gui/mainwin.py:728
+#: ../lib/gui/mainwin.py:722
 msgid "No dictionary activated"
 msgstr "Neaktyvuotas joks þodynas"
 
-#: ../lib/gui/mainwin.py:729
+#: ../lib/gui/mainwin.py:723
 msgid ""
 "No dictionary activated. Please select one from \"Dictionaries\" menu and "
 "try again."
@@ -640,11 +656,11 @@ msgstr ""
 "Neaktyvuotas joks þodynas. Pasirinkite þodynà ið ¥Þodynai´ meniu ir "
 "bandykite dar kartà."
 
-#: ../lib/gui/mainwin.py:732
+#: ../lib/gui/mainwin.py:726
 msgid "No dictionaries installed"
 msgstr "Nëra ádiegtø þodynø"
 
-#: ../lib/gui/mainwin.py:733
+#: ../lib/gui/mainwin.py:727
 msgid ""
 "There is no dictionaries installed. You can install one by selecting Tools > "
 "Manage Dictionaries > Available"
@@ -652,60 +668,68 @@ msgstr ""
 "Nëra ádiegtø þodynø. Ádiegti galite ið meniu pasirinkdami Árankiai > "
 "Tvarkyti þodynus > Galimi"
 
-#: ../lib/gui/mainwin.py:746
+#: ../lib/gui/mainwin.py:740
 msgid "Please enter some text and try again"
 msgstr "Áveskite tekstà ir bandykite dar kartà"
 
-#: ../lib/gui/mainwin.py:866
+#: ../lib/gui/mainwin.py:772
+msgid ""
+"Unable to encode text \"%s\" in %s for \"%s\". That logically means the word "
+"definition does not exist in the dictionary."
+msgstr ""
+"Nepavyko uþkoduoti teksto ¥%s´ koduote ¥%s´. Tai gali reikðti, jog ieðkomo "
+"þodþio þodyne visai nëra."
+
+#: ../lib/gui/mainwin.py:860
 msgid "Connect to DICT server"
 msgstr "Prisijungti prie DICT serverio"
 
-#: ../lib/gui/mainwin.py:893
+#: ../lib/gui/mainwin.py:887
 msgid "Choose a dictionary from \"Dictionaries\" menu"
 msgstr "Iðsirinkite þodynà ið ¥Þodynai´ meniu"
 
-#: ../lib/gui/mainwin.py:914
+#: ../lib/gui/mainwin.py:908
 msgid "Failed to copy text from the clipboard"
 msgstr "Nepavyko paimti teksto ið iðkarpinës"
 
-#: ../lib/gui/mainwin.py:916
+#: ../lib/gui/mainwin.py:910
 msgid "Clipboard contains no text data"
 msgstr "Iðkarpinëje teksto nëra"
 
-#: ../lib/gui/mainwin.py:923
+#: ../lib/gui/mainwin.py:917
 msgid "Groups"
 msgstr "Grupës"
 
-#: ../lib/gui/mainwin.py:935
+#: ../lib/gui/mainwin.py:929
 msgid "Manage Dictionaries"
 msgstr "Tvarkyti þodynus"
 
-#: ../lib/gui/mainwin.py:949
+#: ../lib/gui/mainwin.py:943
 msgid "File Register"
 msgstr "Bylø registras"
 
-#: ../lib/gui/mainwin.py:957
+#: ../lib/gui/mainwin.py:951
 msgid "Create Dictionaries"
 msgstr "Kurti þodynus"
 
-#: ../lib/gui/mainwin.py:966
+#: ../lib/gui/mainwin.py:960
 msgid "Preferences"
 msgstr "Nustatymai"
 
-#: ../lib/gui/mainwin.py:1045
+#: ../lib/gui/mainwin.py:1039
 msgid "Licence Agreement Rejected"
 msgstr "Licencija atmesta"
 
-#: ../lib/gui/mainwin.py:1046
+#: ../lib/gui/mainwin.py:1040
 msgid "You cannot use dictionary \"%s\" without accepting licence agreement"
 msgstr ""
 "Jûs negalite naudotis þodynu ¥%s´, jei nesutinkate su licencijos sàlygomis"
 
-#: ../lib/gui/mainwin.py:1060
+#: ../lib/gui/mainwin.py:1054
 msgid "Dictionary Index"
 msgstr "Þodyno indeksas"
 
-#: ../lib/gui/mainwin.py:1061
+#: ../lib/gui/mainwin.py:1055
 msgid ""
 "This is the first time you use this dictionary or it has been changed on "
 "disk since last indexing. Indexing is used to make search more efficient. "
@@ -719,23 +743,37 @@ msgstr ""
 "\n"
 "Kad pratæstumëte, spauskite ¥Gerai´..."
 
-#: ../lib/gui/mainwin.py:1078
+#: ../lib/gui/mainwin.py:1072
 msgid "Index Creation Error"
 msgstr "Indeksavimo klaida"
 
-#: ../lib/gui/mainwin.py:1099 ../lib/gui/pluginwin.py:737
+#: ../lib/gui/mainwin.py:1073
+msgid ""
+"Error occured while indexing file. This may be because of currently selected "
+"character encoding %s is not correct for this dictionary. Try selecting "
+"another encoding from View > Character Encoding menu"
+msgstr ""
+"Indeksuojant þodynà ávyko klaida. Tai galëjo ávykti dël pasirinktos "
+"netinkamos ðiam þodynui teksto koduotës ¥%s´. Pabandykite pasirinkti kità "
+"koduotæ ið meniu Perþiûra > Teksto koduotë."
+
+#: ../lib/gui/mainwin.py:1093 ../lib/gui/pluginwin.py:737
 msgid "Error"
 msgstr "Klaida"
 
-#: ../lib/gui/mainwin.py:1110
+#: ../lib/gui/mainwin.py:1094
+msgid "Unable to load dictionary index table. Got error: %s"
+msgstr "Nepavyko pakrauti þodyno indeksø lentelës. Gauta klaida: %s"
+
+#: ../lib/gui/mainwin.py:1104
 msgid "Dictionary \"%s\" loaded"
 msgstr "Ákeltas þodynas ¥%s´"
 
-#: ../lib/gui/mainwin.py:1162
+#: ../lib/gui/mainwin.py:1156
 msgid "Error: not supported dictionary type"
 msgstr "Klaida: nepalaikomas þodyno formatas"
 
-#: ../lib/gui/mainwin.py:1265
+#: ../lib/gui/mainwin.py:1259
 msgid ""
 "Select dictionary format. If you can't find\n"
 "the format of your dictionary, the register\n"
@@ -745,35 +783,31 @@ msgstr ""
 "formato sàraðe nëra, registrø sistema kol\n"
 "kas jo nepalaiko."
 
-#: ../lib/gui/mainwin.py:1270
+#: ../lib/gui/mainwin.py:1264
 msgid "Dictionary format"
 msgstr "Þodyno formatas"
 
-#: ../lib/gui/mainwin.py:1287
+#: ../lib/gui/mainwin.py:1281
 msgid "Choose plugin file"
 msgstr "Pasirinkite priedo bylà"
 
-#: ../lib/gui/mainwin.py:1303
-msgid "License"
-msgstr "Licencija"
-
-#: ../lib/gui/mainwin.py:1314
+#: ../lib/gui/mainwin.py:1297
 msgid "About"
 msgstr "Apie"
 
-#: ../lib/gui/mainwin.py:1365
+#: ../lib/gui/mainwin.py:1348
 msgid "Show word list"
 msgstr "Rodyti þodþiø sàraðà"
 
-#: ../lib/gui/mainwin.py:1382
+#: ../lib/gui/mainwin.py:1365
 msgid "Hide word list"
 msgstr "Paslëpti þodþiø sàraðà"
 
-#: ../lib/gui/mainwin.py:1391
+#: ../lib/gui/mainwin.py:1374
 msgid "Failed to print"
 msgstr "Nepavyko atspausdinti"
 
-#: ../lib/gui/mainwin.py:1403
+#: ../lib/gui/mainwin.py:1386
 msgid "Page preview failed"
 msgstr "Puslapio perþiûra nepavyko"
 
@@ -870,9 +904,17 @@ msgstr "Jûsø turimi þodynai yra patys naujausi."
 msgid "Downloading List"
 msgstr "Parsiunèiamas sàraðas"
 
+#: ../lib/gui/pluginwin.py:524
+msgid "Unable to download list from %s: %s"
+msgstr "Nepavyko parsiøsti þodynø sàraðo ið %s: %s"
+
 #: ../lib/gui/pluginwin.py:532
 msgid "Unable to download list"
 msgstr "Nepavyko parsiøsti sàraðo"
+
+#: ../lib/gui/pluginwin.py:610
+msgid "Unable to remove dictionary \"%s\""
+msgstr "Nepavyko paðalinti þodyno ¥%s´"
 
 #: ../lib/gui/pluginwin.py:651
 msgid "Downloading %s..."
@@ -891,9 +933,21 @@ msgid "Downloaded file is damaged and cannot be installed. Please try again."
 msgstr ""
 "Parsiøsta byla yra sugadinta ir negali bûti ádiegta. Bandykite dar kartà."
 
+#: ../lib/gui/pluginwin.py:738
+msgid ""
+"Unable to remove old version of \"%s\". Error occured: \"<i>%s</i>\". New "
+"version cannot be installed without removing old one."
+msgstr ""
+"Nepavyko iðmesti senos ¥%s´ versijos. Ávyko klaida: ¥<i>%s</i>´. Nauja "
+"versija negali bûti instaliuota tol, kol nebus iðmesta sena."
+
 #: ../lib/gui/pluginwin.py:760
 msgid "Unable to install"
 msgstr "Nepavyko ádiegti"
+
+#: ../lib/gui/pluginwin.py:761
+msgid "Unable to install dictionary \"%s\"."
+msgstr "Nepavyko ádiegti þodyno ¥%s´."
 
 #: ../lib/gui/prefswin.py:46
 msgid "Default dictionary: "
@@ -1087,6 +1141,42 @@ msgstr "Baigësi prisijungimo laikas"
 msgid "Bad encoding is set for this dictionary, try another"
 msgstr "Ðiam þodynui nustatyta neteisinga koduotë, pasirinkite kità"
 
+#: ../lib/misc.py:46
+msgid "Unicode (UTF-8)"
+msgstr "Unikodas (UTF-8)"
+
+#: ../lib/misc.py:47
+msgid "Western (ISO-8859-1)"
+msgstr "Vakarø (ISO-8859-1)"
+
+#: ../lib/misc.py:48
+msgid "Central European (ISO-8859-2)"
+msgstr "Centrinës Europos (ISO-8859-2)"
+
+#: ../lib/misc.py:49
+msgid "Nordic (ISO-8859-10)"
+msgstr "Ðiaurës (ISO-8859-10)"
+
+#: ../lib/misc.py:50
+msgid "South European (ISO-8859-3)"
+msgstr "Pietø Europos (ISO-8859-3)"
+
+#: ../lib/misc.py:51
+msgid "Greek (ISO-8859-7)"
+msgstr "Graikø (ISO-8859-7)"
+
+#: ../lib/misc.py:52
+msgid "Baltic (ISO-8859-13)"
+msgstr "Baltø (ISO-8859-13)"
+
+#: ../lib/misc.py:53
+msgid "Cyrillic (KOI8-R)"
+msgstr "Kirilica (KOI8-R)"
+
+#: ../lib/misc.py:54
+msgid "Arabic (ISO-8859-6)"
+msgstr "Arabø (ISO-8859-6)"
+
 #: ../lib/util.py:234
 msgid "Downloading... %d%%"
 msgstr "Parsiunèiama... %d%%"
@@ -1094,6 +1184,33 @@ msgstr "Parsiunèiama... %d%%"
 #: ../opendict.py:115
 msgid "wxPython Version Error"
 msgstr "wxPython versijos klaida"
+
+#: ../opendict.py:116
+msgid ""
+"wxPython %s is installed on this system.\n"
+"\n"
+"OpenDict %s requires wxPython 2.6 to run smoothly.\n"
+"\n"
+"You can find wxPython 2.6 at http://www.wxpython.org or you can install it "
+"using your system package manager."
+msgstr ""
+"Ðioje sistemoje yra suinstaliuota wxPython %s biblioteka.\n"
+"\n"
+"Kad gerai veiktø, OpenDict %s reikalauja wxPython 2.6.\n"
+"\n"
+"Galite rasti wxPython 2.6 adresu http://www.python.org arba galite "
+"suinstaliuoti jà naudodami savo sistemos paketø tvarkymo programà."
+
+#~ msgid "&License"
+#~ msgstr "Licencija"
+
+#, fuzzy
+#~ msgid "Fixed"
+#~ msgstr "&Byla"
+
+#, fuzzy
+#~ msgid "Times"
+#~ msgstr "Baigësi prisijungimo laikas"
 
 #~ msgid "Edit Dictionaries"
 #~ msgstr "Taisyti þodynus"

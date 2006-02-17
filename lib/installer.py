@@ -58,7 +58,7 @@ class Installer:
         
         fileDialog = wxFileDialog(self.mainWin,
                                   message=_("Choose dictionary file"),
-                                  wildcard=_(wildCard),
+                                  wildcard=wildCard,
                                   style=wxOPEN|wxCHANGE_DIR)
         fileDialog.CentreOnScreen()
 

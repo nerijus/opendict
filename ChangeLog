@@ -1,3 +1,36 @@
+2006-02-15 18:29  mjoc
+
+	* lib/gui/mainwin.py, po/lt.po, po/opendict.pot: Window "Edit
+	  Dicitonaries" renamed to "Create Dictionaries".
+
+2006-02-14 15:17  mjoc
+
+	* po/: lt.po, opendict.pot: Translation updated.
+
+2006-02-13 02:08  nerijus
+
+	* lib/gui/mainwin.py: clear search field on ESC, implements feature
+	  request 1351220
+
+2006-02-12 22:10  nerijus
+
+	* po/lt.po, win32/setup.manifest.py, win32/setup.py: Version
+	  changed to 0.6.1
+
+2006-02-12 20:59  mjoc
+
+	* po/: lt.po, opendict.pot: Translation (po) file updated.
+
+2006-02-12 20:56  mjoc
+
+	* lib/gui/dictconnwin.py, po/opendict.pot: Bug fix: encoding has
+	  not been really used after chaning it in DictConnection dialog.
+
+2006-02-12 02:53  mjoc
+
+	* ChangeLog, opendict.1, po/lt.po, po/opendict.pot: Manual page
+	  added. ChangeLog updated.
+
 2006-01-28 16:45  mjoc
 
 	* opendict.py, lib/info.py, lib/logger.py, lib/gui/dictconnwin.py,

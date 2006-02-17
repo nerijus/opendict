@@ -34,13 +34,14 @@ _ = wxGetTranslation
 errors = {1: _("Not found"),
           2: _("Dictionary error, please report to its author"),
           3: _("Syntax error"),
-          4: _("You must be connected to the internet to use this dictionary"), #4: _("Connection error"),
+          4: _("You must be connected to the internet to use this dictionary"),
           5: _("Time out"),
           6: _("Bad encoding is set for this dictionary, try another")}
 
 
 #
 # Character Encodings
+# FIXME: translations does not work, why?
 #
 encodings = {_("Unicode (UTF-8)"): "UTF-8",
              _("Western (ISO-8859-1)"): "ISO-8859-1",
@@ -55,23 +56,14 @@ encodings = {_("Unicode (UTF-8)"): "UTF-8",
 #
 # Font faces
 #
-fontFaces = {_("Fixed"): "fixed",
-             _("Helvetica"): "helvetica",
-             _("Courier"): "courier",
-             _("Times"): "Times",
-             _("Verdana"): "Verdana",
-             _("Lucida"): "Lucida"}
+fontFaces = {"Fixed": "fixed",
+             "Helvetica": "helvetica",
+             "Courier": "courier",
+             "Times": "Times",
+             "Verdana": "Verdana",
+             "Lucida": "Lucida"}
 
 
-#fontSizes = ["1", "2", "3", "4", "6", "8", "10", "12"]
-
-
-#dictFormats = {"dwa": "Slowo",
-#               "mova": "Mova",
-#               "tmx": "TMX",
-#               "dz": "DICT",
-#               "dict": "DICT",
-#               "zip": _("OpenDict plugin")}
 
 def numVersion(str):
     """Return a float number made from x.y.z[-preV] version number"""

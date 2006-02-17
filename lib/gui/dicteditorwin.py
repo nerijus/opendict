@@ -612,7 +612,7 @@ class DictEditorWindow(wxFrame):
                 wx.EndBusyCursor()
                 traceback.print_exc()
                 title = _("Open Failed")
-                msg = _("Unable to open dictionary (got message: %s" % e)
+                msg = _("Unable to open dictionary (got message: %s)") % e
                 errorwin.showErrorMessage(title, msg)
                 
                 return
