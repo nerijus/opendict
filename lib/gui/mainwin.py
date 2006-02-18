@@ -820,13 +820,15 @@ class MainWindow(wxFrame):
 
    def onClean(self, event):
       self.entry.SetValue("")
+      self.entry.SetFocus()
          
 
    def onKeyDown(self, event):
       """Key down event handler."""
+
       key = event.KeyCode()
       if key == wx.WXK_ESCAPE:
-         self.entry.SetValue("")
+         self.onClean(None)
       return
 
 
