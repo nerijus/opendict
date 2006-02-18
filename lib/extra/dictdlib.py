@@ -322,7 +322,7 @@ class DictDB:
             return retval
         for start, length in self.indexentries[word]:
             self.dictfile.seek(start)
-            retval.append(unicode(self.dictfile.read(length), "utf-8"))
+            retval.append(self.dictfile.read(length))
         return retval
             
 

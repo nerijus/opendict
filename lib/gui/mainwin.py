@@ -103,6 +103,7 @@ class HtmlWindow(wxHtmlWindow):
          return
       
       parent.SetStatusText(_("Searching..."))
+      parent.entry.SetValue(word)
       parent.timerSearch.Start(parent.delay)
       parent.search = Process(parent.activeDictionary.search,
                               word)
@@ -1164,6 +1165,8 @@ class MainWindow(wxFrame):
       self.app.config.set('encoding', misc.encodings[name])
 
       if self.activeDictionary:
+         print "Setting encoding %s for dictionary %s" % \
+            (self.app.config.get('encoding'), self.activeDictionary.name)
          self.activeDictionary.setEncoding(self.app.config.get('encoding'))
          systemLog(INFO, "Dictionary encoding set to %s" \
                % self.activeDictionary.getEncoding())

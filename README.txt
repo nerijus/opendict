@@ -2,10 +2,10 @@
                                    OpenDict
                                    --------
 
-Copyright (c) 2005 Martynas Jocius <mjoc@akl.lt>
+Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
 
-What is this?
--------------
+About
+-----
 
 OpenDict is free multiplatform dictionary program. It is made to be
 universal and easy to use for desktop users and developers.
@@ -14,9 +14,9 @@ universal and easy to use for desktop users and developers.
 Requirements
 ------------
 
-   - python >= 2.3
-   - wxPython 2.6 for python
-   - python-xml (PyXML) for python
+   - Python >= 2.3
+   - wxPython 2.6
+   - python-xml (PyXML)
    - gettext >= 0.14
 
 
@@ -27,22 +27,24 @@ OpenDict on UNIX systems can be installed in a quick & dirty way:
 
    # make install
 
-If you get cp: cannot stat `messages.pot': No such file or directory
-you are missing pygettext or pygettext.py. pygettext.py in Fedora is
+If you get "cp: cannot stat `messages.pot': No such file or directory"
+you are missing "pygettext" or "pygettext.py". "pygettext.py" in Fedora is
 provided by python-tools package.
 
 
 For Microsft Windows users
 --------------------------
 
-Before using OpenDict, download and install Python, PyXML and wxPython
-packages. Then unpack compressed OpenDict ZIP archive and click on
-opendict.py icon.
-   
-There is no compiled EXE file for this release. If you would like to have
-compiled version, request it by sending email message to mjoc@akl.lt.
+MS Windows users should download seup with precompiled OpenDict version.
+
+If you want to use it from sources, download and install Python, PyXML 
+and wxPython packages. Then unpack compressed OpenDict ZIP archive and 
+click on opendict.py icon.
+
 
 Help
 ----
 
-For more information, visit http://sourceforge.net/projects/opendict
+For more information, visit http://opendict.sourceforge.net and
+http://sourceforge.net/projects/opendict
+

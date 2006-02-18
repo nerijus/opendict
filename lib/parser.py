@@ -747,12 +747,6 @@ class DictParser(plaindict.PlainDictionary):
       translation = None
       
       for source in translations:
-         try:
-            source = source.encode(self.encoding, 'replace')
-         except:
-            result.setError(errortype.INVALID_ENCODING)
-            break
-         
          chunks = source.split('\n')
          map(string.strip, chunks)
          
