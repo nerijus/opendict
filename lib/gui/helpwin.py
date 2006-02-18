@@ -164,7 +164,7 @@ class AboutWindow(wxDialog):
       title = "OpenDict %s" % info.VERSION
       copy = "Copyright %s 2003-2006 Martynas Jocius <mjoc@akl.lt>" % \
              unicode("\302\251", "UTF-8")
-      desc = _("OpenDict is multiplatform dictionary.")
+      desc = _("OpenDict is a multiplatform dictionary.")
       page = "http://opendict.sourceforge.net"
 
       titleLabel = wxStaticText(self, -1, title,
