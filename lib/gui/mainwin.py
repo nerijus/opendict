@@ -509,7 +509,7 @@ class MainWindow(wxFrame):
       EVT_TIMER(self, idClipboard, self.onTimerClipboard)
       EVT_CLOSE(self, self.onCloseWindow)
 
-      EVT_KEY_DOWN(self, self.onKeyDown)
+      self.entry.Bind(wx.EVT_KEY_DOWN, self.onKeyDown)
 
       # Prepare help message
       self.htmlCode = _("""
@@ -829,7 +829,7 @@ class MainWindow(wxFrame):
       key = event.KeyCode()
       if key == wx.WXK_ESCAPE:
          self.onClean(None)
-      return
+      event.Skip()
 
 
    def onClearHistory(self, event):
