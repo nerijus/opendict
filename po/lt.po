@@ -741,7 +741,7 @@ msgstr ""
 "indeksavimo. Indeksavimas naudojamas þodþiø paieðkai þodyne pagreitinti. "
 "Dabar þodynas bus perindeksuotas. Tai gali uþtrukti keletà sekudþiø.\n"
 "\n"
-"Kad pratæstumëte, spauskite ¥Gerai´..."
+"Norëdami pratæsti, spauskite ¥Gerai´..."
 
 #: ../lib/gui/mainwin.py:1075
 msgid "Index Creation Error"
