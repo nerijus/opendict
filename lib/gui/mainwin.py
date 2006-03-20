@@ -693,19 +693,14 @@ class MainWindow(wxFrame):
          wxTheClipboard.Close()
          return enc.toWX(text)
       
-
-      def clear():
-         do = wxTextDataObject()
-         do.SetText('')
-         wxTheClipboard.Open()
-         wxTheClipboard.SetData(do)
-         wxTheClipboard.Close()
-
       text = getText()
-      if text:
+      old_text = ''
+      if hasattr(self, 'old_clipboard_text'):
+          old_text = self.old_clipboard_text
+      if text and text != old_text:
          self.entry.SetValue(text)
          self.onSearch(None)
-         clear()
+         self.old_clipboard_text = text
 
 
    def onUseScanClipboard(self, event):
