@@ -25,10 +25,11 @@ from lib.misc import encodings
 from lib import enc
 
 _ = wxGetTranslation
-
+PRON_COMMAND = "echo \"(SayText \\\"%s\\\")\" | festival"
 
 class PrefsWindow(wxDialog):
    """Preferences dialog class"""
+
 
    def __init__(self, parent, id, title, pos=wxDefaultPosition,
                 size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
@@ -85,6 +86,42 @@ class PrefsWindow(wxDialog):
       grid.Add(self.portEntry, 0, wxEXPAND)
       
       vboxMain.Add(grid, 0, wxALL | wxEXPAND, 4)
+      
+      #
+      # Pronunciation
+      #
+      panelPron = wxPanel(self, -1)
+      sbSizerPron = wxStaticBoxSizer(wxStaticBox(panelPron, -1, 
+                                                 _("Pronunciation")), 
+                                     wxVERTICAL)
+      panelPron.SetSizer(sbSizerPron)
+      panelPron.SetAutoLayout(true)
+      sbSizerPron.Fit(panelPron)
+      vboxMain.Add(panelPron, 0, wxALL | wxEXPAND, 5)
+
+      hboxPronCmd = wxBoxSizer(wxHORIZONTAL)
+      hboxPronCmd.Add(wxStaticText(panelPron, -1, _("System Command: ")), 0,
+         wxALIGN_CENTER_VERTICAL)
+
+      self.entryPron = wxTextCtrl(panelPron, -1,
+         self.app.config.get('pronunciationCommand') or \
+         PRON_COMMAND)
+      hboxPronCmd.Add(self.entryPron, 1, wxEXPAND, 0)
+      
+      self.buttonDefaultPron = wxButton(panelPron, 1106, _("Default"))
+      hboxPronCmd.Add(self.buttonDefaultPron, 0, wxALL | wxEXPAND)
+      
+      sbSizerPron.Add(hboxPronCmd, 0, wxALL | wxEXPAND, 4)
+
+      hboxPronWhat = wxBoxSizer(wxHORIZONTAL)
+      self.rbPronOrig = wxRadioButton(panelPron, -1, _("Pronounce original word"))
+      hboxPronWhat.Add(self.rbPronOrig, 0, wxALL | wxEXPAND, 3)
+      self.rbPronTrans = wxRadioButton(panelPron, -1, _("Pronounce translation"))
+      if self.app.config.get('pronounceTrans') == 'True':
+          self.rbPronTrans.SetValue(True)
+      hboxPronWhat.Add(self.rbPronTrans, 0, wxALL | wxEXPAND, 3)
+      
+      sbSizerPron.Add(hboxPronWhat, 0, wxALL | wxEXPAND, 0)
 
       self.winSize = wxCheckBox(self, 1101, _("Save window size on exit"))
       self.winSize.SetValue(self.app.config.get('saveWindowSize') == 'True')
@@ -120,6 +157,7 @@ class PrefsWindow(wxDialog):
       EVT_CHECKBOX(self, 1101, self.onSaveWinSizeClicked)
       EVT_CHECKBOX(self, 1102, self.onSaveWinPosClicked)
       EVT_CHECKBOX(self, 1103, self.onSaveSashPosClicked)
+      EVT_BUTTON(self, 1106, self.onDefaultPron)
       EVT_BUTTON(self, 1104, self.onOK)
       EVT_BUTTON(self, 1105, self.onCancel)
 
@@ -157,6 +195,12 @@ class PrefsWindow(wxDialog):
          self.app.config.saveSashPos = 0
 
 
+   def onDefaultPron(self, event):
+      """Set pronunciation command to default value"""
+
+      self.entryPron.SetValue(PRON_COMMAND)
+
+
    def onOK(self, event):
       """Save configuration in the configuration object"""
 
@@ -169,6 +213,9 @@ class PrefsWindow(wxDialog):
       
       self.app.config.set('dictServer', self.serverEntry.GetValue())
       self.app.config.set('dictServerPort', self.portEntry.GetValue())
+      
+      self.app.config.set('pronunciationCommand', self.entryPron.GetValue())
+      self.app.config.set('pronounceTrans', str(self.rbPronTrans.GetValue()))
 
       self.app.config.set('saveWindowSize', str(self.winSize.GetValue()))
       self.app.config.set('saveWindowPos', str(self.winPos.GetValue()))

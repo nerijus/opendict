@@ -35,6 +35,7 @@ from lib.gui.pluginwin import PluginManagerWindow
 from lib.gui.dicteditorwin import DictEditorWindow
 from lib.gui.dictaddwin import DictAddWindow
 from lib.gui.prefswin import PrefsWindow
+from lib.gui import prefswin
 from lib.gui.helpwin import LicenseWindow, AboutWindow
 from lib.gui import errorwin
 from lib.gui import miscwin
@@ -301,6 +302,9 @@ class MainWindow(wxFrame):
       menuTools.Append(idManageDict, _("Manage Dictionaries...\tCtrl-M"),
                       _("Install or remove dictionaries"))
 
+      menuTools.Append(5002, _("Create Dictionaries..."),
+                       _("Create and edit dictionaries"))  
+                           
       menuTools.AppendSeparator()
 
       idUseScan = wx.NewId()
@@ -319,10 +323,12 @@ class MainWindow(wxFrame):
                           _("Open connection to DICT server"))
 
       menuTools.AppendSeparator()
-      
-      menuTools.Append(5002, _("Create Dictionaries..."),
-                       _("Create and edit dictionaries"))  
+
+      idPron = wx.NewId()
+      menuTools.Append(idPron, _("Pronounce\tCtrl-E"),
+          _("Pronounce word"))  
                            
+      
       self.menuBar.Append(menuTools, _("Tools"))
 
 
@@ -490,6 +496,7 @@ class MainWindow(wxFrame):
       EVT_MENU(self, idManageDict, self.onShowPluginManager)
       EVT_MENU(self, 5002, self.onShowDictEditor)
       EVT_MENU(self, idPrefs, self.onShowPrefsWindow)
+      EVT_MENU(self, idPron, self.onPronounce)
 
       # Help menu events
       EVT_MENU(self, idAbout, self.onAbout)
@@ -908,6 +915,32 @@ class MainWindow(wxFrame):
          self.SetStatusText(_("Clipboard contains no text data"))
       wxTheClipboard.Close()
 
+
+   def onPronounce(self, event):
+      """Pronouce word using external software."""
+
+      word = self.entry.GetValue().strip()
+      if word:
+        cmd = self.app.config.get('pronunciationCommand') or prefswin.PRON_COMMAND
+
+        if self.app.config.get('pronounceTrans') == 'True':
+            word = html2text(self.htmlCode)
+        
+        import locale
+        localeCharset = locale.getpreferredencoding()
+
+        try:
+            word = word.replace('(', '').replace(')', '').replace('\n', 
+                '').replace('\r', '').replace('"', '\\"')
+            cmd = (cmd % word).encode(localeCharset)
+            Process(os.system, cmd)
+        except Exception, e:
+            traceback.print_exc()
+            title = _("Error")
+            msg = _("Unable to decode text using your locale charset %s" \
+                % localeCharset)
+            errorwin.showErrorMessage(title, msg)
+            
 
    def onShowGroupsWindow(self, event):
       """This method is invoked when Groups menu item is selected"""
