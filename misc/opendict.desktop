@@ -7,7 +7,5 @@ Comment[lt]=Ieškoti žodžių kompiuterio arba Interneto žodyne
 Exec=/usr/bin/opendict
 Icon=/usr/share/opendict/pixmaps/icon-48x48.png
 Terminal=false
-MultipleArgs=false
 Type=Application
 Categories=Application;Utility;
-
