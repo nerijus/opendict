@@ -281,11 +281,15 @@ class MainWindow(wx.Frame):
             self.app.config.ids.values().index(name)]
 
          try:
-            item = wx.MenuItem(self.menuDict,
-                              itemID,
-                              encoded)
-            self.menuDict.AppendItem(item)
+#            item = wx.MenuItem(self.menuDict,
+#                              itemID,
+#                              encoded)
+#            self.menuDict.AppendItem(item)
+            self.menuDict.AppendRadioItem(itemID, encoded, "")
             wx.EVT_MENU(self, itemID, self.onDefault)
+            if self.app.config.get('defaultDict') == name:
+               self.menuDict.FindItemById(itemID).Check(1)
+		
          except Exception, e:
             systemLog(ERROR, "Unable to create menu item for '%s' (%s)" \
                   % (name, e))
@@ -1013,6 +1017,8 @@ class MainWindow(wx.Frame):
       if eventID in self.app.config.ids.keys():
          dictionary = self.app.dictionaries.get(self.app.config.ids.get(eventID))
          self.loadDictionary(dictionary)
+         label = self.menuDict.FindItemById(eventID).GetLabel()
+         self.app.config.set('defaultDict', label)
 
       elif 2100 <= eventID < 2500:
          label = self.menuEncodings.FindItemById(eventID).GetLabel()

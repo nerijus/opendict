@@ -199,6 +199,8 @@ class SlowoParser(plaindict.PlainDictionary):
          _linesRead += 1
          line = line.strip()
          try:
+            orig = ""
+            end = ""
             try:
                 orig, end = line.split('=', 1)
             except ValueError, e:

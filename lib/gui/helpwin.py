@@ -66,7 +66,7 @@ class LicenseWindow(wx.Frame):
       scWinAbout.SetSizer(scBox)
       vbox.Add(scWinAbout, 1, wx.ALL | wx.EXPAND, 5)
 
-      self.buttonClose = wx.Button(self, 2002, _("Close"))
+      self.buttonClose = wx.Button(self, 2002, _("&Close"))
       vbox.Add(self.buttonClose, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
 
       self.SetSizer(vbox)
@@ -94,7 +94,7 @@ class CreditsWindow(wx.Dialog):
       # "Written by" panel
       writePanel = wx.Panel(nb, -1)
       vboxWrite = wx.BoxSizer(wx.VERTICAL)
-      writtenString = unicode("Martynas Jocius <martynas.jocius@idiles.com>\n"
+      writtenString = unicode("Martynas Jocius <martynas.jocius@idiles.lt>\n"
                               "Nerijus Baliūnas <nerijusb@dtiltas.lt>\n"
                               "Mantas Kriaučiūnas <mantas@akl.lt>",
                               "UTF-8")
@@ -102,13 +102,14 @@ class CreditsWindow(wx.Dialog):
       labelWrite = wx.StaticText(writePanel, -1, written)
       vboxWrite.Add(labelWrite, 0, wx.ALL, 10)
       writePanel.SetSizer(vboxWrite)
+      writePanel.SetFocus()
       
       nb.AddPage(writePanel, _("Written By"))
       
       # "Translations" panel
       tPanel = wx.Panel(nb, -1)
       vboxTP = wx.BoxSizer(wx.VERTICAL)
-      transString = unicode("Martynas Jocius <martynas.jocius@idiles.com>",
+      transString = unicode("Martynas Jocius <martynas.jocius@idiles.lt>",
                             "UTF-8")
       trans = enc.toWX(transString)
       labelTP = wx.StaticText(tPanel, -1, trans)
@@ -131,9 +132,8 @@ class CreditsWindow(wx.Dialog):
       # "Sponsor" panel
       sponsorPanel = wx.Panel(nb, -1)
       vboxSP = wx.BoxSizer(wx.VERTICAL)
-      sponsorString = _("OpenDict project is sponsored by IDILES.\n"
-        "Visit company's website at http://www.idiles.com.\n\n"
-        "Report problems by email address support@idiles.com.")
+      sponsorString = _("OpenDict project was sponsored by IDILES.\n"
+        "Visit company's website at http://www.idiles.com.")
       sponsor = enc.toWX(sponsorString)
       labelSP = wx.StaticText(sponsorPanel, -1, sponsor)
       vboxSP.Add(labelSP, 0, wx.ALL, 10)
@@ -142,7 +142,7 @@ class CreditsWindow(wx.Dialog):
       
       vbox.Add(nb, 1, wx.ALL | wx.EXPAND, 3)
       
-      buttonClose = wx.Button(self, 2005, _("Close"))
+      buttonClose = wx.Button(self, 2005, _("&Close"))
       vbox.Add(buttonClose, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
       
       self.SetSizer(vbox)
@@ -173,11 +173,11 @@ class AboutWindow(wx.Dialog):
       wx.CENTRE, 5)
 
       title = "OpenDict %s" % info.VERSION
-      copy = "Copyright %(c)s 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>\n" \
-            "Copyright %(c)s 2007 IDILES SYSTEMS, UAB <support@idiles.com>" \
+      copy = "Copyright %(c)s 2003-2006 Martynas Jocius <martynas.jocius@idiles.lt>\n" \
+            "Copyright %(c)s 2007-2008 Idiles Systems Ltd <support@idiles.com>" \
              % {'c': unicode("\302\251", "UTF-8")}
       desc = _("OpenDict is a multiplatform dictionary.")
-      page = "http://opendict.idiles.com"
+      page = "http://opendict.sf.net"
 
       titleLabel = wx.StaticText(self, -1, title,
                                 style=wx.ALIGN_CENTER)
@@ -199,13 +199,13 @@ class AboutWindow(wx.Dialog):
 
       vbox.Add(wx.StaticLine(self, -1), 0, wx.ALL | wx.EXPAND, 5)
 
-      self.buttonCredits = wx.Button(self, 2004, _("Credits"))
+      self.buttonCredits = wx.Button(self, 2004, _("C&redits"))
       hboxButtons.Add(self.buttonCredits, 0, wx.ALL | wx.ALIGN_LEFT, 3)
       
-      self.buttonLicence = wx.Button(self, 2006, _("Licence"))
+      self.buttonLicence = wx.Button(self, 2006, _("&Licence"))
       hboxButtons.Add(self.buttonLicence, 0, wx.ALL | wx.ALIGN_LEFT, 3)
       
-      self.buttonOK = wx.Button(self, 2003, _("Close"))
+      self.buttonOK = wx.Button(self, 2003, _("&Close"))
       hboxButtons.Add(self.buttonOK, 0, wx.ALL | wx.ALIGN_RIGHT, 3)
       
       vbox.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_CENTER, 5)

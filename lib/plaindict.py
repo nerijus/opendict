@@ -248,6 +248,7 @@ def _loadPlainDictionary(directory):
 
     from lib import dicttype
     dictionary = None
+    Parser = None
 
     try:
         config = xmltools.parsePlainDictConfig(\

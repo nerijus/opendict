@@ -15,9 +15,8 @@ universal and easy to use for desktop users and developers.
 Requirements
 ~~~~~~~~~~~~
 
-   - Python >= 2.3
-   - wxPython 2.6
-   - python-xml (PyXML)
+   - Python >= 2.4
+   - wxPython >= 2.6
    - gettext >= 0.14
 
 
@@ -46,5 +45,5 @@ click on opendict.py icon.
 Help
 ~~~~
 
-For more information visit http://opendict.idiles.com.
+For more information visit http://opendict.sf.net.
 

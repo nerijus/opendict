@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2007-08-01 13:24+EEST\n"
+"POT-Creation-Date: 2007-08-29 11:55+EEST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,7 +143,7 @@ msgstr ""
 msgid "Connect"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:174 ../lib/gui/mainwin.py:685 ../lib/util.py:240
+#: ../lib/gui/dictconnwin.py:174 ../lib/gui/mainwin.py:689 ../lib/util.py:240
 msgid "Done"
 msgstr ""
 
@@ -236,7 +236,7 @@ msgstr ""
 msgid "Save with a different file name"
 msgstr ""
 
-#: ../lib/gui/dicteditorwin.py:351 ../lib/gui/mainwin.py:1371
+#: ../lib/gui/dicteditorwin.py:351 ../lib/gui/mainwin.py:1377
 msgid "Word List"
 msgstr ""
 
@@ -257,10 +257,8 @@ msgid "Open dictionary file"
 msgstr ""
 
 #: ../lib/gui/dicteditorwin.py:378 ../lib/gui/errorwin.py:84
-#: ../lib/gui/helpwin.py:69 ../lib/gui/helpwin.py:145
-#: ../lib/gui/helpwin.py:208 ../lib/gui/miscwin.py:65
-#: ../lib/gui/miscwin.py:124 ../lib/gui/pluginwin.py:92
-#: ../lib/gui/registerwin.py:89
+#: ../lib/gui/miscwin.py:65 ../lib/gui/miscwin.py:124
+#: ../lib/gui/pluginwin.py:92 ../lib/gui/registerwin.py:89
 msgid "Close"
 msgstr ""
 
@@ -300,7 +298,7 @@ msgstr ""
 msgid "Exit confirmation"
 msgstr ""
 
-#: ../lib/gui/dicteditorwin.py:600 ../lib/gui/mainwin.py:1293
+#: ../lib/gui/dicteditorwin.py:600 ../lib/gui/mainwin.py:1299
 #: ../lib/installer.py:61
 msgid "Choose dictionary file"
 msgstr ""
@@ -321,25 +319,30 @@ msgstr ""
 msgid "An error occured:"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:106
+#: ../lib/gui/helpwin.py:69 ../lib/gui/helpwin.py:146
+#: ../lib/gui/helpwin.py:209
+msgid "&Close"
+msgstr ""
+
+#: ../lib/gui/helpwin.py:107
 msgid "Written By"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:118
+#: ../lib/gui/helpwin.py:119
 msgid "Translated By"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:123
+#: ../lib/gui/helpwin.py:124
 msgid ""
 "Ports:\n"
 "\n"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:128
+#: ../lib/gui/helpwin.py:129
 msgid "Thanks To"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:134
+#: ../lib/gui/helpwin.py:135
 msgid ""
 "OpenDict project is sponsored by IDILES.\n"
 "Visit company's website at http://www.idiles.com.\n"
@@ -347,28 +350,32 @@ msgid ""
 "Report problems by email address support@idiles.com."
 msgstr ""
 
-#: ../lib/gui/helpwin.py:141
+#: ../lib/gui/helpwin.py:142
 msgid "Sponsors"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:179 ../lib/gui/helpwin.py:192
+#: ../lib/gui/helpwin.py:180 ../lib/gui/helpwin.py:193
 msgid "OpenDict is a multiplatform dictionary."
 msgstr ""
 
-#: ../lib/gui/helpwin.py:202
-msgid "Credits"
+#: ../lib/gui/helpwin.py:203
+msgid "C&redits"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:205 ../lib/gui/helpwin.py:234
+#: ../lib/gui/helpwin.py:206
+msgid "&Licence"
+msgstr ""
+
+#: ../lib/gui/helpwin.py:235
 msgid "Licence"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:92 ../lib/gui/mainwin.py:774
-#: ../lib/gui/mainwin.py:812
+#: ../lib/gui/mainwin.py:92 ../lib/gui/mainwin.py:778
+#: ../lib/gui/mainwin.py:816
 msgid "Stopped"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:97 ../lib/gui/mainwin.py:779
+#: ../lib/gui/mainwin.py:97 ../lib/gui/mainwin.py:783
 msgid "Encode Failed"
 msgstr ""
 
@@ -376,8 +383,8 @@ msgstr ""
 msgid "Unable to encode text \"%s\" in %s for \"%s\"."
 msgstr ""
 
-#: ../lib/gui/mainwin.py:106 ../lib/gui/mainwin.py:757
-#: ../lib/gui/mainwin.py:1355
+#: ../lib/gui/mainwin.py:106 ../lib/gui/mainwin.py:761
+#: ../lib/gui/mainwin.py:1361
 msgid "Searching..."
 msgstr ""
 
@@ -493,99 +500,99 @@ msgstr ""
 msgid "&View"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:296
+#: ../lib/gui/mainwin.py:300
 msgid "&Install Dictionary From File..."
 msgstr ""
 
-#: ../lib/gui/mainwin.py:298
+#: ../lib/gui/mainwin.py:302
 msgid "&Dictionaries"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:307
+#: ../lib/gui/mainwin.py:311
 msgid "Manage Dictionaries...\tCtrl-M"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:308
+#: ../lib/gui/mainwin.py:312
 msgid "Install or remove dictionaries"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:310
+#: ../lib/gui/mainwin.py:314
 msgid "Create Dictionaries..."
 msgstr ""
 
-#: ../lib/gui/mainwin.py:311
+#: ../lib/gui/mainwin.py:315
 msgid "Create and edit dictionaries"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:318
+#: ../lib/gui/mainwin.py:322
 msgid "Take Words From Clipboard"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:319
+#: ../lib/gui/mainwin.py:323
 msgid "Scan the clipboard for text to translate"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:327
+#: ../lib/gui/mainwin.py:331
 msgid "Connect to DICT Server..."
 msgstr ""
 
-#: ../lib/gui/mainwin.py:328
+#: ../lib/gui/mainwin.py:332
 msgid "Open connection to DICT server"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:333
+#: ../lib/gui/mainwin.py:337
 msgid "Pronounce\tCtrl-E"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:334
+#: ../lib/gui/mainwin.py:338
 msgid "Pronounce word"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:337
+#: ../lib/gui/mainwin.py:341
 msgid "Tools"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:346
+#: ../lib/gui/mainwin.py:350
 msgid "&About\tCtrl-A"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:348
+#: ../lib/gui/mainwin.py:352
 msgid "&Help"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:353
+#: ../lib/gui/mainwin.py:357
 msgid "Word:"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:358
+#: ../lib/gui/mainwin.py:362
 msgid "Enter some text and press \"Look Up\" button or [ENTER] key on your keyboard"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:364
+#: ../lib/gui/mainwin.py:368
 msgid "Look Up"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:365
+#: ../lib/gui/mainwin.py:369
 msgid "Click this button to look up word in the dictionary"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:376
+#: ../lib/gui/mainwin.py:380
 msgid "History Back"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:385
+#: ../lib/gui/mainwin.py:389
 msgid "History Forward"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:395
+#: ../lib/gui/mainwin.py:399
 msgid "Stop searching"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:419
+#: ../lib/gui/mainwin.py:423
 msgid "Translation"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:527
+#: ../lib/gui/mainwin.py:531
 msgid ""
 "\n"
 "<html>\n"
@@ -610,154 +617,154 @@ msgid ""
 "</html>\n"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:649
+#: ../lib/gui/mainwin.py:653
 msgid "Translation cannot be displayed using selected encoding %s. Please try another encoding from View > Character Encoding menu."
 msgstr ""
 
-#: ../lib/gui/mainwin.py:681
+#: ../lib/gui/mainwin.py:685
 msgid "1 word matches"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:683
+#: ../lib/gui/mainwin.py:687
 msgid "%d words match"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:730
+#: ../lib/gui/mainwin.py:734
 msgid "No dictionary activated"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:731
+#: ../lib/gui/mainwin.py:735
 msgid "No dictionary activated. Please select one from \"Dictionaries\" menu and try again."
 msgstr ""
 
-#: ../lib/gui/mainwin.py:734
+#: ../lib/gui/mainwin.py:738
 msgid "No dictionaries installed"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:735
+#: ../lib/gui/mainwin.py:739
 msgid "There is no dictionaries installed. You can install one by selecting Tools > Manage Dictionaries > Available"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:748
+#: ../lib/gui/mainwin.py:752
 msgid "Please enter some text and try again"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:780
+#: ../lib/gui/mainwin.py:784
 msgid "Unable to encode text \"%s\" in %s for \"%s\". That logically means the word definition does not exist in the dictionary."
 msgstr ""
 
-#: ../lib/gui/mainwin.py:868
+#: ../lib/gui/mainwin.py:872
 msgid "Connect to DICT server"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:895
+#: ../lib/gui/mainwin.py:899
 msgid "Choose a dictionary from \"Dictionaries\" menu"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:916
+#: ../lib/gui/mainwin.py:920
 msgid "Failed to copy text from the clipboard"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:918
+#: ../lib/gui/mainwin.py:922
 msgid "Clipboard contains no text data"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:942 ../lib/gui/mainwin.py:1136
+#: ../lib/gui/mainwin.py:946 ../lib/gui/mainwin.py:1142
 #: ../lib/gui/pluginwin.py:772
 msgid "Error"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:951
+#: ../lib/gui/mainwin.py:955
 msgid "Groups"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:963
+#: ../lib/gui/mainwin.py:967
 msgid "Manage Dictionaries"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:977
+#: ../lib/gui/mainwin.py:981
 msgid "File Register"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:985
+#: ../lib/gui/mainwin.py:989
 msgid "Create Dictionaries"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:994
+#: ../lib/gui/mainwin.py:998
 msgid "Preferences"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1082
+#: ../lib/gui/mainwin.py:1088
 msgid "Licence Agreement Rejected"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1083
+#: ../lib/gui/mainwin.py:1089
 msgid "You cannot use dictionary \"%s\" without accepting licence agreement"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1097
+#: ../lib/gui/mainwin.py:1103
 msgid "Dictionary Index"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1098
+#: ../lib/gui/mainwin.py:1104
 msgid ""
 "This is the first time you use this dictionary or it has been changed on disk since last indexing. Indexing is used to make search more efficient. The dictionary will be indexed now. It can take a few or more seconds.\n"
 "\n"
 "Press OK to continue..."
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1115
+#: ../lib/gui/mainwin.py:1121
 msgid "Index Creation Error"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1116
+#: ../lib/gui/mainwin.py:1122
 msgid "Error occured while indexing file. This may be because of currently selected character encoding %s is not correct for this dictionary. Try selecting another encoding from View > Character Encoding menu"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1137
+#: ../lib/gui/mainwin.py:1143
 msgid "Unable to load dictionary index table. Got error: %s"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1147
+#: ../lib/gui/mainwin.py:1153
 msgid "Dictionary \"%s\" loaded"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1199
+#: ../lib/gui/mainwin.py:1205
 msgid "Error: not supported dictionary type"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1304
+#: ../lib/gui/mainwin.py:1310
 msgid ""
 "Select dictionary format. If you can't find\n"
 "the format of your dictionary, the register\n"
 "system does not support it yet."
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1309
+#: ../lib/gui/mainwin.py:1315
 msgid "Dictionary format"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1326
+#: ../lib/gui/mainwin.py:1332
 msgid "Choose plugin file"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1342
+#: ../lib/gui/mainwin.py:1348
 msgid "About"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1393
+#: ../lib/gui/mainwin.py:1399
 msgid "Show word list"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1410
+#: ../lib/gui/mainwin.py:1416
 msgid "Hide word list"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1419
+#: ../lib/gui/mainwin.py:1425
 msgid "Failed to print"
 msgstr ""
 
-#: ../lib/gui/mainwin.py:1431
+#: ../lib/gui/mainwin.py:1437
 msgid "Page preview failed"
 msgstr ""
 
