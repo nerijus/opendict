@@ -2,8 +2,16 @@
 Encoding=UTF-8
 Name=Dictionary OpenDict
 Name[lt]=Žodynas „OpenDict“
+Name[de]=OpenDict Wörterbuch
+Name[ru]=Словарь OpenDict
+GenericName=Dictionary OpenDict
+GenericName[lt]=Žodynas „OpenDict“
+GenericName[de]=OpenDict Wörterbuch
+GenericName[ru]=Словарь OpenDict
 Comment=Lookup words in a local or Internet dictionary 
 Comment[lt]=Ieškoti žodžių kompiuterio arba Interneto žodyne
+Comment[de]=Wörter in einem lokalen Wörterbuch oder im Internet nachschlagen
+Comment[ru]=Поиск слов в интернет-словаре или в локальном словаре
 Exec=opendict
 Icon=opendict
 StartupNotify=true
