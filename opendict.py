@@ -161,6 +161,15 @@ class OpenDictApp(wx.App):
          self.config.ids[wx.NewId()] = plain.getName()
 
 
+      for d in self.dictionaries.values():
+          if not self.config.activedict.init:
+              if not self.config.activedict.enabled(d.getName()):
+                  d.setActive(active=False)
+          else:
+              # Fill up with names if not initialized yet
+              self.config.activedict.add(d.getName())
+
+
       windowPos = (int(self.config.get('windowPosX')),
                                 int(self.config.get('windowPosY')))
       windowSize = (int(self.config.get('windowWidth')),

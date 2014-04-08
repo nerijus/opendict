@@ -1,6 +1,6 @@
 #
 # OpenDict
-# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,7 +47,11 @@ class PrefsWindow(wxDialog):
       grid.Add(wxStaticText(self, -1, _("Default dictionary: ")),
                    0, wxALIGN_CENTER_VERTICAL)
 
-      dictNames = self.app.dictionaries.keys()
+      dictNames = []
+      for name, d in self.app.dictionaries.items():
+          print name, d.getActive()
+          if d.getActive():
+              dictNames.append(name)
       dictNames.sort()
       dictNames.insert(0, "")
 

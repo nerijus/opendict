@@ -5,14 +5,14 @@
 Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
 
 About
------
+~~~~~
 
 OpenDict is free multiplatform dictionary program. It is made to be
 universal and easy to use for desktop users and developers.
 
 
 Requirements
-------------
+~~~~~~~~~~~~
 
    - Python >= 2.3
    - wxPython 2.6
@@ -21,7 +21,7 @@ Requirements
 
 
 Quick Installation
-------------------
+~~~~~~~~~~~~~~~~~~
 
 OpenDict on UNIX systems can be installed in a quick & dirty way:
 
@@ -33,7 +33,7 @@ provided by python-tools package.
 
 
 For Microsft Windows users
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 MS Windows users should download setup with precompiled OpenDict version.
 
@@ -43,8 +43,7 @@ click on opendict.py icon.
 
 
 Help
-----
+~~~~
 
-For more information, visit http://opendict.sourceforge.net and
-http://sourceforge.net/projects/opendict
+For more information visit http://opendict.inhangar.com.
 

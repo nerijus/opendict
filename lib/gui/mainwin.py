@@ -264,12 +264,17 @@ class MainWindow(wxFrame):
       #
       self.menuDict = wxMenu()
 
-      dictNames = []
+      dicts = []
       for dictionary in self.app.dictionaries.values():
-         dictNames.append(dictionary.getName())
-      dictNames.sort()
+         dicts.append([dictionary.getName(), dictionary.getActive()])
+      dicts.sort()
       
-      for name in dictNames:
+      for name, active in dicts:
+         #if not self.app.config.activedict.enabled(name):
+         #    continue
+         if not active:
+             continue
+
          encoded = enc.toWX(name)
 
          itemID = self.app.config.ids.keys()[\
@@ -345,7 +350,7 @@ class MainWindow(wxFrame):
       self.SetMenuBar(self.menuBar)
 
       # Search Bar
-      labelWord = wxStaticText(self, -1, _("Word:"));
+      labelWord = wxStaticText(self, -1, _("Word:"))
       self.hboxToolbar.Add(labelWord, 0, wxALL | wxCENTER | wx.ALIGN_RIGHT, 5)
       
       self.entry = wxComboBox(self, 153, "", wxPoint(-1, -1),
@@ -1048,7 +1053,16 @@ class MainWindow(wxFrame):
                         dictInstance.getName())
       EVT_MENU(self, unid, self.onDefault)
       
-      self.menuDict.InsertItem(self.menuDict.GetMenuItemCount()-2, item)
+      #self.menuDict.InsertItem(self.menuDict.GetMenuItemCount()-2, item)
+      self.menuDict.InsertItem(0, item)
+
+
+   def removeDictionary(self, name):
+       """Remove dictionary from the menu"""
+
+       item = self.menuDict.FindItem(name)
+       if item:
+           self.menuDict.Delete(item)
 
 
    def loadDictionary(self, dictInstance):

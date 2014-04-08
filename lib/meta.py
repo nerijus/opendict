@@ -1,6 +1,6 @@
 #
 # OpenDict
-# Copyright (c) 2005 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2005-2006 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -75,6 +75,8 @@ class SearchResult:
 
 class Dictionary:
     """Dictionary interface"""
+
+    active = True
 
 
     def start(self):
@@ -153,6 +155,14 @@ class Dictionary:
         """Return licence text"""
 
         return None
+
+
+    def getActive(self):
+        return self.active
+
+
+    def setActive(self, active=True):
+        self.active = active
     
 
     def search(self, word):

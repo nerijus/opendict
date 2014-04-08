@@ -30,12 +30,84 @@ from lib import parser
 from lib import xmltools
 
 
+class ActiveDictConfig(object):
+    """Config file manager for activated dictionaries. Operates with
+    names of dictionaries only."""
+
+    def __init__(self):
+      self.filePath = os.path.join(info.LOCAL_HOME, "active.conf")
+
+      # If config file does not exist (this is the first time),
+      # set special attribute init=True to notify that
+      if not os.path.exists(self.filePath):
+          self.init = True
+      else:
+          self.init = False
+
+      self.dicts = []
+
+
+    def load(self):
+        """Load list of active dictionaries."""
+
+        try:
+            for line in open(self.filePath):
+                name = line.strip()
+                name = unicode(name, 'UTF-8')
+                self.dicts.append(name)
+        except IOError, e:
+            pass
+
+
+    def save(self):
+        """Save list of active dictionaries."""
+
+        fd = open(self.filePath, 'w')
+        for d in self.dicts:
+            name = d.encode('UTF-8')
+            print >> fd, name
+        fd.close()
+
+
+    def enabled(self, name):
+        """Return True if this dictionary is enabled."""
+
+        if name in self.dicts:
+            return True
+
+        return False
+
+
+    def add(self, name):
+        """Add new dictionary to the list."""
+
+        if type(name) == str:
+            name = unicode(name, 'UTF-8')
+
+        if not name in self.dicts:
+            self.dicts.append(name)
+
+
+    def remove(self, name):
+        """Remove dictionary from the list."""
+
+        if type(name) == str:
+            name = unicode(name, 'UTF-8')
+
+        if name in self.dicts:
+            self.dicts.remove(name)
+
+
+
 class Configuration:
    """This class is used for reading and writing config file.
    It also takes care of installing new plugins (but shouldn't)"""
 
    def __init__(self):
       """Initialize default values"""
+
+      self.activedict = ActiveDictConfig()
+      self.activedict.load()
       
       self.filePath = os.path.join(info.LOCAL_HOME, "opendict.xml")
       self.props = {}
@@ -74,8 +146,8 @@ class Configuration:
       self.set('dictServerPort', '2628')
       self.set('dict-server-encoding', 'UTF-8')
 
-      self.set('repository-list',
-               'http://opendict.sf.net/Repository/Data/opendict-add-ons.xml')
+      self.repository = \
+               'http://opendict.sf.net/Repository/Data/opendict-add-ons.xml'
 
 
    def get(self, name):
@@ -99,6 +171,9 @@ class Configuration:
             self.props.update(xmltools.parseMainConfig(self.filePath))
       except Exception, e:
          systemLog(ERROR, "Unable to read configuration file: %s" % e)
+
+      # Old configurations may still keep outdated entry, rewrite it
+      self.set('repository-list', self.repository)
 
 
 

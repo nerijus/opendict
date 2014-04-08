@@ -1,6 +1,6 @@
 
 # OpenDict
-# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -118,14 +118,24 @@ class PluginManagerWindow(wxFrame):
        panelInstalled = wxPanel(tabbedPanel, -1)
        vboxInstalled = wxBoxSizer(wxVERTICAL)
 
+       # Help message
+       labelHelp = wxStaticText(panelInstalled, -1, 
+          _("Checked dictionaries are available from the " \
+          "menu, unchecked dictionaries \nare not available from the menu."));
+       vboxInstalled.Add(labelHelp, 0, wxALL, 3)
+
        #
        # Installed list
        #
        idDictList = wx.NewId()
-       self.installedList = DictListCtrl(panelInstalled, idDictList,
+       self.installedList = wx.CheckListBox(panelInstalled, idDictList,
                                          style=wx.LC_REPORT
                                          | wx.LC_SINGLE_SEL
                                          | wx.SUNKEN_BORDER)
+       self.Bind(wx.EVT_CHECKLISTBOX, self.onDictionaryChecked,
+            self.installedList)
+       self.Bind(wx.EVT_LISTBOX, self.onInstalledSelected,
+            self.installedList)
        vboxInstalled.Add(self.installedList, 1, wxALL | wxEXPAND, 1)
 
        hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
@@ -154,15 +164,12 @@ class PluginManagerWindow(wxFrame):
        #
        # Make columns
        #
-       self.installedList.InsertColumn(0, _("Name"))
-       
+
        dictNames = self.installedDictionaries.keys()
        dictNames.sort()
-       
+       #dictNames.reverse()
+       # FIXME: List is sorted in descending order whatever it is sorted       
        self.setInstalledDicts(dictNames)
-
-       self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onInstalledSelected,
-                 self.installedList)
 
        self.Bind(wx.EVT_BUTTON, self.onRemove, self.buttonRemove)
        self.Bind(wx.EVT_BUTTON, self.onInstallFile, self.buttonInstallFile)
@@ -180,7 +187,7 @@ class PluginManagerWindow(wxFrame):
        vboxAvailable = wxBoxSizer(wxVERTICAL)
 
        #
-       # Installed list
+       # List of available dictionaries
        #
        idAvailList = wx.NewId()
        self.availableList = DictListCtrl(panelAvailable, idAvailList,
@@ -307,6 +314,37 @@ class PluginManagerWindow(wxFrame):
        return panelInfo
 
 
+   def onDictionaryChecked(self, event, *args):
+       index = event.GetSelection()
+       label = self.installedList.GetString(index)
+       if self.installedList.IsChecked(index):
+           self._addDictToMenu(label)
+           d = self.app.dictionaries.get(label)
+           d.setActive()
+       else:
+           self._removeDictFromMenu(label)
+           d = self.app.dictionaries.get(label)
+           d.setActive(active=False)
+       self.installedList.SetSelection(index)
+
+
+   def _removeDictFromMenu(self, name):
+       self.app.config.activedict.remove(name)
+       self.app.config.activedict.save()
+       self.app.window.removeDictionary(name)
+
+
+   def _addDictToMenu(self, name):
+       dict = None
+       for k, v in self.app.dictionaries.items():
+           if k == name:
+               dict = v
+       if dict:
+           self.app.config.activedict.add(name)
+           self.app.config.activedict.save()
+           self.app.window.addDictionary(dict)
+
+
    def onPageChanged(self, event):
 
        _pageInstalled = 0
@@ -333,7 +371,7 @@ class PluginManagerWindow(wxFrame):
    def onInstalledSelected(self, event):
        """Called when list item is selected"""
        
-       self.currentInstalledItemSelection = event.m_itemIndex
+       self.currentInstalledItemSelection = event.GetSelection()
        self.buttonRemove.Enable(1)
        
        self.showInstalledInfo()
@@ -342,7 +380,7 @@ class PluginManagerWindow(wxFrame):
    def showInstalledInfo(self):
        """Show information about selected dictionary"""
 
-       dictName = self.installedList.GetItemText(\
+       dictName = self.installedList.GetString(\
           self.currentInstalledItemSelection)
 
        dictInstance = self.app.dictionaries.get(dictName)
@@ -440,21 +478,19 @@ class PluginManagerWindow(wxFrame):
 
    def setInstalledDicts(self, dictNames):
        """Clear the list of installed dictionaries and set new items"""
-
-       self.installedList.DeleteAllItems()
+    
+       for i in range(self.installedList.GetCount()):
+           self.installedList.Delete(i)
 
        dictNames.sort()
        dictNames.reverse()
-       
+       i = 0
+
        for dictionary in dictNames:
-           index = self.installedList.InsertStringItem(0, dictionary)          
-           self.installedList.SetItemData(index, index+1)
-
-
-       if dictNames:
-           self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
-       else:
-           self.installedList.SetColumnWidth(0, 200)
+           index = self.installedList.Insert(dictionary, i)
+           if self.app.dictionaries[dictionary].getActive():
+               self.installedList.Check(i)
+           i += 1
 
 
    def setAvailDicts(self, addons):
@@ -538,6 +574,7 @@ class PluginManagerWindow(wxFrame):
        
        if hasattr(self, "addons"):
            del self.addons
+
        allAddons = xmltools.parseAddOns(xmlData)
 
        self.addons = {}
@@ -589,10 +626,10 @@ class PluginManagerWindow(wxFrame):
    def onRemove(self, event):
        """Remove button pressed"""
 
-       systemLog(INFO, "Removing %s" % self.installedList.GetItemText(\
+       systemLog(INFO, "Removing %s" % self.installedList.GetString(
            self.currentInstalledItemSelection))
 
-       dictName = self.installedList.GetItemText(\
+       dictName = self.installedList.GetString(
            self.currentInstalledItemSelection)
 
        dictInstance = self.app.dictionaries.get(dictName)
@@ -611,7 +648,7 @@ class PluginManagerWindow(wxFrame):
            errorwin.showErrorMessage(title, msg)
            return
 
-       self.installedList.DeleteItem(self.currentInstalledItemSelection)
+       self.installedList.Delete(self.currentInstalledItemSelection)
 
        idDictMenuItem = None
        for iid, dictionary in self.app.config.ids.items():
@@ -749,11 +786,14 @@ class PluginManagerWindow(wxFrame):
            inst = installer.Installer(self.mainWin, self.app.config)
            inst.install(localPath)
 
-           if self.installedList.FindItem(0, dictInfo.getName()) == -1:
-               index = self.installedList.InsertStringItem(0,
-                                                           dictInfo.getName())
-               self.installedList.SetItemData(index, index+1)
-               self.installedList.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+           if self.installedList.FindString(dictInfo.getName()) == wx.NOT_FOUND:
+               index = self.installedList.Insert(dictInfo.getName(), 0)
+               self.installedList.Check(0)
+               self.app.config.activedict.add(dictInfo.getName())
+               self.app.config.activedict.save()
+
+               # FIXME: Code-wasting. Separated duplicated code into
+               # functions.
            
        except Exception, e:
            traceback.print_exc()
