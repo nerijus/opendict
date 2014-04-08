@@ -20,7 +20,6 @@
 #
 
 import xml.dom.minidom
-import xml.dom.ext
 
 from lib import meta
 
@@ -114,7 +113,7 @@ def writePlainDictConfig(doc, path):
     """Write XML file"""
 
     fd = open(path, 'w')
-    xml.dom.ext.PrettyPrint(doc, fd)
+    fd.write(doc.toxml())
     fd.close()
     
 
@@ -242,7 +241,7 @@ def writeIndexFile(doc, path):
     """Write XML file"""
 
     fd = open(path, 'wb')
-    xml.dom.ext.PrettyPrint(doc, fd)
+    fd.write(doc.toxml())
     fd.close()
 
 
@@ -512,6 +511,6 @@ def writeConfig(doc, path):
     """Write XML file"""
 
     fd = open(path, 'w')
-    xml.dom.ext.PrettyPrint(doc, fd)
+    fd.write(doc.toxml())
     fd.close()
 

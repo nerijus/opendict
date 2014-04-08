@@ -5,7 +5,6 @@ import os
 import zipfile
 import md5
 import xml.dom.minidom
-import xml.dom.ext
 
 #
 # Add-ons description file generator for OpenDict
@@ -267,7 +266,7 @@ def main():
 
     doc = makeDocument(xmlElements)
     fd = open('opendict-add-ons.xml', 'w')
-    xml.dom.ext.PrettyPrint(doc, fd)
+    fd.write(doc.toxml())
     fd.close()
     
 

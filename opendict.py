@@ -54,15 +54,6 @@ except ImportError:
     sys.exit(1)
 
 
-try:
-    import xml.dom.ext
-except ImportError:
-    print >> sys.stderr, "**"
-    print >> sys.stderr, "** Error: Python/XML library not found"
-    print >> sys.stderr, "** Please install python-xml (PyXML) to run OpenDict"
-    print >> sys.stderr, "**"
-    sys.exit(1)
-
 # get_main_dir() returns the directory name of the script or the
 # directory name of the exe
 def get_main_dir():
