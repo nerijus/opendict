@@ -6,7 +6,7 @@ import sys
 #sys.path = [os.path.join(os.curdir, "lib")] + sys.path
 sys.path = ["C:\\Program files\\OpenDict-dev\Opendict-source\lib"] + sys.path
 
-odlist = "wxPython.html,shutil,zipfile,string,"
+odlist = "wx.Python.html,shutil,zipfile,string,"
 
 list = "encodings,codecs,xml,ConfigParser,"\
 "Cookie,copy,ftplib,glob,gopherlib,gzip,htmllib,HTMLParser,httplib,"\

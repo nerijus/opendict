@@ -1,5 +1,7 @@
+#
 # OpenDict
-# Copyright (c) 2003 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,22 +20,22 @@
 #
 # Module: gui.registerwin
 
-from wxPython.wx import *
+import wx
 import os
 
 from info import home, uhome
 
-_ = wxGetTranslation
+_ = wx.GetTranslation
 
-class FileRegistryWindow(wxFrame):
+class FileRegistryWindow(wx.Frame):
 
-   def __init__(self, parent, id, title, pos=wxDefaultPosition,
-                size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
-      wxFrame.__init__(self, parent, id, title, pos, size, style)
+   def __init__(self, parent, id, title, pos=wx.DefaultPosition,
+                size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE):
+      wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
-      self.app = wxGetApp()
+      self.app = wx.GetApp()
 
-      vboxMain = wxBoxSizer(wxVERTICAL)
+      vboxMain = wx.BoxSizer(wx.VERTICAL)
       
       self.types = {}
       self.types['dwa'] = "Slowo"
@@ -41,15 +43,15 @@ class FileRegistryWindow(wxFrame):
       self.types['tmx'] = "TMX"
       self.types['dz'] = "DICT"
 
-      self.fileList = wxListBox(self, 190,
-                                wxPoint(-1, -1),
-                                wxSize(-1, -1),
+      self.fileList = wx.ListBox(self, 190,
+                                wx.Point(-1, -1),
+                                wx.Size(-1, -1),
                                 self.app.config.registers.keys(),
-                                wxLB_SINGLE | wxSUNKEN_BORDER)
+                                wx.LB_SINGLE | wx.SUNKEN_BORDER)
 
-      vboxMain.Add(self.fileList, 1, wxALL | wxEXPAND, 1)
+      vboxMain.Add(self.fileList, 1, wx.ALL | wx.EXPAND, 1)
 
-      vboxInfo = wxBoxSizer(wxVERTICAL)
+      vboxInfo = wx.BoxSizer(wx.VERTICAL)
 
       if len(self.app.config.registers.keys()) > 0:
          self.fileList.SetSelection(0)
@@ -61,44 +63,43 @@ class FileRegistryWindow(wxFrame):
          item = []
          item.extend(["", "", ""])
 
-      self.labelName = wxStaticText(self, -1, _("Name: %s") % name)
-      vboxInfo.Add(self.labelName, 0, wxALL, 0)
+      self.labelName = wx.StaticText(self, -1, _("Name: %s") % name)
+      vboxInfo.Add(self.labelName, 0, wx.ALL, 0)
 
-      self.labelPath = wxStaticText(self, -1, _("Path: %s") % item[0])
-      vboxInfo.Add(self.labelPath, 0, wxALL, 0)
+      self.labelPath = wx.StaticText(self, -1, _("Path: %s") % item[0])
+      vboxInfo.Add(self.labelPath, 0, wx.ALL, 0)
 
-      self.labelFormat = wxStaticText(self, -1, _("Format: %s") % item[1])
-      vboxInfo.Add(self.labelFormat, 0, wxALL, 0)
+      self.labelFormat = wx.StaticText(self, -1, _("Format: %s") % item[1])
+      vboxInfo.Add(self.labelFormat, 0, wx.ALL, 0)
 
-      self.labelEnc = wxStaticText(self, -1, _("Encoding: %s") % item[2])
-      vboxInfo.Add(self.labelEnc, 0, wxALL, 0)
+      self.labelEnc = wx.StaticText(self, -1, _("Encoding: %s") % item[2])
+      vboxInfo.Add(self.labelEnc, 0, wx.ALL, 0)
 
-      vboxMain.Add(vboxInfo, 0, wxALL | wxEXPAND, 10)
+      vboxMain.Add(vboxInfo, 0, wx.ALL | wx.EXPAND, 10)
 
-      hboxButtons = wxBoxSizer(wxHORIZONTAL)
+      hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
 
-      self.buttonInstall = wxButton(self, 191, _("Add new..."))
+      self.buttonInstall = wx.Button(self, 191, _("Add new..."))
       # FIXME: Needs to be rewritten
-      #hboxButtons.Add(self.buttonInstall, 1, wxALL | wxEXPAND, 1)
+      #hboxButtons.Add(self.buttonInstall, 1, wx.ALL | wx.EXPAND, 1)
 
-      self.buttonRemove = wxButton(self, 192, _("Remove selected"))
-      hboxButtons.Add(self.buttonRemove, 1, wxALL | wxEXPAND, 1)
+      self.buttonRemove = wx.Button(self, 192, _("Remove selected"))
+      hboxButtons.Add(self.buttonRemove, 1, wx.ALL | wx.EXPAND, 1)
 
-      self.buttonClose = wxButton(self, 193, _("Close"))
-      hboxButtons.Add(self.buttonClose, 1, wxALL | wxEXPAND, 1)
+      self.buttonClose = wx.Button(self, 193, _("Close"))
+      hboxButtons.Add(self.buttonClose, 1, wx.ALL | wx.EXPAND, 1)
 
-      vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
+      vboxMain.Add(hboxButtons, 0, wx.ALL | wx.EXPAND, 2)
 
       self.SetSizer(vboxMain)
       self.Fit()
 
-      EVT_LISTBOX(self, 190, self.onFileSelected)
-      EVT_BUTTON(self, 191, self.onInstall)
-      EVT_BUTTON(self, 192, self.onRemove)
-      EVT_BUTTON(self, 193, self.onClose)
+      wx.EVT_LISTBOX(self, 190, self.onFileSelected)
+      wx.EVT_BUTTON(self, 191, self.onInstall)
+      wx.EVT_BUTTON(self, 192, self.onRemove)
+      wx.EVT_BUTTON(self, 193, self.onClose)
 
    def onFileSelected(self, event):
-      print event.GetString()
       info = self.app.config.registers[event.GetString()]
 
       self.labelName.SetLabel(_("Name: %s") % event.GetString())
@@ -117,11 +118,8 @@ class FileRegistryWindow(wxFrame):
       if item == "":
           return
 
-      print "Name: %s, Pos: %s [%s]" % (item, pos,
-                                        self.app.config.registers[item][0])
       self.fileList.Delete(pos)
       parent = self.GetParent()
-      print parent.menuDict.FindItem(item)
       parent.menuDict.Delete(parent.menuDict.FindItem(item))
 
       if self.app.config.registers[item][1] != "Dict":

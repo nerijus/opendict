@@ -1,6 +1,7 @@
 #
 # OpenDict
-# Copyright (c) 2003-2006 Martynas Jocius <mjoc at akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,9 +23,8 @@
 Main window GUI module
 """
 
-from wxPython.wx import *
-from wxPython.html import *
-import wxPython
+import wx
+import wx.html
 import os
 import cStringIO
 import traceback
@@ -57,7 +57,7 @@ from lib import errortype
 from lib import dicttype
 from lib import plaindict
 
-_ = wxGetTranslation
+_ = wx.GetTranslation
 
 # Constants
 titleTemplate = "OpenDict - %s"
@@ -68,7 +68,7 @@ NORMAL_FONT_SIZE = '10'
 lastLookupWord = None
 
 
-class HtmlWindow(wxHtmlWindow):
+class HtmlWindow(wx.html.HtmlWindow):
 
    """Html control for showing transaltion and catching
    link-clicking"""
@@ -77,7 +77,7 @@ class HtmlWindow(wxHtmlWindow):
 
       global lastLookupWord
       lastLookupWord = linkInfo.GetHref()
-      wxBeginBusyCursor()
+      wx.BeginBusyCursor()
       parent = self.GetParent().GetParent().GetParent()
 
       word = enc.fromWX(lastLookupWord)
@@ -90,7 +90,7 @@ class HtmlWindow(wxHtmlWindow):
          parent.entry.Enable(True)
          parent.timerSearch.Stop()
          parent.SetStatusText(_('Stopped'))
-         wxEndBusyCursor()
+         wx.EndBusyCursor()
          
          systemLog(ERROR, "Unable to decode '%s': %s" % (word.encode('UTF-8'),
                                                          e))
@@ -111,16 +111,16 @@ class HtmlWindow(wxHtmlWindow):
 
       
 
-class MainWindow(wxFrame):
+class MainWindow(wx.Frame):
 
    """Main OpenDict window with basic controls"""
 
-   def __init__(self, parent, id, title, pos=wxDefaultPosition,
-                size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
-      wxFrame.__init__(self, parent, id, title, pos, size, style)
+   def __init__(self, parent, id, title, pos=wx.DefaultPosition,
+                size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE):
+      wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
-      self.app = wxGetApp()
-      self.printer = wxHtmlEasyPrinting()
+      self.app = wx.GetApp()
+      self.printer = wx.html.HtmlEasyPrinting()
       self.history = History()
       self.htmlCode = ""
       self.dictName = ""
@@ -136,18 +136,18 @@ class MainWindow(wxFrame):
       self.__searchedBySelecting = 0
 
       # Box sizers
-      vboxMain = wxBoxSizer(wxVERTICAL)
-      self.hboxToolbar = wxBoxSizer(wxHORIZONTAL)
+      vboxMain = wx.BoxSizer(wx.VERTICAL)
+      self.hboxToolbar = wx.BoxSizer(wx.HORIZONTAL)
 
       #
       # Menu Bar
       #
-      self.menuBar = wxMenuBar()
+      self.menuBar = wx.MenuBar()
 
       #
       # File menu
       #
-      menuFile = wxMenu()
+      menuFile = wx.Menu()
 
       idPrint = wx.NewId()
       #menuFile.Append(idPrint, _("Print Translation"), "")
@@ -171,7 +171,7 @@ class MainWindow(wxFrame):
 
       self.menuBar.Append(menuFile, _("&File"))
 
-      menuEdit = wxMenu()
+      menuEdit = wx.Menu()
 
       #
       # Clear functions
@@ -206,10 +206,10 @@ class MainWindow(wxFrame):
       #
       # View menu
       #      
-      menuView = wxMenu()
+      menuView = wx.Menu()
 
       # Font size
-      self.menuFontSize = wxMenu()
+      self.menuFontSize = wx.Menu()
       self.menuFontSize.Append(2007, _("Increase\tCtrl-="),
                                _("Increase text size"))
       self.menuFontSize.Append(2008, _("Decrease\tCtrl--"),
@@ -220,14 +220,14 @@ class MainWindow(wxFrame):
       menuView.AppendMenu(2002, _("Font Size"), self.menuFontSize)
 
       # Font face
-      self.menuFontFace = wxMenu()
+      self.menuFontFace = wx.Menu()
       i = 0
       keys = misc.fontFaces.keys()
       keys.sort()
       
       for face in keys:
          self.menuFontFace.AppendRadioItem(2500+i, face, "")
-         EVT_MENU(self, 2500+i, self.onDefault)
+         wx.EVT_MENU(self, 2500+i, self.onDefault)
          if self.app.config.get('fontFace') == misc.fontFaces[face]:
             self.menuFontFace.FindItemById(2500+i).Check(1)
          i+=1
@@ -236,13 +236,13 @@ class MainWindow(wxFrame):
       
 
       # Font encoding
-      self.menuEncodings = wxMenu()
+      self.menuEncodings = wx.Menu()
       i = 0
       keys = misc.encodings.keys()
       keys.sort()
       for encoding in keys:
          self.menuEncodings.AppendRadioItem(2100+i , encoding, "")
-         EVT_MENU(self, 2100+i, self.onDefault)
+         wx.EVT_MENU(self, 2100+i, self.onDefault)
          if self.app.config.get('encoding') == misc.encodings[encoding]:
             self.menuEncodings.FindItemById(2100+i).Check(1)
          i+=1
@@ -262,7 +262,7 @@ class MainWindow(wxFrame):
       #
       # Dictionaries menu
       #
-      self.menuDict = wxMenu()
+      self.menuDict = wx.Menu()
 
       dicts = []
       for dictionary in self.app.dictionaries.values():
@@ -281,11 +281,11 @@ class MainWindow(wxFrame):
             self.app.config.ids.values().index(name)]
 
          try:
-            item = wxMenuItem(self.menuDict,
+            item = wx.MenuItem(self.menuDict,
                               itemID,
                               encoded)
             self.menuDict.AppendItem(item)
-            EVT_MENU(self, itemID, self.onDefault)
+            wx.EVT_MENU(self, itemID, self.onDefault)
          except Exception, e:
             systemLog(ERROR, "Unable to create menu item for '%s' (%s)" \
                   % (name, e))
@@ -301,7 +301,7 @@ class MainWindow(wxFrame):
       #
       # Tools menu
       #
-      menuTools = wxMenu()
+      menuTools = wx.Menu()
 
       idManageDict = wx.NewId()
       menuTools.Append(idManageDict, _("Manage Dictionaries...\tCtrl-M"),
@@ -313,7 +313,7 @@ class MainWindow(wxFrame):
       menuTools.AppendSeparator()
 
       idUseScan = wx.NewId()
-      item = wxMenuItem(menuTools,
+      item = wx.MenuItem(menuTools,
                         idUseScan,
                         _("Take Words From Clipboard"),
                         _("Scan the clipboard for text to translate"),
@@ -340,7 +340,7 @@ class MainWindow(wxFrame):
       #
       # Help menu
       #
-      menuHelp = wxMenu()
+      menuHelp = wx.Menu()
 
       idAbout = wx.NewId()
       menuHelp.Append(idAbout, _("&About\tCtrl-A"))
@@ -350,78 +350,78 @@ class MainWindow(wxFrame):
       self.SetMenuBar(self.menuBar)
 
       # Search Bar
-      labelWord = wxStaticText(self, -1, _("Word:"))
-      self.hboxToolbar.Add(labelWord, 0, wxALL | wxCENTER | wx.ALIGN_RIGHT, 5)
+      labelWord = wx.StaticText(self, -1, _("Word:"))
+      self.hboxToolbar.Add(labelWord, 0, wx.ALL | wx.CENTER | wx.ALIGN_RIGHT, 5)
       
-      self.entry = wxComboBox(self, 153, "", wxPoint(-1, -1),
-                              wxSize(-1, -1), [], wxCB_DROPDOWN)
+      self.entry = wx.ComboBox(self, 153, "", wx.Point(-1, -1),
+                              wx.Size(-1, -1), [], wx.CB_DROPDOWN)
       self.entry.SetToolTipString(_("Enter some text and press " \
                                     "\"Look Up\" button or "
                                     "[ENTER] key on your keyboard"))
-      self.hboxToolbar.Add(self.entry, 1, wxALL | wxCENTER, 1)
+      self.hboxToolbar.Add(self.entry, 1, wx.ALL | wx.CENTER, 1)
 
-      #self.buttonSearch = wxButton(self, wx.ID_FIND)
-      self.buttonSearch = wxButton(self, idFind, _("Look Up"))
+      #self.buttonSearch = wx.Button(self, wx.ID_FIND)
+      self.buttonSearch = wx.Button(self, idFind, _("Look Up"))
       self.buttonSearch.SetToolTipString(_("Click this button to look " \
                                            "up word in " \
                                            "the dictionary"))
       
-      self.hboxToolbar.Add(self.buttonSearch, 0, wxALL | wxCENTER, 1)
+      self.hboxToolbar.Add(self.buttonSearch, 0, wx.ALL | wx.CENTER, 1)
 
       # Back button
-      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "left.png"),
-                     wxBITMAP_TYPE_PNG)
-      self.buttonBack = wxBitmapButton(self, 2010, bmp, (24, 24),
-                                         style=wxNO_BORDER)
+      bmp = wx.Bitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "left.png"),
+                     wx.BITMAP_TYPE_PNG)
+      self.buttonBack = wx.BitmapButton(self, 2010, bmp, (24, 24),
+                                         style=wx.NO_BORDER)
       self.buttonBack.SetToolTipString(_("History Back"))
       self.buttonBack.Disable()
-      self.hboxToolbar.Add(self.buttonBack, 0, wxALL | wxCENTER, 1)
+      self.hboxToolbar.Add(self.buttonBack, 0, wx.ALL | wx.CENTER, 1)
 
       # Forward button
-      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "right.png"),
-                     wxBITMAP_TYPE_PNG)
-      self.buttonForward = wxBitmapButton(self, 2011, bmp, (24, 24),
-                                         style=wxNO_BORDER)
+      bmp = wx.Bitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "right.png"),
+                     wx.BITMAP_TYPE_PNG)
+      self.buttonForward = wx.BitmapButton(self, 2011, bmp, (24, 24),
+                                         style=wx.NO_BORDER)
       self.buttonForward.SetToolTipString(_("History Forward"))
       self.buttonForward.Disable()
-      self.hboxToolbar.Add(self.buttonForward, 0, wxALL | wxCENTER, 1)
+      self.hboxToolbar.Add(self.buttonForward, 0, wx.ALL | wx.CENTER, 1)
 
       # Stop threads
       # TODO: how thread can be killed?
-      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "stop.png"),
-                     wxBITMAP_TYPE_PNG)
-      self.buttonStop = wxBitmapButton(self, 155, bmp, (16, 16),
-                                       style=wxNO_BORDER)
+      bmp = wx.Bitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "stop.png"),
+                     wx.BITMAP_TYPE_PNG)
+      self.buttonStop = wx.BitmapButton(self, 155, bmp, (16, 16),
+                                       style=wx.NO_BORDER)
       self.buttonStop.SetToolTipString(_("Stop searching"))
       self.buttonStop.Disable()
-      self.hboxToolbar.Add(self.buttonStop, 0, wxALL | wxCENTER, 1)
+      self.hboxToolbar.Add(self.buttonStop, 0, wx.ALL | wx.CENTER, 1)
 
       # Word list is hidden by default
       self.wlHidden = True
       
-      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "hide.png"),
-                     wxBITMAP_TYPE_PNG)
-      self.buttonHide = wxBitmapButton(self, 152, bmp, (24, 24),
-                                       style=wxNO_BORDER)
-      self.hboxToolbar.Add(self.buttonHide, 0, wxALL | wxCENTER, 1)
+      bmp = wx.Bitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "hide.png"),
+                     wx.BITMAP_TYPE_PNG)
+      self.buttonHide = wx.BitmapButton(self, 152, bmp, (24, 24),
+                                       style=wx.NO_BORDER)
+      self.hboxToolbar.Add(self.buttonHide, 0, wx.ALL | wx.CENTER, 1)
 
-      vboxMain.Add(self.hboxToolbar, 0, wxALL | wxEXPAND | wxGROW, 0)
+      vboxMain.Add(self.hboxToolbar, 0, wx.ALL | wx.EXPAND | wx.GROW, 0)
 
       # Splitter Window
-      self.splitter = wxSplitterWindow(self, -1)
+      self.splitter = wx.SplitterWindow(self, -1)
 
       # List panel
       self.createListPanel()
       
       # Html window panel
-      self.panelHtml = wxPanel(self.splitter, -1)
-      sbSizerHtml = wxStaticBoxSizer(wxStaticBox(self.panelHtml, -1, 
+      self.panelHtml = wx.Panel(self.splitter, -1)
+      sbSizerHtml = wx.StaticBoxSizer(wx.StaticBox(self.panelHtml, -1, 
                                                  _("Translation")),
-                                     wxVERTICAL)
-      self.htmlWin = HtmlWindow(self.panelHtml, -1, style=wxSUNKEN_BORDER)
-      sbSizerHtml.Add(self.htmlWin, 1, wxALL | wxEXPAND, 0)
+                                     wx.VERTICAL)
+      self.htmlWin = HtmlWindow(self.panelHtml, -1, style=wx.SUNKEN_BORDER)
+      sbSizerHtml.Add(self.htmlWin, 1, wx.ALL | wx.EXPAND, 0)
       self.panelHtml.SetSizer(sbSizerHtml)
-      self.panelHtml.SetAutoLayout(true)
+      self.panelHtml.SetAutoLayout(True)
       sbSizerHtml.Fit(self.panelHtml)
 
       self.splitter.SplitVertically(self.panelList, self.panelHtml,
@@ -433,7 +433,7 @@ class MainWindow(wxFrame):
       if not self.activeDictionary:
          self.hideWordList()
 
-      vboxMain.Add(self.splitter, 1, wxALL | wxGROW | wxEXPAND, 0)
+      vboxMain.Add(self.splitter, 1, wx.ALL | wx.GROW | wx.EXPAND, 0)
 
       # Status bar
       self.CreateStatusBar()
@@ -441,21 +441,21 @@ class MainWindow(wxFrame):
       # Main sizer
       self.SetSizer(vboxMain)
 
-      self.timerSearch = wxTimer(self, 5000)
-      self.timerLoad = wxTimer(self, 5001)
+      self.timerSearch = wx.Timer(self, 5000)
+      self.timerLoad = wx.Timer(self, 5001)
 
       idClipboard = wx.NewId()
-      self.timerClipboard = wxTimer(self, idClipboard)
+      self.timerClipboard = wx.Timer(self, idClipboard)
       self.scanTimeout = 2000
       
       self.search = None
       self.load = None
 
-      wxInitAllImageHandlers()      
-      self.SetIcon(wxIcon(os.path.join(info.GLOBAL_HOME,
+      wx.InitAllImageHandlers()      
+      self.SetIcon(wx.Icon(os.path.join(info.GLOBAL_HOME,
                                        "pixmaps",
                                        "icon-32x32.png"),
-                          wxBITMAP_TYPE_PNG))
+                          wx.BITMAP_TYPE_PNG))
 
 
       #
@@ -475,51 +475,51 @@ class MainWindow(wxFrame):
       # TODO: New-style event definition
 
       # File menu events
-      EVT_MENU(self, idPrint, self.onPrint)
-      EVT_MENU(self, idPreview, self.onPreview)
-      EVT_MENU(self, idCloseDict, self.onCloseDict)
-      EVT_MENU(self, idExit, self.onExit)
+      wx.EVT_MENU(self, idPrint, self.onPrint)
+      wx.EVT_MENU(self, idPreview, self.onPreview)
+      wx.EVT_MENU(self, idCloseDict, self.onCloseDict)
+      wx.EVT_MENU(self, idExit, self.onExit)
 
       # Edit menu events
-      EVT_MENU(self, idClearHistory, self.onClearHistory)
-      EVT_MENU(self, idCopy, self.onCopy)
-      EVT_MENU(self, idPaste, self.onPaste)
-      EVT_MENU(self, idClearEntry, self.onClean)
+      wx.EVT_MENU(self, idClearHistory, self.onClearHistory)
+      wx.EVT_MENU(self, idCopy, self.onCopy)
+      wx.EVT_MENU(self, idPaste, self.onPaste)
+      wx.EVT_MENU(self, idClearEntry, self.onClean)
 
       # View menu events
-      EVT_MENU(self, 2007, self.onIncreaseFontSize)
-      EVT_MENU(self, 2008, self.onDecreaseFontSize)
-      EVT_MENU(self, 2009, self.onNormalFontSize)
-      EVT_MENU(self, idShowHide, self.onHideUnhide)
+      wx.EVT_MENU(self, 2007, self.onIncreaseFontSize)
+      wx.EVT_MENU(self, 2008, self.onDecreaseFontSize)
+      wx.EVT_MENU(self, 2009, self.onNormalFontSize)
+      wx.EVT_MENU(self, idShowHide, self.onHideUnhide)
 
       # Dictionaries menu events
-      EVT_MENU(self, idAddDict, self.onAddDict)
+      wx.EVT_MENU(self, idAddDict, self.onAddDict)
 
       # Tools menu events
-      EVT_MENU(self, idDictServer, self.onOpenDictConn)
-      EVT_MENU(self, idUseScan, self.onUseScanClipboard)
-      EVT_MENU(self, idManageDict, self.onShowPluginManager)
-      EVT_MENU(self, 5002, self.onShowDictEditor)
-      EVT_MENU(self, idPrefs, self.onShowPrefsWindow)
-      EVT_MENU(self, idPron, self.onPronounce)
+      wx.EVT_MENU(self, idDictServer, self.onOpenDictConn)
+      wx.EVT_MENU(self, idUseScan, self.onUseScanClipboard)
+      wx.EVT_MENU(self, idManageDict, self.onShowPluginManager)
+      wx.EVT_MENU(self, 5002, self.onShowDictEditor)
+      wx.EVT_MENU(self, idPrefs, self.onShowPrefsWindow)
+      wx.EVT_MENU(self, idPron, self.onPronounce)
 
       # Help menu events
-      EVT_MENU(self, idAbout, self.onAbout)
+      wx.EVT_MENU(self, idAbout, self.onAbout)
 
       # Other events
       self.Bind(wx.EVT_BUTTON, self.onSearch, self.buttonSearch)
-      EVT_MENU(self, idFind, self.onSearch)
+      wx.EVT_MENU(self, idFind, self.onSearch)
          
-      EVT_BUTTON(self, 2010, self.onBack)
-      EVT_BUTTON(self, 2011, self.onForward)
-      EVT_BUTTON(self, 155, self.onStop)
-      EVT_BUTTON(self, 151, self.onClean)
-      EVT_BUTTON(self, 152, self.onHideUnhide)
-      EVT_TEXT_ENTER(self, 153, self.onSearch)
-      EVT_LISTBOX(self, 154, self.onWordSelected)
-      EVT_TIMER(self, 5000, self.onTimerSearch)
-      EVT_TIMER(self, idClipboard, self.onTimerClipboard)
-      EVT_CLOSE(self, self.onCloseWindow)
+      wx.EVT_BUTTON(self, 2010, self.onBack)
+      wx.EVT_BUTTON(self, 2011, self.onForward)
+      wx.EVT_BUTTON(self, 155, self.onStop)
+      wx.EVT_BUTTON(self, 151, self.onClean)
+      wx.EVT_BUTTON(self, 152, self.onHideUnhide)
+      wx.EVT_TEXT_ENTER(self, 153, self.onSearch)
+      wx.EVT_LISTBOX(self, 154, self.onWordSelected)
+      wx.EVT_TIMER(self, 5000, self.onTimerSearch)
+      wx.EVT_TIMER(self, idClipboard, self.onTimerClipboard)
+      wx.EVT_CLOSE(self, self.onCloseWindow)
 
       self.entry.Bind(wx.EVT_KEY_DOWN, self.onKeyDown)
 
@@ -582,7 +582,7 @@ class MainWindow(wxFrame):
 
          #
          # Turn back active interface elements state
-         wxEndBusyCursor()
+         wx.EndBusyCursor()
          self.SetStatusText("")
          self.entry.Enable(1)
          self.buttonStop.Disable()
@@ -694,15 +694,15 @@ class MainWindow(wxFrame):
       """Clipboard timer, used to watch new text in a clipboard"""
 
       def getText():
-         do = wxTextDataObject()
+         do = wx.TextDataObject()
          text = None
-         wxTheClipboard.Open()
-         if wxTheClipboard.GetData(do):
+         wx.TheClipboard.Open()
+         if wx.TheClipboard.GetData(do):
             try:
                text = do.GetText().strip()
             except Exception, e:
                print e
-         wxTheClipboard.Close()
+         wx.TheClipboard.Close()
          return enc.toWX(text)
       
       text = getText()
@@ -751,7 +751,7 @@ class MainWindow(wxFrame):
 
       global lastLookupWord
       lastLookupWord = word
-      wxBeginBusyCursor()
+      wx.BeginBusyCursor()
 
       self.__searchedBySelecting = 0
       self.SetStatusText(_("Searching..."))
@@ -772,7 +772,7 @@ class MainWindow(wxFrame):
          self.entry.Enable(True)
          self.timerSearch.Stop()
          self.SetStatusText(_('Stopped'))
-         wxEndBusyCursor()
+         wx.EndBusyCursor()
          
          systemLog(ERROR, "Unable to decode '%s': %s" % (word.encode('UTF-8'),
                                                          e))
@@ -821,7 +821,7 @@ class MainWindow(wxFrame):
          self.load.stop()
          self.load = None
 
-      wxEndBusyCursor()
+      wx.EndBusyCursor()
       self.buttonStop.Disable()
       
 
@@ -832,9 +832,7 @@ class MainWindow(wxFrame):
 
    def onKeyDown(self, event):
       """Key down event handler."""
-
-      key = event.KeyCode()
-      if key == wx.WXK_ESCAPE:
+      if event.GetKeyCode() == wx.WXK_ESCAPE:
          self.onClean(None)
       event.Skip()
 
@@ -868,7 +866,7 @@ class MainWindow(wxFrame):
       
       window = DictConnWindow(self, -1,
                               _("Connect to DICT server"),
-                              style=wxDEFAULT_FRAME_STYLE)
+                              style=wx.DEFAULT_FRAME_STYLE)
       window.CentreOnScreen()
       window.Show(True)
 
@@ -899,26 +897,26 @@ class MainWindow(wxFrame):
    
    def onCopy(self, event):
       
-      self.do = wxTextDataObject()
+      self.do = wx.TextDataObject()
       self.do.SetText(self.htmlWin.SelectionToText())
       
-      wxTheClipboard.Open()
-      wxTheClipboard.SetData(self.do)
-      wxTheClipboard.Close()
+      wx.TheClipboard.Open()
+      wx.TheClipboard.SetData(self.do)
+      wx.TheClipboard.Close()
 
    
    def onPaste(self, event):
       """This method is invoked when Paste menu item is selected"""
-      do = wxTextDataObject()
-      wxTheClipboard.Open()
-      if wxTheClipboard.GetData(do):
+      do = wx.TextDataObject()
+      wx.TheClipboard.Open()
+      if wx.TheClipboard.GetData(do):
          try:
             self.entry.SetValue(do.GetText())
          except:
             self.SetStatusText(_("Failed to copy text from the clipboard"))
       else:
          self.SetStatusText(_("Clipboard contains no text data"))
-      wxTheClipboard.Close()
+      wx.TheClipboard.Close()
 
 
    def onPronounce(self, event):
@@ -952,7 +950,7 @@ class MainWindow(wxFrame):
       self.groupsWindow = GroupsWindow(self, -1,
                                           _("Groups"),
                                           size=(330, 150),
-                                          style=wxDEFAULT_FRAME_STYLE)
+                                          style=wx.DEFAULT_FRAME_STYLE)
       self.groupsWindow.CentreOnScreen()
       self.groupsWindow.Show(True)
 
@@ -964,7 +962,7 @@ class MainWindow(wxFrame):
          self.pmWindow = PluginManagerWindow(self, -1,
                                              _("Manage Dictionaries"),
                                              size=(500, 500),
-                                             style=wxDEFAULT_FRAME_STYLE)
+                                             style=wx.DEFAULT_FRAME_STYLE)
          self.pmWindow.CentreOnScreen()
          self.pmWindow.Show(True)
       except Exception, e:
@@ -978,7 +976,7 @@ class MainWindow(wxFrame):
       self.regWindow = FileRegistryWindow(self, -1,
                                           _("File Register"),
                                           size=(340, 200),
-                                          style=wxDEFAULT_FRAME_STYLE)
+                                          style=wx.DEFAULT_FRAME_STYLE)
       self.regWindow.CentreOnScreen()
       self.regWindow.Show(True)
 
@@ -986,7 +984,7 @@ class MainWindow(wxFrame):
    def onShowDictEditor(self, event):
       editor = DictEditorWindow(self, -1, _("Create Dictionaries"),
                                      size=(400, 500),
-                                     style=wxDEFAULT_FRAME_STYLE)
+                                     style=wx.DEFAULT_FRAME_STYLE)
       editor.CentreOnScreen()
       editor.Show(True)
 
@@ -995,7 +993,7 @@ class MainWindow(wxFrame):
       try:
          self.prefsWindow = PrefsWindow(self, -1, _("Preferences"),
                                         size=(-1, -1),
-                                        style=wxDEFAULT_FRAME_STYLE)
+                                        style=wx.DEFAULT_FRAME_STYLE)
          self.prefsWindow.CentreOnScreen()
          self.prefsWindow.Show(True)
       except Exception, e:
@@ -1041,17 +1039,17 @@ class MainWindow(wxFrame):
    def addDictionary(self, dictInstance):
       """Add dictionary to menu and updates ids"""
 
-      app = wxGetApp()
+      app = wx.GetApp()
       app.dictionaries[dictInstance.getName()] = dictInstance
       unid = util.generateUniqueID()
 
       # Insert new menu item only if no same named dictionary exists
       #if not dictInstance.getName() in app.config.ids.values():
       app.config.ids[unid] = dictInstance.getName()
-      item = wxMenuItem(self.menuDict,
+      item = wx.MenuItem(self.menuDict,
                         unid,
                         dictInstance.getName())
-      EVT_MENU(self, unid, self.onDefault)
+      wx.EVT_MENU(self, unid, self.onDefault)
       
       #self.menuDict.InsertItem(self.menuDict.GetMenuItemCount()-2, item)
       self.menuDict.InsertItem(0, item)
@@ -1156,7 +1154,7 @@ class MainWindow(wxFrame):
       except Exception, e:
          systemLog(ERROR, "Unable to select encoding menu item: %s" % e)
 
-      wxEndBusyCursor()
+      wx.EndBusyCursor()
       
 
    def loadPlugin(self, name):
@@ -1292,10 +1290,10 @@ class MainWindow(wxFrame):
    def onAddFromFile(self, event):
       """Starts dictionary registration process"""
 
-      fileDialog = wxFileDialog(self, _("Choose dictionary file"), "", "",
-                            "", wxOPEN|wxMULTIPLE)
+      fileDialog = wx.FileDialog(self, _("Choose dictionary file"), "", "",
+                            "", wx.OPEN|wx.MULTIPLE)
 
-      if fileDialog.ShowModal() == wxID_OK:
+      if fileDialog.ShowModal() == wx.ID_OK:
          file = fileDialog.GetPaths()[0]
       else:
          fileDialog.Destroy()
@@ -1306,11 +1304,11 @@ class MainWindow(wxFrame):
       msg = _("Select dictionary format. If you can't find\n" \
               "the format of your dictionary, the register\n" \
               "system does not support it yet.")
-      formatDialog = wxSingleChoiceDialog(self,
+      formatDialog = wx.SingleChoiceDialog(self,
                                           msg,
                                           _("Dictionary format"),
-                                          flist, wxOK|wxCANCEL)
-      if formatDialog.ShowModal() == wxID_OK:
+                                          flist, wx.OK|wx.CANCEL)
+      if formatDialog.ShowModal() == wx.ID_OK:
          format = formatDialog.GetStringSelection()
       else:
          formatDialog.Destroy()
@@ -1325,9 +1323,9 @@ class MainWindow(wxFrame):
    def onAddFromPlugin(self, event):
       """Starts plugin installation process"""
 
-      dialog = wxFileDialog(self, _("Choose plugin file"), "", "",
-                            "", wxOPEN|wxMULTIPLE)
-      if dialog.ShowModal() == wxID_OK:
+      dialog = wx.FileDialog(self, _("Choose plugin file"), "", "",
+                            "", wx.OPEN|wx.MULTIPLE)
+      if dialog.ShowModal() == wx.ID_OK:
          plugin.installPlugin(self.app.config, dialog.GetPaths()[0])
       dialog.Destroy()
 
@@ -1342,7 +1340,7 @@ class MainWindow(wxFrame):
 
       aboutWindow = AboutWindow(self, -1,
                                 _("About"),
-                                style=wxDEFAULT_DIALOG_STYLE)
+                                style=wx.DEFAULT_DIALOG_STYLE)
       aboutWindow.CentreOnScreen()
       aboutWindow.Show(True)
 
@@ -1364,19 +1362,19 @@ class MainWindow(wxFrame):
       word = enc.fromWX(word)
       word = word.encode(self.activeDictionary.getEncoding())
       self.search = Process(self.activeDictionary.search, word)
-      wxBeginBusyCursor()
+      wx.BeginBusyCursor()
 
 
    def createListPanel(self):
-      self.panelList = wxPanel(self.splitter, -1)
-      sbSizerList = wxStaticBoxSizer(wxStaticBox(self.panelList, -1, 
+      self.panelList = wx.Panel(self.splitter, -1)
+      sbSizerList = wx.StaticBoxSizer(wx.StaticBox(self.panelList, -1, 
                                                  _("Word List")), 
-                                     wxVERTICAL)
-      self.wordList = wxListBox(self.panelList, 154, wxPoint(-1, -1),
-                                wxSize(-1, -1), self.words, wxLB_SINGLE)
-      sbSizerList.Add(self.wordList, 1, wxALL | wxEXPAND, 0)
+                                     wx.VERTICAL)
+      self.wordList = wx.ListBox(self.panelList, 154, wx.Point(-1, -1),
+                                wx.Size(-1, -1), self.words, wx.LB_SINGLE)
+      sbSizerList.Add(self.wordList, 1, wx.ALL | wx.EXPAND, 0)
       self.panelList.SetSizer(sbSizerList)
-      self.panelList.SetAutoLayout(true)
+      self.panelList.SetAutoLayout(True)
       sbSizerList.Fit(self.panelList)
 
       
@@ -1389,8 +1387,8 @@ class MainWindow(wxFrame):
       self.wlHidden = True
 
       # And change the button pixmap
-      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "unhide.png"),
-                     wxBITMAP_TYPE_PNG)
+      bmp = wx.Bitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "unhide.png"),
+                     wx.BITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)
       self.buttonHide.SetToolTipString(_("Show word list"))
       self.buttonHide.Show(False)
@@ -1406,8 +1404,8 @@ class MainWindow(wxFrame):
       self.wlHidden = False
 
       # And change the pixmap
-      bmp = wxBitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "hide.png"),
-                     wxBITMAP_TYPE_PNG)
+      bmp = wx.Bitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "hide.png"),
+                     wx.BITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)
       self.buttonHide.SetToolTipString(_("Hide word list"))
 

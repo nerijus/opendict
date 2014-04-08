@@ -1,6 +1,7 @@
 #
 # OpenDict
-# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +19,7 @@
 # 02111-1307 USA
 #
 
-from wxPython.wx import *
+import wx
 
 import os
 import zipfile
@@ -36,7 +37,7 @@ from lib import enc
 from lib import plaindict
 from lib import newplugin
 
-_ = wxGetTranslation
+_ = wx.GetTranslation
 
 class Installer:
     """Default class used for installing plugins and registering
@@ -56,13 +57,13 @@ class Installer:
                    "Mova dictionaries (*.mova)|*.mova|" \
                    "DICT dictionaries (*.dz)|*.dz"
         
-        fileDialog = wxFileDialog(self.mainWin,
+        fileDialog = wx.FileDialog(self.mainWin,
                                   message=_("Choose dictionary file"),
                                   wildcard=wildCard,
-                                  style=wxOPEN|wxCHANGE_DIR)
+                                  style=wx.OPEN|wx.CHANGE_DIR)
         fileDialog.CentreOnScreen()
 
-        if fileDialog.ShowModal() == wxID_OK:
+        if fileDialog.ShowModal() == wx.ID_OK:
             filePath = fileDialog.GetPaths()[0]
         else:
             fileDialog.Destroy()
@@ -334,7 +335,6 @@ def _installNormalPlugin(filePath):
             if len(fileName) == 0:
                 dirToCreate = os.path.join(pluginsPath, dirName)
                 if not os.path.exists(dirToCreate):
-                    #print "Creating", dirToCreate
                     os.mkdir(dirToCreate)
             else:
                 fileToWrite = os.path.join(pluginsPath, dirName, fileName)

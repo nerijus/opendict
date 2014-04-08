@@ -1,6 +1,7 @@
 #
 # OpenDict
-# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,8 +21,7 @@
 
 # TODO: not usable yet, needs some work with encodings, gui, etc.
 
-from wxPython.wx import *
-from wxPython.lib.rcsizer import RowColSizer
+from wx.lib.rcsizer import RowColSizer
 import wx
 import os
 import codecs
@@ -35,28 +35,28 @@ from lib import info
 from lib import dicteditor
 from lib import enc
 
-_ = wxGetTranslation
+_ = wx.GetTranslation
 
 
-class EditWordWindow(wxFrame):
+class EditWordWindow(wx.Frame):
     """Word editor window"""
 
-    def __init__(self, word, parent, id, title, pos=wxDefaultPosition,
-             size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
-        wxFrame.__init__(self, parent, id, title, pos, size, style)
+    def __init__(self, word, parent, id, title, pos=wx.DefaultPosition,
+             size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE):
+        wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
-        vboxMain = wxBoxSizer(wxVERTICAL)
-        hboxButtons = wxBoxSizer(wxHORIZONTAL)
+        vboxMain = wx.BoxSizer(wx.VERTICAL)
+        hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
         self.boxInfo = RowColSizer()
 
 
-        self.boxInfo.Add(wxStaticText(self, -1, _("Word: "), pos=(-1, -1)),
-                         flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
+        self.boxInfo.Add(wx.StaticText(self, -1, _("Word: "), pos=(-1, -1)),
+                         flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
                          row=0, col=0, border=1)
 
-        self.entryWord = wxTextCtrl(self, -1, word)
+        self.entryWord = wx.TextCtrl(self, -1, word)
         self.entryWord.Disable()
-        self.boxInfo.Add(self.entryWord, flag=wxEXPAND,
+        self.boxInfo.Add(self.entryWord, flag=wx.EXPAND,
                          row=0, col=1, border=1)
 
 
@@ -82,19 +82,19 @@ class EditWordWindow(wxFrame):
                     entry.SetValue(transcomm)
 
         self.boxInfo.AddGrowableCol(1)
-        vboxMain.Add(self.boxInfo, 1, wxALL | wxEXPAND, 2)
+        vboxMain.Add(self.boxInfo, 1, wx.ALL | wx.EXPAND, 2)
 
         idAdd = wx.NewId()
-        self.buttonAdd = wxButton(self, idAdd, _("Add translation field"))
-        vboxMain.Add(self.buttonAdd, 0, wxALL | wxALIGN_RIGHT, 2)
+        self.buttonAdd = wx.Button(self, idAdd, _("Add translation field"))
+        vboxMain.Add(self.buttonAdd, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
 
-        self.buttonOK = wxButton(self, 6050, _("OK"))
-        hboxButtons.Add(self.buttonOK, 0, wxALL, 1)
+        self.buttonOK = wx.Button(self, 6050, _("OK"))
+        hboxButtons.Add(self.buttonOK, 0, wx.ALL, 1)
 
-        self.buttonCancel = wxButton(self, 6051, _("Cancel"))
-        hboxButtons.Add(self.buttonCancel, 0, wxALL, 1)
+        self.buttonCancel = wx.Button(self, 6051, _("Cancel"))
+        hboxButtons.Add(self.buttonCancel, 0, wx.ALL, 1)
 
-        vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 2)
+        vboxMain.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
 
         self.SetSizer(vboxMain)
         self.Fit()
@@ -108,20 +108,20 @@ class EditWordWindow(wxFrame):
     def onAddEmptyField(self, event):
         """Add empty translation field"""
 
-        transLabel = wxStaticText(self, -1, _("Translation #%d: ") \
+        transLabel = wx.StaticText(self, -1, _("Translation #%d: ") \
                                               % (len(self.textEntries)+1))
         self.transLabels[len(self.transLabels)] = transLabel
         self.boxInfo.Add(transLabel,
                          flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
                          row=len(self.transLabels), col=0, border=1)
 
-        text = wxTextCtrl(self, -1,
+        text = wx.TextCtrl(self, -1,
                           "",
                           size=(100, -1))
 
         self.textEntries[len(self.textEntries)] = text
 
-        self.boxInfo.Add(text, flag=wxEXPAND,
+        self.boxInfo.Add(text, flag=wx.EXPAND,
                          row=len(self.textEntries),
                          col=1, border=1)
 
@@ -170,7 +170,7 @@ class EditWordWindow(wxFrame):
 
 
 # IDs range: 6000-6200
-class DictEditorWindow(wxFrame):
+class DictEditorWindow(wx.Frame):
 
     """Built-in dictionary editor. This tool lets user create and
     manage his own dictionaries in TMX format."""
@@ -178,8 +178,8 @@ class DictEditorWindow(wxFrame):
     class AddWordWindow(EditWordWindow):
         """Window for adding new word"""
 
-        def __init__(self, parent, id, title, pos=wxDefaultPosition,
-                 size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
+        def __init__(self, parent, id, title, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE):
 
             EditWordWindow.__init__(self, '', parent, id, title, pos,
                                     size, style)
@@ -228,41 +228,41 @@ class DictEditorWindow(wxFrame):
 
 
     # IDs range: 6000-6003
-    class ConfirmExitWindow(wxDialog):
+    class ConfirmExitWindow(wx.Dialog):
         """Save confirmation dialog"""
 
-        def __init__(self, parent, id, title, pos=wxDefaultPosition,
-                 size=wxDefaultSize, style=wxDEFAULT_DIALOG_STYLE):
+        def __init__(self, parent, id, title, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE):
             
-            wxDialog.__init__(self, parent, id, title, pos, size, style)
+            wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
             self.parent = self.GetParent()
             
-            vboxMain = wxBoxSizer(wxVERTICAL)
-            hboxButtons = wxBoxSizer(wxHORIZONTAL)
+            vboxMain = wx.BoxSizer(wx.VERTICAL)
+            hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
             
-            labelMsg = wxStaticText(self, -1,
+            labelMsg = wx.StaticText(self, -1,
                                     _("Dictionary \"%s\" has been changed") \
                                     % parent.name)
-            vboxMain.Add(labelMsg, 1, wxALL | wxEXPAND, 15)
+            vboxMain.Add(labelMsg, 1, wx.ALL | wx.EXPAND, 15)
             
-            buttonSave = wxButton(self, 6000, _("Save"))
-            hboxButtons.Add(buttonSave, 0, wxALL | wxEXPAND, 3)
+            buttonSave = wx.Button(self, 6000, _("Save"))
+            hboxButtons.Add(buttonSave, 0, wx.ALL | wx.EXPAND, 3)
             
-            buttonExit = wxButton(self, 6001, _("Do not save"))
-            hboxButtons.Add(buttonExit, 0, wxALL | wxEXPAND, 3)
+            buttonExit = wx.Button(self, 6001, _("Do not save"))
+            hboxButtons.Add(buttonExit, 0, wx.ALL | wx.EXPAND, 3)
             
-            buttonCancel = wxButton(self, 6002, _("Cancel"))
-            hboxButtons.Add(buttonCancel, 0, wxALL | wxEXPAND, 3)
+            buttonCancel = wx.Button(self, 6002, _("Cancel"))
+            hboxButtons.Add(buttonCancel, 0, wx.ALL | wx.EXPAND, 3)
             
-            vboxMain.Add(hboxButtons, 0, wxALL | wxEXPAND, 2)
+            vboxMain.Add(hboxButtons, 0, wx.ALL | wx.EXPAND, 2)
             
             self.SetSizer(vboxMain)
             self.Fit()
             
-            EVT_BUTTON(self, 6000, self.onSave)
-            EVT_BUTTON(self, 6001, self.onExitParent)
-            EVT_BUTTON(self, 6002, self.onClose)
+            wx.EVT_BUTTON(self, 6000, self.onSave)
+            wx.EVT_BUTTON(self, 6001, self.onExitParent)
+            wx.EVT_BUTTON(self, 6002, self.onClose)
 
             
         def onSave(self, event):
@@ -295,11 +295,11 @@ class DictEditorWindow(wxFrame):
 
 
     # -------------------------------------------------------------
-    def __init__(self, parent, id, title, pos=wxDefaultPosition,
-                 size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
-        wxFrame.__init__(self, parent, id, title, pos, size, style)
+    def __init__(self, parent, id, title, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE):
+        wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
-        self.app = wxGetApp()
+        self.app = wx.GetApp()
         self.CreateStatusBar()
         
         self.priTitle = _("Dictionary editor")
@@ -308,99 +308,99 @@ class DictEditorWindow(wxFrame):
         self.editor = dicteditor.Editor()
         self.cAction = None
 
-        vboxMain = wxBoxSizer(wxVERTICAL)
-        vboxDict = wxBoxSizer(wxVERTICAL)
-        vboxList = wxBoxSizer(wxVERTICAL)
-        hboxDict = wxBoxSizer(wxHORIZONTAL)
-        vboxEditButtons = wxBoxSizer(wxVERTICAL)
-        hboxButtons = wxBoxSizer(wxHORIZONTAL)
+        vboxMain = wx.BoxSizer(wx.VERTICAL)
+        vboxDict = wx.BoxSizer(wx.VERTICAL)
+        vboxList = wx.BoxSizer(wx.VERTICAL)
+        hboxDict = wx.BoxSizer(wx.HORIZONTAL)
+        vboxEditButtons = wx.BoxSizer(wx.VERTICAL)
+        hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
 
         # Control buttons
         self.controlButtons = []
         
-        self.buttonAdd = wxButton(self, 6000, _("Add"))
+        self.buttonAdd = wx.Button(self, 6000, _("Add"))
         self.buttonAdd.SetToolTipString(_("Add word"))
         self.controlButtons.append(self.buttonAdd)
         
-        self.buttonEdit = wxButton(self, 6001, _("Edit"))
+        self.buttonEdit = wx.Button(self, 6001, _("Edit"))
         self.buttonEdit.SetToolTipString(_("Change translation"))
         self.controlButtons.append(self.buttonEdit)
 
-        self.buttonRemove = wxButton(self, 6002, _("Remove"))
+        self.buttonRemove = wx.Button(self, 6002, _("Remove"))
         self.buttonRemove.SetToolTipString(_("Remove selected word"))
         self.controlButtons.append(self.buttonRemove)
 
-        self.buttonSort = wxButton(self, 6004, _("Sort"))
+        self.buttonSort = wx.Button(self, 6004, _("Sort"))
         self.buttonSort.SetToolTipString(_("Sort word list"))
         self.controlButtons.append(self.buttonSort)
 
-        self.buttonSave = wxButton(self, 6005, _("Save"))
+        self.buttonSave = wx.Button(self, 6005, _("Save"))
         self.buttonSave.SetToolTipString(_("Save words to file"))
         self.controlButtons.append(self.buttonSave)
 
-        self.buttonSaveAs = wxButton(self, 6006, _("Save As..."))
+        self.buttonSaveAs = wx.Button(self, 6006, _("Save As..."))
         self.buttonSaveAs.SetToolTipString(_("Save with a different file name"))
         self.controlButtons.append(self.buttonSaveAs)
         
         for button in self.controlButtons:
             button.Disable()
-            vboxEditButtons.Add(button, 0, wxALL | wxEXPAND, 1)
+            vboxEditButtons.Add(button, 0, wx.ALL | wx.EXPAND, 1)
         
-        panelList = wxPanel(self, -1)
-        sbSizerList = wxStaticBoxSizer(wxStaticBox(panelList, -1, 
+        panelList = wx.Panel(self, -1)
+        sbSizerList = wx.StaticBoxSizer(wx.StaticBox(panelList, -1, 
                                                  _("Word List")),
-                                       wxVERTICAL)
+                                       wx.VERTICAL)
         
-        self.list = wxListBox(panelList, 6020,
-                              wxPoint(-1, -1),
-                              wxSize(-1, -1),
+        self.list = wx.ListBox(panelList, 6020,
+                              wx.Point(-1, -1),
+                              wx.Size(-1, -1),
                               [],
-                              wxLB_SINGLE | wxSUNKEN_BORDER)
+                              wx.LB_SINGLE | wx.SUNKEN_BORDER)
                               
-        sbSizerList.Add(self.list, 1, wxALL | wxEXPAND, 0)
+        sbSizerList.Add(self.list, 1, wx.ALL | wx.EXPAND, 0)
         panelList.SetSizer(sbSizerList)
-        panelList.SetAutoLayout(true)
+        panelList.SetAutoLayout(True)
         sbSizerList.Fit(panelList)
 
-        hboxDict.Add(panelList, 1, wxALL | wxEXPAND, 0)
-        hboxDict.Add(vboxEditButtons, 0, wxALL | wxEXPAND, 5)
-        vboxDict.Add(hboxDict, 1, wxALL | wxEXPAND, 0)
-        vboxMain.Add(vboxDict, 1, wxALL | wxEXPAND, 10)
+        hboxDict.Add(panelList, 1, wx.ALL | wx.EXPAND, 0)
+        hboxDict.Add(vboxEditButtons, 0, wx.ALL | wx.EXPAND, 5)
+        vboxDict.Add(hboxDict, 1, wx.ALL | wx.EXPAND, 0)
+        vboxMain.Add(vboxDict, 1, wx.ALL | wx.EXPAND, 10)
 
-        self.buttonNew = wxButton(self, 6030, _("New..."))
+        self.buttonNew = wx.Button(self, 6030, _("New..."))
         self.buttonNew.SetToolTipString(_("Start new dictionary"))
-        hboxButtons.Add(self.buttonNew, 0, wxALL | wxEXPAND, 1)
+        hboxButtons.Add(self.buttonNew, 0, wx.ALL | wx.EXPAND, 1)
 
-        self.buttonOpen = wxButton(self, 6031, _("Open..."))
+        self.buttonOpen = wx.Button(self, 6031, _("Open..."))
         self.buttonOpen.SetToolTipString(_("Open dictionary file"))
-        hboxButtons.Add(self.buttonOpen, 0, wxALL | wxEXPAND, 1)
+        hboxButtons.Add(self.buttonOpen, 0, wx.ALL | wx.EXPAND, 1)
 
-        self.buttonClose = wxButton(self, 6032, _("Close"))
+        self.buttonClose = wx.Button(self, 6032, _("Close"))
         self.buttonClose.SetToolTipString(_("Close editor window"))
-        hboxButtons.Add(self.buttonClose, 0, wxALL | wxEXPAND, 1)
+        hboxButtons.Add(self.buttonClose, 0, wx.ALL | wx.EXPAND, 1)
 
-        vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 2)
+        vboxMain.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
 
-        self.SetIcon(wxIcon(os.path.join(info.GLOBAL_HOME,
+        self.SetIcon(wx.Icon(os.path.join(info.GLOBAL_HOME,
                                         "pixmaps",
                                         "icon-24x24.png"),
-                            wxBITMAP_TYPE_PNG))
+                            wx.BITMAP_TYPE_PNG))
 
         self.SetSizer(vboxMain)
 
         self.Bind(wx.EVT_LISTBOX, self.onWordSelected, self.list)
         self.Bind(wx.EVT_BUTTON, self.onCreate, self.buttonNew)
 
-        EVT_BUTTON(self, 6000, self.onAddWord)
-        EVT_BUTTON(self, 6001, self.onEdit)
-        EVT_BUTTON(self, 6002, self.onRemove)
-        EVT_BUTTON(self, 6003, self.onSearch)
-        EVT_BUTTON(self, 6004, self.onSort)
-        EVT_BUTTON(self, 6005, self.onSave)
-        EVT_BUTTON(self, 6006, self.onSaveAs)
-        EVT_BUTTON(self, 6031, self.onOpen)
-        EVT_BUTTON(self, 6032, self.onClose)
-        EVT_CLOSE(self, self.onClose)
+        wx.EVT_BUTTON(self, 6000, self.onAddWord)
+        wx.EVT_BUTTON(self, 6001, self.onEdit)
+        wx.EVT_BUTTON(self, 6002, self.onRemove)
+        wx.EVT_BUTTON(self, 6003, self.onSearch)
+        wx.EVT_BUTTON(self, 6004, self.onSort)
+        wx.EVT_BUTTON(self, 6005, self.onSave)
+        wx.EVT_BUTTON(self, 6006, self.onSaveAs)
+        wx.EVT_BUTTON(self, 6031, self.onOpen)
+        wx.EVT_BUTTON(self, 6032, self.onClose)
+        wx.EVT_CLOSE(self, self.onClose)
 
 
     def onAddWord(self, event):
@@ -409,7 +409,7 @@ class DictEditorWindow(wxFrame):
         
         window = self.AddWordWindow(self, -1, _("New Word"),
                                     size=(-1, -1), pos=(-1, -1),
-                                    style=wxDEFAULT_FRAME_STYLE)
+                                    style=wx.DEFAULT_FRAME_STYLE)
         window.CentreOnScreen()
         window.Show(True)
 
@@ -424,7 +424,7 @@ class DictEditorWindow(wxFrame):
 
         window = EditWordWindow(word, self, -1, _("Edit Word"),
                                 size=(-1, -1),
-                                style=wxDEFAULT_FRAME_STYLE)
+                                style=wx.DEFAULT_FRAME_STYLE)
         window.CentreOnScreen()
         window.Show(True)
 
@@ -597,9 +597,9 @@ class DictEditorWindow(wxFrame):
     def open(self):
         wildCard = "Slowo dictionaries (*.dwa)|*.dwa"
         
-        dialog = wxFileDialog(self, message=_("Choose dictionary file"),
-                              wildcard=wildCard, style=wxOPEN|wxMULTIPLE)
-        if dialog.ShowModal() == wxID_OK:
+        dialog = wx.FileDialog(self, message=_("Choose dictionary file"),
+                              wildcard=wildCard, style=wx.OPEN|wx.MULTIPLE)
+        if dialog.ShowModal() == wx.ID_OK:
             name = os.path.split(dialog.GetPaths()[0])[1]
             self.filePath = dialog.GetPaths()[0]
             self.name = os.path.split(self.filePath)[1]

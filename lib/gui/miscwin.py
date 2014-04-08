@@ -1,6 +1,7 @@
 #
 # OpenDict
-# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,9 +19,8 @@
 # 02111-1307 USA
 #
 
-from wxPython.wx import *
-from wxPython.html import *
 import wx
+import wx.html
 import shutil
 import traceback
 
@@ -28,19 +28,19 @@ from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 from lib import enc
 from lib.gui import errorwin
 
-_ = wxGetTranslation
+_ = wx.GetTranslation
 
 
-class PluginLicenceWindow(wxDialog):
+class PluginLicenceWindow(wx.Dialog):
 
-   def __init__(self, parent, id, title, msg, pos=wxDefaultPosition,
-                size=wxDefaultSize, style=wxDEFAULT_DIALOG_STYLE):
-      wxDialog.__init__(self, parent, id, title, pos, size, style)
+   def __init__(self, parent, id, title, msg, pos=wx.DefaultPosition,
+                size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE):
+      wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
-      vbox = wxBoxSizer(wxVERTICAL)
-      vboxButtons = wxBoxSizer(wxHORIZONTAL)
+      vbox = wx.BoxSizer(wx.VERTICAL)
+      vboxButtons = wx.BoxSizer(wx.HORIZONTAL)
 
-      htmlWin = wxHtmlWindow(self, -1, style=wxSUNKEN_BORDER)
+      htmlWin = wx.html.HtmlWindow(self, -1, style=wx.SUNKEN_BORDER)
       htmlWin.SetFonts('Helvetica', 'Fixed', [10]*5)
 
       error = False
@@ -53,19 +53,19 @@ class PluginLicenceWindow(wxDialog):
           htmlWin.SetPage(_("Error: <i>unable to show licence text</i>"))
           error = True
 
-      vbox.Add(htmlWin, 1, wxALL | wxEXPAND, 5)
+      vbox.Add(htmlWin, 1, wx.ALL | wx.EXPAND, 5)
 
       if not error:
-          self.buttonNo = wxButton(self, wx.ID_CANCEL, _("Do not accept"))
-          vboxButtons.Add(self.buttonNo, 0, wxALL, 2)
+          self.buttonNo = wx.Button(self, wx.ID_CANCEL, _("Do not accept"))
+          vboxButtons.Add(self.buttonNo, 0, wx.ALL, 2)
           
-          self.buttonYes = wxButton(self, wx.ID_OK, _("Accept"))
-          vboxButtons.Add(self.buttonYes, 0, wxALL, 2)
+          self.buttonYes = wx.Button(self, wx.ID_OK, _("Accept"))
+          vboxButtons.Add(self.buttonYes, 0, wx.ALL, 2)
       else:
-          self.buttonNo = wxButton(self, wx.ID_CANCEL, _("Close"))
-          vboxButtons.Add(self.buttonNo, 0, wxALL, 2)
+          self.buttonNo = wx.Button(self, wx.ID_CANCEL, _("Close"))
+          vboxButtons.Add(self.buttonNo, 0, wx.ALL, 2)
 
-      vbox.Add(vboxButtons, 0, wxALL | wxALIGN_RIGHT, 5)
+      vbox.Add(vboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
       self.SetSizer(vbox)
 
 
@@ -85,11 +85,11 @@ def showLicenceAgreement(parentWindow, licenceText):
 
 
 
-class InvalidDictWindow(wxDialog):
+class InvalidDictWindow(wx.Dialog):
 
-   def __init__(self, parent, id, title, dicts, pos=wxDefaultPosition,
-                size=wxDefaultSize, style=wxDEFAULT_DIALOG_STYLE):
-      wxDialog.__init__(self, parent, id, title, pos, size, style)
+   def __init__(self, parent, id, title, dicts, pos=wx.DefaultPosition,
+                size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE):
+      wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
       self.dicts = {}
       self.buttons = {}
@@ -98,34 +98,33 @@ class InvalidDictWindow(wxDialog):
       vboxButtons = wx.BoxSizer(wx.HORIZONTAL)
       vboxDicts = wx.BoxSizer(wx.VERTICAL)
 
-      grid = wxFlexGridSizer(2, 2, 5, 5)
+      grid = wx.FlexGridSizer(2, 2, 5, 5)
 
       msg =  _("You have directories that containt invalid dictionaries " \
                "and cannot be loaded. \nYou can try to remove these " \
                "directories right now.")
 
       vbox.Add(wx.StaticText(self, -1, msg),
-               0, wxALL, 5)
+               0, wx.ALL, 5)
 
       row = 0
       for d in dicts:
-         grid.Add(wxStaticText(self, -1, d),
-                  0, wxALIGN_CENTER_VERTICAL)
+         grid.Add(wx.StaticText(self, -1, d),
+                  0, wx.ALIGN_CENTER_VERTICAL)
          rid = wx.NewId()
          self.dicts[rid] = d
          b = wx.Button(self, rid, _("Remove"))
          self.buttons[rid] = b
-         grid.Add(b, 1, wxALIGN_CENTER_VERTICAL)
-         EVT_BUTTON(self, rid, self.onRemove)
-         #print d
+         grid.Add(b, 1, wx.ALIGN_CENTER_VERTICAL)
+         wx.EVT_BUTTON(self, rid, self.onRemove)
 
-      vbox.Add(grid, 0, wxALL, 10)
-      vbox.Add(wx.StaticLine(self, -1), 1, wxALL | wxEXPAND, 1)
+      vbox.Add(grid, 0, wx.ALL, 10)
+      vbox.Add(wx.StaticLine(self, -1), 1, wx.ALL | wx.EXPAND, 1)
 
-      self.buttonClose = wxButton(self, wx.ID_CANCEL, _("Close"))
-      vboxButtons.Add(self.buttonClose, 0, wxALL, 5)
+      self.buttonClose = wx.Button(self, wx.ID_CANCEL, _("Close"))
+      vboxButtons.Add(self.buttonClose, 0, wx.ALL, 5)
 
-      vbox.Add(vboxButtons, 0, wxALL | wxALIGN_RIGHT, 5)
+      vbox.Add(vboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
       self.SetSizer(vbox)
 
       self.Fit()

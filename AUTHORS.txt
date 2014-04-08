@@ -1,12 +1,15 @@
 OpenDict Authors
 ================
-Last updated: 2006-09-23
+Last updated: 2007-06-20
 
-o Martynas Jocius <mjoc@akl.lt> 
+o Martynas Jocius <martynas.jocius@idiles.com> 
   Maintainer and main developer
   
 o Kęstutis Biliūnas <kebil@kaunas.init.lt>
   Debian developer, contributor
+
+o Linas Valiukas <shirshegsm@gmail.com>
+  MacOS X port
 
 o Nerijus Baliūnas <nerijusb@dtiltas.lt>
   Developer of better MS Windows platform support

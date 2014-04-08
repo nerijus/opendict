@@ -9,9 +9,10 @@ import xml.dom.ext
 
 #
 # Add-ons description file generator for OpenDict
-# Copyright (c) 2005 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
-# Fast code, dirty code
+# Fast & dirty code
 #
 
 def parsePluginConfig(xmlData):
@@ -136,8 +137,8 @@ def generateElement(**args):
     # Description element
     descElement = doc.createElement('description')
     addonElement.appendChild(descElement)
-    descEscaped = "%s" % args.get('description', '')
-    descElement.appendChild(doc.createTextNode(descEscaped))
+    descElement.appendChild(doc.createTextNode(args.get('description') \
+                                               or None))
 
     # MD5 element
     md5Element = doc.createElement('md5')

@@ -6,8 +6,8 @@ all: messages.pot $(MOFILES)
 install: all
 	for file in $(MOFILES); do \
 		lang=`echo $$file | sed 's/\.mo//'`; \
-		install -d $(prefix)/usr/share/locale/$$lang/LC_MESSAGES/; \
-		install -m 0644 $$file $(prefix)/usr/share/locale/$$lang/LC_MESSAGES/opendict.mo; \
+		install -d $(prefix)/share/locale/$$lang/LC_MESSAGES/; \
+		install -m 0644 $$file $(prefix)/share/locale/$$lang/LC_MESSAGES/opendict.mo; \
 	done
 
 messages.pot:
@@ -15,6 +15,7 @@ messages.pot:
 	rm -f *.pot
 	test -f /usr/bin/pygettext && /usr/bin/pygettext -v ../opendict.py ../lib/*.py ../lib/gui/*.py || echo
 	test -f /usr/bin/pygettext.py && /usr/bin/pygettext.py -v ../opendict.py ../lib/*.py ../lib/gui/*.py || echo
+	test -f /usr/share/doc/packages/python/Tools/i18n/pygettext.py && python /usr/share/doc/packages/python/Tools/i18n/pygettext.py -v ../opendict.py ../lib/*.py ../lib/gui/*.py  || echo
 	cp messages.pot opendict.pot
 	rm -f messages.pot
 
@@ -37,5 +38,5 @@ clean:
 uninstall:
 	for file in $(MOFILES); do \
 		lang=`echo $$file | sed 's/\.mo//'`; \
-		rm -f $(prefix)/usr/share/locale/$$lang/LC_MESSAGES/opendict.mo; \
+		rm -f $(prefix)/share/locale/$$lang/LC_MESSAGES/opendict.mo; \
 	done

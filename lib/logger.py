@@ -1,6 +1,7 @@
 #
 # OpenDict
-# Copyright (c) 2005-2006 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,8 +36,15 @@ _systemLogFile = os.path.join(_logDir, 'system.log')
 _debugLogFile = os.path.join(_logDir, 'debug.log')
 
 
+# Enable or disable logging
+logging = False
+
+
 def systemLog(messageType, message):
     """Write message system log"""
+
+    if not logging:
+        return
 
     dateStr = time.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -59,6 +67,9 @@ def systemLog(messageType, message):
 def debugLog(messageType, message):
     """Write message system log"""
 
+    if not logging:
+        return
+
     dateStr = time.strftime("%Y-%m-%d %H:%M:%S")
 
     typeStr = 'ERROR'
@@ -70,10 +81,4 @@ def debugLog(messageType, message):
         typeStr = 'DEBUG'
 
     print dateStr, typeStr, message
-    #try:
-    #    fd = open(_debugLogFile, 'a')
-    #    print >> fd, dateStr, typeStr, message
-    #    fd.close()
-    #except Exception, e:
-    #    print "LOGGER ERROR: Unable to write message"
     

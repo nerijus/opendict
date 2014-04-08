@@ -2,7 +2,8 @@
 # -*- coding: iso-8859-1 -*-
 
 # OpenDict
-# Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,14 +39,13 @@ def main_is_frozen():
 if not main_is_frozen():
     try:
         import wxversion
-        wxversion.select(["2.5", "2.6-unicode"])
+        wxversion.select(["2.5", "2.6-unicode", "2.8-unicode"])
     except Exception, e:
         print "You seem to have wxPython 2.4: %s" \
               % e
 
 try:
     import wx
-    import wxPython
 except ImportError:
     print >> sys.stderr, "**"
     print >> sys.stderr, "** Error: wxPython library not found"
@@ -90,7 +90,7 @@ from lib import util
 
 
 class OpenDictApp(wx.App):
-   """Top-level class of wxWindows application"""
+   """Top-level class of wxWidgets application"""
 
    locale = wx.Locale()
 
@@ -99,16 +99,16 @@ class OpenDictApp(wx.App):
       _ = wx.GetTranslation
       _start = time.time()
 
-      wxVersion = []
+      wx.Version = []
       try:
-          wxVersion = wx.__version__
+          wx.Version = wx.__version__
       except Exception, e:
           try:
-              wxVersion = wxPython.__version__
+              wx.Version = wx.Python.__version__
           except:
               pass
 
-      if wxVersion.split('.') < ['2', '6']:
+      if wx.Version.split('.') < ['2', '6']:
           from lib.gui import errorwin
           
           # Go away, wxPython 2.4!
@@ -118,7 +118,7 @@ class OpenDictApp(wx.App):
                   "You can find wxPython 2.6 at "
                   "http://www.wxpython.org or you can "
                   "install it using your system package manager.") \
-                  % (wxVersion, info.VERSION)
+                  % (wx.Version, info.VERSION)
           errorwin.showErrorMessage(title, msg)
           return False
 
@@ -182,7 +182,7 @@ class OpenDictApp(wx.App):
       
       try:
           systemLog(INFO, "OpenDict %s" % info.VERSION)
-          systemLog(INFO, "wxPython %s" % wxVersion)
+          systemLog(INFO, "wxPython %s" % wx.Version)
           systemLog(INFO, "Global home: %s:" % info.GLOBAL_HOME)
           systemLog(INFO, "Local home: %s" % info.LOCAL_HOME)
           systemLog(DEBUG, "Loaded in %f seconds" % (time.time() - _start))

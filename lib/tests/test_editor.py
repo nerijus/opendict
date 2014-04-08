@@ -1,6 +1,9 @@
 #
+# OpenDict
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
+#
 # Unit Test for editor.py
-# Copyright (c) 2005 Martynas Jocius <mjoc@akl.lt>
 #
 
 """

@@ -1,5 +1,6 @@
 # OpenDict
-# Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -113,8 +114,8 @@ class Configuration:
       self.props = {}
 
       # TODO: Should not be here after removing register part from config
-      import wxPython.wx
-      self.app = wxPython.wx.wxGetApp()
+      import wx
+      self.app = wx.GetApp()
 
       #
       # Default values

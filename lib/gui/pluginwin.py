@@ -1,6 +1,7 @@
-
+#
 # OpenDict
-# Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,8 +19,8 @@
 # 02111-1307 USA
 #
 
-from wxPython.wx import *
-import wx.lib.mixins.listctrl as listmix
+#from wx import *
+#import wx.lib.mixins.listctrl as listmix
 import wx
 
 from shutil import rmtree
@@ -38,7 +39,7 @@ from lib import util
 from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 
 
-_ = wxGetTranslation
+_ = wx.GetTranslation
 
 
 class DictListCtrl(wx.ListCtrl):
@@ -47,21 +48,21 @@ class DictListCtrl(wx.ListCtrl):
         wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
         
 
-class PluginManagerWindow(wxFrame):
+class PluginManagerWindow(wx.Frame):
 
    """Plugin Manager lets install, remove and view info
    about installed plugins"""
 
-   def __init__(self, parent, id, title, pos=wxDefaultPosition,
-                size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
-      wxFrame.__init__(self, parent, id, title, pos, size, style)
+   def __init__(self, parent, id, title, pos=wx.DefaultPosition,
+                size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE):
+      wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
-      self.app = wxGetApp()
+      self.app = wx.GetApp()
       self.mainWin = parent
       self.currentInstalledItemSelection = -1
       self.currentAvailItemSelection = -1
 
-      vboxMain = wxBoxSizer(wxVERTICAL)
+      vboxMain = wx.BoxSizer(wx.VERTICAL)
 
       self.installedDictionaries = {}
       self.availDictionaries = self.app.cache.get('addons') or {}
@@ -80,31 +81,31 @@ class PluginManagerWindow(wxFrame):
       panelAvailable = self._makeAvailablePanel(tabbedPanel)
       tabbedPanel.AddPage(panelAvailable, _("Available"))
 
-      vboxMain.Add(tabbedPanel, 1, wxALL | wxEXPAND, 2)
+      vboxMain.Add(tabbedPanel, 1, wx.ALL | wx.EXPAND, 2)
 
       # Add info panel
       panelInfo = self._makeInfoPanel()
-      vboxMain.Add(panelInfo, 0, wxALL | wxEXPAND, 2)
+      vboxMain.Add(panelInfo, 0, wx.ALL | wx.EXPAND, 2)
 
-      hboxButtons = wxBoxSizer(wxHORIZONTAL)
+      hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
 
-      self.buttonClose = wxButton(self, 163, _("Close"))
-      hboxButtons.Add(self.buttonClose, 0, wxALL | wxALIGN_RIGHT, 3)
+      self.buttonClose = wx.Button(self, 163, _("Close"))
+      hboxButtons.Add(self.buttonClose, 0, wx.ALL | wx.ALIGN_RIGHT, 3)
 
-      vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
+      vboxMain.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 1)
 
-      self.SetIcon(wxIcon(os.path.join(info.GLOBAL_HOME,
+      self.SetIcon(wx.Icon(os.path.join(info.GLOBAL_HOME,
                                        "pixmaps",
                                        "icon-24x24.png"),
-                          wxBITMAP_TYPE_PNG))
+                          wx.BITMAP_TYPE_PNG))
 
       self.SetSizer(vboxMain)
 
       self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onPageChanged)
       
-      EVT_BUTTON(self, 161, self.onInstall)
-      EVT_BUTTON(self, 162, self.onRemove)
-      EVT_BUTTON(self, 163, self.onClose)
+      wx.EVT_BUTTON(self, 161, self.onInstall)
+      wx.EVT_BUTTON(self, 162, self.onRemove)
+      wx.EVT_BUTTON(self, 163, self.onClose)
 
       self.addons = self.app.cache.get("addons", {})
 
@@ -115,14 +116,14 @@ class PluginManagerWindow(wxFrame):
        #
        # Boxes
        # 
-       panelInstalled = wxPanel(tabbedPanel, -1)
-       vboxInstalled = wxBoxSizer(wxVERTICAL)
+       panelInstalled = wx.Panel(tabbedPanel, -1)
+       vboxInstalled = wx.BoxSizer(wx.VERTICAL)
 
        # Help message
-       labelHelp = wxStaticText(panelInstalled, -1, 
+       labelHelp = wx.StaticText(panelInstalled, -1, 
           _("Checked dictionaries are available from the " \
           "menu, unchecked dictionaries \nare not available from the menu."));
-       vboxInstalled.Add(labelHelp, 0, wxALL, 3)
+       vboxInstalled.Add(labelHelp, 0, wx.ALL, 3)
 
        #
        # Installed list
@@ -136,7 +137,7 @@ class PluginManagerWindow(wxFrame):
             self.installedList)
        self.Bind(wx.EVT_LISTBOX, self.onInstalledSelected,
             self.installedList)
-       vboxInstalled.Add(self.installedList, 1, wxALL | wxEXPAND, 1)
+       vboxInstalled.Add(self.installedList, 1, wx.ALL | wx.EXPAND, 1)
 
        hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
        
@@ -144,19 +145,19 @@ class PluginManagerWindow(wxFrame):
        # "Install from file" button
        #
        idInstallFile = wx.NewId()
-       self.buttonInstallFile = wxButton(panelInstalled, idInstallFile, 
+       self.buttonInstallFile = wx.Button(panelInstalled, idInstallFile, 
                                          _("Install From File"))
-       hboxButtons.Add(self.buttonInstallFile, 0, wxALL | wxALIGN_RIGHT, 2)
+       hboxButtons.Add(self.buttonInstallFile, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
        
        #
        # "Remove" button
        #
        idRemove = wx.NewId()
-       self.buttonRemove = wxButton(panelInstalled, idRemove, _("Remove"))
+       self.buttonRemove = wx.Button(panelInstalled, idRemove, _("Remove"))
        self.buttonRemove.Disable()
-       hboxButtons.Add(self.buttonRemove, 0, wxALL | wxALIGN_RIGHT, 2)
+       hboxButtons.Add(self.buttonRemove, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
        
-       vboxInstalled.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 2)
+       vboxInstalled.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
        
        panelInstalled.SetSizer(vboxInstalled)
        vboxInstalled.Fit(panelInstalled)
@@ -167,8 +168,6 @@ class PluginManagerWindow(wxFrame):
 
        dictNames = self.installedDictionaries.keys()
        dictNames.sort()
-       #dictNames.reverse()
-       # FIXME: List is sorted in descending order whatever it is sorted       
        self.setInstalledDicts(dictNames)
 
        self.Bind(wx.EVT_BUTTON, self.onRemove, self.buttonRemove)
@@ -183,8 +182,8 @@ class PluginManagerWindow(wxFrame):
        #
        # Boxes
        # 
-       panelAvailable = wxPanel(tabbedPanel, -1)
-       vboxAvailable = wxBoxSizer(wxVERTICAL)
+       panelAvailable = wx.Panel(tabbedPanel, -1)
+       vboxAvailable = wx.BoxSizer(wx.VERTICAL)
 
        #
        # List of available dictionaries
@@ -195,29 +194,29 @@ class PluginManagerWindow(wxFrame):
                                          | wx.LC_SINGLE_SEL
                                          #| wx.LC_NO_HEADER
                                          | wx.SUNKEN_BORDER)
-       vboxAvailable.Add(self.availableList, 1, wxALL | wxEXPAND, 1)
+       vboxAvailable.Add(self.availableList, 1, wx.ALL | wx.EXPAND, 1)
 
 
        # Horizontal box for buttons
-       hboxButtons = wxBoxSizer(wxHORIZONTAL)
+       hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
 
        #
        # "Update" button
        #
        idUpdate = wx.NewId()
-       self.buttonUpdate = wxButton(panelAvailable, idUpdate,
+       self.buttonUpdate = wx.Button(panelAvailable, idUpdate,
                                     _("Update List"))
-       hboxButtons.Add(self.buttonUpdate, 0, wxALL | wxALIGN_RIGHT, 2)
+       hboxButtons.Add(self.buttonUpdate, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
        
        #
        # "Install" button
        #
        idInstall = wx.NewId()
-       self.buttonInstall = wxButton(panelAvailable, idInstall, _("Install"))
+       self.buttonInstall = wx.Button(panelAvailable, idInstall, _("Install"))
        self.buttonInstall.Disable()
-       hboxButtons.Add(self.buttonInstall, 0, wxALL | wxALIGN_RIGHT, 2)
+       hboxButtons.Add(self.buttonInstall, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
 
-       vboxAvailable.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 1)
+       vboxAvailable.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 1)
        
        panelAvailable.SetSizer(vboxAvailable)
        vboxAvailable.Fit(panelAvailable)
@@ -267,46 +266,46 @@ class PluginManagerWindow(wxFrame):
        #
        # Boxes
        # 
-       panelInfo = wxPanel(self, -1)
-       vboxInfo = wxBoxSizer(wxVERTICAL)
-       vboxInfoBox = wxBoxSizer(wxVERTICAL)
-       sbSizerInfo = wxStaticBoxSizer(\
-          wxStaticBox(panelInfo, -1, 
+       panelInfo = wx.Panel(self, -1)
+       vboxInfo = wx.BoxSizer(wx.VERTICAL)
+       vboxInfoBox = wx.BoxSizer(wx.VERTICAL)
+       sbSizerInfo = wx.StaticBoxSizer(\
+          wx.StaticBox(panelInfo, -1, 
                       _("Information About Dictionary")),
-          wxVERTICAL)
+          wx.VERTICAL)
 
-       grid = wxFlexGridSizer(3, 2, 1, 1)
+       grid = wx.FlexGridSizer(3, 2, 1, 1)
        
-       self.labelName = wxStaticText(panelInfo, -1, "")
-       self.labelVersion = wxStaticText(panelInfo, -1, "")
-       self.labelFormat = wxStaticText(panelInfo, -1, "")
-       self.labelAuthor = wxStaticText(panelInfo, -1, "")
-       self.labelSize = wxStaticText(panelInfo, -1, "")
+       self.labelName = wx.StaticText(panelInfo, -1, "")
+       self.labelVersion = wx.StaticText(panelInfo, -1, "")
+       self.labelFormat = wx.StaticText(panelInfo, -1, "")
+       self.labelAuthor = wx.StaticText(panelInfo, -1, "")
+       self.labelSize = wx.StaticText(panelInfo, -1, "")
        
-       self.textAbout = wxTextCtrl(panelInfo, -1, size=(-1, 100),
-                                   style=wxTE_MULTILINE | wxTE_READONLY)
+       self.textAbout = wx.TextCtrl(panelInfo, -1, size=(-1, 100),
+                                   style=wx.TE_MULTILINE | wx.TE_READONLY)
 
-       self.stName = wxStaticText(panelInfo, -1, _("Name: "))
+       self.stName = wx.StaticText(panelInfo, -1, _("Name: "))
        self.stName.Disable()
-       grid.Add(self.stName, 0, wxALL | wxALIGN_RIGHT)
-       grid.Add(self.labelName, 0, wxALL)
+       grid.Add(self.stName, 0, wx.ALL | wx.ALIGN_RIGHT)
+       grid.Add(self.labelName, 0, wx.ALL)
 
-       self.stVersion = wxStaticText(panelInfo, -1, _("Version: "))
+       self.stVersion = wx.StaticText(panelInfo, -1, _("Version: "))
        self.stVersion.Disable()
-       grid.Add(self.stVersion, 0, wxALL | wxALIGN_RIGHT)
-       grid.Add(self.labelVersion, 0, wxALL)
+       grid.Add(self.stVersion, 0, wx.ALL | wx.ALIGN_RIGHT)
+       grid.Add(self.labelVersion, 0, wx.ALL)
 
-       self.stAuthor = wxStaticText(panelInfo, -1, _("Maintainer: "))
+       self.stAuthor = wx.StaticText(panelInfo, -1, _("Maintainer: "))
        self.stAuthor.Disable()
-       grid.Add(self.stAuthor, 0, wxALL | wxALIGN_RIGHT)
-       grid.Add(self.labelAuthor, 0, wxALL)
+       grid.Add(self.stAuthor, 0, wx.ALL | wx.ALIGN_RIGHT)
+       grid.Add(self.labelAuthor, 0, wx.ALL)
 
-       vboxInfoBox.Add(grid, 1, wxALL | wxEXPAND, 1)
-       vboxInfoBox.Add(self.textAbout, 0, wxALL | wxEXPAND, 1)
+       vboxInfoBox.Add(grid, 1, wx.ALL | wx.EXPAND, 1)
+       vboxInfoBox.Add(self.textAbout, 0, wx.ALL | wx.EXPAND, 1)
        
-       sbSizerInfo.Add(vboxInfoBox, 1, wxALL | wxEXPAND, 5)
+       sbSizerInfo.Add(vboxInfoBox, 1, wx.ALL | wx.EXPAND, 5)
        
-       vboxInfo.Add(sbSizerInfo, 1, wxALL | wxEXPAND, 5)
+       vboxInfo.Add(sbSizerInfo, 1, wx.ALL | wx.EXPAND, 5)
 
        panelInfo.SetSizer(vboxInfo)
        vboxInfo.Fit(panelInfo)
@@ -483,7 +482,6 @@ class PluginManagerWindow(wxFrame):
            self.installedList.Delete(i)
 
        dictNames.sort()
-       dictNames.reverse()
        i = 0
 
        for dictionary in dictNames:
@@ -587,7 +585,7 @@ class PluginManagerWindow(wxFrame):
 
            self.addons[name] = obj
 
-       app = wxGetApp()
+       app = wx.GetApp()
        if app.cache.has_key("addons"):
            del app.cache["addons"]
        app.cache["addons"] = self.addons

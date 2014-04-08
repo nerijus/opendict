@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 # OpenDict
-# Copyright (c) 2003 Martynas Jocius <mjoc@delfi.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,27 +21,27 @@
 #
 # Module: gui.dictaddwin
 
-from wxPython.wx import *
+import wx
 
 from lib import misc
 
-_ = wxGetTranslation
+_ = wx.GetTranslation
 
 # IDs range: 6300-6310
-class DictAddWindow(wxDialog):
+class DictAddWindow(wx.Dialog):
 
     def __init__(self, parent, fname, filePath):
-        wxDialog.__init__(self, parent, -1, 
-                         _("Add new dictionary"), wxDefaultPosition, 
-                         wxDefaultSize, wxDEFAULT_DIALOG_STYLE)
+        wx.Dialog.__init__(self, parent, -1, 
+                         _("Add new dictionary"), wx.DefaultPosition, 
+                         wx.DefaultSize, wx.DEFAULT_DIALOG_STYLE)
         
         self.filePath = filePath
-        vboxMain = wxBoxSizer(wxVERTICAL)
+        vboxMain = wx.BoxSizer(wx.VERTICAL)
         
         msg1 = _("The file format of \"%s\" could not be \nrecognized by its" \
                  " extention. Please select one\nfrom the list:") % fname
-        label1 = wxStaticText(self, -1, msg1)
-        vboxMain.Add(label1, 0, wxALL | wxEXPAND, 5)
+        label1 = wx.StaticText(self, -1, msg1)
+        vboxMain.Add(label1, 0, wx.ALL | wx.EXPAND, 5)
         
         choices = [misc.dictFormats["zip"], # OpenDict plugin
                    _("\"%s\" dictionary format") % misc.dictFormats["dwa"],
@@ -48,26 +49,26 @@ class DictAddWindow(wxDialog):
                    _("\"%s\" dictionary format") % misc.dictFormats["tmx"],
                    _("\"%s\" dictionary format") % misc.dictFormats["dz"]]
         
-        self.box = wxListBox(self, -1, wxPoint(-1, -1),
-                        wxSize(-1, -1), choices, wxLB_SINGLE)
+        self.box = wx.ListBox(self, -1, wx.Point(-1, -1),
+                        wx.Size(-1, -1), choices, wx.LB_SINGLE)
         
-        vboxMain.Add(self.box, 1, wxALL | wxEXPAND, 3)
+        vboxMain.Add(self.box, 1, wx.ALL | wx.EXPAND, 3)
         
-        hboxButtons = wxBoxSizer(wxHORIZONTAL)
+        hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
         
-        buttonOK = wxButton(self, wxID_OK, _("OK"))
-        hboxButtons.Add(buttonOK, 0, wxALL, 1)
+        buttonOK = wx.Button(self, wx.ID_OK, _("OK"))
+        hboxButtons.Add(buttonOK, 0, wx.ALL, 1)
         
-        buttonCancel = wxButton(self, 6302, _("Cancel"))
-        hboxButtons.Add(buttonCancel, 0, wxALL, 1)
+        buttonCancel = wx.Button(self, 6302, _("Cancel"))
+        hboxButtons.Add(buttonCancel, 0, wx.ALL, 1)
         
-        vboxMain.Add(hboxButtons, 0, wxALL | wxCENTER, 2)
+        vboxMain.Add(hboxButtons, 0, wx.ALL | wx.CENTER, 2)
         
         self.SetSizer(vboxMain)
         self.Fit()
         
-        EVT_BUTTON(self, wxID_OK, self.onOK)
-        EVT_BUTTON(self, 6302, self.onCancel)
+        wx.EVT_BUTTON(self, wx.ID_OK, self.onOK)
+        wx.EVT_BUTTON(self, 6302, self.onCancel)
     
     def onOK(self, event):
         parent = self.GetParent()
@@ -85,25 +86,10 @@ class DictAddWindow(wxDialog):
         elif i == 4:
             ext == "dz"
         
-        print "Format:", ext
-        
         from installer import Installer
         installer = Installer(parent, parent.app.config)
         installer.install(self.filePath, ext)
         
-        #try:
-        #    if ext in misc.dictFormats.values()[0:-1]:
-        #        print "Registering..."
-        #        parent.app.reg.registerDictionary(self.filePath, 
-        #                 misc.dictFormats.keys()[misc.dictFormats.values().index(name)], 
-        #                 parent.app.config.defaultEnc)
-        #    else:
-        #        print "Installing plugin..."
-        #        plugin.installPlugin(parent.app.config, self.filePath)
-        #except:
-        #    misc.printError()
-        #    parent.SetStatusText(_("Error: installation failed"))
-        # 
         self.Destroy()
     
     def onCancel(self, event):

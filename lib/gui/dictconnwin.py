@@ -1,6 +1,7 @@
 #
 # OpenDict
-# Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,8 +19,8 @@
 # 02111-1307 USA
 #
 
-from wxPython.wx import *
-from wxPython.lib.rcsizer import RowColSizer
+import wx
+from wx.lib.rcsizer import RowColSizer
 import traceback
 
 from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
@@ -29,110 +30,110 @@ from lib.threads import Process
 from lib.gui import errorwin
 from lib import misc
 
-_ = wxGetTranslation
+_ = wx.GetTranslation
 
 CONNECTION_CHECK_INTERVAL = 400
 
 
-class DictConnWindow(wxFrame):
+class DictConnWindow(wx.Frame):
 
-   def __init__(self, parent, id, title, pos=wxDefaultPosition,
-                size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
-      wxFrame.__init__(self, parent, id, title, pos, size, style)
+   def __init__(self, parent, id, title, pos=wx.DefaultPosition,
+                size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE):
+      wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
       self.parent = parent
-      self.app = wxGetApp()
+      self.app = wx.GetApp()
 
-      vboxMain = wxBoxSizer(wxVERTICAL)
+      vboxMain = wx.BoxSizer(wx.VERTICAL)
 
-      hboxButtons = wxBoxSizer(wxHORIZONTAL)
+      hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
       hboxServer = RowColSizer()
 
       #
       # Server address row
       #
-      hboxServer.Add(wxStaticText(self, -1, _("Server: ")),
-                     flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
+      hboxServer.Add(wx.StaticText(self, -1, _("Server: ")),
+                     flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
                      row=0, col=0, border=1)
 
       servers = ['dict.org', 'localhost']
-      self.entryServer = wxComboBox(self, -1,
-          self.app.config.get('dictServer'), wxPoint(-1, -1),
-                              wxSize(-1, -1), servers, wxCB_DROPDOWN)
-      hboxServer.Add(self.entryServer, flag=wxEXPAND, row=0, col=1, border=1)
-      hboxServer.Add(wxButton(self, 1000, _("Default Server")),
-                     flag=wxEXPAND, row=0, col=2, border=5)
+      self.entryServer = wx.ComboBox(self, -1,
+          self.app.config.get('dictServer'), wx.Point(-1, -1),
+                              wx.Size(-1, -1), servers, wx.CB_DROPDOWN)
+      hboxServer.Add(self.entryServer, flag=wx.EXPAND, row=0, col=1, border=1)
+      hboxServer.Add(wx.Button(self, 1000, _("Default Server")),
+                     flag=wx.EXPAND, row=0, col=2, border=5)
 
       #
       # Port entry row
       #
-      hboxServer.Add(wxStaticText(self, -1, _("Port: ")),
-                     flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
+      hboxServer.Add(wx.StaticText(self, -1, _("Port: ")),
+                     flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
                      row=1, col=0, border=1)
-      hboxServer.Add(wxButton(self, 1001, _("Default Port")),
-                     flag=wxEXPAND, row=1, col=2, border=5)
+      hboxServer.Add(wx.Button(self, 1001, _("Default Port")),
+                     flag=wx.EXPAND, row=1, col=2, border=5)
 
-      self.entryPort = wxTextCtrl(self, -1,
+      self.entryPort = wx.TextCtrl(self, -1,
                                   self.app.config.get('dictServerPort'))
-      hboxServer.Add(self.entryPort, flag=wxEXPAND, row=1, col=1, border=1)
+      hboxServer.Add(self.entryPort, flag=wx.EXPAND, row=1, col=1, border=1)
 
       #
       # Database selection row
       #
-      hboxServer.Add(wxStaticText(self, -1, _("Database: ")),
-                     flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
+      hboxServer.Add(wx.StaticText(self, -1, _("Database: ")),
+                     flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
                      row=2, col=0, border=1)
 
       self.msgSearchInAll = _("Search in all databases")
-      self.choiceDB = wxComboBox(self, 1002, self.msgSearchInAll,
+      self.choiceDB = wx.ComboBox(self, 1002, self.msgSearchInAll,
                                  choices=[self.msgSearchInAll],
-                                 style=wxTE_READONLY)
+                                 style=wx.TE_READONLY)
       self.choiceDB.SetInsertionPoint(0)
-      hboxServer.Add(self.choiceDB, flag=wxEXPAND, row=2, col=1, border=1)
+      hboxServer.Add(self.choiceDB, flag=wx.EXPAND, row=2, col=1, border=1)
 
-      hboxServer.Add(wxButton(self, 1003, _("Fetch List")), #size=(-1, 18)),
-                     flag=wxEXPAND, row=2, col=2, border=1)
+      hboxServer.Add(wx.Button(self, 1003, _("Fetch List")), #size=(-1, 18)),
+                     flag=wx.EXPAND, row=2, col=2, border=1)
 
       #
       # Encoding selection row
       #
-      hboxServer.Add(wxStaticText(self, -1, _("Character encoding: ")),
-                     flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
+      hboxServer.Add(wx.StaticText(self, -1, _("Character encoding: ")),
+                     flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
                      row=3, col=0, border=1)
 
-      self.entryEncoding = wxComboBox(self, 1006,
+      self.entryEncoding = wx.ComboBox(self, 1006,
                               misc.encodings.keys()[
                                 misc.encodings.values().index(
                                     self.app.config.get('dict-server-encoding'))],
-                              wxPoint(-1, -1),
-                              wxSize(-1, -1), misc.encodings.keys(), 
-                              wxCB_DROPDOWN | wxCB_READONLY)
+                              wx.Point(-1, -1),
+                              wx.Size(-1, -1), misc.encodings.keys(), 
+                              wx.CB_DROPDOWN | wx.CB_READONLY)
 
-      hboxServer.Add(self.entryEncoding, flag=wxEXPAND, row=3, col=1, border=1)
+      hboxServer.Add(self.entryEncoding, flag=wx.EXPAND, row=3, col=1, border=1)
 
-      #hboxServer.Add(wxStaticText(self, -1, _("Strategy: ")),
-      #               flag=wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL,
+      #hboxServer.Add(wx.StaticText(self, -1, _("Strategy: ")),
+      #               flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
       #               row=3, col=0, rowspan=1, border=1)
       #
-      #self.choiceStrat = wxComboBox(self, 1006, #size=(-1, 20),
+      #self.choiceStrat = wx.ComboBox(self, 1006, #size=(-1, 20),
       #                         choices=[])
-      #hboxServer.Add(self.choiceStrat, flag=wxEXPAND, row=3, col=1,
+      #hboxServer.Add(self.choiceStrat, flag=wx.EXPAND, row=3, col=1,
       #               rowspan=1, border=1)
       #
-      #hboxServer.Add(wxButton(self, 1007, _("Update")), #size=(-1, 18)),
-      #               flag=wxEXPAND, row=3, col=2, border=5)
+      #hboxServer.Add(wx.Button(self, 1007, _("Update")), #size=(-1, 18)),
+      #               flag=wx.EXPAND, row=3, col=2, border=5)
 
       hboxServer.AddGrowableCol(1)
 
-      vboxMain.Add(hboxServer, 1, wxALL | wxEXPAND, 4)
+      vboxMain.Add(hboxServer, 1, wx.ALL | wx.EXPAND, 4)
 
-      self.buttonOK = wxButton(self, 1004, _("Connect"))
-      hboxButtons.Add(self.buttonOK, 0, wxALL, 1)
+      self.buttonOK = wx.Button(self, 1004, _("Connect"))
+      hboxButtons.Add(self.buttonOK, 0, wx.ALL, 1)
 
-      self.buttonCancel = wxButton(self, 1005, _("Cancel"))
-      hboxButtons.Add(self.buttonCancel, 0, wxALL, 1)
+      self.buttonCancel = wx.Button(self, 1005, _("Cancel"))
+      hboxButtons.Add(self.buttonCancel, 0, wx.ALL, 1)
 
-      vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_CENTER, 2)
+      vboxMain.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_CENTER, 2)
 
       self.CreateStatusBar()
 
@@ -140,20 +141,20 @@ class DictConnWindow(wxFrame):
       self.Fit()
       self.SetSize((500, -1))
 
-      self.timerUpdateDB = wxTimer(self, 1006)
-      self.timerConnect = wxTimer(self, 1007)
+      self.timerUpdateDB = wx.Timer(self, 1006)
+      self.timerConnect = wx.Timer(self, 1007)
 
       self.update = None
       self.connection = None
 
-      EVT_BUTTON(self, 1000, self.onDefaultServer)
-      EVT_BUTTON(self, 1001, self.onDefaultPort)
-      EVT_BUTTON(self, 1003, self.onUpdateDB)
-      EVT_BUTTON(self, 1007, self.onUpdateStrats)
-      EVT_BUTTON(self, 1004, self.onOK)
-      EVT_BUTTON(self, 1005, self.onCancel)
-      EVT_TIMER(self, 1006, self.onTimerUpdateDB)
-      EVT_TIMER(self, 1007, self.onTimerConnect)
+      wx.EVT_BUTTON(self, 1000, self.onDefaultServer)
+      wx.EVT_BUTTON(self, 1001, self.onDefaultPort)
+      wx.EVT_BUTTON(self, 1003, self.onUpdateDB)
+      wx.EVT_BUTTON(self, 1007, self.onUpdateStrats)
+      wx.EVT_BUTTON(self, 1004, self.onOK)
+      wx.EVT_BUTTON(self, 1005, self.onCancel)
+      wx.EVT_TIMER(self, 1006, self.onTimerUpdateDB)
+      wx.EVT_TIMER(self, 1007, self.onTimerConnect)
 
 
    def onTimerUpdateDB(self, event):

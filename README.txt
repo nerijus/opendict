@@ -2,7 +2,8 @@
                                    OpenDict
                                    --------
 
-Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
+Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 
 About
 ~~~~~
@@ -45,5 +46,5 @@ click on opendict.py icon.
 Help
 ~~~~
 
-For more information visit http://opendict.inhangar.com.
+For more information visit http://opendict.idiles.com.
 

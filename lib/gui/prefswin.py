@@ -1,6 +1,7 @@
 #
 # OpenDict
-# Copyright (c) 2003-2006 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,38 +19,37 @@
 # 02111-1307 USA
 #
 
-from wxPython.wx import *
+import wx
 
 from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 from lib.misc import encodings
 from lib import enc
 
-_ = wxGetTranslation
+_ = wx.GetTranslation
 PRON_COMMAND = "echo \"(SayText \\\"%s\\\")\" | festival"
 
-class PrefsWindow(wxDialog):
+class PrefsWindow(wx.Dialog):
    """Preferences dialog class"""
 
 
-   def __init__(self, parent, id, title, pos=wxDefaultPosition,
-                size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
+   def __init__(self, parent, id, title, pos=wx.DefaultPosition,
+                size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE):
       """Initialize preferences dialog window"""
       
-      wxDialog.__init__(self, parent, id, title, pos, size, style)
+      wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
-      self.app = wxGetApp()
+      self.app = wx.GetApp()
 
-      vboxMain = wxBoxSizer(wxVERTICAL)
-      hboxButtons = wxBoxSizer(wxHORIZONTAL)
+      vboxMain = wx.BoxSizer(wx.VERTICAL)
+      hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
 
-      grid = wxFlexGridSizer(2, 2, 1, 1)
+      grid = wx.FlexGridSizer(2, 2, 1, 1)
 
-      grid.Add(wxStaticText(self, -1, _("Default dictionary: ")),
-                   0, wxALIGN_CENTER_VERTICAL)
+      grid.Add(wx.StaticText(self, -1, _("Default dictionary: ")),
+                   0, wx.ALIGN_CENTER_VERTICAL)
 
       dictNames = []
       for name, d in self.app.dictionaries.items():
-          print name, d.getActive()
           if d.getActive():
               dictNames.append(name)
       dictNames.sort()
@@ -60,110 +60,110 @@ class PrefsWindow(wxDialog):
       except Exception, e:
          systemLog(ERROR, "Unable to decode titles to UTF-8 (%s)" % e)
       
-      self.dictChooser = wxComboBox(self, 1100,
+      self.dictChooser = wx.ComboBox(self, 1100,
                                     enc.toWX(self.app.config.get('defaultDict')),
-                                    wxPoint(-1, -1),
-                                    wxSize(-1, -1), dictNames, wxTE_READONLY)
-      grid.Add(self.dictChooser, 0, wxEXPAND)
+                                    wx.Point(-1, -1),
+                                    wx.Size(-1, -1), dictNames, wx.TE_READONLY)
+      grid.Add(self.dictChooser, 0, wx.EXPAND)
 
-      grid.Add(wxStaticText(self, -1, _("Default encoding: ")),
-               0, wxALIGN_CENTER_VERTICAL)
-      self.encChooser = wxComboBox(self, 1108,
+      grid.Add(wx.StaticText(self, -1, _("Default encoding: ")),
+               0, wx.ALIGN_CENTER_VERTICAL)
+      self.encChooser = wx.ComboBox(self, 1108,
                                   encodings.keys()[encodings.values().index(self.app.config.get('encoding'))],
-                                  wxPoint(-1, -1),
-                                  wxSize(-1, -1), encodings.keys(),
-                                  wxTE_READONLY)
-      grid.Add(self.encChooser, 0, wxEXPAND | wxALIGN_RIGHT)
+                                  wx.Point(-1, -1),
+                                  wx.Size(-1, -1), encodings.keys(),
+                                  wx.TE_READONLY)
+      grid.Add(self.encChooser, 0, wx.EXPAND | wx.ALIGN_RIGHT)
       
       grid.AddGrowableCol(1)
       
-      grid.Add(wxStaticText(self, -1, _("Default DICT server: ")),
-                   0, wxALIGN_CENTER_VERTICAL)
-      self.serverEntry = wxTextCtrl(self, -1,
+      grid.Add(wx.StaticText(self, -1, _("Default DICT server: ")),
+                   0, wx.ALIGN_CENTER_VERTICAL)
+      self.serverEntry = wx.TextCtrl(self, -1,
                                     self.app.config.get('dictServer'))
-      grid.Add(self.serverEntry, 0, wxEXPAND)
+      grid.Add(self.serverEntry, 0, wx.EXPAND)
       
-      grid.Add(wxStaticText(self, -1, _("Default DICT server port: ")),
-                   0, wxALIGN_CENTER_VERTICAL)
-      self.portEntry = wxTextCtrl(self, -1,
+      grid.Add(wx.StaticText(self, -1, _("Default DICT server port: ")),
+                   0, wx.ALIGN_CENTER_VERTICAL)
+      self.portEntry = wx.TextCtrl(self, -1,
                                   self.app.config.get('dictServerPort'))
-      grid.Add(self.portEntry, 0, wxEXPAND)
+      grid.Add(self.portEntry, 0, wx.EXPAND)
       
-      vboxMain.Add(grid, 0, wxALL | wxEXPAND, 4)
+      vboxMain.Add(grid, 0, wx.ALL | wx.EXPAND, 4)
       
       #
       # Pronunciation
       #
-      panelPron = wxPanel(self, -1)
-      sbSizerPron = wxStaticBoxSizer(wxStaticBox(panelPron, -1, 
+      panelPron = wx.Panel(self, -1)
+      sbSizerPron = wx.StaticBoxSizer(wx.StaticBox(panelPron, -1, 
                                                  _("Pronunciation")), 
-                                     wxVERTICAL)
+                                     wx.VERTICAL)
       panelPron.SetSizer(sbSizerPron)
-      panelPron.SetAutoLayout(true)
+      panelPron.SetAutoLayout(True)
       sbSizerPron.Fit(panelPron)
-      vboxMain.Add(panelPron, 0, wxALL | wxEXPAND, 5)
+      vboxMain.Add(panelPron, 0, wx.ALL | wx.EXPAND, 5)
 
-      hboxPronCmd = wxBoxSizer(wxHORIZONTAL)
-      hboxPronCmd.Add(wxStaticText(panelPron, -1, _("System Command: ")), 0,
-         wxALIGN_CENTER_VERTICAL)
+      hboxPronCmd = wx.BoxSizer(wx.HORIZONTAL)
+      hboxPronCmd.Add(wx.StaticText(panelPron, -1, _("System Command: ")), 0,
+         wx.ALIGN_CENTER_VERTICAL)
 
-      self.entryPron = wxTextCtrl(panelPron, -1,
+      self.entryPron = wx.TextCtrl(panelPron, -1,
          self.app.config.get('pronunciationCommand') or \
          PRON_COMMAND)
-      hboxPronCmd.Add(self.entryPron, 1, wxEXPAND, 0)
+      hboxPronCmd.Add(self.entryPron, 1, wx.EXPAND, 0)
       
-      self.buttonDefaultPron = wxButton(panelPron, 1106, _("Default"))
-      hboxPronCmd.Add(self.buttonDefaultPron, 0, wxALL | wxEXPAND)
+      self.buttonDefaultPron = wx.Button(panelPron, 1106, _("Default"))
+      hboxPronCmd.Add(self.buttonDefaultPron, 0, wx.ALL | wx.EXPAND)
       
-      sbSizerPron.Add(hboxPronCmd, 0, wxALL | wxEXPAND, 4)
+      sbSizerPron.Add(hboxPronCmd, 0, wx.ALL | wx.EXPAND, 4)
 
-      hboxPronWhat = wxBoxSizer(wxHORIZONTAL)
-      self.rbPronOrig = wxRadioButton(panelPron, -1, _("Pronounce original word"))
-      hboxPronWhat.Add(self.rbPronOrig, 0, wxALL | wxEXPAND, 3)
-      self.rbPronTrans = wxRadioButton(panelPron, -1, _("Pronounce translation"))
+      hboxPronWhat = wx.BoxSizer(wx.HORIZONTAL)
+      self.rbPronOrig = wx.RadioButton(panelPron, -1, _("Pronounce original word"))
+      hboxPronWhat.Add(self.rbPronOrig, 0, wx.ALL | wx.EXPAND, 3)
+      self.rbPronTrans = wx.RadioButton(panelPron, -1, _("Pronounce translation"))
       if self.app.config.get('pronounceTrans') == 'True':
           self.rbPronTrans.SetValue(True)
-      hboxPronWhat.Add(self.rbPronTrans, 0, wxALL | wxEXPAND, 3)
+      hboxPronWhat.Add(self.rbPronTrans, 0, wx.ALL | wx.EXPAND, 3)
       
-      sbSizerPron.Add(hboxPronWhat, 0, wxALL | wxEXPAND, 0)
+      sbSizerPron.Add(hboxPronWhat, 0, wx.ALL | wx.EXPAND, 0)
 
-      self.winSize = wxCheckBox(self, 1101, _("Save window size on exit"))
+      self.winSize = wx.CheckBox(self, 1101, _("Save window size on exit"))
       self.winSize.SetValue(self.app.config.get('saveWindowSize') == 'True')
-      vboxMain.Add(self.winSize, 0, wxALL, 3)
+      vboxMain.Add(self.winSize, 0, wx.ALL, 3)
 
-      self.winPos = wxCheckBox(self, 1102, _("Save window position on exit"))
+      self.winPos = wx.CheckBox(self, 1102, _("Save window position on exit"))
       self.winPos.SetValue(self.app.config.get('saveWindowPos') == 'True')
-      vboxMain.Add(self.winPos, 0, wxALL, 3)
+      vboxMain.Add(self.winPos, 0, wx.ALL, 3)
 
-      self.sashPos = wxCheckBox(self, 1103, _("Save sash position on exit"))
+      self.sashPos = wx.CheckBox(self, 1103, _("Save sash position on exit"))
       self.sashPos.SetValue(self.app.config.get('saveSashPos') == 'True')
-      vboxMain.Add(self.sashPos, 0, wxALL, 3)
+      vboxMain.Add(self.sashPos, 0, wx.ALL, 3)
 
-      self.clipboard = wxCheckBox(self, 1103,
+      self.clipboard = wx.CheckBox(self, 1103,
                                   _("Take words from the clipboard by default"))
       self.clipboard.SetValue(self.app.config.get('useClipboard') == 'True')
-      vboxMain.Add(self.clipboard, 0, wxALL, 3)
+      vboxMain.Add(self.clipboard, 0, wx.ALL, 3)
 
-      vboxMain.Add(wxStaticLine(self, -1), 0, wxALL | wxEXPAND, 5)
+      vboxMain.Add(wx.StaticLine(self, -1), 0, wx.ALL | wx.EXPAND, 5)
 
-      self.buttonOK = wxButton(self, 1104, _("OK"))
-      hboxButtons.Add(self.buttonOK, 0, wxALL | wxEXPAND, 1)
+      self.buttonOK = wx.Button(self, 1104, _("OK"))
+      hboxButtons.Add(self.buttonOK, 0, wx.ALL | wx.EXPAND, 1)
 
-      self.buttonCancel = wxButton(self, 1105, _("Cancel"))
-      hboxButtons.Add(self.buttonCancel, 0, wxALL | wxEXPAND, 1)
+      self.buttonCancel = wx.Button(self, 1105, _("Cancel"))
+      hboxButtons.Add(self.buttonCancel, 0, wx.ALL | wx.EXPAND, 1)
 
-      vboxMain.Add(hboxButtons, 0, wxALL | wxALIGN_RIGHT, 4)
+      vboxMain.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 4)
 
       self.SetSizer(vboxMain)
       self.Fit()
       self.SetSize((400, -1))
 
-      EVT_CHECKBOX(self, 1101, self.onSaveWinSizeClicked)
-      EVT_CHECKBOX(self, 1102, self.onSaveWinPosClicked)
-      EVT_CHECKBOX(self, 1103, self.onSaveSashPosClicked)
-      EVT_BUTTON(self, 1106, self.onDefaultPron)
-      EVT_BUTTON(self, 1104, self.onOK)
-      EVT_BUTTON(self, 1105, self.onCancel)
+      wx.EVT_CHECKBOX(self, 1101, self.onSaveWinSizeClicked)
+      wx.EVT_CHECKBOX(self, 1102, self.onSaveWinPosClicked)
+      wx.EVT_CHECKBOX(self, 1103, self.onSaveSashPosClicked)
+      wx.EVT_BUTTON(self, 1106, self.onDefaultPron)
+      wx.EVT_BUTTON(self, 1104, self.onOK)
+      wx.EVT_BUTTON(self, 1105, self.onCancel)
 
 
    def onSaveWinSizeClicked(self, event):

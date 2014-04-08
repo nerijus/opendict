@@ -1,6 +1,7 @@
 #
 # OpenDict
-# Copyright (c) 2003-2005 Martynas Jocius <mjoc@akl.lt>
+# Copyright (c) 2003-2006 Martynas Jocius <martynas.jocius@idiles.com>
+# Copyright (c) 2007 IDILES SYSTEMS, UAB <support@idiles.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +25,6 @@ import re
 import os
 import traceback
 import xml.parsers.expat
-from wxPython.wx import wxGetApp
 
 from lib.extra import dictclient
 from lib.extra import dictdlib
@@ -555,7 +555,7 @@ class TMXParser(plaindict.PlainDictionary):
     def getEncoding(self):
        """Return encoding set for that dictionary"""
        
-       return wxGetApp().config.encoding
+       return wx.GetApp().config.encoding
 
 
     def getUsesWordList(self):
