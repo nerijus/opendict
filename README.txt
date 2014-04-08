@@ -37,9 +37,9 @@ For Microsft Windows users
 
 MS Windows users should download setup with precompiled OpenDict version.
 
-If you want to use it from sources, download and install Python, PyXML 
-and wxPython packages. Then unpack compressed OpenDict ZIP archive and 
-click on opendict.py icon.
+If you want to use it from sources, download and install Python and wxPython
+packages. Then unpack compressed OpenDict ZIP archive and click on opendict.py
+icon.
 
 
 Help

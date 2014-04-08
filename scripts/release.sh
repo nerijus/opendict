@@ -13,10 +13,10 @@ if [[ $NAME == "" ]] || [[ $INDIR == "" ]]; then
     exit 1;
 fi
 
-if [[ $UID != "0" ]]; then
-    echo "You should be root (or modify this script to avoid root :)"
-    exit 1;
-fi
+#if [[ $UID != "0" ]]; then
+#    echo "You should be root (or modify this script to avoid root :)"
+#    exit 1;
+#fi
 
 cd $INDIR && make clean
 
