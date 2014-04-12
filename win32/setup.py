@@ -10,6 +10,9 @@ setup(
       version="0.6.5",
       zipfile=None,
       package_dir = {"": "lib"},
-      windows=["opendict.py"],
+      windows = [{
+            "script":"opendict.py",
+            "icon_resources": [(1, "win32/opendict.ico")]
+            }],
       data_files=[("pixmaps", glob.glob("pixmaps/\\*.png"))],
 )
