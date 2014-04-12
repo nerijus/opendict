@@ -1,3 +1,7 @@
+2014-04-08 nerijus
+
+	* PyXML is no longer needed
+
 2006-02-15 18:29  mjoc
 
 	* lib/gui/mainwin.py, po/lt.po, po/opendict.pot: Window "Edit

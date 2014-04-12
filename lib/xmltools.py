@@ -29,7 +29,7 @@ def _textData(element):
 
     text = ''
     for node in element.childNodes:
-        text = node.data
+        text = node.data.strip()
 
     return text
 
@@ -98,7 +98,7 @@ class RegisterConfigGenerator:
                                                    or ''))
 
         return doc
-    
+
 
 def generatePlainDictConfig(**args):
     """Generate configuration and return DOM object"""
@@ -112,10 +112,11 @@ def generatePlainDictConfig(**args):
 def writePlainDictConfig(doc, path):
     """Write XML file"""
 
-    fd = open(path, 'w')
-    fd.write(doc.toxml())
+    import codecs
+    fd = codecs.open(path, 'w', 'utf-8')
+    doc.writexml(fd, addindent = "  ", newl = "\n", encoding = "UTF-8")
     fd.close()
-    
+
 
 
 class RegisterConfigParser:
@@ -140,35 +141,35 @@ class RegisterConfigParser:
             raise Exception("Invalid configuration")
 
         registerElement = registers[0]
-        
+
         for nameElement in registerElement.getElementsByTagName('name'):
             for node in nameElement.childNodes:
-                name = node.data
+                name = node.data.strip()
 
         for formatElement in registerElement.getElementsByTagName('format'):
             for node in formatElement.childNodes:
-                format = node.data
+                format = node.data.strip()
 
         for pathElement in registerElement.getElementsByTagName('path'):
             for node in pathElement.childNodes:
-                path = node.data
+                path = node.data.strip()
 
         for versionElement in registerElement.getElementsByTagName('version'):
             for node in versionElement.childNodes:
                 version = node.data.strip()
 
         for authorElement in registerElement.getElementsByTagName('author'):
-            authors.append({'name': authorElement.getAttribute('name'),
-                            'email': authorElement.getAttribute('email')})
+            authors.append({'name': authorElement.getAttribute('name').strip(),
+                            'email': authorElement.getAttribute('email').strip()})
 
         for md5Element in registerElement.getElementsByTagName('md5'):
             for node in md5Element.childNodes:
-                md5 = node.data
+                md5 = node.data.strip()
 
         for encodingElement in \
                 registerElement.getElementsByTagName('encoding'):
             for node in encodingElement.childNodes:
-                encoding = node.data
+                encoding = node.data.strip()
 
         for licenceElement in \
                 registerElement.getElementsByTagName('licence'):
@@ -240,8 +241,9 @@ def generateIndexFile(index):
 def writeIndexFile(doc, path):
     """Write XML file"""
 
-    fd = open(path, 'wb')
-    fd.write(doc.toxml())
+    import codecs
+    fd = codecs.open(path, 'wb', 'utf-8')
+    doc.writexml(fd, addindent = "  ", newl = "\n", encoding = "UTF-8")
     fd.close()
 
 
@@ -510,7 +512,8 @@ def generateMainConfig(props):
 def writeConfig(doc, path):
     """Write XML file"""
 
-    fd = open(path, 'w')
-    fd.write(doc.toxml())
+    import codecs
+    fd = codecs.open(path, 'w', 'utf-8')
+    doc.writexml(fd, addindent = "  ", newl = "\n", encoding = "UTF-8")
     fd.close()
 
