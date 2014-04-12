@@ -1,5 +1,5 @@
 # OpenDict Makefile
-# 
+#
 
 DESTDIR     = /usr
 bindir	    = $(DESTDIR)/bin
@@ -16,6 +16,11 @@ install:
 	mkdir -p $(opendictdir)/pixmaps
 	cp pixmaps/*.png $(opendictdir)/pixmaps
 	chmod -R a+rX $(opendictdir)/pixmaps
+	mkdir -p $(icondir)/24x24/apps
+	mkdir -p $(icondir)/32x32/apps
+	mkdir -p $(icondir)/48x48/apps
+	mkdir -p $(icondir)/96x96/apps
+	mkdir -p $(icondir)/scalable/apps
 	cp pixmaps/icon-24x24.png $(icondir)/24x24/apps/opendict.png
 	cp pixmaps/icon-32x32.png $(icondir)/32x32/apps/opendict.png
 	cp pixmaps/icon-48x48.png $(icondir)/48x48/apps/opendict.png
@@ -28,7 +33,9 @@ install:
 	chmod a+rx $(opendictdir)/opendict.py
 	cp copying.html $(opendictdir)
 	chmod a+r $(opendictdir)/copying.html
+	mkdir -p $(bindir)
 	ln -sf $(opendictdir)/opendict.py $(bindir)/opendict
+	mkdir -p $(DESTDIR)/share/applications
 	cp misc/opendict.desktop $(DESTDIR)/share/applications
 	chmod a+r $(DESTDIR)/share/applications/opendict.desktop
 
