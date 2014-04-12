@@ -27,9 +27,8 @@ OpenDict on UNIX systems can be installed in a quick & dirty way:
 
    # make install
 
-If you get "cp: cannot stat `messages.pot': No such file or directory"
-you are missing "pygettext" or "pygettext.py". "pygettext.py" in Fedora is
-provided by python-tools package.
+If you get "cp: cannot stat `messages.po': No such file or directory" you
+are missing "xgettext". "xgettext" in Fedora is provided by gettext package.
 
 
 For Microsft Windows users
