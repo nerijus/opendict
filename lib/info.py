@@ -24,7 +24,7 @@ import os
 import imp
 
 # OpenDict version
-VERSION = "0.6.4"
+VERSION = "0.6.5"
 
 # File system objects
 __OPENDICT_LOCAL_DIR = ".opendict"
@@ -43,7 +43,7 @@ PLUGIN_DICT_DIR = os.path.join(__DICT_DIR, __PLUGIN_DICT_DIR)
 
 GLOBAL_HOME = None
 LOCAL_HOME = None
-      
+
 ## if sys.platform == "win32":
 ##    import _winreg
 ##    x = _winreg.ConnectRegistry(None, _winreg.HKEY_CURRENT_USER)
@@ -52,14 +52,14 @@ LOCAL_HOME = None
 ##       GLOBAL_HOME = _winreg.QueryValueEx(y, "Path")[0]
 ##    except:
 ##       GLOBAL_HOME = "C:\\Program Files\\OpenDict"
-      
+
 ##    LOCAL_HOME = GLOBAL_HOME
 
 ## else:
 ##    if not os.path.exists(os.path.join(os.environ.get("HOME"),
 ##                                       __OPENDICT_LOCAL_DIR)):
 ##       os.mkdir(os.path.join(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR))
-      
+
 ##    LOCAL_HOME = os.path.join(os.environ.get("HOME"), __OPENDICT_LOCAL_DIR)
 ##    GLOBAL_HOME = "/usr/share/opendict"
 
