@@ -1,19 +1,36 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR ORGANIZATION
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2007-08-29 11:55+EEST\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-12 20:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
-"Generated-By: pygettext.py 1.5\n"
+"Content-Transfer-Encoding: 8bit\n"
 
+#: ../opendict.py:106
+msgid "wxPython Version Error"
+msgstr ""
+
+#: ../opendict.py:107
+#, python-format
+msgid ""
+"wxPython %s is installed on this system.\n"
+"\n"
+"OpenDict %s requires wxPython 2.6 to run smoothly.\n"
+"\n"
+"You can find wxPython 2.6 at http://www.wxpython.org or you can install it "
+"using your system package manager."
+msgstr ""
 
 #: ../lib/errortype.py:57
 msgid "Success"
@@ -36,7 +53,9 @@ msgid "Internal error"
 msgstr ""
 
 #: ../lib/errortype.py:75
-msgid "Internal error occured. Please send bug report to the dictionary's of current use authors. Thank you."
+msgid ""
+"Internal error occured. Please send bug report to the dictionary's of "
+"current use authors. Thank you."
 msgstr ""
 
 #: ../lib/errortype.py:83
@@ -44,7 +63,9 @@ msgid "Not connected"
 msgstr ""
 
 #: ../lib/errortype.py:84
-msgid "This dictionary uses Internet connection to translate words. Please connect to the Internet and try again."
+msgid ""
+"This dictionary uses Internet connection to translate words. Please connect "
+"to the Internet and try again."
 msgstr ""
 
 #: ../lib/errortype.py:93 ../lib/gui/dictconnwin.py:183
@@ -61,7 +82,9 @@ msgid "Invalid encoding"
 msgstr ""
 
 #: ../lib/errortype.py:103
-msgid "Selected encoding is not correct for this dictionary. Please select another from Edit > Character Encoding menu"
+msgid ""
+"Selected encoding is not correct for this dictionary. Please select another "
+"from Edit > Character Encoding menu"
 msgstr ""
 
 #: ../lib/errortype.py:112
@@ -69,7 +92,9 @@ msgid "OpenDict Bug"
 msgstr ""
 
 #: ../lib/errortype.py:113
-msgid "Internal error occured. Please send bug report to OpenDict authors to prevent this error in the future. Thank you!"
+msgid ""
+"Internal error occured. Please send bug report to OpenDict authors to "
+"prevent this error in the future. Thank you!"
 msgstr ""
 
 #: ../lib/errortype.py:121
@@ -80,11 +105,194 @@ msgstr ""
 msgid "Unknown error occured."
 msgstr ""
 
+#: ../lib/installer.py:61 ../lib/gui/dicteditorwin.py:600
+#: ../lib/gui/mainwin.py:1299
+msgid "Choose dictionary file"
+msgstr ""
+
+#: ../lib/installer.py:81
+msgid "Recognition Error"
+msgstr ""
+
+#: ../lib/installer.py:82
+#, python-format
+msgid "File %s is not supported by OpenDict"
+msgstr ""
+
+#: ../lib/installer.py:108 ../lib/installer.py:110
+msgid "Installation failed"
+msgstr ""
+
+#: ../lib/installer.py:122 ../lib/installer.py:308 ../lib/installer.py:316
+msgid "Installation Error"
+msgstr ""
+
+#: ../lib/installer.py:124 ../lib/installer.py:128
+msgid "Error: Installation failed"
+msgstr ""
+
+#: ../lib/installer.py:132
+msgid "Dictionary installed"
+msgstr ""
+
+#: ../lib/installer.py:133
+msgid ""
+"Dictionary successfully installed. You can choose it from \"Dictionaries\" "
+"menu now."
+msgstr ""
+
+#: ../lib/installer.py:143 ../lib/installer.py:218
+#, python-format
+msgid "File %s does not exist"
+msgstr ""
+
+#: ../lib/installer.py:146 ../lib/installer.py:222
+#, python-format
+msgid "%s is not a file"
+msgstr ""
+
+#: ../lib/installer.py:160
+#, python-format
+msgid "Dictionary \"%s\" is already installed"
+msgstr ""
+
+#: ../lib/installer.py:226
+#, python-format
+msgid "%s is not OpenDict dictionary plugin"
+msgstr ""
+
+#: ../lib/installer.py:233
+#, python-format
+msgid "File \"%s\" is not valid ZIP file"
+msgstr ""
+
+#: ../lib/installer.py:238
+msgid "Dictionary plugin file is corrupted"
+msgstr ""
+
+#: ../lib/installer.py:244
+#, python-format
+msgid "Plugin file is empty (%s)"
+msgstr ""
+
+#: ../lib/installer.py:268
+msgid "Selected file is not valid OpenDict plugin"
+msgstr ""
+
+#: ../lib/installer.py:295 ../lib/installer.py:377
+msgid ""
+"This dictionary already installed. If you want to upgrade it, please remove "
+"old version first."
+msgstr ""
+
+#: ../lib/installer.py:309 ../lib/installer.py:317
+msgid ""
+"Installation tool for this dictionary failed to start. Please report this "
+"problem to developers."
+msgstr ""
+
+#: ../lib/installer.py:323
+msgid "Installation Aborted"
+msgstr ""
+
+#: ../lib/installer.py:324
+msgid "Dictionary installation has been aborted."
+msgstr ""
+
+#: ../lib/installer.py:348 ../lib/installer.py:400
+msgid ""
+"Error while removing created directories after plugin installation failure. "
+"This may be permission or disk space error."
+msgstr ""
+
+#: ../lib/installer.py:352
+msgid "Unable to install plugin"
+msgstr ""
+
+#: ../lib/installer.py:369
+msgid "Compressed dictionary file is corrupted"
+msgstr ""
+
+#: ../lib/installer.py:404
+msgid "Unable to install dictionary"
+msgstr ""
+
+#: ../lib/misc.py:37
+msgid "Dictionary error, please report to its author"
+msgstr ""
+
+#: ../lib/misc.py:38
+msgid "Syntax error"
+msgstr ""
+
+#: ../lib/misc.py:39
+msgid "You must be connected to the internet to use this dictionary"
+msgstr ""
+
+#: ../lib/misc.py:40
+msgid "Time out"
+msgstr ""
+
+#: ../lib/misc.py:41
+msgid "Bad encoding is set for this dictionary, try another"
+msgstr ""
+
+#: ../lib/misc.py:48
+msgid "Unicode (UTF-8)"
+msgstr ""
+
+#: ../lib/misc.py:49
+msgid "Western (ISO-8859-1)"
+msgstr ""
+
+#: ../lib/misc.py:50
+msgid "Central European (ISO-8859-2)"
+msgstr ""
+
+#: ../lib/misc.py:51
+msgid "Nordic (ISO-8859-10)"
+msgstr ""
+
+#: ../lib/misc.py:52
+msgid "South European (ISO-8859-3)"
+msgstr ""
+
+#: ../lib/misc.py:53
+msgid "Greek (ISO-8859-7)"
+msgstr ""
+
+#: ../lib/misc.py:54
+msgid "Baltic (ISO-8859-13)"
+msgstr ""
+
+#: ../lib/misc.py:55
+msgid "Cyrillic (KOI8-R)"
+msgstr ""
+
+#: ../lib/misc.py:56
+msgid "Arabic (ISO-8859-6)"
+msgstr ""
+
+#: ../lib/util.py:219 ../lib/gui/dictconnwin.py:254
+#, python-format
+msgid "Connecting to %s..."
+msgstr ""
+
+#: ../lib/util.py:235
+#, python-format
+msgid "Downloading... %d%%"
+msgstr ""
+
+#: ../lib/util.py:240 ../lib/gui/dictconnwin.py:174 ../lib/gui/mainwin.py:689
+msgid "Done"
+msgstr ""
+
 #: ../lib/gui/dictaddwin.py:35
 msgid "Add new dictionary"
 msgstr ""
 
 #: ../lib/gui/dictaddwin.py:41
+#, python-format
 msgid ""
 "The file format of \"%s\" could not be \n"
 "recognized by its extention. Please select one\n"
@@ -93,6 +301,7 @@ msgstr ""
 
 #: ../lib/gui/dictaddwin.py:47 ../lib/gui/dictaddwin.py:48
 #: ../lib/gui/dictaddwin.py:49 ../lib/gui/dictaddwin.py:50
+#, python-format
 msgid "\"%s\" dictionary format"
 msgstr ""
 
@@ -143,10 +352,6 @@ msgstr ""
 msgid "Connect"
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:174 ../lib/gui/mainwin.py:689 ../lib/util.py:240
-msgid "Done"
-msgstr ""
-
 #: ../lib/gui/dictconnwin.py:178
 msgid "Receiving database list..."
 msgstr ""
@@ -159,10 +364,6 @@ msgstr ""
 msgid "Connecting..."
 msgstr ""
 
-#: ../lib/gui/dictconnwin.py:254 ../lib/util.py:219
-msgid "Connecting to %s..."
-msgstr ""
-
 #: ../lib/gui/dicteditorwin.py:53
 msgid "Word: "
 msgstr ""
@@ -172,10 +373,12 @@ msgid "Add translation field"
 msgstr ""
 
 #: ../lib/gui/dicteditorwin.py:111
+#, python-format
 msgid "Translation #%d: "
 msgstr ""
 
 #: ../lib/gui/dicteditorwin.py:245
+#, python-format
 msgid "Dictionary \"%s\" has been changed"
 msgstr ""
 
@@ -298,16 +501,12 @@ msgstr ""
 msgid "Exit confirmation"
 msgstr ""
 
-#: ../lib/gui/dicteditorwin.py:600 ../lib/gui/mainwin.py:1299
-#: ../lib/installer.py:61
-msgid "Choose dictionary file"
-msgstr ""
-
 #: ../lib/gui/dicteditorwin.py:614
 msgid "Open Failed"
 msgstr ""
 
 #: ../lib/gui/dicteditorwin.py:615
+#, python-format
 msgid "Unable to open dictionary (got message: %s)"
 msgstr ""
 
@@ -319,8 +518,8 @@ msgstr ""
 msgid "An error occured:"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:69 ../lib/gui/helpwin.py:146
-#: ../lib/gui/helpwin.py:209
+#: ../lib/gui/helpwin.py:69 ../lib/gui/helpwin.py:145
+#: ../lib/gui/helpwin.py:208
 msgid "&Close"
 msgstr ""
 
@@ -344,29 +543,27 @@ msgstr ""
 
 #: ../lib/gui/helpwin.py:135
 msgid ""
-"OpenDict project is sponsored by IDILES.\n"
-"Visit company's website at http://www.idiles.com.\n"
-"\n"
-"Report problems by email address support@idiles.com."
+"OpenDict project was sponsored by IDILES.\n"
+"Visit company's website at http://www.idiles.com."
 msgstr ""
 
-#: ../lib/gui/helpwin.py:142
+#: ../lib/gui/helpwin.py:141
 msgid "Sponsors"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:180 ../lib/gui/helpwin.py:193
+#: ../lib/gui/helpwin.py:179 ../lib/gui/helpwin.py:192
 msgid "OpenDict is a multiplatform dictionary."
 msgstr ""
 
-#: ../lib/gui/helpwin.py:203
+#: ../lib/gui/helpwin.py:202
 msgid "C&redits"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:206
+#: ../lib/gui/helpwin.py:205
 msgid "&Licence"
 msgstr ""
 
-#: ../lib/gui/helpwin.py:235
+#: ../lib/gui/helpwin.py:234
 msgid "Licence"
 msgstr ""
 
@@ -380,6 +577,7 @@ msgid "Encode Failed"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:98
+#, python-format
 msgid "Unable to encode text \"%s\" in %s for \"%s\"."
 msgstr ""
 
@@ -441,11 +639,11 @@ msgid "Paste clipboard text into the search entry"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:201
-msgid "Edit preferences"
+msgid "Preferences...\tCtrl-P"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:201
-msgid "Preferences...\tCtrl-P"
+msgid "Edit preferences"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:203
@@ -565,7 +763,8 @@ msgid "Word:"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:362
-msgid "Enter some text and press \"Look Up\" button or [ENTER] key on your keyboard"
+msgid ""
+"Enter some text and press \"Look Up\" button or [ENTER] key on your keyboard"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:368
@@ -608,8 +807,10 @@ msgid ""
 "  </li>\n"
 "  <li>To install new dictionary from the Internet, select\n"
 "    <i><b>Manage Dictionaries</b></i>\n"
-"    from <i><b>Tools</b></i> menu and choose <i><b>Available</b></i> tab.</li>\n"
-"  <li>To install new dictionary from file, select <i><b>Install Dictionary From File...</b></i>\n"
+"    from <i><b>Tools</b></i> menu and choose <i><b>Available</b></i> tab.</"
+"li>\n"
+"  <li>To install new dictionary from file, select <i><b>Install Dictionary "
+"From File...</b></i>\n"
 "  from <i><b>Dictionaries</b></i> menu.\n"
 "  </li>\n"
 "</ul>\n"
@@ -618,7 +819,10 @@ msgid ""
 msgstr ""
 
 #: ../lib/gui/mainwin.py:653
-msgid "Translation cannot be displayed using selected encoding %s. Please try another encoding from View > Character Encoding menu."
+#, python-format
+msgid ""
+"Translation cannot be displayed using selected encoding %s. Please try "
+"another encoding from View > Character Encoding menu."
 msgstr ""
 
 #: ../lib/gui/mainwin.py:685
@@ -626,6 +830,7 @@ msgid "1 word matches"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:687
+#, python-format
 msgid "%d words match"
 msgstr ""
 
@@ -634,7 +839,9 @@ msgid "No dictionary activated"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:735
-msgid "No dictionary activated. Please select one from \"Dictionaries\" menu and try again."
+msgid ""
+"No dictionary activated. Please select one from \"Dictionaries\" menu and "
+"try again."
 msgstr ""
 
 #: ../lib/gui/mainwin.py:738
@@ -642,7 +849,9 @@ msgid "No dictionaries installed"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:739
-msgid "There is no dictionaries installed. You can install one by selecting Tools > Manage Dictionaries > Available"
+msgid ""
+"There is no dictionaries installed. You can install one by selecting Tools > "
+"Manage Dictionaries > Available"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:752
@@ -650,7 +859,10 @@ msgid "Please enter some text and try again"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:784
-msgid "Unable to encode text \"%s\" in %s for \"%s\". That logically means the word definition does not exist in the dictionary."
+#, python-format
+msgid ""
+"Unable to encode text \"%s\" in %s for \"%s\". That logically means the word "
+"definition does not exist in the dictionary."
 msgstr ""
 
 #: ../lib/gui/mainwin.py:872
@@ -672,6 +884,11 @@ msgstr ""
 #: ../lib/gui/mainwin.py:946 ../lib/gui/mainwin.py:1142
 #: ../lib/gui/pluginwin.py:772
 msgid "Error"
+msgstr ""
+
+#: ../lib/gui/mainwin.py:947
+#, python-format
+msgid "Unable to decode text using your locale charset %s"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:955
@@ -699,6 +916,7 @@ msgid "Licence Agreement Rejected"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:1089
+#, python-format
 msgid "You cannot use dictionary \"%s\" without accepting licence agreement"
 msgstr ""
 
@@ -708,7 +926,9 @@ msgstr ""
 
 #: ../lib/gui/mainwin.py:1104
 msgid ""
-"This is the first time you use this dictionary or it has been changed on disk since last indexing. Indexing is used to make search more efficient. The dictionary will be indexed now. It can take a few or more seconds.\n"
+"This is the first time you use this dictionary or it has been changed on "
+"disk since last indexing. Indexing is used to make search more efficient. "
+"The dictionary will be indexed now. It can take a few or more seconds.\n"
 "\n"
 "Press OK to continue..."
 msgstr ""
@@ -718,14 +938,20 @@ msgid "Index Creation Error"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:1122
-msgid "Error occured while indexing file. This may be because of currently selected character encoding %s is not correct for this dictionary. Try selecting another encoding from View > Character Encoding menu"
+#, python-format
+msgid ""
+"Error occured while indexing file. This may be because of currently selected "
+"character encoding %s is not correct for this dictionary. Try selecting "
+"another encoding from View > Character Encoding menu"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:1143
+#, python-format
 msgid "Unable to load dictionary index table. Got error: %s"
 msgstr ""
 
 #: ../lib/gui/mainwin.py:1153
+#, python-format
 msgid "Dictionary \"%s\" loaded"
 msgstr ""
 
@@ -786,7 +1012,8 @@ msgstr ""
 
 #: ../lib/gui/miscwin.py:103
 msgid ""
-"You have directories that containt invalid dictionaries and cannot be loaded. \n"
+"You have directories that containt invalid dictionaries and cannot be "
+"loaded. \n"
 "You can try to remove these directories right now."
 msgstr ""
 
@@ -795,6 +1022,7 @@ msgid "Unable to remove"
 msgstr ""
 
 #: ../lib/gui/miscwin.py:143
+#, python-format
 msgid "Unable to remove directory \"%s\": %s"
 msgstr ""
 
@@ -865,6 +1093,7 @@ msgid "Downloading List"
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:558
+#, python-format
 msgid "Unable to download list from %s: %s"
 msgstr ""
 
@@ -873,10 +1102,12 @@ msgid "Unable to download list"
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:645
+#, python-format
 msgid "Unable to remove dictionary \"%s\""
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:686
+#, python-format
 msgid "Downloading %s..."
 msgstr ""
 
@@ -893,7 +1124,10 @@ msgid "Downloaded file is damaged and cannot be installed. Please try again."
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:773
-msgid "Unable to remove old version of \"%s\". Error occured: \"<i>%s</i>\". New version cannot be installed without removing old one."
+#, python-format
+msgid ""
+"Unable to remove old version of \"%s\". Error occured: \"<i>%s</i>\". New "
+"version cannot be installed without removing old one."
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:798
@@ -901,6 +1135,7 @@ msgid "Unable to install"
 msgstr ""
 
 #: ../lib/gui/pluginwin.py:799
+#, python-format
 msgid "Unable to install dictionary \"%s\"."
 msgstr ""
 
@@ -958,21 +1193,25 @@ msgstr ""
 
 #: ../lib/gui/registerwin.py:66 ../lib/gui/registerwin.py:105
 #: ../lib/gui/registerwin.py:148
+#, python-format
 msgid "Name: %s"
 msgstr ""
 
 #: ../lib/gui/registerwin.py:69 ../lib/gui/registerwin.py:106
 #: ../lib/gui/registerwin.py:149
+#, python-format
 msgid "Path: %s"
 msgstr ""
 
 #: ../lib/gui/registerwin.py:72 ../lib/gui/registerwin.py:107
 #: ../lib/gui/registerwin.py:150
+#, python-format
 msgid "Format: %s"
 msgstr ""
 
 #: ../lib/gui/registerwin.py:75 ../lib/gui/registerwin.py:108
 #: ../lib/gui/registerwin.py:151
+#, python-format
 msgid "Encoding: %s"
 msgstr ""
 
@@ -985,171 +1224,6 @@ msgid "Remove selected"
 msgstr ""
 
 #: ../lib/gui/registerwin.py:130 ../lib/gui/registerwin.py:137
+#, python-format
 msgid "Error while deleting \"%s\""
 msgstr ""
-
-#: ../lib/installer.py:81
-msgid "Recognition Error"
-msgstr ""
-
-#: ../lib/installer.py:82
-msgid "File %s is not supported by OpenDict"
-msgstr ""
-
-#: ../lib/installer.py:108 ../lib/installer.py:110
-msgid "Installation failed"
-msgstr ""
-
-#: ../lib/installer.py:122 ../lib/installer.py:308 ../lib/installer.py:316
-msgid "Installation Error"
-msgstr ""
-
-#: ../lib/installer.py:124 ../lib/installer.py:128
-msgid "Error: Installation failed"
-msgstr ""
-
-#: ../lib/installer.py:132
-msgid "Dictionary installed"
-msgstr ""
-
-#: ../lib/installer.py:133
-msgid "Dictionary successfully installed. You can choose it from \"Dictionaries\" menu now."
-msgstr ""
-
-#: ../lib/installer.py:143 ../lib/installer.py:218
-msgid "File %s does not exist"
-msgstr ""
-
-#: ../lib/installer.py:146 ../lib/installer.py:222
-msgid "%s is not a file"
-msgstr ""
-
-#: ../lib/installer.py:160
-msgid "Dictionary \"%s\" is already installed"
-msgstr ""
-
-#: ../lib/installer.py:226
-msgid "%s is not OpenDict dictionary plugin"
-msgstr ""
-
-#: ../lib/installer.py:233
-msgid "File \"%s\" is not valid ZIP file"
-msgstr ""
-
-#: ../lib/installer.py:238
-msgid "Dictionary plugin file is corrupted"
-msgstr ""
-
-#: ../lib/installer.py:244
-msgid "Plugin file is empty (%s)"
-msgstr ""
-
-#: ../lib/installer.py:268
-msgid "Selected file is not valid OpenDict plugin"
-msgstr ""
-
-#: ../lib/installer.py:295 ../lib/installer.py:377
-msgid "This dictionary already installed. If you want to upgrade it, please remove old version first."
-msgstr ""
-
-#: ../lib/installer.py:309 ../lib/installer.py:317
-msgid "Installation tool for this dictionary failed to start. Please report this problem to developers."
-msgstr ""
-
-#: ../lib/installer.py:323
-msgid "Installation Aborted"
-msgstr ""
-
-#: ../lib/installer.py:324
-msgid "Dictionary installation has been aborted."
-msgstr ""
-
-#: ../lib/installer.py:348 ../lib/installer.py:400
-msgid "Error while removing created directories after plugin installation failure. This may be permission or disk space error."
-msgstr ""
-
-#: ../lib/installer.py:352
-msgid "Unable to install plugin"
-msgstr ""
-
-#: ../lib/installer.py:369
-msgid "Compressed dictionary file is corrupted"
-msgstr ""
-
-#: ../lib/installer.py:404
-msgid "Unable to install dictionary"
-msgstr ""
-
-#: ../lib/misc.py:37
-msgid "Dictionary error, please report to its author"
-msgstr ""
-
-#: ../lib/misc.py:38
-msgid "Syntax error"
-msgstr ""
-
-#: ../lib/misc.py:39
-msgid "You must be connected to the internet to use this dictionary"
-msgstr ""
-
-#: ../lib/misc.py:40
-msgid "Time out"
-msgstr ""
-
-#: ../lib/misc.py:41
-msgid "Bad encoding is set for this dictionary, try another"
-msgstr ""
-
-#: ../lib/misc.py:48
-msgid "Unicode (UTF-8)"
-msgstr ""
-
-#: ../lib/misc.py:49
-msgid "Western (ISO-8859-1)"
-msgstr ""
-
-#: ../lib/misc.py:50
-msgid "Central European (ISO-8859-2)"
-msgstr ""
-
-#: ../lib/misc.py:51
-msgid "Nordic (ISO-8859-10)"
-msgstr ""
-
-#: ../lib/misc.py:52
-msgid "South European (ISO-8859-3)"
-msgstr ""
-
-#: ../lib/misc.py:53
-msgid "Greek (ISO-8859-7)"
-msgstr ""
-
-#: ../lib/misc.py:54
-msgid "Baltic (ISO-8859-13)"
-msgstr ""
-
-#: ../lib/misc.py:55
-msgid "Cyrillic (KOI8-R)"
-msgstr ""
-
-#: ../lib/misc.py:56
-msgid "Arabic (ISO-8859-6)"
-msgstr ""
-
-#: ../lib/util.py:235
-msgid "Downloading... %d%%"
-msgstr ""
-
-#: ../opendict.py:115
-msgid "wxPython Version Error"
-msgstr ""
-
-#: ../opendict.py:116
-msgid ""
-"wxPython %s is installed on this system.\n"
-"\n"
-"OpenDict %s requires wxPython 2.6 to run smoothly.\n"
-"\n"
-"You can find wxPython 2.6 at http://www.wxpython.org or you can install it using your system package manager."
-msgstr ""
-

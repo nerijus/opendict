@@ -13,11 +13,9 @@ install: all
 opendict.pot:
 	@echo "Rebuilding the pot file"
 	rm -f *.pot
-	test -f /usr/bin/pygettext && /usr/bin/pygettext -v ../opendict.py ../lib/*.py ../lib/gui/*.py || echo
-	test -f /usr/bin/pygettext.py && /usr/bin/pygettext.py -v ../opendict.py ../lib/*.py ../lib/gui/*.py || echo
-	test -f /usr/share/doc/packages/python/Tools/i18n/pygettext.py && python /usr/share/doc/packages/python/Tools/i18n/pygettext.py -v ../opendict.py ../lib/*.py ../lib/gui/*.py  || echo
-	cp messages.pot opendict.pot
-	rm -f messages.pot
+	test -f /usr/bin/xgettext && /usr/bin/xgettext ../opendict.py ../lib/*.py ../lib/gui/*.py || echo
+	cp messages.po opendict.pot
+	rm -f messages.po
 
 %.mo: %.po
 	msgfmt --verbose --check -o $@ $<
