@@ -65,7 +65,7 @@ class ErrorWindow(wx.Frame):
                 size=wx.DefaultSize, style=wx.CENTRE):
       wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
-      raise "Deprecated"
+      raise DeprecationWarning
 
       vbox = wx.BoxSizer(wx.VERTICAL)
 

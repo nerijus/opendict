@@ -190,7 +190,7 @@ class Configuration:
    def checkDir(self, dir):
       """Check if directory exists. Create one if not"""
 
-      raise "Deprecated"
+      raise DeprecationWarning
 
       if not os.path.exists(os.path.join(uhome, dir)):
          os.mkdir(os.path.join(uhome, dir))

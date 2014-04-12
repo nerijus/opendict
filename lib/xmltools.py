@@ -137,7 +137,7 @@ class RegisterConfigParser:
 
         registers = doc.getElementsByTagName('plain-dictionary')
         if len(registers) == 0:
-            raise "Invalid configuration"
+            raise Exception("Invalid configuration")
 
         registerElement = registers[0]
         
@@ -448,7 +448,7 @@ class MainConfigParser:
 
         configs = doc.getElementsByTagName('main-config')
         if len(configs) == 0:
-            raise "Invalid configuration"
+            raise Exception("Invalid configuration")
 
         configElement = configs[0]
         
