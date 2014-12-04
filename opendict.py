@@ -34,14 +34,14 @@ def main_is_frozen():
 	    hasattr(sys, "importers") # old py2exe
 	    or imp.is_frozen("__main__")) # tools/freeze
 
-# If application is not frozen to binary, try selecting wxPython 2.6 or 2.5
+# If application is not frozen to binary, try selecting wxPython 3.0 or 2.8
 # on multiversioned wxPython installation.
 if not main_is_frozen():
     try:
         import wxversion
-        wxversion.select(["2.6-unicode", "2.8-unicode"])
+        wxversion.select(["2.8-unicode", "3.0"])
     except Exception, e:
-        print "You seem to have wxPython 2.4: %s" \
+        print "You seem to have an unsupported wxPython version: %s" \
               % e
 
 try:
@@ -49,7 +49,7 @@ try:
 except ImportError:
     print >> sys.stderr, "**"
     print >> sys.stderr, "** Error: wxPython library not found"
-    print >> sys.stderr, "** Please install wxPython 2.6 or later to run OpenDict"
+    print >> sys.stderr, "** Please install wxPython 2.8 or later to run OpenDict"
     print >> sys.stderr, "**"
     sys.exit(1)
 
@@ -99,25 +99,24 @@ class OpenDictApp(wx.App):
           except:
               pass
 
-      if wx.Version.split('.') < ['2', '6']:
+      if wx.Version.split('.') < ['2', '8']:
           from lib.gui import errorwin
-          
-          # Go away, wxPython 2.4!
+
           title = _("wxPython Version Error")
           msg = _("wxPython %s is installed on this system.\n\n"
-                  "OpenDict %s requires wxPython 2.6 to run smoothly.\n\n"
-                  "You can find wxPython 2.6 at "
+                  "OpenDict %s requires wxPython 2.8 or newer to run smoothly.\n\n"
+                  "You can find wxPython at "
                   "http://www.wxpython.org or you can "
                   "install it using your system package manager.") \
                   % (wx.Version, info.VERSION)
           errorwin.showErrorMessage(title, msg)
           return False
 
-      
+
       util.makeDirectories()
-      
+
       systemLog(DEBUG, "Unicode version: %s" % wx.USE_UNICODE)
-      
+
       # Init gettext support
       wx.Locale_AddCatalogLookupPathPrefix(os.path.join(info.GLOBAL_HOME,
                                                        'po'))
@@ -126,7 +125,7 @@ class OpenDictApp(wx.App):
 
       # Data cache instance
       self.cache = {}
-      
+
       # Dictionaries container
       # Mapping: name -> object
       self.dictionaries = {}
@@ -134,15 +133,15 @@ class OpenDictApp(wx.App):
       # Failed dictionaries.
       # For error message that may be shown after creating main window
       self.invalidDictionaries = []
-      
+
       self.config = Configuration()
       self.config.load()
 
       self.agreements = util.AgreementsManager(os.path.join(info.LOCAL_HOME,
                                                             'agreements.txt'))
-      
-      
-      
+
+
+
       # Set unique ids
       for plugin in newplugin.loadDictionaryPlugins(self.dictionaries,
                                                     self.invalidDictionaries):
@@ -170,7 +169,7 @@ class OpenDictApp(wx.App):
                                windowPos,
                                windowSize,
                                style=wx.DEFAULT_FRAME_STYLE)
-      
+
       try:
           systemLog(INFO, "OpenDict %s" % info.VERSION)
           systemLog(INFO, "wxPython %s" % wx.Version)
@@ -179,13 +178,13 @@ class OpenDictApp(wx.App):
           systemLog(DEBUG, "Loaded in %f seconds" % (time.time() - _start))
       except Exception, e:
           print "Logger Error: Unable to write to log (%s)" % e
-      
+
       self.window.Show(True)
 
       return True
 
 
 if __name__ == "__main__":
-   
+
    openDictApp = OpenDictApp(0)
    openDictApp.MainLoop()

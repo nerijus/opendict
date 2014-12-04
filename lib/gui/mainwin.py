@@ -455,7 +455,6 @@ class MainWindow(wx.Frame):
       self.search = None
       self.load = None
 
-      wx.InitAllImageHandlers()      
       self.SetIcon(wx.Icon(os.path.join(info.GLOBAL_HOME,
                                        "pixmaps",
                                        "icon-32x32.png"),
@@ -1297,7 +1296,7 @@ class MainWindow(wx.Frame):
       """Starts dictionary registration process"""
 
       fileDialog = wx.FileDialog(self, _("Choose dictionary file"), "", "",
-                            "", wx.OPEN|wx.MULTIPLE)
+                            "", wx.FD_OPEN|wx.FD_MULTIPLE)
 
       if fileDialog.ShowModal() == wx.ID_OK:
          file = fileDialog.GetPaths()[0]
@@ -1330,7 +1329,7 @@ class MainWindow(wx.Frame):
       """Starts plugin installation process"""
 
       dialog = wx.FileDialog(self, _("Choose plugin file"), "", "",
-                            "", wx.OPEN|wx.MULTIPLE)
+                            "", wx.FD_OPEN|wx.FD_MULTIPLE)
       if dialog.ShowModal() == wx.ID_OK:
          plugin.installPlugin(self.app.config, dialog.GetPaths()[0])
       dialog.Destroy()

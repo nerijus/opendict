@@ -43,7 +43,7 @@ class PrefsWindow(wx.Dialog):
       vboxMain = wx.BoxSizer(wx.VERTICAL)
       hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
 
-      grid = wx.FlexGridSizer(2, 2, 1, 1)
+      grid = wx.FlexGridSizer(4, 2, 1, 1)
 
       grid.Add(wx.StaticText(self, -1, _("Default dictionary: ")),
                    0, wx.ALIGN_CENTER_VERTICAL)

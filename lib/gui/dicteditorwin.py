@@ -484,7 +484,7 @@ class DictEditorWindow(wx.Frame):
                                    wildcard=wildCard,
                                    defaultFile=default,
                                    message=_("Save file"),
-                                   style=wx.SAVE | wx.CHANGE_DIR)
+                                   style=wx.FD_SAVE | wx.FD_CHANGE_DIR)
             if dialog.ShowModal() == wx.ID_OK:
                 self.filePath = dialog.GetPaths()[0]
             else:
@@ -598,7 +598,7 @@ class DictEditorWindow(wx.Frame):
         wildCard = "Slowo dictionaries (*.dwa)|*.dwa"
         
         dialog = wx.FileDialog(self, message=_("Choose dictionary file"),
-                              wildcard=wildCard, style=wx.OPEN|wx.MULTIPLE)
+                              wildcard=wildCard, style=wx.FD_OPEN|wx.FD_MULTIPLE)
         if dialog.ShowModal() == wx.ID_OK:
             name = os.path.split(dialog.GetPaths()[0])[1]
             self.filePath = dialog.GetPaths()[0]
