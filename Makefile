@@ -5,6 +5,7 @@ DESTDIR     = /usr
 bindir	    = $(DESTDIR)/bin
 icondir	    = $(DESTDIR)/share/icons/hicolor
 opendictdir = $(DESTDIR)/share/opendict
+mandir      = $(DESTDIR)/share/man/man1
 
 install:
 	mkdir -p $(opendictdir)/lib/extra
@@ -38,6 +39,8 @@ install:
 	mkdir -p $(DESTDIR)/share/applications
 	cp misc/opendict.desktop $(DESTDIR)/share/applications
 	chmod a+r $(DESTDIR)/share/applications/opendict.desktop
+	mkdir -p $(mandir)
+	cp opendict.1 $(mandir)
 
 uninstall:
 	rm -f $(DESTDIR)/share/applications/opendict.desktop
@@ -61,6 +64,7 @@ uninstall:
 	rmdir $(opendictdir)/lib/gui
 	rmdir $(opendictdir)/lib
 	rmdir $(opendictdir)
+	rm -f $(mandir)/opendict.*
 
 clean:
 	for f in `find . -name '*.pyc'`; do rm $$f; done
