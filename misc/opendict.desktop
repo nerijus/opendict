@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Dictionary OpenDict
 Name[lt]=Žodynas „OpenDict“
 Name[de]=OpenDict Wörterbuch
@@ -123,3 +122,4 @@ StartupNotify=true
 Terminal=false
 Type=Application
 Categories=GTK;Utility;Dictionary;
+Keywords=Dictonary;Words;
