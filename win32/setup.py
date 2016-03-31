@@ -7,7 +7,7 @@ import glob
 
 setup(
       name="opendict",
-      version="0.6.6",
+      version="0.6.7",
       zipfile=None,
       package_dir = {"": "lib"},
       windows = [{
