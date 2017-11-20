@@ -745,7 +745,7 @@ class MainWindow(wx.Frame):
       if self.search and not self.search.isDone():
           self.onStop(None)
 
-      word = self.entry.GetValue()
+      word = self.entry.GetValue().strip()
 
       if word == "":
          self.SetStatusText(_("Please enter some text and try again"))
