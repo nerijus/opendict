@@ -27,7 +27,7 @@ cd $OUTDIR
 rm -rf $NAME.zip
 rm -rf $NAME.tar.gz
 
-for f in `find "$NAME" -name ".svn"`; do echo Removing "$f" && rm -rf "$f"; done;
+for f in `find "$NAME" -name ".git"`; do echo Removing "$f" && rm -rf "$f"; done;
 
 zip -r "$NAME.zip" "$NAME"
 tar -cf "$NAME.tar" "$NAME"
