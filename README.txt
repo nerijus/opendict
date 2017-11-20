@@ -44,5 +44,4 @@ icon.
 Help
 ~~~~
 
-For more information visit http://opendict.sf.net.
-
+For more information visit http://opendict.sf.net and https://github.com/nerijus/opendict.

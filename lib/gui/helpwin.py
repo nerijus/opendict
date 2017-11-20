@@ -177,7 +177,7 @@ class AboutWindow(wx.Dialog):
             "Copyright %(c)s 2007-2008 Idiles Systems Ltd <support@idiles.com>" \
              % {'c': unicode("\302\251", "UTF-8")}
       desc = _("OpenDict is a multiplatform dictionary.")
-      page = "http://opendict.sf.net"
+      page = "http://opendict.sf.net\nhttps://github.com/nerijus/opendict"
 
       titleLabel = wx.StaticText(self, -1, title,
                                 style=wx.ALIGN_CENTER)

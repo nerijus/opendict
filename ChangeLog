@@ -1,3 +1,7 @@
+2017-11-20 nerijus
+
+	* strip whitespace when searching
+
 2014-04-08 nerijus
 
 	* PyXML is no longer needed
