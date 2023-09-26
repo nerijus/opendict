@@ -148,7 +148,7 @@ class Configuration:
       self.set('dict-server-encoding', 'UTF-8')
 
       self.repository = \
-               'http://opendict.sf.net/Repository/Data/opendict-add-ons.xml'
+               'https://opendict.sourceforge.net/Repository/Data/opendict-add-ons.xml'
 
 
    def get(self, name):
