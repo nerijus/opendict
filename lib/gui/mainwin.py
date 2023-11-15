@@ -26,7 +26,7 @@ Main window GUI module
 import wx
 import wx.html
 import os
-import cStringIO
+from io import StringIO
 import traceback
 
 from lib import info
@@ -83,7 +83,7 @@ class HtmlWindow(wx.html.HtmlWindow):
       word = enc.fromWX(lastLookupWord)
       try:
          word = word.encode(parent.activeDictionary.getEncoding())
-      except Exception, e:
+      except Exception(e):
          # FIXME: Code duplicates
          traceback.print_exc()
          parent.buttonStop.Disable()
@@ -290,7 +290,7 @@ class MainWindow(wx.Frame):
             if self.app.config.get('defaultDict') == name:
                self.menuDict.FindItemById(itemID).Check(1)
 		
-         except Exception, e:
+         except Exception(e):
             systemLog(ERROR, "Unable to create menu item for '%s' (%s)" \
                   % (name, e))
 
@@ -644,7 +644,7 @@ class MainWindow(wx.Frame):
          try:
             transUnicode = unicode(result.translation,
                                    self.activeDictionary.getEncoding())
-         except Exception, e:
+         except Exception(e):
             systemLog(ERROR, "Unable to decode translation in %s (%s)" \
                       % (self.activeDictionary.getEncoding(),
                          e))
@@ -703,8 +703,8 @@ class MainWindow(wx.Frame):
          if wx.TheClipboard.GetData(do):
             try:
                text = do.GetText().strip()
-            except Exception, e:
-               print e
+            except Exception(e):
+               print(e)
          wx.TheClipboard.Close()
          return enc.toWX(text)
       
@@ -769,7 +769,7 @@ class MainWindow(wx.Frame):
       word = enc.fromWX(word)
       try:
          word = word.encode(self.activeDictionary.getEncoding())
-      except Exception, e:
+      except Exception(e):
          # FIXME: Code duplicates
          self.buttonStop.Disable()
          self.entry.Enable(True)
@@ -940,7 +940,7 @@ class MainWindow(wx.Frame):
                 '').replace('\r', '').replace('"', '\\"')
             cmd = (cmd % word).encode(localeCharset)
             Process(os.system, cmd)
-        except Exception, e:
+        except Exception(e):
             traceback.print_exc()
             title = _("Error")
             msg = _("Unable to decode text using your locale charset %s" \
@@ -968,7 +968,7 @@ class MainWindow(wx.Frame):
                                              style=wx.DEFAULT_FRAME_STYLE)
          self.pmWindow.CentreOnScreen()
          self.pmWindow.Show(True)
-      except Exception, e:
+      except Exception(e):
          traceback.print_exc()
          systemLog(ERROR, "Unable to show prefs window: %s" % e)
          self.SetStatusText("Error occured, please contact developers (%s)" \
@@ -999,7 +999,7 @@ class MainWindow(wx.Frame):
                                         style=wx.DEFAULT_FRAME_STYLE)
          self.prefsWindow.CentreOnScreen()
          self.prefsWindow.Show(True)
-      except Exception, e:
+      except Exception(e):
          traceback.print_exc()
          systemLog(ERROR, "Unable to show preferences window: %s" % e)
          title = errortype.OPENDICT_BUG.getMessage()
@@ -1114,7 +1114,7 @@ class MainWindow(wx.Frame):
                plaindict.makeIndex(dictInstance, 
                                    self.app.config.get('encoding'))
                wx.EndBusyCursor()
-            except Exception, e:
+            except Exception(e):
                wx.EndBusyCursor()
                traceback.print_exc()
                title = _("Index Creation Error")
@@ -1135,7 +1135,7 @@ class MainWindow(wx.Frame):
             index = plaindict.loadIndex(dictInstance)
             self.activeDictionary.setIndex(index)
             wx.EndBusyCursor()
-         except Exception, e:
+         except Exception(e):
             wx.EndBusyCursor()
             traceback.print_exc()
             title = _("Error")
@@ -1156,7 +1156,7 @@ class MainWindow(wx.Frame):
 
       try:
          self.checkEncMenuItem(self.activeDictionary.getEncoding())
-      except Exception, e:
+      except Exception(e):
          systemLog(ERROR, "Unable to select encoding menu item: %s" % e)
 
       wx.EndBusyCursor()
@@ -1212,8 +1212,8 @@ class MainWindow(wx.Frame):
       self.app.config.set('encoding', misc.encodings[name])
 
       if self.activeDictionary:
-         print "Setting encoding %s for dictionary %s" % \
-            (self.app.config.get('encoding'), self.activeDictionary.name)
+         print("Setting encoding %s for dictionary %s" % \
+            (self.app.config.get('encoding'), self.activeDictionary.name))
          self.activeDictionary.setEncoding(self.app.config.get('encoding'))
          systemLog(INFO, "Dictionary encoding set to %s" \
                % self.activeDictionary.getEncoding())
@@ -1420,7 +1420,7 @@ class MainWindow(wx.Frame):
 
       try:
          self.printer.PrintText(self.htmlCode)
-      except Exception, e:
+      except Exception(e):
          self.SetStatusText(_("Failed to print"))
          systemLog(ERROR, "Unable to print translation (%s)" % e)
          traceback.print_exc()
@@ -1431,7 +1431,7 @@ class MainWindow(wx.Frame):
 
       try:
          self.printer.PreviewText(self.htmlCode)
-      except Exception, e:
+      except Exception(e):
          systemLog(ERROR, "Unable to preview translation (%s)" % e)
          self.SetStatusText(_("Page preview failed"))
          traceback.print_exc()
@@ -1452,6 +1452,6 @@ class MainWindow(wx.Frame):
 
       try:
          self.app.config.save()
-      except Exception, e:
+      except Exception(e):
          systemLog(ERROR, "Unable to save configuration: %s" % e)
          

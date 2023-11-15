@@ -7,7 +7,7 @@
 import sys
 
 if len(sys.argv) < 3:
-    print "Usage: %s <dict_file> <hash_file>" % sys.argv[0]
+    print("Usage: %s <dict_file> <hash_file>" % sys.argv[0])
     sys.exit(1)
 
 dict = open(sys.argv[1], "r")

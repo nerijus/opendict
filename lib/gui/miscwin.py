@@ -48,7 +48,7 @@ class PluginLicenceWindow(wx.Dialog):
       try:
           encodedText = enc.toWX(unicode(msg, 'UTF-8'))
           htmlWin.SetPage(encodedText)
-      except Exception, e:
+      except Exception(e):
           systemLog(ERROR, "Unable to encode/show licence text: %s" % e)
           htmlWin.SetPage(_("Error: <i>unable to show licence text</i>"))
           error = True
@@ -137,7 +137,7 @@ class InvalidDictWindow(wx.Dialog):
       try:
          shutil.rmtree(path)
          self.buttons[event.GetId()].Disable()
-      except Exception, e:
+      except Exception(e):
          traceback.print_exc()
          title = _("Unable to remove")
          msg = _("Unable to remove directory \"%s\": %s") % (path, e)

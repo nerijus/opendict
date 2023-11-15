@@ -56,7 +56,7 @@ class ActiveDictConfig(object):
                 name = line.strip()
                 name = unicode(name, 'UTF-8')
                 self.dicts.append(name)
-        except IOError, e:
+        except IOError(e):
             pass
 
 
@@ -66,7 +66,7 @@ class ActiveDictConfig(object):
         fd = open(self.filePath, 'w')
         for d in self.dicts:
             name = d.encode('UTF-8')
-            print >> fd, name
+            print(name, file=fd)
         fd.close()
 
 
@@ -170,7 +170,7 @@ class Configuration:
       try:
          if os.path.exists(self.filePath):
             self.props.update(xmltools.parseMainConfig(self.filePath))
-      except Exception, e:
+      except Exception(e):
          systemLog(ERROR, "Unable to read configuration file: %s" % e)
 
       # Old configurations may still keep outdated entry, rewrite it

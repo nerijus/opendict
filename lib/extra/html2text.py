@@ -114,8 +114,8 @@ def html2text (data, use_ansi = 0, is_latin1 = 0):
 
 
 def usage(progname):
-  print "usage: %s --help <htmlfile>" % progname
-  print __doc__
+  print("usage: %s --help <htmlfile>" % progname)
+  print(__doc__)
 
 def main(argc, argv):
   progname = argv[0]
@@ -138,9 +138,9 @@ def main(argc, argv):
   fp.close()
 
   if data:
-    print (html2text(data))
+    print(html2text(data))
   else:
-    print "Document contained no data"
+    print("Document contained no data")
 
 if __name__ == "__main__":
   main(len(sys.argv), sys.argv)

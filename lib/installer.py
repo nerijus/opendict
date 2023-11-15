@@ -104,7 +104,7 @@ class Installer:
                         self.mainWin.addDictionary(dictionary)
                         succeeded = True
                         
-                except Exception, e:
+                except Exception(e):
                     errorwin.showErrorMessage(_("Installation failed"),
                                               e.args[0] or '')
                     self.mainWin.SetStatusText(_("Installation failed"))
@@ -117,7 +117,7 @@ class Installer:
                         dictionary = plaindict._loadPlainDictionary(directory)
                         self.mainWin.addDictionary(dictionary)
                         succeeded = True
-                except Exception, e:
+                except Exception(e):
                     traceback.print_exc()
                     errorwin.showErrorMessage(_("Installation Error"),
                                               e.args[0] or '')
@@ -140,10 +140,10 @@ def installPlainDictionary(filePath):
     """Install plain dictionary and return directory path"""
 
     if not os.path.exists(filePath):
-        raise Exception, _("File %s does not exist") % filePath
+        raise Exception(_("File %s does not exist") % filePath)
 
     if not os.path.isfile(filePath):
-        raise Exception, _("%s is not a file") % filePath
+        raise Exception(_("%s is not a file") % filePath)
 
     util.makeDirectories()
 
@@ -157,8 +157,8 @@ def installPlainDictionary(filePath):
 
     # Check existance
     if os.path.exists(dictDir):
-        raise Exception, _("Dictionary \"%s\" is already installed") \
-            % dictionaryName
+        raise Exception(_("Dictionary \"%s\" is already installed") \
+            % dictionaryName)
     
     extention = os.path.splitext(fileName)[1][1:]
     dictType = None
@@ -171,8 +171,8 @@ def installPlainDictionary(filePath):
                 break
 
     if not dictType:
-        raise Exception, "Dictionary type for '%s' still unknown! " \
-              "This may be internal error." % fileName
+        raise Exception("Dictionary type for '%s' still unknown! " \
+              "This may be internal error." % fileName)
 
     # Create directories
     try:
@@ -180,12 +180,12 @@ def installPlainDictionary(filePath):
         os.mkdir(os.path.join(dictDir, info.__PLAIN_DICT_CONFIG_DIR))
         os.mkdir(os.path.join(dictDir, info.__PLAIN_DICT_FILE_DIR))
         os.mkdir(os.path.join(dictDir, info._PLAIN_DICT_DATA_DIR))
-    except Exception, e:
-        print "ERROR Unable to create dicrectories, aborted (%s)" % e
+    except Exception(e):
+        print("ERROR Unable to create dicrectories, aborted (%s)" % e)
         try:
             shutil.rmtree(dictDir)
-        except Exception, e:
-            print "ERROR Unable to remove directories (%s)" % e
+        except Exception(e):
+            print("ERROR Unable to remove directories (%s)" % e)
 
 
     # Determine info
@@ -215,33 +215,33 @@ def installPlugin(filePath):
 
     # Check if file exists
     if not os.path.exists(filePath):
-        raise Exception, _("File %s does not exist") % filePath
+        raise Exception(_("File %s does not exist") % filePath)
 
     # Check if it is file
     if not os.path.isfile(filePath):
-        raise Exception, _("%s is not a file") % filePath
+        raise Exception(_("%s is not a file") % filePath)
 
     # Check if it is ZIP archive
     if os.path.splitext(filePath)[1].lower()[1:] != "zip":
-        raise Exception, _("%s is not OpenDict dictionary plugin") % filePath
+        raise Exception(_("%s is not OpenDict dictionary plugin") % filePath)
 
     util.makeDirectories()
 
     try:
         zipFile = zipfile.ZipFile(filePath, 'r')
-    except Exception, e:
-        raise Exception, _("File \"%s\" is not valid ZIP file") % \
-              os.path.basename(filePath)
+    except Exception(e):
+        raise Exception(_("File \"%s\" is not valid ZIP file") % \
+              os.path.basename(filePath))
 
     # Test CRC
     if zipFile.testzip():
-        raise Exception, _("Dictionary plugin file is corrupted")
+        raise Exception(_("Dictionary plugin file is corrupted"))
 
     # Check if empty
     try:
         topDirectory = zipFile.namelist()[0]
-    except Exception, e:
-        raise Exception, _("Plugin file is empty (%s)") % e
+    except Exception(e):
+        raise Exception(_("Plugin file is empty (%s)") % e)
 
     configFileExists = False
     pluginConfigExists = False
@@ -265,7 +265,7 @@ def installPlugin(filePath):
 
     if ((not plainConfigExists) and (not pluginConfigExists)) \
        or (not topLevelDirExists):
-        raise Exception, _("Selected file is not valid OpenDict plugin")
+        raise Exception(_("Selected file is not valid OpenDict plugin"))
 
 
     dtype = None
@@ -292,9 +292,9 @@ def _installNormalPlugin(filePath):
     if os.path.exists(os.path.join(info.LOCAL_HOME,
                                    info.PLUGIN_DICT_DIR,
                                    topDirectory)):
-        raise Exception, _("This dictionary already installed. " \
+        raise Exception(_("This dictionary already installed. " \
                            "If you want to upgrade it, please remove " \
-                           "old version first.")
+                           "old version first."))
 
     installFile = os.path.join(topDirectory, 'install.py')
     
@@ -303,8 +303,8 @@ def _installNormalPlugin(filePath):
 
         try:
             struct = {}
-            exec data in struct
-        except Exception, e:
+            exec(data) in struct
+        except Exception(e):
             title = _("Installation Error")
             msg = _("Installation tool for this dictionary failed to start. " \
                     "Please report this problem to developers.")
@@ -341,10 +341,10 @@ def _installNormalPlugin(filePath):
                 fd = open(fileToWrite, 'wb')
                 fd.write(zipFile.read(fileInZip))
                 fd.close()
-    except Exception, e:
+    except Exception(e):
         try:
             shutil.rmtree(os.path.join(pluginsPath, topLevelDir))
-        except Exception, e:
+        except Exception(e):
             raise _("Error while removing created directories after " \
                     "plugin installation failure. This may be " \
                     "permission or disk space error.")
@@ -366,7 +366,7 @@ def _installPlainPlugin(filePath):
 
     # Test CRC
     if zipFile.testzip():
-        raise Exception, _("Compressed dictionary file is corrupted")
+        raise Exception(_("Compressed dictionary file is corrupted"))
 
     plainDictsPath = os.path.join(info.LOCAL_HOME,
                               info.PLAIN_DICT_DIR)
@@ -374,9 +374,9 @@ def _installPlainPlugin(filePath):
     # Check if already installed
     if os.path.exists(os.path.join(plainDictsPath,
                                    topDirectory)):
-        raise Exception, _("This dictionary already installed. " \
+        raise Exception(_("This dictionary already installed. " \
                            "If you want to upgrade it, please remove " \
-                           "old version first.")
+                           "old version first."))
 
     # Install
     try:
@@ -393,10 +393,10 @@ def _installPlainPlugin(filePath):
                 fd = open(fileToWrite, 'wb')
                 fd.write(zipFile.read(fileInZip))
                 fd.close()
-    except Exception, e:
+    except Exception(e):
         try:
             shutil.rmtree(os.path.join(plainDictsPath, topDirectory))
-        except Exception, e:
+        except Exception(e):
             raise _("Error while removing created directories after " \
                     "plugin installation failure. This may be " \
                     "permission or disk space error.")
@@ -420,8 +420,8 @@ def removePlainDictionary(dictInstance):
 
     try:
         shutil.rmtree(dictDir)
-    except Exception, e:
-        raise Exception, str(e)
+    except Exception(e):
+        raise Exception(str(e))
 
 
 def removePluginDictionary(dictInstance):
@@ -434,6 +434,6 @@ def removePluginDictionary(dictInstance):
 
     try:
         shutil.rmtree(dictDir)
-    except Exception, e:
-        raise Exception, str(e)
+    except Exception(e):
+        raise Exception(str(e))
     

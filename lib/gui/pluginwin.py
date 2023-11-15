@@ -552,7 +552,7 @@ class PluginManagerWindow(wx.Frame):
            xmlData += downloader.getBytes()
 
            systemLog(INFO, "Finished downloading list")
-       except Exception, e:
+       except Exception(e):
            traceback.print_exc()
            progressDialog.Destroy()
            error = _("Unable to download list from %s: %s") \
@@ -639,7 +639,7 @@ class PluginManagerWindow(wx.Frame):
                removeDictionary = installer.removePlainDictionary
 
            removeDictionary(dictInstance)
-       except Exception, e:
+       except Exception(e):
            traceback.print_exc()
            title = _("Unable to remove")
            msg = _("Unable to remove dictionary \"%s\"") % dictName
@@ -718,11 +718,11 @@ class PluginManagerWindow(wx.Frame):
            if len(bytes):
                fd.write(bytes)
            
-	   progressDialog.Destroy()
-	   downloader.stop()
+           progressDialog.Destroy()
+           downloader.stop()
 
 
-       except Exception, e:
+       except Exception(e):
            traceback.print_exc()
            progressDialog.Destroy()
 
@@ -767,7 +767,7 @@ class PluginManagerWindow(wx.Frame):
                else:
                    installer.removePlainDictionary(dictInstance)
 
-           except Exception, e:
+           except Exception(e):
                traceback.print_exc()
                title = _("Error")
                msg = _("Unable to remove old version of \"%s\". "
@@ -793,7 +793,7 @@ class PluginManagerWindow(wx.Frame):
                # FIXME: Code-wasting. Separated duplicated code into
                # functions.
            
-       except Exception, e:
+       except Exception(e):
            traceback.print_exc()
            title = _("Unable to install")
            msg = _("Unable to install dictionary \"%s\".") \

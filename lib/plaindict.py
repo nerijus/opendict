@@ -40,7 +40,7 @@ class PlainDictInfo:
     def __init__(self, directory):
         """Store configuration data"""
 
-        raise Exception, "PlainDictInfo is deprecated"
+        raise Exception("PlainDictInfo is deprecated")
 
         self.config = xmltools.parsePlainDictConfig(\
                 os.path.join(directory,
@@ -125,7 +125,7 @@ class PlainDictInfo:
                 data = fd.read()
                 fd.close()
                 return data
-            except Exception, e:
+            except Exception(e):
                 systemLog(ERROR, "Unable to read licence file for %s: %" \
                           % (self.getName(), e))
                 return errMsg
@@ -198,7 +198,7 @@ class PlainDictionary(meta.Dictionary):
                 data = fd.read()
                 fd.close()
                 return data
-            except Exception, e:
+            except Exception(e):
                 systemLog(ERROR, "Unable to read licence file for %s: %" \
                           % (self.getName(), e))
                 return errMsg
@@ -261,8 +261,8 @@ def _loadPlainDictionary(directory):
                 Parser = t.getClass()
 
         if not Parser:
-            raise Exception, "This is internal error and should not happen: " \
-                  "no parser class found for dictionary in %s" % directory
+            raise Exception("This is internal error and should not happen: " \
+                  "no parser class found for dictionary in %s" % directory)
 
         filePath = config.get('path')
         fileName = os.path.basename(filePath)
@@ -281,7 +281,7 @@ def _loadPlainDictionary(directory):
 
             
         if not filePath:
-            raise Exception, "Dictionary file not found: %s" % fileName
+            raise Exception("Dictionary file not found: %s" % fileName)
 
         dictionary = Parser(filePath)
         dictionary.setEncoding(config.get('encoding'))
@@ -292,7 +292,7 @@ def _loadPlainDictionary(directory):
         dictionary.setLicenceFile(config.get('licence'))
         dictionary.setDescription(config.get('description'))
 
-    except Exception, e:
+    except Exception(e):
         traceback.print_exc()
 
     util.correctDictName(dictionary)
@@ -370,7 +370,7 @@ def makeIndex(dictionary, currentlySetEncoding):
     fd = open(filePath)
 
     index = {}
-    count = 0L
+    count = 0
     linenum = -1
     
     for line in fd:
@@ -384,16 +384,16 @@ def makeIndex(dictionary, currentlySetEncoding):
                                   currentlySetEncoding)[:2].lower()
                 dictionary.setEncoding(currentlySetEncoding)
             except:
-                raise Exception, "Unable to encode data in %s nor %s " \
+                raise Exception("Unable to encode data in %s nor %s " \
                       "at line %d" \
                       % (dictionary.getEncoding(), currentlySetEncoding,
-                         linenum)
+                         linenum))
 
         # Ignore if control character found
         if literal and not literal in index.keys() and literal[0] > u'\x19':
             try:
                 index[literal] = count
-            except Exception, e:
+            except Exception(e):
                 systemLog(ERROR, e)
 
         count += len(line)
@@ -426,7 +426,7 @@ def loadIndex(dictionary):
     if os.path.exists(dictIndex):
         index = xmltools.parseIndexFile(dictIndex)
     if not index:
-        raise Exception, "Index for %s does not exist" % dictionary.getName()
+        raise Exception("Index for %s does not exist" % dictionary.getName())
 
     return index
      

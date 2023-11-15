@@ -93,9 +93,9 @@ class Editor:
             for line in fd:
                 try:
                     line = unicode(line, self.encoding)
-                except Exception, e:
-                    raise Exception, "Unable to encode text in %s" \
-                          % self.encoding
+                except Exception(e):
+                    raise Exception("Unable to encode text in %s" \
+                          % self.encoding)
                 
                 word, end = line.split('=')
                 word = word.strip()
@@ -124,8 +124,8 @@ class Editor:
 
             fd.close()
 
-        except Exception, e:
-            raise Exception, "Unable to read dictionary: %s" % e
+        except Exception(e):
+            raise Exception("Unable to read dictionary: %s" % e)
 
 
     def save(self, filePath=None):
@@ -148,9 +148,9 @@ class Editor:
                         chunks.append(trans)
                 outstr += u' ; '.join(chunks) + u' ;'
                 outstr = outstr.encode(self.encoding)
-                print >> fd, outstr
-        except Exception, e:
-            raise Exception, "Unable to save dictionary: %s" % e
+                print(outstr, file=fd)
+        except Exception(e):
+            raise Exception("Unable to save dictionary: %s" % e)
 
 
     def getUnit(self, word):

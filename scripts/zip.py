@@ -12,9 +12,9 @@ def compress(z, dir):
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print "Usage: %s <zip file> <directory>" % sys.argv[0]
+        print("Usage: %s <zip file> <directory>" % sys.argv[0])
         sys.exit(1)
 
-    print "Packing '%s' to '%s'..." % (sys.argv[2], sys.argv[1]),
-    compress(sys.argv[1], sys.argv[2])
+    print("Packing '%s' to '%s'..." % (sys.argv[2], sys.argv[1]),
+    compress(sys.argv[1], sys.argv[2]), file=sys.stderr)
     print "done"

@@ -170,7 +170,7 @@ class SlowoParser(plaindict.PlainDictionary):
       #
       # Seek to the beginning of the block
       #
-      position = 0L
+      position = 0
       if word_lowered[:2] in encodedIndex.keys():
          position = encodedIndex[word_lowered[:2]]
 
@@ -203,7 +203,7 @@ class SlowoParser(plaindict.PlainDictionary):
             end = ""
             try:
                 orig, end = line.split('=', 1)
-            except ValueError, e:
+            except ValueError(e):
                 systemLog(ERROR, '%s (line %s)' % (e, line))
             orig = orig.strip()
             chunks = end.split(';')
@@ -417,7 +417,7 @@ class MovaParser(plaindict.PlainDictionary):
       #
       # Seek to the beginning of the block
       #
-      position = 0L
+      position = 0
       if word_lowered[:2] in encodedIndex.keys():
          position = encodedIndex[word_lowered[:2]]
 

@@ -68,8 +68,8 @@ class TestDictionaryPlugin(unittest.TestCase):
         self.assertEquals(p.info.__class__, newplugin.PluginInfo)
         self.assertEquals(len(p.dictionary.search('x').words), 20)
 
-        self.assertRaises(newplugin.InvalidPluginException,
-                          newplugin.DictionaryPlugin, 'blabla')
+        self.assertRaises(newplugin.InvalidPluginException(
+                          newplugin.DictionaryPlugin, 'blabla'))
                                         
 
 

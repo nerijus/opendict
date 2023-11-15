@@ -608,7 +608,7 @@ class DictEditorWindow(wx.Frame):
             
             try:
                 self.editor.load(self.filePath)
-            except Exception, e:
+            except Exception(e):
                 wx.EndBusyCursor()
                 traceback.print_exc()
                 title = _("Open Failed")

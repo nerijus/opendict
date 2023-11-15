@@ -34,23 +34,13 @@ def main_is_frozen():
 	    hasattr(sys, "importers") # old py2exe
 	    or imp.is_frozen("__main__")) # tools/freeze
 
-# If application is not frozen to binary, try selecting wxPython 3.0 or 2.8
-# on multiversioned wxPython installation.
-if not main_is_frozen():
-    try:
-        import wxversion
-        wxversion.select(["2.8-unicode", "3.0"])
-    except Exception, e:
-        print "You seem to have an unsupported wxPython version: %s" \
-              % e
-
 try:
     import wx
 except ImportError:
-    print >> sys.stderr, "**"
-    print >> sys.stderr, "** Error: wxPython library not found"
-    print >> sys.stderr, "** Please install wxPython 2.8 or later to run OpenDict"
-    print >> sys.stderr, "**"
+    print("**", file=sys.stderr)
+    print("** Error: wxPython library not found", file=sys.stderr)
+    print("** Please install wxPython 2.8 or later to run OpenDict", file=sys.stderr)
+    print("**", file=sys.stderr)
     sys.exit(1)
 
 
@@ -58,7 +48,7 @@ except ImportError:
 # directory name of the exe
 def get_main_dir():
     if main_is_frozen():
-	return os.path.dirname(sys.executable)
+        return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.realpath(__file__))
     # or return os.path.dirname(sys.argv[0])
 
@@ -93,7 +83,7 @@ class OpenDictApp(wx.App):
       wx.Version = []
       try:
           wx.Version = wx.__version__
-      except Exception, e:
+      except Exception(e):
           try:
               wx.Version = wx.Python.__version__
           except:
@@ -176,8 +166,8 @@ class OpenDictApp(wx.App):
           systemLog(INFO, "Global home: %s:" % info.GLOBAL_HOME)
           systemLog(INFO, "Local home: %s" % info.LOCAL_HOME)
           systemLog(DEBUG, "Loaded in %f seconds" % (time.time() - _start))
-      except Exception, e:
-          print "Logger Error: Unable to write to log (%s)" % e
+      except Exception(e):
+          print("Logger Error: Unable to write to log (%s)" % e)
 
       self.window.Show(True)
 

@@ -28,7 +28,7 @@ def parsePluginConfig(xmlData):
     pluginType = pluginElement.getAttribute('type')
 
     if pluginType != 'dictionary':
-        raise Exception, "Plugin is not dictionary plugin"
+        raise Exception("Plugin is not dictionary plugin")
 
     # Get name
     for nameElement in doc.getElementsByTagName('name'):
@@ -166,7 +166,7 @@ def listFiles(start, followLinks, myDepth, maxDepth):
         dirList = os.listdir(start)
     except:
         if os.path.isdir(start):
-            print 'ERROR: Cannot list directory %s' % start
+            print('ERROR: Cannot list directory %s' % start)
         return files
     
     for item in dirList:
@@ -200,8 +200,8 @@ def main():
     """Main procedure"""
     
     if len(sys.argv) < 3:
-        print "Usage: %s <directory> <base URL>" % sys.argv[0]
-        print "(Example: '%s . http://xxx.yyy.net/dicts')" % sys.argv[0]
+        print("Usage: %s <directory> <base URL>" % sys.argv[0])
+        print("(Example: '%s . http://xxx.yyy.net/dicts')" % sys.argv[0])
         sys.exit(1)
 
     d = sys.argv[1]
@@ -212,19 +212,19 @@ def main():
 
         try:
             zipFile = zipfile.ZipFile(filePath, 'r')
-        except Exception, e:
-            print "ERROR: %s: %s" % (filePath, e)
+        except Exception(e):
+            print("ERROR: %s: %s" % (filePath, e))
             continue
         
         # Test CRC
         if zipFile.testzip():
-            raise Exception, _("Dictionary plugin file is corrupted")
+            raise Exception(_("Dictionary plugin file is corrupted"))
         
         # Check if empty
         try:
             topDirectory = zipFile.namelist()[0]
-        except Exception, e:
-            raise Exception, _("Plugin file is empty (%s)" % e)
+        except Exception(e):
+            raise Exception(_("Plugin file is empty (%s)" % e))
         
         # Check for validity
         for fileInZip in zipFile.namelist():
@@ -263,7 +263,7 @@ def main():
                                            md5sum=checksum,
                                            size=sz))
 
-        print "* %s" % filePath
+        print("* %s" % filePath)
 
     doc = makeDocument(xmlElements)
     fd = open('opendict-add-ons.xml', 'w')

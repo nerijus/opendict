@@ -50,7 +50,7 @@ class LicenseWindow(wx.Frame):
          fd = open(os.path.join(info.GLOBAL_HOME, 'copying.html'))
          data = fd.read()
          fd.close()
-      except Exception, e:
+      except Exception(e):
          systemLog(ERROR, "Unable to read licence file: %s" % e)
          data = "Error: <i>licence file not found</i>"
 

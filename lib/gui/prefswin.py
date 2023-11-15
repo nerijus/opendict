@@ -57,7 +57,7 @@ class PrefsWindow(wx.Dialog):
 
       try:
          map(enc.toWX, dictNames)
-      except Exception, e:
+      except Exception(e):
          systemLog(ERROR, "Unable to decode titles to UTF-8 (%s)" % e)
       
       self.dictChooser = wx.ComboBox(self, 1100,

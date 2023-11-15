@@ -115,7 +115,7 @@ def makeDirectories():
             systemLog(DEBUG, "%s does not exist, creating..." \
                       % info.LOCAL_HOME)
             os.mkdir(info.LOCAL_HOME)
-        except Exception, e:
+        except Exception(e):
             systemLog(ERROR, "Unable to create %s (%s)" % (info.LOCAL_HOME, e))
 
     if not os.path.exists(os.path.join(info.LOCAL_HOME, info.__DICT_DIR)):
@@ -123,7 +123,7 @@ def makeDirectories():
             systemLog(DEBUG, "%s does not exist, creating..." \
                   % os.path.join(info.LOCAL_HOME, info.__DICT_DIR))
             os.mkdir(os.path.join(info.LOCAL_HOME, info.__DICT_DIR))
-        except Exception, e:
+        except Exception(e):
             systemLog(ERROR, "Unable to create %s (%s)" \
                   % (os.path.join(info.LOCAL_HOME, info.__DICT_DIR), e))
 
@@ -131,14 +131,14 @@ def makeDirectories():
         try:
             systemLog(DEBUG, "%s does not exist, creating..." % plainDir)
             os.mkdir(plainDir)
-        except Exception, e:
+        except Exception(e):
             systemLog(ERROR, "Unable to create %s (%s)" % (plainDir, e))
 
     
     if not os.path.exists(pluginDir):
         try:
             os.mkdir(pluginDir)
-        except Exception, e:
+        except Exception(e):
             systemLog(ERROR, "Unable to create %s (%s)" % (pluginDir, e))
 
 
@@ -219,7 +219,7 @@ class DownloadThread:
             self.statusMessage = _("Connecting to %s...") % serverName
             self.up = urllib2.urlopen(self.url)
             fileSize = int(self.up.info().getheader('Content-length'))
-        except Exception, e:
+        except Exception(e):
             self.errorMessage = "Unable to connect to %s" % serverName
             self.done = True
             return
@@ -238,7 +238,7 @@ class DownloadThread:
             self.up.close()
             self.done = True
             self.statusMessage = _("Done")
-        except Exception, e:
+        except Exception(e):
             self.errorMessage = "Error while fetching data from %s: %s" \
                                 % (self.url, e)
             self.done =  True
@@ -260,7 +260,7 @@ class AgreementsManager:
     def addAgreement(self, dictConfigPath):
         """Mark dictionary licence as accepted"""
 
-	dictConfigPath = os.path.realpath(dictConfigPath)
+        dictConfigPath = os.path.realpath(dictConfigPath)
 
         if not dictConfigPath in self.dictPaths:
             self.dictPaths.append(dictConfigPath)
@@ -271,7 +271,7 @@ class AgreementsManager:
         """Mark dictionary licence as rejected,
         i.e. remove from accepted list"""
 
-	dictConfigPath = os.path.realpath(dictConfigPath)
+        dictConfigPath = os.path.realpath(dictConfigPath)
 
         if dictConfigPath in self.dictPaths:
             self.dictPaths.remove(dictConfigPath)
@@ -281,7 +281,7 @@ class AgreementsManager:
     def getAccepted(self, dictConfigPath):
         """Return True if dictionary licence is marked as accepted"""
 
-	dictConfigPath = os.path.realpath(dictConfigPath)
+        dictConfigPath = os.path.realpath(dictConfigPath)
 
         if dictConfigPath in self.dictPaths:
             return True
@@ -316,7 +316,7 @@ class AgreementsManager:
 
         fd = open(self.filePath, 'w')
         for path in self.dictPaths:
-            print >> fd, path
+            print(path, file=fd)
         fd.close()
 
 
@@ -334,8 +334,8 @@ def correctDictName(dictInstance):
             try:
                 if n.startswith(name):
                     matches += 1
-            except Exception, e:
-                print "WARNING:", e
+            except Exception(e):
+                print("WARNING:", e)
         return matches
 
     import wx

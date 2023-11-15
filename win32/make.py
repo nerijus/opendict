@@ -17,11 +17,11 @@ command = "C:\\python24\\python.exe setup.py py2exe -w " \
           "--icon ..\\pixmaps\\icon.ico -i %s " \
           "--packages encodings --force-imports encodings" % (odlist+list)
 #command = "C:\\python22\\python.exe setup.py py2exe  --icon ..\\pixmaps\\icon.ico"
-print "Command: '%s'\n" % command
+print("Command: '%s'\n" % command)
 
 out = os.popen(command)
 
-print "\"dist\" directory will be created."
-print "Compiling, will take a minute...\n", out.read()
+print("\"dist\" directory will be created.")
+print("Compiling, will take a minute...\n", out.read())
 
 raw_input("<Enter>...")

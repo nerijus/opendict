@@ -122,7 +122,7 @@ class DictDB:
         elif mode == 'write':
             self.indexfile = open(self.indexfilename, "wt")
             if self.usecompression:
-                raise ValueError, "'write' mode incompatible with .dz files"
+                raise ValueError("'write' mode incompatible with .dz files")
             else:
                 self.dictfile = open(self.dictfilename, "wb")
         elif mode == 'update':
@@ -140,7 +140,7 @@ class DictDB:
                     self.dictfile = open(self.dictfilename, "w+b")
             self._initindex()
         else:
-            raise ValueError, "mode must be 'read', 'write', or 'update'"
+            raise ValueError("mode must be 'read', 'write', or 'update'")
 
         #self.writeentry(url_headword + "\n     " + url, [url_headword])
         #self.writeentry(short_headword + "\n     " + shortname,

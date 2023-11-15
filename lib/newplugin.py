@@ -68,7 +68,7 @@ class PluginInfo:
         pluginType = pluginElement.getAttribute('type')
 
         if pluginType != 'dictionary':
-            raise Exception, "Plugin is not dictionary plugin"
+            raise Exception("Plugin is not dictionary plugin")
 
         # Get name
         for nameElement in doc.getElementsByTagName('name'):
@@ -151,13 +151,13 @@ class DictionaryPlugin(meta.Dictionary):
 
         try:
             self.info = self._loadInfo(path)
-        except Exception, e:
-            raise InvalidPluginException, e
+        except Exception(e):
+            raise InvalidPluginException(e)
 
         try:
             self.dictionary = self._loadPlugin(path)
-        except Exception, e:
-            raise InvalidPluginException, e
+        except Exception(e):
+            raise InvalidPluginException(e)
 
 
     def getType(self):
@@ -247,7 +247,7 @@ class DictionaryPlugin(meta.Dictionary):
                 fd = open(os.path.join(self.getPath(), self.info.licenceFile))
                 data = fd.read()
                 fd.close()
-            except Exception, e:
+            except Exception(e):
                 systemLog(ERROR, "Unable to read licence file: %s" % e)
                 data = 'Error: <i>Licence file not found</i>'
         else:
@@ -272,9 +272,9 @@ class DictionaryPlugin(meta.Dictionary):
 
             info = PluginInfo(xmlData)
             return info
-        except Exception, e:
-            raise InvalidPluginException, \
-                  "Unable to load plugin info (%s)" % e
+        except Exception(e):
+            raise InvalidPluginException(\
+                  "Unable to load plugin info (%s)" % e)
     
 
     def _loadPlugin(self, path):
@@ -328,7 +328,7 @@ def _loadDictionaryPlugin(directory):
     try:
         plugin = DictionaryPlugin(directory)
         util.correctDictName(plugin)
-    except InvalidPluginException, e:
+    except InvalidPluginException(e):
         systemLog(ERROR, "Unable to load plugin from %s (%s)" % (directory, e))
 
     return plugin

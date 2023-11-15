@@ -7,13 +7,13 @@
 import sys
 
 if len(sys.argv) < 3:
-    print "Usage: %s <dict_file> <hash_file>" % sys.argv[0]
+    print("Usage: %s <dict_file> <hash_file>" % sys.argv[0])
     sys.exit(1)
 
 fdDict = open(sys.argv[1])
 fdHash = open(sys.argv[2], "w")
  
-print "Indexing..."
+print("Indexing...")
 
 hash = {}
 

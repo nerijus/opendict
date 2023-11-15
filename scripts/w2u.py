@@ -15,7 +15,7 @@ def w2u(args):
       files.extend(glob.glob(arg))
 
    for fname in files:
-      print "Working on %s..." % fname
+      print("Working on %s..." % fname)
       old = open(fname)
    
       data = ""
@@ -32,7 +32,7 @@ def w2u(args):
 if __name__ == "__main__":
 
    if len(sys.argv) < 2:
-      print "Usage: %s <file1> [file2] [file3] ..." % sys.argv[0]
+      print("Usage: %s <file1> [file2] [file3] ..." % sys.argv[0])
       sys.exit(1)
 
    w2u(sys.argv[1:])

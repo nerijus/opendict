@@ -25,15 +25,15 @@ def count(file):
                 continue
         code += 1
 
-    print "%s:" % file
-    print "   Number of lines: ", all
-    print "   Number of code lines:", code
+    print("%s:" % file)
+    print("   Number of lines: ", all)
+    print("   Number of code lines:", code)
 
     return (all, code)
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        print "Usage: %s <file> [file1] [file2] ..." % sys.argv[0]
+        print("Usage: %s <file> [file1] [file2] ..." % sys.argv[0])
         sys.exit(1)
 
     lines = 0
@@ -45,5 +45,5 @@ if __name__ == "__main__":
             lines += new[0]
             code += new[1]
 
-    print "\nTotal number of lines: %d" % lines
-    print "Total number of code lines: %d" % code
+    print("\nTotal number of lines: %d" % lines)
+    print("Total number of code lines: %d" % code)

@@ -58,10 +58,10 @@ def systemLog(messageType, message):
 
     try:
         fd = open(_systemLogFile, 'a+')
-        print >> fd, dateStr, typeStr, message
+        print(dateStr, typeStr, message, file=fd)
         fd.close()
-    except Exception, e:
-        print "LOGGER ERROR: Unable to write message '%s'" % repr(message)
+    except Exception(e):
+        print("LOGGER ERROR: Unable to write message '%s'" % repr(message))
 
 
 def debugLog(messageType, message):
@@ -80,5 +80,5 @@ def debugLog(messageType, message):
     elif messageType == DEBUG:
         typeStr = 'DEBUG'
 
-    print dateStr, typeStr, message
+    print(dateStr, typeStr, message)
     

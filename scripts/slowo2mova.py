@@ -18,7 +18,7 @@ def slowo2mova(sfName, mfName):
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print "Usage %s <slowo file> <mova file>" % sys.argv[0]
+        print("Usage %s <slowo file> <mova file>" % sys.argv[0])
         sys.exit(1)
 
     slowo2mova(sys.argv[1], sys.argv[2])

@@ -243,8 +243,8 @@ class DictConnWindow(wx.Frame):
       try:
           enc = misc.encodings[encName]
       except KeyError:
-          print 'Error: invalid encoding name "%s", defaulting to UTF-8' % \
-              encName
+          print('Error: invalid encoding name "%s", defaulting to UTF-8' % \
+              encName)
           enc = 'UTF-8'
           
       self.encoding = (enc, encName)
