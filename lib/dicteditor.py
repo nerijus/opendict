@@ -91,15 +91,9 @@ class Editor:
             fd = open(filePath)
 
             for line in fd:
-                try:
-                    line = unicode(line, self.encoding)
-                except Exception(e):
-                    raise Exception("Unable to encode text in %s" \
-                          % self.encoding)
-                
                 word, end = line.split('=')
                 word = word.strip()
-                
+
                 translation = Translation()
                 translation.setWord(word)
 
@@ -108,7 +102,7 @@ class Editor:
                     chunk = chunk.strip()
                     if not chunk:
                         continue
-                    
+
                     try:
                         trans, comment = chunk.split('//')
                     except:
@@ -124,7 +118,7 @@ class Editor:
 
             fd.close()
 
-        except Exception(e):
+        except Exception as e:
             raise Exception("Unable to read dictionary: %s" % e)
 
 
@@ -149,7 +143,7 @@ class Editor:
                 outstr += u' ; '.join(chunks) + u' ;'
                 outstr = outstr.encode(self.encoding)
                 print(outstr, file=fd)
-        except Exception(e):
+        except Exception as e:
             raise Exception("Unable to save dictionary: %s" % e)
 
 

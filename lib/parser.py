@@ -203,7 +203,7 @@ class SlowoParser(plaindict.PlainDictionary):
             end = ""
             try:
                 orig, end = line.split('=', 1)
-            except ValueError(e):
+            except ValueError as e:
                 systemLog(ERROR, '%s (line %s)' % (e, line))
             orig = orig.strip()
             chunks = end.split(';')
@@ -212,15 +212,15 @@ class SlowoParser(plaindict.PlainDictionary):
             for chunk in chunks:
                comment = []
                trans = chunk.split('//')
-               
+
                if len(trans) > 1:
                   comment = trans[1:]
 
                trans = trans[:1]
-                  
+
                trans = "".join(trans).strip()
                comment = "".join(comment).strip()
-               
+
                if len(trans) and len(comment) != 0:
                   translation.append("<li>%s (<i>%s</i>)</li>" \
                                      % (trans, comment))
@@ -236,14 +236,14 @@ class SlowoParser(plaindict.PlainDictionary):
             continue
 
          if line.lower().startswith(word_lowered):   
-            
+
             if not orig.lower().startswith(word_lowered):
                break
-            
+
             if orig.lower() == word_lowered and not found:
                found = True
                self._appendTranslation(html, orig, translation)               
-               
+
             words.append(orig)
             if len(words) == 1:
                suggestedWord = orig
@@ -252,7 +252,7 @@ class SlowoParser(plaindict.PlainDictionary):
             break
 
       debugLog(DEBUG, "%d lines scanned" % _linesRead)
-      
+
       if not found:
          if words:
             self._appendTranslation(html, suggestedWord, suggestedTrans)

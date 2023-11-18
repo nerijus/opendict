@@ -44,11 +44,10 @@ class PluginLicenceWindow(wx.Dialog):
       htmlWin.SetFonts('Helvetica', 'Fixed', [10]*5)
 
       error = False
-      
+
       try:
-          encodedText = enc.toWX(unicode(msg, 'UTF-8'))
-          htmlWin.SetPage(encodedText)
-      except Exception(e):
+          htmlWin.SetPage(msg)
+      except Exception as e:
           systemLog(ERROR, "Unable to encode/show licence text: %s" % e)
           htmlWin.SetPage(_("Error: <i>unable to show licence text</i>"))
           error = True
@@ -58,7 +57,7 @@ class PluginLicenceWindow(wx.Dialog):
       if not error:
           self.buttonNo = wx.Button(self, wx.ID_CANCEL, _("Do not accept"))
           vboxButtons.Add(self.buttonNo, 0, wx.ALL, 2)
-          
+
           self.buttonYes = wx.Button(self, wx.ID_OK, _("Accept"))
           vboxButtons.Add(self.buttonYes, 0, wx.ALL, 2)
       else:
@@ -98,7 +97,7 @@ class InvalidDictWindow(wx.Dialog):
       vboxButtons = wx.BoxSizer(wx.HORIZONTAL)
       vboxDicts = wx.BoxSizer(wx.VERTICAL)
 
-      grid = wx.FlexGridSizer(2, 2, 5, 5)
+      grid = wx.FlexGridSizer(2, 5, 5)
 
       msg =  _("You have directories that containt invalid dictionaries " \
                "and cannot be loaded. \nYou can try to remove these " \
@@ -109,9 +108,8 @@ class InvalidDictWindow(wx.Dialog):
 
       row = 0
       for d in dicts:
-         grid.Add(wx.StaticText(self, -1, d),
-                  0, wx.ALIGN_CENTER_VERTICAL)
-         rid = wx.NewId()
+         grid.Add(wx.StaticText(self, -1, d), 0, wx.ALIGN_CENTER_VERTICAL)
+         rid = wx.NewIdRef(count=1)
          self.dicts[rid] = d
          b = wx.Button(self, rid, _("Remove"))
          self.buttons[rid] = b
@@ -137,7 +135,7 @@ class InvalidDictWindow(wx.Dialog):
       try:
          shutil.rmtree(path)
          self.buttons[event.GetId()].Disable()
-      except Exception(e):
+      except Exception as e:
          traceback.print_exc()
          title = _("Unable to remove")
          msg = _("Unable to remove directory \"%s\": %s") % (path, e)

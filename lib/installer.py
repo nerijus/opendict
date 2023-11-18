@@ -104,7 +104,7 @@ class Installer:
                         self.mainWin.addDictionary(dictionary)
                         succeeded = True
                         
-                except Exception(e):
+                except Exception as e:
                     errorwin.showErrorMessage(_("Installation failed"),
                                               e.args[0] or '')
                     self.mainWin.SetStatusText(_("Installation failed"))
@@ -117,7 +117,7 @@ class Installer:
                         dictionary = plaindict._loadPlainDictionary(directory)
                         self.mainWin.addDictionary(dictionary)
                         succeeded = True
-                except Exception(e):
+                except Exception as e:
                     traceback.print_exc()
                     errorwin.showErrorMessage(_("Installation Error"),
                                               e.args[0] or '')
@@ -180,11 +180,11 @@ def installPlainDictionary(filePath):
         os.mkdir(os.path.join(dictDir, info.__PLAIN_DICT_CONFIG_DIR))
         os.mkdir(os.path.join(dictDir, info.__PLAIN_DICT_FILE_DIR))
         os.mkdir(os.path.join(dictDir, info._PLAIN_DICT_DATA_DIR))
-    except Exception(e):
+    except Exception as e:
         print("ERROR Unable to create dicrectories, aborted (%s)" % e)
         try:
             shutil.rmtree(dictDir)
-        except Exception(e):
+        except Exception as e:
             print("ERROR Unable to remove directories (%s)" % e)
 
 
@@ -229,7 +229,7 @@ def installPlugin(filePath):
 
     try:
         zipFile = zipfile.ZipFile(filePath, 'r')
-    except Exception(e):
+    except Exception as e:
         raise Exception(_("File \"%s\" is not valid ZIP file") % \
               os.path.basename(filePath))
 
@@ -240,7 +240,7 @@ def installPlugin(filePath):
     # Check if empty
     try:
         topDirectory = zipFile.namelist()[0]
-    except Exception(e):
+    except Exception as e:
         raise Exception(_("Plugin file is empty (%s)") % e)
 
     configFileExists = False
@@ -304,7 +304,7 @@ def _installNormalPlugin(filePath):
         try:
             struct = {}
             exec(data) in struct
-        except Exception(e):
+        except Exception as e:
             title = _("Installation Error")
             msg = _("Installation tool for this dictionary failed to start. " \
                     "Please report this problem to developers.")
@@ -341,10 +341,10 @@ def _installNormalPlugin(filePath):
                 fd = open(fileToWrite, 'wb')
                 fd.write(zipFile.read(fileInZip))
                 fd.close()
-    except Exception(e):
+    except Exception as e:
         try:
             shutil.rmtree(os.path.join(pluginsPath, topLevelDir))
-        except Exception(e):
+        except Exception as e:
             raise _("Error while removing created directories after " \
                     "plugin installation failure. This may be " \
                     "permission or disk space error.")
@@ -393,10 +393,10 @@ def _installPlainPlugin(filePath):
                 fd = open(fileToWrite, 'wb')
                 fd.write(zipFile.read(fileInZip))
                 fd.close()
-    except Exception(e):
+    except Exception as e:
         try:
             shutil.rmtree(os.path.join(plainDictsPath, topDirectory))
-        except Exception(e):
+        except Exception as e:
             raise _("Error while removing created directories after " \
                     "plugin installation failure. This may be " \
                     "permission or disk space error.")
@@ -420,7 +420,7 @@ def removePlainDictionary(dictInstance):
 
     try:
         shutil.rmtree(dictDir)
-    except Exception(e):
+    except Exception as e:
         raise Exception(str(e))
 
 
@@ -434,6 +434,6 @@ def removePluginDictionary(dictInstance):
 
     try:
         shutil.rmtree(dictDir)
-    except Exception(e):
+    except Exception as e:
         raise Exception(str(e))
     

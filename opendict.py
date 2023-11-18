@@ -83,7 +83,7 @@ class OpenDictApp(wx.App):
       wx.Version = []
       try:
           wx.Version = wx.__version__
-      except Exception(e):
+      except Exception as e:
           try:
               wx.Version = wx.Python.__version__
           except:
@@ -105,10 +105,8 @@ class OpenDictApp(wx.App):
 
       util.makeDirectories()
 
-      systemLog(DEBUG, "Unicode version: %s" % wx.USE_UNICODE)
-
       # Init gettext support
-      wx.Locale_AddCatalogLookupPathPrefix(os.path.join(info.GLOBAL_HOME,
+      wx.Locale.AddCatalogLookupPathPrefix(os.path.join(info.GLOBAL_HOME,
                                                        'po'))
       self.locale.Init(wx.LANGUAGE_DEFAULT)
       self.locale.AddCatalog('opendict')
@@ -135,10 +133,10 @@ class OpenDictApp(wx.App):
       # Set unique ids
       for plugin in newplugin.loadDictionaryPlugins(self.dictionaries,
                                                     self.invalidDictionaries):
-         self.config.ids[wx.NewId()] = plugin.getName()
+         self.config.ids[wx.NewIdRef(count=1)] = plugin.getName()
 
       for plain in plaindict.loadPlainDictionaries(self.dictionaries):
-         self.config.ids[wx.NewId()] = plain.getName()
+         self.config.ids[wx.NewIdRef(count=1)] = plain.getName()
 
 
       for d in self.dictionaries.values():
@@ -166,7 +164,7 @@ class OpenDictApp(wx.App):
           systemLog(INFO, "Global home: %s:" % info.GLOBAL_HOME)
           systemLog(INFO, "Local home: %s" % info.LOCAL_HOME)
           systemLog(DEBUG, "Loaded in %f seconds" % (time.time() - _start))
-      except Exception(e):
+      except Exception as e:
           print("Logger Error: Unable to write to log (%s)" % e)
 
       self.window.Show(True)

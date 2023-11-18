@@ -54,9 +54,8 @@ class ActiveDictConfig(object):
         try:
             for line in open(self.filePath):
                 name = line.strip()
-                name = unicode(name, 'UTF-8')
                 self.dicts.append(name)
-        except IOError(e):
+        except IOError as e:
             pass
 
 
@@ -82,18 +81,12 @@ class ActiveDictConfig(object):
     def add(self, name):
         """Add new dictionary to the list."""
 
-        if type(name) == str:
-            name = unicode(name, 'UTF-8')
-
         if not name in self.dicts:
             self.dicts.append(name)
 
 
     def remove(self, name):
         """Remove dictionary from the list."""
-
-        if type(name) == str:
-            name = unicode(name, 'UTF-8')
 
         if name in self.dicts:
             self.dicts.remove(name)
@@ -109,7 +102,7 @@ class Configuration:
 
       self.activedict = ActiveDictConfig()
       self.activedict.load()
-      
+
       self.filePath = os.path.join(info.LOCAL_HOME, "opendict.xml")
       self.props = {}
 
@@ -170,7 +163,7 @@ class Configuration:
       try:
          if os.path.exists(self.filePath):
             self.props.update(xmltools.parseMainConfig(self.filePath))
-      except Exception(e):
+      except Exception as e:
          systemLog(ERROR, "Unable to read configuration file: %s" % e)
 
       # Old configurations may still keep outdated entry, rewrite it

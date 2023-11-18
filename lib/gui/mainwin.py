@@ -80,10 +80,10 @@ class HtmlWindow(wx.html.HtmlWindow):
       wx.BeginBusyCursor()
       parent = self.GetParent().GetParent().GetParent()
 
-      word = enc.fromWX(lastLookupWord)
+      word = lastLookupWord
       try:
          word = word.encode(parent.activeDictionary.getEncoding())
-      except Exception(e):
+      except Exception as e:
          # FIXME: Code duplicates
          traceback.print_exc()
          parent.buttonStop.Disable()
@@ -91,25 +91,25 @@ class HtmlWindow(wx.html.HtmlWindow):
          parent.timerSearch.Stop()
          parent.SetStatusText(_('Stopped'))
          wx.EndBusyCursor()
-         
+
          systemLog(ERROR, "Unable to decode '%s': %s" % (word.encode('UTF-8'),
                                                          e))
          title = _("Encode Failed")
          msg = _("Unable to encode text \"%s\" in %s for \"%s\".") \
-                 % (enc.toWX(word), parent.activeDictionary.getEncoding(),
+                 % (word, parent.activeDictionary.getEncoding(),
                  parent.activeDictionary.getName())
-                    
+
          errorwin.showErrorMessage(title, msg)
 
          return
-      
+
       parent.SetStatusText(_("Searching..."))
       parent.entry.SetValue(word)
       parent.timerSearch.Start(parent.delay)
       parent.search = Process(parent.activeDictionary.search,
                               word)
 
-      
+
 
 class MainWindow(wx.Frame):
 
@@ -127,7 +127,7 @@ class MainWindow(wx.Frame):
       self.activeDictionary = None
       self.words = []
       self.delay = 10 # miliseconds
-      
+
       self.lastInstalledDictName = None
 
       # This var is used by onTimerSearch to recognize search method.
@@ -149,23 +149,23 @@ class MainWindow(wx.Frame):
       #
       menuFile = wx.Menu()
 
-      idPrint = wx.NewId()
+      idPrint = wx.NewIdRef(count=1)
       #menuFile.Append(idPrint, _("Print Translation"), "")
 
-      idPreview = wx.NewId()
+      idPreview = wx.NewIdRef(count=1)
       #menuFile.Append(idPreview, _("Print Preview"), "")
 
-      idFind = wx.NewId()
+      idFind = wx.NewIdRef(count=1)
       menuFile.Append(idFind, _("Look Up\tCtrl-U"),
                       _("Lookup up word in the dictionary"))
-      
+
       menuFile.AppendSeparator()
 
-      idCloseDict = wx.NewId()
+      idCloseDict = wx.NewIdRef(count=1)
       menuFile.Append(idCloseDict, _("&Close Dictionary\tCtrl-W"),
                       _("Close opened dicitonary"))
 
-      idExit = wx.NewId()
+      idExit = wx.NewIdRef(count=1)
       menuFile.Append(idExit, _("E&xit\tCtrl-Q"),
                       _("Exit program"))
 
@@ -176,10 +176,10 @@ class MainWindow(wx.Frame):
       #
       # Clear functions
       #
-      idClearEntry = wx.NewId()
+      idClearEntry = wx.NewIdRef(count=1)
       menuEdit.Append(idClearEntry, _("&Clear Search Entry\tCtrl-L"))
 
-      idClearHistory = wx.NewId()
+      idClearHistory = wx.NewIdRef(count=1)
       menuEdit.Append(idClearHistory, _("Clear History"))
 
       menuEdit.AppendSeparator()
@@ -187,17 +187,17 @@ class MainWindow(wx.Frame):
       #
       # Clipboard functions
       #
-      idCopy = wx.NewId()
+      idCopy = wx.NewIdRef(count=1)
       menuEdit.Append(idCopy, _("Copy\tCtrl-C"),
                       _("Copy selected translation text"))
 
-      idPaste = wx.NewId()
+      idPaste = wx.NewIdRef(count=1)
       menuEdit.Append(idPaste, _("Paste\tCtrl-V"),
                       _("Paste clipboard text into the search entry"))
-      
+
       menuEdit.AppendSeparator()
 
-      idPrefs = wx.NewId()
+      idPrefs = wx.NewIdRef(count=1)
       menuEdit.Append(idPrefs, _("Preferences...\tCtrl-P"), _("Edit preferences"))
 
       self.menuBar.Append(menuEdit, _("&Edit"))
@@ -205,7 +205,7 @@ class MainWindow(wx.Frame):
 
       #
       # View menu
-      #      
+      #
       menuView = wx.Menu()
 
       # Font size
@@ -217,28 +217,28 @@ class MainWindow(wx.Frame):
       self.menuFontSize.AppendSeparator()
       self.menuFontSize.Append(2009, _("Normal\tCtrl-0"),
                                _("Set normal text size"))
-      menuView.AppendMenu(2002, _("Font Size"), self.menuFontSize)
+      menuView.Append(2002, _("Font Size"), self.menuFontSize)
 
       # Font face
       self.menuFontFace = wx.Menu()
       i = 0
-      keys = misc.fontFaces.keys()
+      keys = list(misc.fontFaces.keys())
       keys.sort()
-      
+
       for face in keys:
          self.menuFontFace.AppendRadioItem(2500+i, face, "")
          wx.EVT_MENU(self, 2500+i, self.onDefault)
          if self.app.config.get('fontFace') == misc.fontFaces[face]:
             self.menuFontFace.FindItemById(2500+i).Check(1)
          i+=1
-         
-      menuView.AppendMenu(2001, _("Font Face"), self.menuFontFace)
-      
+
+      menuView.Append(2001, _("Font Face"), self.menuFontFace)
+
 
       # Font encoding
       self.menuEncodings = wx.Menu()
       i = 0
-      keys = misc.encodings.keys()
+      keys = list(misc.encodings.keys())
       keys.sort()
       for encoding in keys:
          self.menuEncodings.AppendRadioItem(2100+i , encoding, "")
@@ -246,26 +246,26 @@ class MainWindow(wx.Frame):
          if self.app.config.get('encoding') == misc.encodings[encoding]:
             self.menuEncodings.FindItemById(2100+i).Check(1)
          i+=1
-         
-      menuView.AppendMenu(2000, _("Character Encoding"), self.menuEncodings)
-      
+
+      menuView.Append(2000, _("Character Encoding"), self.menuEncodings)
+
       menuView.AppendSeparator()
 
-      idShowHide = wx.NewId()
+      idShowHide = wx.NewIdRef(count=1)
       menuView.Append(idShowHide, _("Show/Hide Word List...\tCtrl-H"), 
             _("Show or hide word list"))
-      
+
 
       self.menuBar.Append(menuView, _("&View"))
 
-      
+
       #
       # Dictionaries menu
       #
       self.menuDict = wx.Menu()
 
       dicts = []
-      for dictionary in self.app.dictionaries.values():
+      for dictionary in list(self.app.dictionaries.values()):
          dicts.append([dictionary.getName(), dictionary.getActive()])
       dicts.sort()
       
@@ -275,30 +275,28 @@ class MainWindow(wx.Frame):
          if not active:
              continue
 
-         encoded = enc.toWX(name)
-
-         itemID = self.app.config.ids.keys()[\
-            self.app.config.ids.values().index(name)]
+         itemID = list(self.app.config.ids.keys())[\
+            list(self.app.config.ids.values()).index(name)]
 
          try:
 #            item = wx.MenuItem(self.menuDict,
 #                              itemID,
-#                              encoded)
+#                              name)
 #            self.menuDict.AppendItem(item)
-            self.menuDict.AppendRadioItem(itemID, encoded, "")
+            self.menuDict.AppendRadioItem(itemID, name, "")
             wx.EVT_MENU(self, itemID, self.onDefault)
             if self.app.config.get('defaultDict') == name:
                self.menuDict.FindItemById(itemID).Check(1)
-		
-         except Exception(e):
+
+         except Exception as e:
             systemLog(ERROR, "Unable to create menu item for '%s' (%s)" \
                   % (name, e))
 
       self.menuDict.AppendSeparator()
 
-      idAddDict = wx.NewId()
+      idAddDict = wx.NewIdRef(count=1)
       self.menuDict.Append(idAddDict, _("&Install Dictionary From File..."))
-      
+
       self.menuBar.Append(self.menuDict, _("&Dictionaries"))
 
 
@@ -307,37 +305,37 @@ class MainWindow(wx.Frame):
       #
       menuTools = wx.Menu()
 
-      idManageDict = wx.NewId()
+      idManageDict = wx.NewIdRef(count=1)
       menuTools.Append(idManageDict, _("Manage Dictionaries...\tCtrl-M"),
                       _("Install or remove dictionaries"))
 
       menuTools.Append(5002, _("Create Dictionaries..."),
                        _("Create and edit dictionaries"))  
-                           
+
       menuTools.AppendSeparator()
 
-      idUseScan = wx.NewId()
+      idUseScan = wx.NewIdRef(count=1)
       item = wx.MenuItem(menuTools,
                         idUseScan,
                         _("Take Words From Clipboard"),
                         _("Scan the clipboard for text to translate"),
                         wx.ITEM_CHECK)
-      menuTools.AppendItem(item)
+      menuTools.Append(item)
       menuTools.Check(idUseScan, self.app.config.get('useClipboard') == 'True')
 
       menuTools.AppendSeparator()
 
-      idDictServer = wx.NewId()
+      idDictServer = wx.NewIdRef(count=1)
       menuTools.Append(idDictServer, _("Connect to DICT Server..."),
                           _("Open connection to DICT server"))
 
       menuTools.AppendSeparator()
 
-      idPron = wx.NewId()
+      idPron = wx.NewIdRef(count=1)
       menuTools.Append(idPron, _("Pronounce\tCtrl-E"),
           _("Pronounce word"))  
-                           
-      
+
+
       self.menuBar.Append(menuTools, _("Tools"))
 
 
@@ -346,7 +344,7 @@ class MainWindow(wx.Frame):
       #
       menuHelp = wx.Menu()
 
-      idAbout = wx.NewId()
+      idAbout = wx.NewIdRef(count=1)
       menuHelp.Append(idAbout, _("&About\tCtrl-A"))
 
       self.menuBar.Append(menuHelp, _("&Help"))
@@ -355,18 +353,18 @@ class MainWindow(wx.Frame):
 
       # Search Bar
       labelWord = wx.StaticText(self, -1, _("Word:"))
-      self.hboxToolbar.Add(labelWord, 0, wx.ALL | wx.CENTER | wx.ALIGN_RIGHT, 5)
-      
+      self.hboxToolbar.Add(labelWord, 0, wx.ALL | wx.CENTER, 5)
+
       self.entry = wx.ComboBox(self, 153, "", wx.Point(-1, -1),
                               wx.Size(-1, -1), [], wx.CB_DROPDOWN)
-      self.entry.SetToolTipString(_("Enter some text and press " \
+      self.entry.SetToolTip(_("Enter some text and press " \
                                     "\"Look Up\" button or "
                                     "[ENTER] key on your keyboard"))
       self.hboxToolbar.Add(self.entry, 1, wx.ALL | wx.CENTER, 1)
 
       #self.buttonSearch = wx.Button(self, wx.ID_FIND)
       self.buttonSearch = wx.Button(self, idFind, _("Look Up"))
-      self.buttonSearch.SetToolTipString(_("Click this button to look " \
+      self.buttonSearch.SetToolTip(_("Click this button to look " \
                                            "up word in " \
                                            "the dictionary"))
       
@@ -377,7 +375,7 @@ class MainWindow(wx.Frame):
                      wx.BITMAP_TYPE_PNG)
       self.buttonBack = wx.BitmapButton(self, 2010, bmp, (24, 24),
                                          style=wx.NO_BORDER)
-      self.buttonBack.SetToolTipString(_("History Back"))
+      self.buttonBack.SetToolTip(_("History Back"))
       self.buttonBack.Disable()
       self.hboxToolbar.Add(self.buttonBack, 0, wx.ALL | wx.CENTER, 1)
 
@@ -386,7 +384,7 @@ class MainWindow(wx.Frame):
                      wx.BITMAP_TYPE_PNG)
       self.buttonForward = wx.BitmapButton(self, 2011, bmp, (24, 24),
                                          style=wx.NO_BORDER)
-      self.buttonForward.SetToolTipString(_("History Forward"))
+      self.buttonForward.SetToolTip(_("History Forward"))
       self.buttonForward.Disable()
       self.hboxToolbar.Add(self.buttonForward, 0, wx.ALL | wx.CENTER, 1)
 
@@ -396,13 +394,13 @@ class MainWindow(wx.Frame):
                      wx.BITMAP_TYPE_PNG)
       self.buttonStop = wx.BitmapButton(self, 155, bmp, (16, 16),
                                        style=wx.NO_BORDER)
-      self.buttonStop.SetToolTipString(_("Stop searching"))
+      self.buttonStop.SetToolTip(_("Stop searching"))
       self.buttonStop.Disable()
       self.hboxToolbar.Add(self.buttonStop, 0, wx.ALL | wx.CENTER, 1)
 
       # Word list is hidden by default
       self.wlHidden = True
-      
+
       bmp = wx.Bitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "hide.png"),
                      wx.BITMAP_TYPE_PNG)
       self.buttonHide = wx.BitmapButton(self, 152, bmp, (24, 24),
@@ -416,7 +414,7 @@ class MainWindow(wx.Frame):
 
       # List panel
       self.createListPanel()
-      
+
       # Html window panel
       self.panelHtml = wx.Panel(self.splitter, -1)
       sbSizerHtml = wx.StaticBoxSizer(wx.StaticBox(self.panelHtml, -1, 
@@ -430,9 +428,8 @@ class MainWindow(wx.Frame):
 
       self.splitter.SplitVertically(self.panelList, self.panelHtml,
                                     int(self.app.config.get('sashPos')))
-         
+
       self.splitter.SetMinimumPaneSize(90)
-      self.splitter.SetSashSize(5)
 
       if not self.activeDictionary:
          self.hideWordList()
@@ -448,10 +445,10 @@ class MainWindow(wx.Frame):
       self.timerSearch = wx.Timer(self, 5000)
       self.timerLoad = wx.Timer(self, 5001)
 
-      idClipboard = wx.NewId()
+      idClipboard = wx.NewIdRef(count=1)
       self.timerClipboard = wx.Timer(self, idClipboard)
       self.scanTimeout = 2000
-      
+
       self.search = None
       self.load = None
 
@@ -512,7 +509,7 @@ class MainWindow(wx.Frame):
       # Other events
       self.Bind(wx.EVT_BUTTON, self.onSearch, self.buttonSearch)
       wx.EVT_MENU(self, idFind, self.onSearch)
-         
+
       wx.EVT_BUTTON(self, 2010, self.onBack)
       wx.EVT_BUTTON(self, 2011, self.onForward)
       wx.EVT_BUTTON(self, 155, self.onStop)
@@ -520,8 +517,8 @@ class MainWindow(wx.Frame):
       wx.EVT_BUTTON(self, 152, self.onHideUnhide)
       wx.EVT_TEXT_ENTER(self, 153, self.onSearch)
       wx.EVT_LISTBOX(self, 154, self.onWordSelected)
-      wx.EVT_TIMER(self, 5000, self.onTimerSearch)
-      wx.EVT_TIMER(self, idClipboard, self.onTimerClipboard)
+      self.Bind(wx.EVT_TIMER, self.onTimerSearch)
+      self.Bind(wx.EVT_TIMER, self.onTimerClipboard)
       wx.EVT_CLOSE(self, self.onCloseWindow)
 
       self.entry.Bind(wx.EVT_KEY_DOWN, self.onKeyDown)
@@ -639,12 +636,12 @@ class MainWindow(wx.Frame):
          #
          if not result.getTranslation():
             self.SetStatusText(errortype.NOT_FOUND.getMessage())
-            
+
 
          try:
-            transUnicode = unicode(result.translation,
+            transUnicode = str(result.translation,
                                    self.activeDictionary.getEncoding())
-         except Exception(e):
+         except Exception as e:
             systemLog(ERROR, "Unable to decode translation in %s (%s)" \
                       % (self.activeDictionary.getEncoding(),
                          e))
@@ -656,27 +653,24 @@ class MainWindow(wx.Frame):
             self.SetStatusText(title)
             errorwin.showErrorMessage(title, msg)
             return 
-            
-         transPreparedForWX = enc.toWX(transUnicode)
 
-         self.htmlWin.SetPage(transPreparedForWX)
-         self.history.add(transPreparedForWX)
+         self.htmlWin.SetPage(transUnicode)
+         self.history.add(transUnicode)
 
          # FIXME: Nasty names
          # Where it is used? htmlWin.GetPage
-         self.htmlCode = transPreparedForWX
-         
+         self.htmlCode = transUnicode
+
          if not self.wordListHidden():
             if not self.__searchedBySelecting:
                self.wordList.Clear()
 
-               toUnicode = lambda s: unicode(s,
+               toUnicode = lambda s: str(s,
                                              self.activeDictionary.getEncoding())
-               wordsInUnicode = map(toUnicode, result.words)
-               wordsPreparedForWX = map(enc.toWX, wordsInUnicode)
-               
-               self.wordList.InsertItems(wordsPreparedForWX, 0)
-               self.words = wordsPreparedForWX
+               wordsInUnicode = list(map(toUnicode, result.words))
+ 
+               self.wordList.InsertItems(wordsInUnicode, 0)
+               self.words = wordsInUnicode
 
          if not self.__searchedBySelecting:
             matches = self.wordList.GetCount()
@@ -689,7 +683,7 @@ class MainWindow(wx.Frame):
 
          if self.history.canBack():
             self.buttonBack.Enable(1)
-            
+
          self.search = None
 
 
@@ -703,11 +697,11 @@ class MainWindow(wx.Frame):
          if wx.TheClipboard.GetData(do):
             try:
                text = do.GetText().strip()
-            except Exception(e):
+            except Exception as e:
                print(e)
          wx.TheClipboard.Close()
-         return enc.toWX(text)
-      
+         return text
+
       text = getText()
       old_text = ''
       if hasattr(self, 'old_clipboard_text'):
@@ -766,35 +760,34 @@ class MainWindow(wx.Frame):
       self.entry.Disable()
       self.timerSearch.Start(self.delay)
 
-      word = enc.fromWX(word)
       try:
          word = word.encode(self.activeDictionary.getEncoding())
-      except Exception(e):
+      except Exception as e:
          # FIXME: Code duplicates
          self.buttonStop.Disable()
          self.entry.Enable(True)
          self.timerSearch.Stop()
          self.SetStatusText(_('Stopped'))
          wx.EndBusyCursor()
-         
+
          systemLog(ERROR, "Unable to decode '%s': %s" % (word.encode('UTF-8'),
                                                          e))
          title = _("Encode Failed")
          msg = _("Unable to encode text \"%s\" in %s for \"%s\". "
                  "That logically means the word "
                  "definition does not exist in the dictionary.") \
-                 % (enc.toWX(word), self.activeDictionary.getEncoding(),
+                 % (word, self.activeDictionary.getEncoding(),
                  self.activeDictionary.getName())
-                    
+
          errorwin.showErrorMessage(title, msg)
 
          return
-         
+
       self.search = Process(self.activeDictionary.search, word)
 
 
    def onBack(self, event):
-      
+
       self.buttonForward.Enable(1)
       self.htmlWin.SetPage(self.history.back())
       if not self.history.canBack():
@@ -802,7 +795,7 @@ class MainWindow(wx.Frame):
 
 
    def onForward(self, event):
-      
+
       self.buttonBack.Enable(1)
       self.htmlWin.SetPage(self.history.forward())
       if not self.history.canForward():
@@ -826,12 +819,12 @@ class MainWindow(wx.Frame):
 
       wx.EndBusyCursor()
       self.buttonStop.Disable()
-      
+
 
    def onClean(self, event):
       self.entry.SetValue("")
       self.entry.SetFocus()
-         
+
 
    def onKeyDown(self, event):
       """Key down event handler."""
@@ -880,7 +873,7 @@ class MainWindow(wx.Frame):
       # If there was a registered dict, set it's default encoding
       # FIXME: new way
       try:
-         if self.dict.name in self.app.config.registers.keys():
+         if self.dict.name in list(self.app.config.registers.keys()):
             self.app.config.registers[self.dict.name][2] = self.app.config.encoding
       except:
          pass
@@ -940,7 +933,7 @@ class MainWindow(wx.Frame):
                 '').replace('\r', '').replace('"', '\\"')
             cmd = (cmd % word).encode(localeCharset)
             Process(os.system, cmd)
-        except Exception(e):
+        except Exception as e:
             traceback.print_exc()
             title = _("Error")
             msg = _("Unable to decode text using your locale charset %s" \
@@ -968,7 +961,7 @@ class MainWindow(wx.Frame):
                                              style=wx.DEFAULT_FRAME_STYLE)
          self.pmWindow.CentreOnScreen()
          self.pmWindow.Show(True)
-      except Exception(e):
+      except Exception as e:
          traceback.print_exc()
          systemLog(ERROR, "Unable to show prefs window: %s" % e)
          self.SetStatusText("Error occured, please contact developers (%s)" \
@@ -991,7 +984,7 @@ class MainWindow(wx.Frame):
       editor.CentreOnScreen()
       editor.Show(True)
 
-      
+
    def onShowPrefsWindow(self, event):
       try:
          self.prefsWindow = PrefsWindow(self, -1, _("Preferences"),
@@ -999,40 +992,40 @@ class MainWindow(wx.Frame):
                                         style=wx.DEFAULT_FRAME_STYLE)
          self.prefsWindow.CentreOnScreen()
          self.prefsWindow.Show(True)
-      except Exception(e):
+      except Exception as e:
          traceback.print_exc()
          systemLog(ERROR, "Unable to show preferences window: %s" % e)
          title = errortype.OPENDICT_BUG.getMessage()
          msg = errortype.OPENDICT_BUG.getLongMessage()
          errorwin.showErrorMessage(title, msg)
-         
+
 
    def onDefault(self, event):
       # FIXME: Bad way. Try setting a few constants for each type
       # of dictionary and then check this type instead of IDs.
 
       eventID = event.GetId()
-      
-      if eventID in self.app.config.ids.keys():
+
+      if eventID in list(self.app.config.ids.keys()):
          dictionary = self.app.dictionaries.get(self.app.config.ids.get(eventID))
          self.loadDictionary(dictionary)
-         label = self.menuDict.FindItemById(eventID).GetLabel()
+         label = self.menuDict.FindItemById(eventID).GetItemLabelText()
          self.app.config.set('defaultDict', label)
 
       elif 2100 <= eventID < 2500:
-         label = self.menuEncodings.FindItemById(eventID).GetLabel()
+         label = self.menuEncodings.FindItemById(eventID).GetItemLabelText()
          self.changeEncoding(label)
       elif 2500 <= eventID < 2600:
-         label = self.menuFontFace.FindItemById(eventID).GetLabel()
+         label = self.menuFontFace.FindItemById(eventID).GetItemLabelText()
          self.changeFontFace(label)
       elif 2600 <= eventID < 2700:
-         label = self.menuFontSize.FindItemById(eventID).GetLabel()
+         label = self.menuFontSize.FindItemById(eventID).GetItemLabelText()
          self.changeFontSize(label)
 
 
    def checkIfNeedsList(self):
       """Unhides word list if current dictionary uses it"""
-      
+
       if self.activeDictionary.getUsesWordList():
          if self.wordListHidden():
             self.unhideWordList()
@@ -1114,7 +1107,7 @@ class MainWindow(wx.Frame):
                plaindict.makeIndex(dictInstance, 
                                    self.app.config.get('encoding'))
                wx.EndBusyCursor()
-            except Exception(e):
+            except Exception as e:
                wx.EndBusyCursor()
                traceback.print_exc()
                title = _("Index Creation Error")
@@ -1135,7 +1128,7 @@ class MainWindow(wx.Frame):
             index = plaindict.loadIndex(dictInstance)
             self.activeDictionary.setIndex(index)
             wx.EndBusyCursor()
-         except Exception(e):
+         except Exception as e:
             wx.EndBusyCursor()
             traceback.print_exc()
             title = _("Error")
@@ -1149,18 +1142,18 @@ class MainWindow(wx.Frame):
       self.activeDictionary.start()
       self.checkIfNeedsList()
       self.SetTitle(titleTemplate % dictInstance.getName())
-      self.SetStatusText(enc.toWX(_("Dictionary \"%s\" loaded") \
-                                    % dictInstance.getName()))
+      self.SetStatusText(_("Dictionary \"%s\" loaded") \
+                                    % dictInstance.getName())
 
       self.entry.SetFocus()
 
       try:
          self.checkEncMenuItem(self.activeDictionary.getEncoding())
-      except Exception(e):
+      except Exception as e:
          systemLog(ERROR, "Unable to select encoding menu item: %s" % e)
 
       wx.EndBusyCursor()
-      
+
 
    def loadPlugin(self, name):
       """Sets plugin as currently used dictionary"""
@@ -1174,7 +1167,7 @@ class MainWindow(wx.Frame):
       self.entry.Enable(1)
       self.SetStatusText("Done") # TODO: Set something more useful
       self.htmlWin.SetPage("")
-      
+
 
 
    # FIXME: deprecated, update!
@@ -1212,23 +1205,21 @@ class MainWindow(wx.Frame):
       self.app.config.set('encoding', misc.encodings[name])
 
       if self.activeDictionary:
-         print("Setting encoding %s for dictionary %s" % \
-            (self.app.config.get('encoding'), self.activeDictionary.name))
+         print("Setting encoding %s for dictionary %s" % (self.app.config.get('encoding'), self.activeDictionary.name))
          self.activeDictionary.setEncoding(self.app.config.get('encoding'))
-         systemLog(INFO, "Dictionary encoding set to %s" \
-               % self.activeDictionary.getEncoding())
+         systemLog(INFO, "Dictionary encoding set to %s" % self.activeDictionary.getEncoding())
          plaindict.savePlainConfiguration(self.activeDictionary)
-         
+
 
    def changeFontFace(self, name):
       """Save font face changes"""
-      
+
       self.app.config.set('fontFace', misc.fontFaces[name])
       self.updateHtmlScreen()
 
 
    def changeFontSize(self, name):
-      
+
       fontSize = int(name) * 10
       systemLog(INFO, "Setting font size %d" % fontSize)
       self.app.config.set('fontSize', fontSize)
@@ -1238,8 +1229,7 @@ class MainWindow(wx.Frame):
    def updateHtmlScreen(self):
       """Update HtmlWindow screen"""
 
-      self.htmlWin.SetFonts(self.app.config.get('fontFace'), "Fixed",
-                            [int(self.app.config.get('fontSize'))]*5)
+      self.htmlWin.SetFonts(self.app.config.get('fontFace'), "Fixed", [int(self.app.config.get('fontSize'))]*7)
       self.htmlWin.SetPage(self.htmlCode)
 
 
@@ -1364,7 +1354,6 @@ class MainWindow(wx.Frame):
       global lastLookupWord
       lastLookupWord = word
       self.entry.SetValue(word)
-      word = enc.fromWX(word)
       word = word.encode(self.activeDictionary.getEncoding())
       self.search = Process(self.activeDictionary.search, word)
       wx.BeginBusyCursor()
@@ -1395,7 +1384,7 @@ class MainWindow(wx.Frame):
       bmp = wx.Bitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "unhide.png"),
                      wx.BITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)
-      self.buttonHide.SetToolTipString(_("Show word list"))
+      self.buttonHide.SetToolTip(_("Show word list"))
       self.buttonHide.Show(False)
 
 
@@ -1412,7 +1401,7 @@ class MainWindow(wx.Frame):
       bmp = wx.Bitmap(os.path.join(info.GLOBAL_HOME, "pixmaps", "hide.png"),
                      wx.BITMAP_TYPE_PNG)
       self.buttonHide.SetBitmapLabel(bmp)
-      self.buttonHide.SetToolTipString(_("Hide word list"))
+      self.buttonHide.SetToolTip(_("Hide word list"))
 
 
    def onPrint(self, event):
@@ -1420,7 +1409,7 @@ class MainWindow(wx.Frame):
 
       try:
          self.printer.PrintText(self.htmlCode)
-      except Exception(e):
+      except Exception as e:
          self.SetStatusText(_("Failed to print"))
          systemLog(ERROR, "Unable to print translation (%s)" % e)
          traceback.print_exc()
@@ -1431,7 +1420,7 @@ class MainWindow(wx.Frame):
 
       try:
          self.printer.PreviewText(self.htmlCode)
-      except Exception(e):
+      except Exception as e:
          systemLog(ERROR, "Unable to preview translation (%s)" % e)
          self.SetStatusText(_("Page preview failed"))
          traceback.print_exc()
@@ -1452,6 +1441,6 @@ class MainWindow(wx.Frame):
 
       try:
          self.app.config.save()
-      except Exception(e):
+      except Exception as e:
          systemLog(ERROR, "Unable to save configuration: %s" % e)
-         
+

@@ -212,20 +212,20 @@ def main():
 
         try:
             zipFile = zipfile.ZipFile(filePath, 'r')
-        except Exception(e):
+        except Exception as e:
             print("ERROR: %s: %s" % (filePath, e))
             continue
-        
+
         # Test CRC
         if zipFile.testzip():
             raise Exception(_("Dictionary plugin file is corrupted"))
-        
+
         # Check if empty
         try:
             topDirectory = zipFile.namelist()[0]
-        except Exception(e):
+        except Exception as e:
             raise Exception(_("Plugin file is empty (%s)" % e))
-        
+
         # Check for validity
         for fileInZip in zipFile.namelist():
             dirName = os.path.dirname(fileInZip)

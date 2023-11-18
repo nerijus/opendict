@@ -55,13 +55,8 @@ class PrefsWindow(wx.Dialog):
       dictNames.sort()
       dictNames.insert(0, "")
 
-      try:
-         map(enc.toWX, dictNames)
-      except Exception(e):
-         systemLog(ERROR, "Unable to decode titles to UTF-8 (%s)" % e)
-      
       self.dictChooser = wx.ComboBox(self, 1100,
-                                    enc.toWX(self.app.config.get('defaultDict')),
+                                    self.app.config.get('defaultDict'),
                                     wx.Point(-1, -1),
                                     wx.Size(-1, -1), dictNames, wx.TE_READONLY)
       grid.Add(self.dictChooser, 0, wx.EXPAND)
@@ -169,7 +164,7 @@ class PrefsWindow(wx.Dialog):
    def onSaveWinSizeClicked(self, event):
       """This method is invoked when checkbox for window size
       is clicked"""
-      
+
       if event.Checked() == 1:
          self.app.config.winSize = self.GetParent().GetSize()
          self.app.config.saveWinSize = 1
@@ -180,7 +175,7 @@ class PrefsWindow(wx.Dialog):
    def onSaveWinPosClicked(self, event):
       """This method is invoked when checkbox for window position
       is clicked"""
-      
+
       if event.Checked() == 1:
          self.app.config.winPos = self.GetParent().GetPosition()
          self.app.config.saveWinPos = 1
@@ -191,7 +186,7 @@ class PrefsWindow(wx.Dialog):
    def onSaveSashPosClicked(self, event):
       """This method is invoked when checkbox for sash position
       is clicked"""
-      
+
       if event.Checked() == 1:
          self.app.config.sashPos = self.GetParent().splitter.GetSashPosition()
          self.app.config.saveSashPos = 1
@@ -209,15 +204,15 @@ class PrefsWindow(wx.Dialog):
       """Save configuration in the configuration object"""
 
       self.app.config.set('defaultDict',
-                          enc.fromWX(self.dictChooser.GetValue()))
+                          self.dictChooser.GetValue())
 
       self.app.config.set('encoding', encodings[self.encChooser.GetValue()])
       if self.app.window.activeDictionary == None:
          self.app.window.checkEncMenuItem(self.app.config.get('encoding'))
-      
+
       self.app.config.set('dictServer', self.serverEntry.GetValue())
       self.app.config.set('dictServerPort', self.portEntry.GetValue())
-      
+
       self.app.config.set('pronunciationCommand', self.entryPron.GetValue())
       self.app.config.set('pronounceTrans', str(self.rbPronTrans.GetValue()))
 
@@ -239,11 +234,11 @@ class PrefsWindow(wx.Dialog):
             self.app.config.set('sashPos', frame.splitter.GetSashPosition())
 
       self.app.config.save()
-      
+
       self.Destroy()
 
 
    def onCancel(self, event):
       """Close dialog window discarding changes"""
-      
+
       self.Destroy()

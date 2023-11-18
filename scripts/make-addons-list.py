@@ -211,7 +211,7 @@ def main():
 
         try:
             zipFile = zipfile.ZipFile(filePath, 'r')
-        except Exception(e):
+        except Exception as e:
             print("ERROR: %s: %s" % (filePath, e))
             continue
         
@@ -222,7 +222,7 @@ def main():
         # Check if empty
         try:
             topDirectory = zipFile.namelist()[0]
-        except Exception(e):
+        except Exception as e:
             raise Exception(_("Plugin file is empty (%s)" % e))
         
         # Check for validity

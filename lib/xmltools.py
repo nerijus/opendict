@@ -260,7 +260,7 @@ class IndexFileParser:
         indexElement = doc.getElementsByTagName('index')[0]
 
         for element in indexElement.getElementsByTagName('element'):
-            index[element.getAttribute("literal")] = long(element.getAttribute("position"))
+            index[element.getAttribute("literal")] = int(element.getAttribute("position"))
 
         return index
 
@@ -370,7 +370,7 @@ class AddOnsParser:
         def getDescription(self):
 
             return self.desc
-        
+
 
     def parse(self, xmlData):
         """Parse XML data and return name->info dictionary object"""
@@ -399,7 +399,7 @@ class AddOnsParser:
             for authorElement in addonElement.getElementsByTagName('author'):
                 authors.append({'name': authorElement.getAttribute('name'),
                                 'email': authorElement.getAttribute('email')})
-                
+
             for descElement \
                     in addonElement.getElementsByTagName('description'):
                 description = _textData(descElement)
@@ -408,8 +408,8 @@ class AddOnsParser:
                 url = _textData(urlElement)
 
             for sizeElement in addonElement.getElementsByTagName('size'):
-                size = long(_textData(sizeElement))
-                
+                size = int(_textData(sizeElement))
+
             for sumElement in addonElement.getElementsByTagName('md5'):
                 checksum = _textData(sumElement)
 

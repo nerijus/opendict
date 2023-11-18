@@ -73,9 +73,7 @@ class EditWordWindow(wx.Frame):
                     transcomm = u"%s // %s" % (trans, comment)
                 else:
                     transcomm = trans
-                    
-                transcomm = enc.toWX(transcomm)
-                
+
                 self.onAddEmptyField(None)
                 entry = self.textEntries.get(max(self.textEntries.keys()))
                 if entry:
@@ -84,7 +82,7 @@ class EditWordWindow(wx.Frame):
         self.boxInfo.AddGrowableCol(1)
         vboxMain.Add(self.boxInfo, 1, wx.ALL | wx.EXPAND, 2)
 
-        idAdd = wx.NewId()
+        idAdd = wx.NewIdRef(count=1)
         self.buttonAdd = wx.Button(self, idAdd, _("Add translation field"))
         vboxMain.Add(self.buttonAdd, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
 
@@ -133,12 +131,12 @@ class EditWordWindow(wx.Frame):
         """Apply changes"""
 
         parent = self.GetParent()
-        word = enc.fromWX(self.entryWord.GetValue())
+        word = self.entryWord.GetValue()
 
         translations = []
 
         for label in self.textEntries.values():
-            translations.append(enc.fromWX(label.GetValue()))
+            translations.append(label.GetValue())
 
         transcomm = {}
 
@@ -192,12 +190,12 @@ class DictEditorWindow(wx.Frame):
             """Apply changes"""
 
             parent = self.GetParent()
-            word = enc.fromWX(self.entryWord.GetValue())
+            word = self.entryWord.GetValue()
 
             translations = []
 
             for label in self.textEntries.values():
-                translations.append(enc.fromWX(label.GetValue()))
+                translations.append(label.GetValue())
 
             transcomm = {}
 
@@ -218,8 +216,8 @@ class DictEditorWindow(wx.Frame):
             unit.setWord(word)
             unit.setTranslations(transcomm)
             parent.editor.addUnit(unit)
-            parent.list.Append(enc.toWX(word))
-            
+            parent.list.Append(word)
+
             parent.setChanged(True)
             parent.checkAllButtons()
 
@@ -233,40 +231,40 @@ class DictEditorWindow(wx.Frame):
 
         def __init__(self, parent, id, title, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE):
-            
+
             wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
             self.parent = self.GetParent()
-            
+
             vboxMain = wx.BoxSizer(wx.VERTICAL)
             hboxButtons = wx.BoxSizer(wx.HORIZONTAL)
-            
+
             labelMsg = wx.StaticText(self, -1,
                                     _("Dictionary \"%s\" has been changed") \
                                     % parent.name)
             vboxMain.Add(labelMsg, 1, wx.ALL | wx.EXPAND, 15)
-            
+
             buttonSave = wx.Button(self, 6000, _("Save"))
             hboxButtons.Add(buttonSave, 0, wx.ALL | wx.EXPAND, 3)
-            
+
             buttonExit = wx.Button(self, 6001, _("Do not save"))
             hboxButtons.Add(buttonExit, 0, wx.ALL | wx.EXPAND, 3)
-            
+
             buttonCancel = wx.Button(self, 6002, _("Cancel"))
             hboxButtons.Add(buttonCancel, 0, wx.ALL | wx.EXPAND, 3)
-            
+
             vboxMain.Add(hboxButtons, 0, wx.ALL | wx.EXPAND, 2)
-            
+
             self.SetSizer(vboxMain)
             self.Fit()
-            
+
             wx.EVT_BUTTON(self, 6000, self.onSave)
             wx.EVT_BUTTON(self, 6001, self.onExitParent)
             wx.EVT_BUTTON(self, 6002, self.onClose)
 
-            
+
         def onSave(self, event):
-            
+
             if self.parent.cAction == "save":
                 self.parent.onSave(None)
                 self.parent.Destroy()
@@ -277,10 +275,10 @@ class DictEditorWindow(wx.Frame):
             elif self.parent.cAction == "close":
                 self.parent.onSave(None)
                 self.parent.Destroy()
-                
-            
+
+
         def onExitParent(self, event):
-            
+
             if self.parent.cAction == "save" or self.parent.cAction == "close":
                 self.parent.Destroy()
             elif self.parent.cAction == "open":
@@ -288,9 +286,9 @@ class DictEditorWindow(wx.Frame):
                 self.parent.open()
                 self.Destroy()
 
-            
+
         def onClose(self, event):
-            
+
             self.Destroy()
 
 
@@ -578,10 +576,10 @@ class DictEditorWindow(wx.Frame):
         self.checkSaveButton()
 
         self.buttonSaveAs.Enable(True)
-        
+
 
     def onOpen(self, event):
-        
+
         if self.editor and self.changed:
                 window = self.ConfirmExitWindow(self,
                                                 -1,
@@ -593,10 +591,10 @@ class DictEditorWindow(wx.Frame):
             self.open()
             self.savedOnce = True # no need to specify file name
 
-        
+
     def open(self):
         wildCard = "Slowo dictionaries (*.dwa)|*.dwa"
-        
+
         dialog = wx.FileDialog(self, message=_("Choose dictionary file"),
                               wildcard=wildCard, style=wx.FD_OPEN|wx.FD_MULTIPLE)
         if dialog.ShowModal() == wx.ID_OK:
@@ -605,24 +603,24 @@ class DictEditorWindow(wx.Frame):
             self.name = os.path.split(self.filePath)[1]
 
             wx.BeginBusyCursor()
-            
+
             try:
                 self.editor.load(self.filePath)
-            except Exception(e):
+            except Exception as e:
                 wx.EndBusyCursor()
                 traceback.print_exc()
                 title = _("Open Failed")
                 msg = _("Unable to open dictionary (got message: %s)") % e
                 errorwin.showErrorMessage(title, msg)
-                
+
                 return
-            
+
             self.SetTitle("%s - %s" % (self.priTitle, self.name))
-            
+
             self.list.Clear()
             words = []
             for unit in self.editor.getUnits():
-                words.append(enc.toWX(unit.getWord()))
+                words.append(unit.getWord())
             words.sort()
 
             self.list.InsertItems(words, 0)
@@ -637,9 +635,9 @@ class DictEditorWindow(wx.Frame):
 
         self.checkAllButtons()
 
-            
+
     def onClose(self, event):
-        
+
         if self.changed:
             self.cAction = "close"
             window = self.ConfirmExitWindow(self, -1, _("Exit confirmation"))

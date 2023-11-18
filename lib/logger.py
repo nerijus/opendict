@@ -60,7 +60,7 @@ def systemLog(messageType, message):
         fd = open(_systemLogFile, 'a+')
         print(dateStr, typeStr, message, file=fd)
         fd.close()
-    except Exception(e):
+    except Exception as e:
         print("LOGGER ERROR: Unable to write message '%s'" % repr(message))
 
 

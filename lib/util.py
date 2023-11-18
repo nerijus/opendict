@@ -27,10 +27,9 @@ import wx
 _ = wx.GetTranslation
 
 import os
-import md5
 import threading
 import time
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import traceback
 
 from lib import info
@@ -46,17 +45,17 @@ class UniqueIdGenerator:
 
         def __init__(self, start=0):
             """Set starting ID value"""
-            
+
             self.id = start
-            
-            
+
+
         def getID(self):
             """Return unique ID"""
-            
+
             self.id += 1
             return self.id
 
-    
+
     __instance = None
 
 
@@ -88,7 +87,7 @@ def getMD5Sum(filePath):
     data = fd.read()
     fd.close()
 
-    generator = md5.new(data)
+    generator = hashlib.md5.new(data)
 
     return generator.hexdigest()
 
@@ -115,7 +114,7 @@ def makeDirectories():
             systemLog(DEBUG, "%s does not exist, creating..." \
                       % info.LOCAL_HOME)
             os.mkdir(info.LOCAL_HOME)
-        except Exception(e):
+        except Exception as e:
             systemLog(ERROR, "Unable to create %s (%s)" % (info.LOCAL_HOME, e))
 
     if not os.path.exists(os.path.join(info.LOCAL_HOME, info.__DICT_DIR)):
@@ -123,7 +122,7 @@ def makeDirectories():
             systemLog(DEBUG, "%s does not exist, creating..." \
                   % os.path.join(info.LOCAL_HOME, info.__DICT_DIR))
             os.mkdir(os.path.join(info.LOCAL_HOME, info.__DICT_DIR))
-        except Exception(e):
+        except Exception as e:
             systemLog(ERROR, "Unable to create %s (%s)" \
                   % (os.path.join(info.LOCAL_HOME, info.__DICT_DIR), e))
 
@@ -131,20 +130,20 @@ def makeDirectories():
         try:
             systemLog(DEBUG, "%s does not exist, creating..." % plainDir)
             os.mkdir(plainDir)
-        except Exception(e):
+        except Exception as e:
             systemLog(ERROR, "Unable to create %s (%s)" % (plainDir, e))
 
-    
+
     if not os.path.exists(pluginDir):
         try:
             os.mkdir(pluginDir)
-        except Exception(e):
+        except Exception as e:
             systemLog(ERROR, "Unable to create %s (%s)" % (pluginDir, e))
 
 
 class DownloadThread:
     """Non-blocking download thread
-    
+
     Can be used to connect and download files from the Internet.
     """
 
@@ -217,28 +216,18 @@ class DownloadThread:
 
         try:
             self.statusMessage = _("Connecting to %s...") % serverName
-            self.up = urllib2.urlopen(self.url)
-            fileSize = int(self.up.info().getheader('Content-length'))
-        except Exception(e):
-            self.errorMessage = "Unable to connect to %s" % serverName
+            self.up = urllib.request.urlopen(self.url)
+        except Exception as e:
+            self.errorMessage = "Unable to connect to %s: %s" % (serverName, e)
             self.done = True
             return
 
-        count = 0
-
         try:
-            while not self.stopRequested and count < fileSize:
-                bytes = self.up.read(1024)
-                count += len(bytes)
-                self.buffer += bytes
-                self.percents = int(float(count) / fileSize * 100)
-                self.statusMessage = _("Downloading... %d%%") % self.percents
-                time.sleep(0.005) # To lower CPU usage
-                
+            self.buffer += self.up.read().decode('utf-8')
             self.up.close()
             self.done = True
             self.statusMessage = _("Done")
-        except Exception(e):
+        except Exception as e:
             self.errorMessage = "Error while fetching data from %s: %s" \
                                 % (self.url, e)
             self.done =  True
@@ -295,7 +284,7 @@ class AgreementsManager:
         try:
             fd = open(self.filePath)
             update = False
-            
+
             for line in fd:
                 line = line.strip()
                 if os.path.exists(line) and not line in self.dictPaths:
@@ -334,7 +323,7 @@ def correctDictName(dictInstance):
             try:
                 if n.startswith(name):
                     matches += 1
-            except Exception(e):
+            except Exception as e:
                 print("WARNING:", e)
         return matches
 

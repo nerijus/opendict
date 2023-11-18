@@ -71,7 +71,7 @@ class TypePlugin(DictionaryType):
 class TypeSlowo(DictionaryType):
     """Slowo dictionary format"""
 
-    import parser
+    from . import parser
 
     dictClass = parser.SlowoParser
     fileExtentions = ('dwa',)
@@ -83,19 +83,19 @@ class TypeSlowo(DictionaryType):
 class TypeMova(DictionaryType):
     """Mova dictionary format"""
 
-    import parser
+    from . import parser
 
     dictClass = parser.MovaParser
     fileExtentions = ('mova',)
     name = "Mova dictionary"
     shortIdName = "mova"
 
-    
+
 
 class TypeTMX(DictionaryType):
     """TMX dictionary format"""
 
-    import parser
+    from . import parser
 
     dictClass = parser.TMXParser
     fileExtentions = ('tmx',)
@@ -107,7 +107,7 @@ class TypeTMX(DictionaryType):
 class TypeDict(DictionaryType):
     """DICT dictionary type"""
 
-    import parser
+    from . import parser
 
     dictClass = parser.DictParser
     fileExtentions = ('dict', 'dz',)

@@ -125,7 +125,7 @@ class PlainDictInfo:
                 data = fd.read()
                 fd.close()
                 return data
-            except Exception(e):
+            except Exception as e:
                 systemLog(ERROR, "Unable to read licence file for %s: %" \
                           % (self.getName(), e))
                 return errMsg
@@ -198,7 +198,7 @@ class PlainDictionary(meta.Dictionary):
                 data = fd.read()
                 fd.close()
                 return data
-            except Exception(e):
+            except Exception as e:
                 systemLog(ERROR, "Unable to read licence file for %s: %" \
                           % (self.getName(), e))
                 return errMsg
@@ -292,7 +292,7 @@ def _loadPlainDictionary(directory):
         dictionary.setLicenceFile(config.get('licence'))
         dictionary.setDescription(config.get('description'))
 
-    except Exception(e):
+    except Exception as e:
         traceback.print_exc()
 
     util.correctDictName(dictionary)
@@ -376,11 +376,11 @@ def makeIndex(dictionary, currentlySetEncoding):
     for line in fd:
         linenum += 1
         try:
-            literal = unicode(line.strip(),
+            literal = str(line.strip(),
                               dictionary.getEncoding())[:2].lower()
         except:
             try:
-                literal = unicode(line.strip(),
+                literal = str(line.strip(),
                                   currentlySetEncoding)[:2].lower()
                 dictionary.setEncoding(currentlySetEncoding)
             except:
@@ -393,7 +393,7 @@ def makeIndex(dictionary, currentlySetEncoding):
         if literal and not literal in index.keys() and literal[0] > u'\x19':
             try:
                 index[literal] = count
-            except Exception(e):
+            except Exception as e:
                 systemLog(ERROR, e)
 
         count += len(line)
@@ -406,7 +406,7 @@ def makeIndex(dictionary, currentlySetEncoding):
                             fileName)
 
 
-    toUnicode = lambda s: unicode(s, dictionary.getEncoding())
+    toUnicode = lambda s: str(s, dictionary.getEncoding())
 
     doc = xmltools.generateIndexFile(index)
     xmltools.writeIndexFile(doc, os.path.join(dictHome, 'data', 'index.xml'))

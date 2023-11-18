@@ -153,12 +153,12 @@ class DictConnWindow(wx.Frame):
       wx.EVT_BUTTON(self, 1007, self.onUpdateStrats)
       wx.EVT_BUTTON(self, 1004, self.onOK)
       wx.EVT_BUTTON(self, 1005, self.onCancel)
-      wx.EVT_TIMER(self, 1006, self.onTimerUpdateDB)
-      wx.EVT_TIMER(self, 1007, self.onTimerConnect)
+      self.Bind(wx.EVT_TIMER, self.onTimerUpdateDB)
+      self.Bind(wx.EVT_TIMER, self.onTimerConnect)
 
 
    def onTimerUpdateDB(self, event):
-      
+
       systemLog(DEBUG, "DictConnection: [IDLE] Receiving DB list...")
       if self.update != None:
          if self.update.isDone():
@@ -187,13 +187,13 @@ class DictConnWindow(wx.Frame):
 
 
    def onTimerConnect(self, event):
-      
+
       if self.connection != None:
          if self.connection.isDone():
             systemLog(INFO, "Connection timer stopped")
             self.timerConnect.Stop()
             self.conn = self.connection()
-            
+
             if self.conn == None:
                 self.SetStatusText('')
                 title = _("Connection Error")
@@ -201,20 +201,20 @@ class DictConnWindow(wx.Frame):
                 errorwin.showErrorMessage(title, msg)
             else:
                 self.prepareForUsing()
-            
+
 
    def onDefaultServer(self, event):
-      
+
       self.entryServer.SetValue("dict.org")
 
 
    def onDefaultPort(self, event):
-      
+
       self.entryPort.SetValue("2628")
 
 
    def onUpdateDB(self, event):
-      
+
       self.SetStatusText(_("Connecting..."))
       self.timerUpdateDB.Start(CONNECTION_CHECK_INTERVAL)
       self.update = Process(dictclient.Connection,

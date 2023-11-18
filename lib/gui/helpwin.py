@@ -50,7 +50,7 @@ class LicenseWindow(wx.Frame):
          fd = open(os.path.join(info.GLOBAL_HOME, 'copying.html'))
          data = fd.read()
          fd.close()
-      except Exception(e):
+      except Exception as e:
          systemLog(ERROR, "Unable to read licence file: %s" % e)
          data = "Error: <i>licence file not found</i>"
 
@@ -60,7 +60,7 @@ class LicenseWindow(wx.Frame):
       htmlWin = wx.html.HtmlWindow(scWinAbout, -1, style=wx.SUNKEN_BORDER)
       htmlWin.SetFonts('Helvetica', 'Fixed', [10]*5)
       htmlWin.SetPage(data)
-      
+
       scBox = wx.BoxSizer(wx.VERTICAL)
       scBox.Add(htmlWin, 1, wx.ALL | wx.EXPAND, 1)
       scWinAbout.SetSizer(scBox)
@@ -76,54 +76,49 @@ class LicenseWindow(wx.Frame):
 
    def onClose(self, event):
       """This method is invoked when Close button is clicked"""
-      
+
       self.Destroy()
-      
+
 
 class CreditsWindow(wx.Dialog):
    """Credits window class"""
-   
+
    def __init__(self, parent, id, title, pos=wx.DefaultPosition,
                 size=wx.DefaultSize):
       wx.Dialog.__init__(self, parent, id, title, pos, size)
-      
+
       vbox = wx.BoxSizer(wx.VERTICAL)
-      
+
       nb = wx.Notebook(self, -1)
-      
+
       # "Written by" panel
       writePanel = wx.Panel(nb, -1)
       vboxWrite = wx.BoxSizer(wx.VERTICAL)
-      writtenString = unicode("Martynas Jocius <martynas.jocius@idiles.lt>\n"
+      writtenString = str("Martynas Jocius <martynas.jocius@idiles.lt>\n"
                               "Nerijus Baliūnas <nerijusb@dtiltas.lt>\n"
-                              "Mantas Kriaučiūnas <mantas@akl.lt>",
-                              "UTF-8")
-      written = enc.toWX(writtenString)
-      labelWrite = wx.StaticText(writePanel, -1, written)
+                              "Mantas Kriaučiūnas <mantas@akl.lt>")
+      labelWrite = wx.StaticText(writePanel, -1, writtenString)
       vboxWrite.Add(labelWrite, 0, wx.ALL, 10)
       writePanel.SetSizer(vboxWrite)
       writePanel.SetFocus()
-      
+
       nb.AddPage(writePanel, _("Written By"))
-      
+
       # "Translations" panel
       tPanel = wx.Panel(nb, -1)
       vboxTP = wx.BoxSizer(wx.VERTICAL)
-      transString = unicode("Martynas Jocius <martynas.jocius@idiles.lt>",
-                            "UTF-8")
-      trans = enc.toWX(transString)
-      labelTP = wx.StaticText(tPanel, -1, trans)
+      transString = str("Martynas Jocius <martynas.jocius@idiles.lt>")
+      labelTP = wx.StaticText(tPanel, -1, transString)
       vboxTP.Add(labelTP, 0, wx.ALL, 10)
       tPanel.SetSizer(vboxTP)
-      
+
       nb.AddPage(tPanel, _("Translated By"))
 
       # "Thanks" panel
       thPanel = wx.Panel(nb, -1)
       vboxThP = wx.BoxSizer(wx.VERTICAL)
       thanksString = _("Ports:\n\n") + u"Debian/Ubuntu:\n    Kęstutis Biliūnas <kebil@kaunas.init.lt>\n\nMacOS X:\n    Linas Valiukas <shirshegsm@gmail.com>"
-      thanks = enc.toWX(thanksString)
-      labelThP = wx.StaticText(thPanel, -1, thanks)
+      labelThP = wx.StaticText(thPanel, -1, thanksString)
       vboxThP.Add(labelThP, 0, wx.ALL, 10)
       thPanel.SetSizer(vboxThP)
       nb.AddPage(thPanel, _("Thanks To"))
@@ -134,27 +129,26 @@ class CreditsWindow(wx.Dialog):
       vboxSP = wx.BoxSizer(wx.VERTICAL)
       sponsorString = _("OpenDict project was sponsored by IDILES.\n"
         "Visit company's website at http://www.idiles.com.")
-      sponsor = enc.toWX(sponsorString)
-      labelSP = wx.StaticText(sponsorPanel, -1, sponsor)
+      labelSP = wx.StaticText(sponsorPanel, -1, sponsorString)
       vboxSP.Add(labelSP, 0, wx.ALL, 10)
       sponsorPanel.SetSizer(vboxSP)
       nb.AddPage(sponsorPanel, _("Sponsors"))
-      
+
       vbox.Add(nb, 1, wx.ALL | wx.EXPAND, 3)
-      
+
       buttonClose = wx.Button(self, 2005, _("&Close"))
       vbox.Add(buttonClose, 0, wx.ALL | wx.ALIGN_RIGHT, 5)
-      
+
       self.SetSizer(vbox)
-      
+
       wx.EVT_BUTTON(self, 2005, self.onClose)
 
-      
+
    def onClose(self, event):
       """This method is invoked when Close button is clicked"""
-      
+
       self.Destroy()
-      
+
 
 class AboutWindow(wx.Dialog):
    """Information window about OpenDict"""
@@ -175,7 +169,7 @@ class AboutWindow(wx.Dialog):
       title = "OpenDict %s" % info.VERSION
       copy = "Copyright %(c)s 2003-2006 Martynas Jocius <martynas.jocius@idiles.lt>\n" \
             "Copyright %(c)s 2007-2008 Idiles Systems Ltd <support@idiles.com>" \
-             % {'c': unicode("\302\251", "UTF-8")}
+             % {'c': str("©")}
       desc = _("OpenDict is a multiplatform dictionary.")
       page = "http://opendict.sf.net\nhttps://github.com/nerijus/opendict"
 
@@ -201,13 +195,13 @@ class AboutWindow(wx.Dialog):
 
       self.buttonCredits = wx.Button(self, 2004, _("C&redits"))
       hboxButtons.Add(self.buttonCredits, 0, wx.ALL | wx.ALIGN_LEFT, 3)
-      
+
       self.buttonLicence = wx.Button(self, 2006, _("&Licence"))
       hboxButtons.Add(self.buttonLicence, 0, wx.ALL | wx.ALIGN_LEFT, 3)
-      
+
       self.buttonOK = wx.Button(self, 2003, _("&Close"))
-      hboxButtons.Add(self.buttonOK, 0, wx.ALL | wx.ALIGN_RIGHT, 3)
-      
+      hboxButtons.Add(self.buttonOK, 0, wx.ALL, 3)
+
       vbox.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_CENTER, 5)
 
       self.SetSizer(vbox)

@@ -63,7 +63,7 @@ def sortnormalize(x):
     with standard comparison."""
     x2 = ''
     for i in range(len(x)):
-        if validdict.has_key(x[i]):
+        if x[i] in validdict:
             x2 += x[i]
     return x2.upper() + "\0" + x.upper()
 
@@ -150,9 +150,9 @@ class DictDB:
     def _initindex(self):
         """Load the entire index off disk into memory."""
         self.indexfile.seek(0)
-        for line in self.indexfile.xreadlines():
+        for line in self.indexfile.readlines():
             splits = line.rstrip().split("\t")
-            if not self.indexentries.has_key(splits[0]):
+            if splits[0] not in self.indexentries:
                 self.indexentries[splits[0]] = []
             self.indexentries[splits[0]].append([b64_decode(splits[1]),
                                                  b64_decode(splits[2])])
@@ -161,7 +161,7 @@ class DictDB:
         """Adds an entry to the index.  word is the relevant word.
         start is the starting position in the dictionary and size is the
         size of the definition; both are integers."""
-        if not self.indexentries.has_key(word):
+        if word not in self.indexentries:
             self.indexentries[word] = []
         self.indexentries[word].append([start, size])
 
@@ -183,7 +183,7 @@ class DictDB:
 
         Returns a count of the deleted entries."""
 
-        if not self.indexentries.has_key(word):
+        if word not in self.indexentries:
             return 0
         retval = 0
         entrylist = self.indexentries[word]
@@ -256,7 +256,7 @@ class DictDB:
             self.update("Sorting index: converting")
 
             indexlist = []
-            for word, defs in self.indexentries.items():
+            for word, defs in list(self.indexentries.items()):
                 for thisdef in defs:
                     indexlist.append("%s\t%s\t%s" % (word,
                                                      b64_encode(thisdef[0]),
@@ -267,7 +267,7 @@ class DictDB:
             sortmap = {}
             for entry in indexlist:
                 norm = sortnormalize(entry)
-                if sortmap.has_key(norm):
+                if norm in sortmap:
                     sortmap[norm].append(entry)
                     sortmap[norm].sort(sortfunc)
                 else:
@@ -275,7 +275,7 @@ class DictDB:
 
             self.update(" listing")
                 
-            normalizedentries = sortmap.keys()
+            normalizedentries = list(sortmap.keys())
 
             self.update(" sorting")
 
@@ -308,10 +308,10 @@ class DictDB:
     def getdeflist(self):
         """Returns a list of strings naming all definitions contained
         in this dictionary."""
-        return self.indexentries.keys()
+        return list(self.indexentries.keys())
 
     def hasdef(self, word):
-        return self.indexentries.has_key(word)
+        return word in self.indexentries
 
     def getdef(self, word):
         """Given a definition name, returns a list of strings with all
