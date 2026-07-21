@@ -30,7 +30,7 @@ class TestTranslation(unittest.TestCase):
 
         self.translations.setWord('test')
 
-        self.assertEquals(self.translations.getWord(), 'test')
+        self.assertEqual(self.translations.getWord(), 'test')
 
 
     def test_translation(self):
@@ -43,14 +43,14 @@ class TestTranslation(unittest.TestCase):
 
         trans = self.translations.getTranslations()
 
-        self.assertEquals(trans.has_key('trans1'), True)
-        self.assertEquals(len(trans.keys()), 3)
-        self.assertEquals(trans['trans3'], 'comment3')
+        self.assertEqual('trans1' in trans, True)
+        self.assertEqual(len(trans.keys()), 3)
+        self.assertEqual(trans['trans3'], 'comment3')
 
         trans = {'key1': 'value1', 'key2': 'value2'}
         self.translations.setTranslations(trans)
 
-        self.assertEquals(len(self.translations.getTranslations()), 2)
+        self.assertEqual(len(self.translations.getTranslations()), 2)
 
 
 
@@ -61,10 +61,10 @@ class TestEditor(unittest.TestCase):
         """Editor should load dictionary from file"""
 
         editor = dicteditor.Editor()
-        self.assertEquals(len(editor.getUnits()), 0)
+        self.assertEqual(len(editor.getUnits()), 0)
         
         editor.load("data/sampledict.dwa")
-        self.assertEquals(len(editor.getUnits()), 7)
+        self.assertEqual(len(editor.getUnits()), 7)
 
 
     def test_save(self):
@@ -77,7 +77,7 @@ class TestEditor(unittest.TestCase):
         editor.save("data/__output.dwa")
         editor.load("data/__output.dwa")
 
-        self.assertEquals(len(units), len(editor.getUnits()))
+        self.assertEqual(len(units), len(editor.getUnits()))
 
         os.unlink("data/__output.dwa")
 
@@ -105,7 +105,7 @@ class TestEditor(unittest.TestCase):
 
         editor.addUnit(newUnit)
 
-        self.assertEquals(len(editor.getUnits()), oldCount + 1)
+        self.assertEqual(len(editor.getUnits()), oldCount + 1)
 
 
     def test_removeUnit(self):
@@ -118,7 +118,7 @@ class TestEditor(unittest.TestCase):
         unit = editor.getUnit('vienas')
         editor.removeUnit(unit)
         
-        self.assertEquals(len(editor.getUnits()), oldCount - 1)
+        self.assertEqual(len(editor.getUnits()), oldCount - 1)
 
 
     def test_unicode(self):
@@ -129,7 +129,7 @@ class TestEditor(unittest.TestCase):
 
         for unit in editor.getUnits()[:10]:
             for trans in unit.getTranslations().keys():
-                self.assertEquals(type(trans), type(u''))
+                self.assertEqual(type(trans), type(u''))
         
 
 if __name__ == "__main__":

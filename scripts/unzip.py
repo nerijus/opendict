@@ -4,7 +4,7 @@
 import sys, zipfile, os, os.path
 
 def unzip_file_into_dir(file, dir):
-    os.mkdir(dir, 0777)
+    os.mkdir(dir, 0o777)
     zfobj = zipfile.ZipFile(file)
     for name in zfobj.namelist():
         if name.endswith('/'):

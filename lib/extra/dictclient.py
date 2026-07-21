@@ -147,7 +147,7 @@ class Connection:
         if not hasattr(self, 'dbobjs'):
             self.dbobjs = {}
 
-        if self.dbobjs.has_key(dbname):
+        if dbname in self.dbobjs:
             return self.dbobjs[dbname]
 
         # We use self.dbdescs explicitly since we don't want to
@@ -197,7 +197,7 @@ class Connection:
             if code != 151:
                 break
 
-            resultword, resultdb = re.search('^"(.+)" (\S+)', text).groups()
+            resultword, resultdb = re.search(r'^"(.+)" (\S+)', text).groups()
             defstr = self.get100block()
             retval.append(Definition(self, self.getdbobj(resultdb),
                                      resultword, defstr))

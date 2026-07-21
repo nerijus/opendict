@@ -25,7 +25,6 @@ import sys
 import os
 import copy
 import traceback
-import string
 
 class KThread(Thread):
     """Thread that can be killed during its run()"""
@@ -79,8 +78,8 @@ class Process:
            self.__result = func(*param)
         except:
            self.__result = None
-           print(string.join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1],
-           sys.exc_info()[2]), ""))
+           print("".join(traceback.format_exception(sys.exc_info()[0], sys.exc_info()[1],
+           sys.exc_info()[2])))
         self.__done = 1
         self.__status = "self.__result"
         self.__C.notify()

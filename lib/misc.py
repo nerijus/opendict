@@ -22,7 +22,6 @@
 
 import wx
 from os.path import *
-import string
 import traceback
 import sys
 import os
@@ -78,15 +77,15 @@ def numVersion(str):
         return 0.0
 
 def printError():
-    print(string.join(traceback.format_exception(sys.exc_info()[0],
-                                                 sys.exc_info()[1],
-                                                 sys.exc_info()[2]), ""))
+    print("".join(traceback.format_exception(sys.exc_info()[0],
+                                             sys.exc_info()[1],
+                                             sys.exc_info()[2])))
 
 
 def getTraceback():
-    return string.join(traceback.format_exception(sys.exc_info()[0],
-                                                 sys.exc_info()[1],
-                                                 sys.exc_info()[2]), "")
+    return "".join(traceback.format_exception(sys.exc_info()[0],
+                                              sys.exc_info()[1],
+                                              sys.exc_info()[2]))
 
 
 

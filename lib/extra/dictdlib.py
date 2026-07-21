@@ -17,6 +17,7 @@
 #    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 import sys, string, gzip, os
+from functools import cmp_to_key
 
 b64_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 url_headword = "00-database-url"
@@ -71,10 +72,10 @@ def sortfunc(x, y):
    """Emulate sort -df."""
    xl = x.split("\0")
    yl = y.split("\0")
-   ret = cmp(xl[0], yl[0])
+   ret = (xl[0] > yl[0]) - (xl[0] < yl[0])
    if ret != 0:
        return ret
-   return cmp(xl[1], yl[1])
+   return (xl[1] > yl[1]) - (xl[1] < yl[1])
 
 class DictDB:
     def __init__(self, basename, mode = 'read', quiet = 0):
@@ -269,7 +270,7 @@ class DictDB:
                 norm = sortnormalize(entry)
                 if norm in sortmap:
                     sortmap[norm].append(entry)
-                    sortmap[norm].sort(sortfunc)
+                    sortmap[norm].sort(key=cmp_to_key(sortfunc))
                 else:
                     sortmap[norm] = [entry]
 

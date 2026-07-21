@@ -17,4 +17,4 @@ if __name__ == "__main__":
 
     print("Packing '%s' to '%s'..." % (sys.argv[2], sys.argv[1]),
     compress(sys.argv[1], sys.argv[2]), file=sys.stderr)
-    print "done"
+    print("done")

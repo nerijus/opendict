@@ -20,7 +20,6 @@
 #
 
 import time
-import string
 import re
 import os
 import traceback
@@ -195,7 +194,7 @@ class SlowoParser(plaindict.PlainDictionary):
       # DEBUG
       _linesRead = 0
 
-      for line in self.fd.xreadlines():
+      for line in self.fd:
          _linesRead += 1
          line = line.strip()
          try:
@@ -441,7 +440,7 @@ class MovaParser(plaindict.PlainDictionary):
       # DEBUG
       _linesRead = 0
 
-      for line in self.fd.xreadlines():
+      for line in self.fd:
          _linesRead += 1
          line = line.strip()
          try:
@@ -750,10 +749,9 @@ class DictParser(plaindict.PlainDictionary):
       
       for source in translations:
          chunks = source.split('\n')
-         map(string.strip, chunks)
-         
+
          orig = chunks[0]
-         pron = re.findall("\[(.*?)\]", orig)
+         pron = re.findall(r"\[(.*?)\]", orig)
          if len(pron) > 0:
             orig = "<b>%s</b> [<i>%s</i>]" % \
                    (orig.replace(" [%s]" % pron[0], ""), pron[0])
@@ -920,11 +918,11 @@ class DictConnection(meta.Dictionary):
          source = source.replace('>', '&gt;')
          orig = source.split("\n", 1)[0]
          
-         pron = re.findall("\[(.*?)\]", orig) # 1st comment type
+         pron = re.findall(r"\[(.*?)\]", orig) # 1st comment type
          pronPatt = " [%s]"
          
          if len(pron) == 0:
-            pron = re.findall("\/(.*?)\/", orig) # 2nd comment type
+            pron = re.findall(r"\/(.*?)\/", orig) # 2nd comment type
             pronPatt = " /%s/"
          if len(pron) == 0:
             pron = re.findall(r"\\(.*?)\\", orig) # 3rd comment type

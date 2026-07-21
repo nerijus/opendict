@@ -26,7 +26,7 @@ n += len(line)
 
 for line in fdDict.readlines():
     l = line[0:2].lower()
-    if not hash.has_key(l):
+    if l not in hash:
         hash[l] = n
     n += len(line)
 

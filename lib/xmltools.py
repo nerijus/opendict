@@ -493,7 +493,7 @@ class MainConfigGenerator:
         for key, value in props.items():
             elem = doc.createElement(key)
             mainElement.appendChild(elem)
-            if type(value) != unicode:
+            if not isinstance(value, str):
                 value = str(value)
             elem.appendChild(doc.createTextNode(value))
 

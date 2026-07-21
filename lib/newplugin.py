@@ -125,7 +125,7 @@ class PluginInfo:
         for platformElement in doc.getElementsByTagName('platform'):
             platformName = platformElement.getAttribute('name')
             self.platforms.append({'name': platformName})
-        self.platforms.sort()
+        self.platforms.sort(key=lambda p: p['name'])
 
         # Get description
         for descElement in doc.getElementsByTagName('description'):

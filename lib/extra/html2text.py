@@ -6,15 +6,15 @@
 
 
 # system libraries
-import os, sys, string, time, getopt
+import os, sys, time, getopt
 import re
 
 WIDTH = 80
 
 def tag_replace (data,center,indent, use_ansi = 0):
-  data = re.sub ("\s+", " ", data)
+  data = re.sub (r"\s+", " ", data)
   data = re.sub ("(?s)<!--.*?-->", "", data)
-  data = string.replace (data, "\n", " ")
+  data = data.replace("\n", " ")
   output = []
 
   # modified 6/17/99 splits on all cases of "img" tags
@@ -22,17 +22,17 @@ def tag_replace (data,center,indent, use_ansi = 0):
   imgs = re.split ("(?si)(<img.*?>)", data)
 
   for img in imgs:
-    if string.lower(img[:4]) == "<img":
-      alt = re.search ("(?si)alt\s*=\s*\"([^\"]*)\"", img)
+    if img[:4].lower() == "<img":
+      alt = re.search (r"(?si)alt\s*=\s*\"([^\"]*)\"", img)
       if not alt:
-        alt = re.search ("(?si)alt\s*=([^\s]*)", img)
+        alt = re.search (r"(?si)alt\s*=([^\s]*)", img)
       if alt:
         output.append ("%s" % img[alt.start(1):alt.end(1)])
       else:
         output.append ("[img]")
     else:
       output.append (img)
-  data = string.join (output, "")
+  data = "".join(output)
   data = re.sub ("(?i)<br>", "\n", data)
   data = re.sub ("(?i)<hr[^>]*>", "\n" + "-"*50 + "\n", data)
   data = re.sub ("(?i)<li>", "\n* ", data)
@@ -65,7 +65,7 @@ def tag_replace (data,center,indent, use_ansi = 0):
   data = re.sub ("(?i)<td[^>]*>", "\t", data)
   data = re.sub ("(?i)<th[^>]*>", "\t", data)
   data = re.sub (" *\n", "\n", data)
-  lines = string.split (data, "\n")
+  lines = data.split("\n")
   output = []
   for line in lines:
     if line == "<UL>":
@@ -80,14 +80,14 @@ def tag_replace (data,center,indent, use_ansi = 0):
       if center < 0: center = 0
     else:
       if center:
-        line = "  "*indent + string.strip(line)
-        nline = re.sub("\[.*?m", "", line)
+        line = "  "*indent + line.strip()
+        nline = re.sub(r"\[.*?m", "", line)
         nline = re.sub ("<[^>]*>", "", nline)
-        c = WIDTH/2 - (len (nline) / 2)
+        c = WIDTH//2 - (len(nline) // 2)
         output.append (" "*c + line)
       else:
         output.append ("  "*indent + line)
-  data = string.join (output, "\n")
+  data = "\n".join(output)
   data = re.sub (" *\n", "\n", data)
   data = re.sub ("\n\n\n*", "\n\n", data)
   data = re.sub ("<[^>]*>", "", data)
@@ -105,7 +105,7 @@ def html2text (data, use_ansi = 0, is_latin1 = 0):
     else:
       part = re.sub("(?i)</*pre>", "", part)
       out.append (part)
-  data = string.join (out)
+  data = " ".join(out)
   data = re.sub ("&gt;", ">", data)
   data = re.sub ("&lt;", "<", data)
   data = re.sub ("&nbsp;", " ", data)
