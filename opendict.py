@@ -22,17 +22,14 @@
 
 import sys
 import os
-import imp
 import traceback
-import string
 import time
 
 # main_is_frozen() returns True when running the exe, and False when
 # running from a script.
 def main_is_frozen():
     return (hasattr(sys, "frozen") or # new py2exe
-	    hasattr(sys, "importers") # old py2exe
-	    or imp.is_frozen("__main__")) # tools/freeze
+	    hasattr(sys, "importers")) # old py2exe
 
 try:
     import wx

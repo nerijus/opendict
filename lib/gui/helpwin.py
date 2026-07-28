@@ -28,7 +28,6 @@ import os
 import sys
 
 from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-from lib import enc
 from lib import info
 
 _ = wx.GetTranslation

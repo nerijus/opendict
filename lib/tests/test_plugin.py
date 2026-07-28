@@ -62,14 +62,14 @@ class TestDictionaryPlugin(unittest.TestCase):
         p = newplugin.DictionaryPlugin(os.path.realpath('data/sampleplugin'))
 
         self.assertEqual(p.__class__, newplugin.DictionaryPlugin)
-        self.assert_(p.info != None)
-        self.assert_(p.dictionary != None)
-        self.assert_(p.isValid() == True)
+        self.assertTrue(p.info != None)
+        self.assertTrue(p.dictionary != None)
+        self.assertTrue(p.isValid() == True)
         self.assertEqual(p.info.__class__, newplugin.PluginInfo)
         self.assertEqual(len(p.dictionary.search('x').words), 20)
 
-        self.assertRaises(newplugin.InvalidPluginException(
-                          newplugin.DictionaryPlugin, 'blabla'))
+        self.assertRaises(newplugin.InvalidPluginException,
+                          newplugin.DictionaryPlugin, 'blabla')
                                         
 
 

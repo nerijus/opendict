@@ -52,7 +52,6 @@ from lib import misc
 from lib import info
 from lib import util
 from lib import meta
-from lib import enc
 from lib import errortype
 from lib import dicttype
 from lib import plaindict

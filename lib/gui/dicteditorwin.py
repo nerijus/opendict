@@ -33,7 +33,6 @@ from lib.parser import TMXParser
 from lib.gui import errorwin
 from lib import info
 from lib import dicteditor
-from lib import enc
 
 _ = wx.GetTranslation
 

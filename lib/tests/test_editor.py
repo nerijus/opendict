@@ -89,7 +89,7 @@ class TestEditor(unittest.TestCase):
         editor.load("data/sampledict.dwa")
         oldCount = len(editor.getUnits())
 
-        self.assert_(editor.getUnit('du') != None)        
+        self.assertTrue(editor.getUnit('du') != None)        
 
 
     def test_addUnit(self):

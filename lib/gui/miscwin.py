@@ -25,7 +25,6 @@ import shutil
 import traceback
 
 from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
-from lib import enc
 from lib.gui import errorwin
 
 _ = wx.GetTranslation

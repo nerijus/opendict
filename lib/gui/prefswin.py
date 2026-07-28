@@ -23,7 +23,6 @@ import wx
 
 from lib.logger import systemLog, debugLog, DEBUG, INFO, WARNING, ERROR
 from lib.misc import encodings
-from lib import enc
 
 _ = wx.GetTranslation
 PRON_COMMAND = "echo \"(SayText \\\"%s\\\")\" | festival"

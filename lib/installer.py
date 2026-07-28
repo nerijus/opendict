@@ -33,7 +33,6 @@ from lib import info
 from lib import dicttype
 from lib import xmltools
 from lib import util
-from lib import enc
 from lib import plaindict
 from lib import newplugin
 

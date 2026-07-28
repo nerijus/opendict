@@ -21,7 +21,6 @@
 
 import sys
 import os
-import imp
 
 # OpenDict version
 VERSION = "0.6.8"
@@ -68,8 +67,7 @@ LOCAL_HOME = None
 # running from a script. 
 def main_is_frozen():
     return (hasattr(sys, "frozen") or # new py2exe 
-            hasattr(sys, "importers") # old py2exe 
-            or imp.is_frozen("__main__")) # tools/freeze 
+            hasattr(sys, "importers")) # old py2exe
 
 if main_is_frozen():
     GLOBAL_HOME = os.path.realpath(os.path.join(os.path.dirname(\
