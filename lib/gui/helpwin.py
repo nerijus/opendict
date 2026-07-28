@@ -70,7 +70,7 @@ class LicenseWindow(wx.Frame):
 
       self.SetSizer(vbox)
 
-      wx.EVT_BUTTON(self, 2002, self.onClose)
+      self.Bind(wx.EVT_BUTTON, self.onClose, id=2002)
 
 
    def onClose(self, event):
@@ -140,7 +140,7 @@ class CreditsWindow(wx.Dialog):
 
       self.SetSizer(vbox)
 
-      wx.EVT_BUTTON(self, 2005, self.onClose)
+      self.Bind(wx.EVT_BUTTON, self.onClose, id=2005)
 
 
    def onClose(self, event):
@@ -206,9 +206,9 @@ class AboutWindow(wx.Dialog):
       self.SetSizer(vbox)
       vbox.Fit(self)
 
-      wx.EVT_BUTTON(self, 2003, self.onClose)
-      wx.EVT_BUTTON(self, 2004, self.onCredits)
-      wx.EVT_BUTTON(self, 2006, self.onLicence)
+      self.Bind(wx.EVT_BUTTON, self.onClose, id=2003)
+      self.Bind(wx.EVT_BUTTON, self.onCredits, id=2004)
+      self.Bind(wx.EVT_BUTTON, self.onLicence, id=2006)
 
 
    def onClose(self, event):

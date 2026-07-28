@@ -102,9 +102,9 @@ class PluginManagerWindow(wx.Frame):
 
       self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onPageChanged)
       
-      wx.EVT_BUTTON(self, 161, self.onInstall)
-      wx.EVT_BUTTON(self, 162, self.onRemove)
-      wx.EVT_BUTTON(self, 163, self.onClose)
+      self.Bind(wx.EVT_BUTTON, self.onInstall, id=161)
+      self.Bind(wx.EVT_BUTTON, self.onRemove, id=162)
+      self.Bind(wx.EVT_BUTTON, self.onClose, id=163)
 
       self.addons = self.app.cache.get("addons", {})
 

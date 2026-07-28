@@ -88,5 +88,5 @@ class ErrorWindow(wx.Frame):
       self.SetSizer(vbox)
       self.Fit()
 
-      wx.EVT_CLOSE(self, self.onCloseWindow)
-      wx.EVT_BUTTON(self, 200, self.onExit)
+      self.Bind(wx.EVT_CLOSE, self.onCloseWindow)
+      self.Bind(wx.EVT_BUTTON, self.onExit, id=200)

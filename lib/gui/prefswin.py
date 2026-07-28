@@ -152,12 +152,12 @@ class PrefsWindow(wx.Dialog):
       self.Fit()
       self.SetSize((400, -1))
 
-      wx.EVT_CHECKBOX(self, 1101, self.onSaveWinSizeClicked)
-      wx.EVT_CHECKBOX(self, 1102, self.onSaveWinPosClicked)
-      wx.EVT_CHECKBOX(self, 1103, self.onSaveSashPosClicked)
-      wx.EVT_BUTTON(self, 1106, self.onDefaultPron)
-      wx.EVT_BUTTON(self, 1104, self.onOK)
-      wx.EVT_BUTTON(self, 1105, self.onCancel)
+      self.Bind(wx.EVT_CHECKBOX, self.onSaveWinSizeClicked, id=1101)
+      self.Bind(wx.EVT_CHECKBOX, self.onSaveWinPosClicked, id=1102)
+      self.Bind(wx.EVT_CHECKBOX, self.onSaveSashPosClicked, id=1103)
+      self.Bind(wx.EVT_BUTTON, self.onDefaultPron, id=1106)
+      self.Bind(wx.EVT_BUTTON, self.onOK, id=1104)
+      self.Bind(wx.EVT_BUTTON, self.onCancel, id=1105)
 
 
    def onSaveWinSizeClicked(self, event):

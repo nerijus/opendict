@@ -257,9 +257,9 @@ class DictEditorWindow(wx.Frame):
             self.SetSizer(vboxMain)
             self.Fit()
 
-            wx.EVT_BUTTON(self, 6000, self.onSave)
-            wx.EVT_BUTTON(self, 6001, self.onExitParent)
-            wx.EVT_BUTTON(self, 6002, self.onClose)
+            self.Bind(wx.EVT_BUTTON, self.onSave, id=6000)
+            self.Bind(wx.EVT_BUTTON, self.onExitParent, id=6001)
+            self.Bind(wx.EVT_BUTTON, self.onClose, id=6002)
 
 
         def onSave(self, event):
@@ -388,16 +388,16 @@ class DictEditorWindow(wx.Frame):
         self.Bind(wx.EVT_LISTBOX, self.onWordSelected, self.list)
         self.Bind(wx.EVT_BUTTON, self.onCreate, self.buttonNew)
 
-        wx.EVT_BUTTON(self, 6000, self.onAddWord)
-        wx.EVT_BUTTON(self, 6001, self.onEdit)
-        wx.EVT_BUTTON(self, 6002, self.onRemove)
-        wx.EVT_BUTTON(self, 6003, self.onSearch)
-        wx.EVT_BUTTON(self, 6004, self.onSort)
-        wx.EVT_BUTTON(self, 6005, self.onSave)
-        wx.EVT_BUTTON(self, 6006, self.onSaveAs)
-        wx.EVT_BUTTON(self, 6031, self.onOpen)
-        wx.EVT_BUTTON(self, 6032, self.onClose)
-        wx.EVT_CLOSE(self, self.onClose)
+        self.Bind(wx.EVT_BUTTON, self.onAddWord, id=6000)
+        self.Bind(wx.EVT_BUTTON, self.onEdit, id=6001)
+        self.Bind(wx.EVT_BUTTON, self.onRemove, id=6002)
+        self.Bind(wx.EVT_BUTTON, self.onSearch, id=6003)
+        self.Bind(wx.EVT_BUTTON, self.onSort, id=6004)
+        self.Bind(wx.EVT_BUTTON, self.onSave, id=6005)
+        self.Bind(wx.EVT_BUTTON, self.onSaveAs, id=6006)
+        self.Bind(wx.EVT_BUTTON, self.onOpen, id=6031)
+        self.Bind(wx.EVT_BUTTON, self.onClose, id=6032)
+        self.Bind(wx.EVT_CLOSE, self.onClose)
 
 
     def onAddWord(self, event):

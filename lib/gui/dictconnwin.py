@@ -147,12 +147,12 @@ class DictConnWindow(wx.Frame):
       self.update = None
       self.connection = None
 
-      wx.EVT_BUTTON(self, 1000, self.onDefaultServer)
-      wx.EVT_BUTTON(self, 1001, self.onDefaultPort)
-      wx.EVT_BUTTON(self, 1003, self.onUpdateDB)
-      wx.EVT_BUTTON(self, 1007, self.onUpdateStrats)
-      wx.EVT_BUTTON(self, 1004, self.onOK)
-      wx.EVT_BUTTON(self, 1005, self.onCancel)
+      self.Bind(wx.EVT_BUTTON, self.onDefaultServer, id=1000)
+      self.Bind(wx.EVT_BUTTON, self.onDefaultPort, id=1001)
+      self.Bind(wx.EVT_BUTTON, self.onUpdateDB, id=1003)
+      self.Bind(wx.EVT_BUTTON, self.onUpdateStrats, id=1007)
+      self.Bind(wx.EVT_BUTTON, self.onOK, id=1004)
+      self.Bind(wx.EVT_BUTTON, self.onCancel, id=1005)
       self.Bind(wx.EVT_TIMER, self.onTimerUpdateDB)
       self.Bind(wx.EVT_TIMER, self.onTimerConnect)
 

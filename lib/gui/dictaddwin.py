@@ -67,8 +67,8 @@ class DictAddWindow(wx.Dialog):
         self.SetSizer(vboxMain)
         self.Fit()
         
-        wx.EVT_BUTTON(self, wx.ID_OK, self.onOK)
-        wx.EVT_BUTTON(self, 6302, self.onCancel)
+        self.Bind(wx.EVT_BUTTON, self.onOK, id=wx.ID_OK)
+        self.Bind(wx.EVT_BUTTON, self.onCancel, id=6302)
     
     def onOK(self, event):
         parent = self.GetParent()

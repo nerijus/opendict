@@ -113,7 +113,7 @@ class InvalidDictWindow(wx.Dialog):
          b = wx.Button(self, rid, _("Remove"))
          self.buttons[rid] = b
          grid.Add(b, 1, wx.ALIGN_CENTER_VERTICAL)
-         wx.EVT_BUTTON(self, rid, self.onRemove)
+         self.Bind(wx.EVT_BUTTON, self.onRemove, id=rid)
 
       vbox.Add(grid, 0, wx.ALL, 10)
       vbox.Add(wx.StaticLine(self, -1), 1, wx.ALL | wx.EXPAND, 1)

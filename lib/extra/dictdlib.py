@@ -114,7 +114,7 @@ class DictDB:
             self.usecompression = 0
 
         if mode == 'read':
-            self.indexfile = open(self.indexfilename, "rt")
+            self.indexfile = open(self.indexfilename, "rb")
             if self.usecompression:
                 self.dictfile = gzip.GzipFile(self.dictfilename, "rb")
             else:
@@ -152,11 +152,13 @@ class DictDB:
         """Load the entire index off disk into memory."""
         self.indexfile.seek(0)
         for line in self.indexfile.readlines():
-            splits = line.rstrip().split("\t")
-            if splits[0] not in self.indexentries:
-                self.indexentries[splits[0]] = []
-            self.indexentries[splits[0]].append([b64_decode(splits[1]),
-                                                 b64_decode(splits[2])])
+            splits = line.rstrip().split(b"\t")
+            word = splits[0]
+            if word not in self.indexentries:
+                self.indexentries[word] = []
+            self.indexentries[word].append([
+                b64_decode(splits[1].decode('ascii')),
+                b64_decode(splits[2].decode('ascii'))])
 
     def addindexentry(self, word, start, size):
         """Adds an entry to the index.  word is the relevant word.

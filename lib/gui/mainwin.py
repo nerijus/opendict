@@ -226,7 +226,7 @@ class MainWindow(wx.Frame):
 
       for face in keys:
          self.menuFontFace.AppendRadioItem(2500+i, face, "")
-         wx.EVT_MENU(self, 2500+i, self.onDefault)
+         self.Bind(wx.EVT_MENU, self.onDefault, id=2500+i)
          if self.app.config.get('fontFace') == misc.fontFaces[face]:
             self.menuFontFace.FindItemById(2500+i).Check(1)
          i+=1
@@ -241,7 +241,7 @@ class MainWindow(wx.Frame):
       keys.sort()
       for encoding in keys:
          self.menuEncodings.AppendRadioItem(2100+i , encoding, "")
-         wx.EVT_MENU(self, 2100+i, self.onDefault)
+         self.Bind(wx.EVT_MENU, self.onDefault, id=2100+i)
          if self.app.config.get('encoding') == misc.encodings[encoding]:
             self.menuEncodings.FindItemById(2100+i).Check(1)
          i+=1
@@ -283,7 +283,7 @@ class MainWindow(wx.Frame):
 #                              name)
 #            self.menuDict.AppendItem(item)
             self.menuDict.AppendRadioItem(itemID, name, "")
-            wx.EVT_MENU(self, itemID, self.onDefault)
+            self.Bind(wx.EVT_MENU, self.onDefault, id=itemID)
             if self.app.config.get('defaultDict') == name:
                self.menuDict.FindItemById(itemID).Check(1)
 
@@ -474,51 +474,51 @@ class MainWindow(wx.Frame):
       # TODO: New-style event definition
 
       # File menu events
-      wx.EVT_MENU(self, idPrint, self.onPrint)
-      wx.EVT_MENU(self, idPreview, self.onPreview)
-      wx.EVT_MENU(self, idCloseDict, self.onCloseDict)
-      wx.EVT_MENU(self, idExit, self.onExit)
+      self.Bind(wx.EVT_MENU, self.onPrint, id=idPrint)
+      self.Bind(wx.EVT_MENU, self.onPreview, id=idPreview)
+      self.Bind(wx.EVT_MENU, self.onCloseDict, id=idCloseDict)
+      self.Bind(wx.EVT_MENU, self.onExit, id=idExit)
 
       # Edit menu events
-      wx.EVT_MENU(self, idClearHistory, self.onClearHistory)
-      wx.EVT_MENU(self, idCopy, self.onCopy)
-      wx.EVT_MENU(self, idPaste, self.onPaste)
-      wx.EVT_MENU(self, idClearEntry, self.onClean)
+      self.Bind(wx.EVT_MENU, self.onClearHistory, id=idClearHistory)
+      self.Bind(wx.EVT_MENU, self.onCopy, id=idCopy)
+      self.Bind(wx.EVT_MENU, self.onPaste, id=idPaste)
+      self.Bind(wx.EVT_MENU, self.onClean, id=idClearEntry)
 
       # View menu events
-      wx.EVT_MENU(self, 2007, self.onIncreaseFontSize)
-      wx.EVT_MENU(self, 2008, self.onDecreaseFontSize)
-      wx.EVT_MENU(self, 2009, self.onNormalFontSize)
-      wx.EVT_MENU(self, idShowHide, self.onHideUnhide)
+      self.Bind(wx.EVT_MENU, self.onIncreaseFontSize, id=2007)
+      self.Bind(wx.EVT_MENU, self.onDecreaseFontSize, id=2008)
+      self.Bind(wx.EVT_MENU, self.onNormalFontSize, id=2009)
+      self.Bind(wx.EVT_MENU, self.onHideUnhide, id=idShowHide)
 
       # Dictionaries menu events
-      wx.EVT_MENU(self, idAddDict, self.onAddDict)
+      self.Bind(wx.EVT_MENU, self.onAddDict, id=idAddDict)
 
       # Tools menu events
-      wx.EVT_MENU(self, idDictServer, self.onOpenDictConn)
-      wx.EVT_MENU(self, idUseScan, self.onUseScanClipboard)
-      wx.EVT_MENU(self, idManageDict, self.onShowPluginManager)
-      wx.EVT_MENU(self, 5002, self.onShowDictEditor)
-      wx.EVT_MENU(self, idPrefs, self.onShowPrefsWindow)
-      wx.EVT_MENU(self, idPron, self.onPronounce)
+      self.Bind(wx.EVT_MENU, self.onOpenDictConn, id=idDictServer)
+      self.Bind(wx.EVT_MENU, self.onUseScanClipboard, id=idUseScan)
+      self.Bind(wx.EVT_MENU, self.onShowPluginManager, id=idManageDict)
+      self.Bind(wx.EVT_MENU, self.onShowDictEditor, id=5002)
+      self.Bind(wx.EVT_MENU, self.onShowPrefsWindow, id=idPrefs)
+      self.Bind(wx.EVT_MENU, self.onPronounce, id=idPron)
 
       # Help menu events
-      wx.EVT_MENU(self, idAbout, self.onAbout)
+      self.Bind(wx.EVT_MENU, self.onAbout, id=idAbout)
 
       # Other events
       self.Bind(wx.EVT_BUTTON, self.onSearch, self.buttonSearch)
-      wx.EVT_MENU(self, idFind, self.onSearch)
+      self.Bind(wx.EVT_MENU, self.onSearch, id=idFind)
 
-      wx.EVT_BUTTON(self, 2010, self.onBack)
-      wx.EVT_BUTTON(self, 2011, self.onForward)
-      wx.EVT_BUTTON(self, 155, self.onStop)
-      wx.EVT_BUTTON(self, 151, self.onClean)
-      wx.EVT_BUTTON(self, 152, self.onHideUnhide)
-      wx.EVT_TEXT_ENTER(self, 153, self.onSearch)
-      wx.EVT_LISTBOX(self, 154, self.onWordSelected)
+      self.Bind(wx.EVT_BUTTON, self.onBack, id=2010)
+      self.Bind(wx.EVT_BUTTON, self.onForward, id=2011)
+      self.Bind(wx.EVT_BUTTON, self.onStop, id=155)
+      self.Bind(wx.EVT_BUTTON, self.onClean, id=151)
+      self.Bind(wx.EVT_BUTTON, self.onHideUnhide, id=152)
+      self.Bind(wx.EVT_TEXT_ENTER, self.onSearch, id=153)
+      self.Bind(wx.EVT_LISTBOX, self.onWordSelected, id=154)
       self.Bind(wx.EVT_TIMER, self.onTimerSearch)
       self.Bind(wx.EVT_TIMER, self.onTimerClipboard)
-      wx.EVT_CLOSE(self, self.onCloseWindow)
+      self.Bind(wx.EVT_CLOSE, self.onCloseWindow)
 
       self.entry.Bind(wx.EVT_KEY_DOWN, self.onKeyDown)
 
@@ -1046,7 +1046,7 @@ class MainWindow(wx.Frame):
       item = wx.MenuItem(self.menuDict,
                         unid,
                         dictInstance.getName())
-      wx.EVT_MENU(self, unid, self.onDefault)
+      self.Bind(wx.EVT_MENU, self.onDefault, id=unid)
       
       #self.menuDict.InsertItem(self.menuDict.GetMenuItemCount()-2, item)
       self.menuDict.InsertItem(0, item)

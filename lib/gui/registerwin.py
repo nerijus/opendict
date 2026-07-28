@@ -94,10 +94,10 @@ class FileRegistryWindow(wx.Frame):
       self.SetSizer(vboxMain)
       self.Fit()
 
-      wx.EVT_LISTBOX(self, 190, self.onFileSelected)
-      wx.EVT_BUTTON(self, 191, self.onInstall)
-      wx.EVT_BUTTON(self, 192, self.onRemove)
-      wx.EVT_BUTTON(self, 193, self.onClose)
+      self.Bind(wx.EVT_LISTBOX, self.onFileSelected, id=190)
+      self.Bind(wx.EVT_BUTTON, self.onInstall, id=191)
+      self.Bind(wx.EVT_BUTTON, self.onRemove, id=192)
+      self.Bind(wx.EVT_BUTTON, self.onClose, id=193)
 
    def onFileSelected(self, event):
       info = self.app.config.registers[event.GetString()]

@@ -748,6 +748,7 @@ class DictParser(plaindict.PlainDictionary):
       translation = None
       
       for source in translations:
+         source = source.decode(self.encoding)
          chunks = source.split('\n')
 
          orig = chunks[0]
