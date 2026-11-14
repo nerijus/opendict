@@ -234,10 +234,10 @@ class PluginManagerWindow(wx.Frame):
        dictNames.sort()
 
        for dictionary in dictNames:
-           index = self.availableList.InsertStringItem(0, dictionary)
+           index = self.availableList.InsertItem(0, dictionary)
            sizeString = "%d KB" % addons.get(dictionary).getSize()
 
-           self.availableList.SetStringItem(index, 1,
+           self.availableList.SetItem(index, 1,
                                             sizeString)
            self.availableList.SetItemData(index, index+1)
 
@@ -503,8 +503,8 @@ class PluginManagerWindow(wx.Frame):
        for name in names:
            addon = addons.get(name)
 
-           index = self.availableList.InsertStringItem(0, addon.getName())
-           self.availableList.SetStringItem(index, 1,
+           index = self.availableList.InsertItem(0, addon.getName())
+           self.availableList.SetItem(index, 1,
                                             str(addon.getSize())+" KB")
            self.availableList.SetItemData(index, index+1)
 

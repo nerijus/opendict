@@ -316,27 +316,27 @@ class DictEditorWindow(wx.Frame):
         self.controlButtons = []
         
         self.buttonAdd = wx.Button(self, 6000, _("Add"))
-        self.buttonAdd.SetToolTipString(_("Add word"))
+        self.buttonAdd.SetToolTip(_("Add word"))
         self.controlButtons.append(self.buttonAdd)
         
         self.buttonEdit = wx.Button(self, 6001, _("Edit"))
-        self.buttonEdit.SetToolTipString(_("Change translation"))
+        self.buttonEdit.SetToolTip(_("Change translation"))
         self.controlButtons.append(self.buttonEdit)
 
         self.buttonRemove = wx.Button(self, 6002, _("Remove"))
-        self.buttonRemove.SetToolTipString(_("Remove selected word"))
+        self.buttonRemove.SetToolTip(_("Remove selected word"))
         self.controlButtons.append(self.buttonRemove)
 
         self.buttonSort = wx.Button(self, 6004, _("Sort"))
-        self.buttonSort.SetToolTipString(_("Sort word list"))
+        self.buttonSort.SetToolTip(_("Sort word list"))
         self.controlButtons.append(self.buttonSort)
 
         self.buttonSave = wx.Button(self, 6005, _("Save"))
-        self.buttonSave.SetToolTipString(_("Save words to file"))
+        self.buttonSave.SetToolTip(_("Save words to file"))
         self.controlButtons.append(self.buttonSave)
 
         self.buttonSaveAs = wx.Button(self, 6006, _("Save As..."))
-        self.buttonSaveAs.SetToolTipString(_("Save with a different file name"))
+        self.buttonSaveAs.SetToolTip(_("Save with a different file name"))
         self.controlButtons.append(self.buttonSaveAs)
         
         for button in self.controlButtons:
@@ -365,15 +365,15 @@ class DictEditorWindow(wx.Frame):
         vboxMain.Add(vboxDict, 1, wx.ALL | wx.EXPAND, 10)
 
         self.buttonNew = wx.Button(self, 6030, _("New..."))
-        self.buttonNew.SetToolTipString(_("Start new dictionary"))
+        self.buttonNew.SetToolTip(_("Start new dictionary"))
         hboxButtons.Add(self.buttonNew, 0, wx.ALL | wx.EXPAND, 1)
 
         self.buttonOpen = wx.Button(self, 6031, _("Open..."))
-        self.buttonOpen.SetToolTipString(_("Open dictionary file"))
+        self.buttonOpen.SetToolTip(_("Open dictionary file"))
         hboxButtons.Add(self.buttonOpen, 0, wx.ALL | wx.EXPAND, 1)
 
         self.buttonClose = wx.Button(self, 6032, _("Close"))
-        self.buttonClose.SetToolTipString(_("Close editor window"))
+        self.buttonClose.SetToolTip(_("Close editor window"))
         hboxButtons.Add(self.buttonClose, 0, wx.ALL | wx.EXPAND, 1)
 
         vboxMain.Add(hboxButtons, 0, wx.ALL | wx.ALIGN_RIGHT, 2)
