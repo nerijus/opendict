@@ -673,6 +673,7 @@ class DictParser(plaindict.PlainDictionary):
 
       self.dict = None
       self.definitions = None
+      self.stripKeys = True
 
 
    def start(self):
@@ -683,6 +684,12 @@ class DictParser(plaindict.PlainDictionary):
       indexFile = os.path.join(os.path.dirname(self.filePath),
                                name)
       self.dict = dictdlib.DictDB(indexFile)
+
+      # Unless the database has this entry, dictfmt kept only ASCII letters,
+      # digits and spaces in the index keys (a word ending in a non-ASCII
+      # letter is indexed without it) and dictd strips searched words
+      # the same way
+      self.stripKeys = not self.dict.hasdef(b'00-database-allchars')
 
 
    def stop(self):
@@ -744,29 +751,55 @@ class DictParser(plaindict.PlainDictionary):
       return self.needsList
 
 
-   def _getTranslation(self, word):
-      """Return word and translation code without formatting
-      full HTML document"""
+   # Index keys are stripped (see start()), so real headwords have to be
+   # read from definitions. Do that only for a reasonable number of keys.
+   MAX_STRIPPED_KEYS = 200
 
-      translations = self.dict.getdef(word)
 
-      orig = None
-      translation = None
-      
-      for source in translations:
-         source = source.decode(self.encoding)
-         chunks = source.split('\n')
+   def _stripWord(self, word):
+      """Return word the way dictfmt writes it to the index of a database
+      built without the 00-database-allchars entry: only ASCII letters,
+      digits, space and tab are kept, so 8-bit letters are lost."""
 
-         orig = chunks[0]
-         pron = re.findall(r"\[(.*?)\]", orig)
-         if len(pron) > 0:
-            orig = "<b>%s</b> [<i>%s</i>]" % \
-                   (orig.replace(" [%s]" % pron[0], ""), pron[0])
+      return bytes(b for b in word
+                   if b < 128 and (chr(b).isalnum() or b in b' \t'))
+
+
+   def _splitDefinition(self, source):
+      """Decode raw definition and return (headword, pronunciation,
+      lines of translation)"""
+
+      source = source.decode(self.encoding)
+      chunks = source.split('\n')
+
+      orig = chunks[0]
+      pron = re.findall(r"\[(.*?)\]", orig)
+      if len(pron) > 0:
+         return (orig.replace(" [%s]" % pron[0], ""), pron[0], chunks[1:])
+
+      return (orig, None, chunks[1:])
+
+
+   def _getTranslations(self, key, wanted=None, strict=False):
+      """Return a list of (word, translation) HTML code pairs for all
+      definitions stored under the index key, without formatting full
+      HTML document. Several words can share one (stripped) key, so if
+      wanted (text) is given, definitions with that headword (or starting
+      with it) are preferred. If there are none, all definitions are
+      returned, unless strict is true."""
+
+      found = []
+
+      for source in self.dict.getdef(key):
+         headword, pron, lines = self._splitDefinition(source)
+
+         if pron:
+            orig = "<b>%s</b> [<i>%s</i>]" % (headword, pron)
          else:
-            orig = "<b>%s</b>" % orig
+            orig = "<b>%s</b>" % headword
 
          translation = ['<ul>']
-         for c in chunks[1:]:
+         for c in lines:
             if len(c) > 0:
                translation.append("<li>%s</li>" % c)
          translation.append('</ul>')
@@ -779,7 +812,60 @@ class DictParser(plaindict.PlainDictionary):
                                               "<a href=\"%s\">%s</a>" \
                                               % (link, link))
 
-      return (orig, translation)
+         found.append((headword.strip(), orig, translation))
+
+      if wanted is not None:
+         wanted = wanted.strip().lower()
+         exact = [f for f in found if f[0].lower() == wanted]
+         starting = [f for f in found if f[0].lower().startswith(wanted)]
+         if strict:
+            found = exact or starting
+         else:
+            found = exact or starting or found
+
+      return [(orig, translation) for (headword, orig, translation) in found]
+
+
+   def _lookup(self, word):
+      """Return (word, translation) HTML code pairs for the word (bytes
+      in the dictionary encoding)"""
+
+      wanted = word.decode(self.encoding, 'replace')
+      results = self._getTranslations(word, wanted)
+
+      if not results and self.stripKeys:
+         lowered = word.lower()
+         stripped = self._stripWord(lowered)
+         if stripped and stripped != lowered:
+            debugLog(DEBUG, "Looking up stripped key %s" % stripped)
+            results = self._getTranslations(stripped, wanted, strict=True)
+
+      return results
+
+
+   def _findHeadwords(self, prefix, wanted):
+      """Return headwords (bytes) starting with wanted (text) from
+      definitions stored under index keys starting with prefix"""
+
+      if not prefix:
+         return []
+
+      keys = [k for k in self.definitions if k.lower().startswith(prefix)]
+      if len(keys) > self.MAX_STRIPPED_KEYS:
+         return []
+
+      wanted = wanted.strip().lower()
+      words = []
+
+      for key in keys:
+         for source in self.dict.getdef(key):
+            headword = self._splitDefinition(source)[0].strip()
+            if headword.lower().startswith(wanted):
+               headword = headword.encode(self.encoding)
+               if not headword in words:
+                  words.append(headword)
+
+      return words
 
 
    def search(self, word):
@@ -789,17 +875,42 @@ class DictParser(plaindict.PlainDictionary):
 
       result = meta.SearchResult()
 
+      if isinstance(word, str):
+         word = word.encode(self.encoding)
+
       word_lowered = word.lower()
       
       if self.definitions is None:
          self.definitions = self.dict.getdeflist()
          self.definitions.sort()
 
-      words = []
+      try:
+         words = []
 
-      for definition in self.definitions:
-         if definition.lower().startswith(word_lowered):
-            words.append(definition)
+         for definition in self.definitions:
+            if definition.lower().startswith(word_lowered):
+               words.append(definition)
+
+         if not words and self.stripKeys:
+            stripped = self._stripWord(word_lowered)
+            if stripped != word_lowered:
+               words = self._findHeadwords(stripped,
+                                           word.decode(self.encoding,
+                                                       'replace'))
+
+         results = self._lookup(word)
+
+         if not results and len(words):
+            debugLog(DEBUG, "Retrying search...")
+            results = self._lookup(words[0])
+      except UnicodeDecodeError as e:
+         systemLog(ERROR, "Unable to decode definition in %s: %s" \
+                   % (self.encoding, e))
+         result.setError(errortype.INVALID_ENCODING)
+         return result
+
+      if not results:
+         result.setError(errortype.NOT_FOUND)
 
       html = []
 
@@ -809,25 +920,14 @@ class DictParser(plaindict.PlainDictionary):
                   % str(self.getEncoding()))
       html.append("<head><body>")
 
-      (orig, translation) = self._getTranslation(word)
+      for (orig, translation) in results:
+         html.append("<table width=\"100%\"><tr>")
+         html.append("<td bgcolor=\"%s\">" % WORD_BG)
+         html.append("<b>%s</b></td></tr>" % orig)
+         html.append("<tr><td>")
+         html.append("<p>%s</p>" % translation)
+         html.append("</td></tr></table>")
 
-      if not translation:
-         if len(words):
-            debugLog(DEBUG, "Retrying search...")
-            _word = words[0]
-            orig, translation = self._getTranslation(_word)
-            if not translation:
-               result.setError(errortype.NOT_FOUND)
-         else:
-            result.setError(errortype.NOT_FOUND)
-            translation = ""
-
-      html.append("<table width=\"100%\"><tr>")
-      html.append("<td bgcolor=\"%s\">" % WORD_BG)
-      html.append("<b>%s</b></td></tr>" % orig)
-      html.append("<tr><td>")
-      html.append("<p>%s</p>" % translation)
-      html.append("</td></tr></table>")
       html.append("</body></html>")
 
       result.setTranslation("".join(html))
