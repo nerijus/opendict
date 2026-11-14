@@ -245,7 +245,7 @@ def main():
             info.update(parsePluginConfig(zipFile.read(pluginConfigPath)))
             info['type'] = 'plugin-dictionary'
 
-        sz = os.stat(filePath)[6] / 1000
+        sz = os.stat(filePath)[6] // 1000
 
         fd = open(filePath, 'rb')
         m = hashlib.md5(fd.read())
