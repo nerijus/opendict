@@ -354,8 +354,10 @@ class MainWindow(wx.Frame):
       labelWord = wx.StaticText(self, -1, _("Word:"))
       self.hboxToolbar.Add(labelWord, 0, wx.ALL | wx.CENTER, 5)
 
+      # wx.TE_PROCESS_ENTER is needed to get EVT_TEXT_ENTER on [ENTER]
       self.entry = wx.ComboBox(self, 153, "", wx.Point(-1, -1),
-                              wx.Size(-1, -1), [], wx.CB_DROPDOWN)
+                              wx.Size(-1, -1), [],
+                              wx.CB_DROPDOWN | wx.TE_PROCESS_ENTER)
       self.entry.SetToolTip(_("Enter some text and press " \
                                     "\"Look Up\" button or "
                                     "[ENTER] key on your keyboard"))
