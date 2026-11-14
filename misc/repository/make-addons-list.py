@@ -266,8 +266,10 @@ def main():
         print("* %s" % filePath)
 
     doc = makeDocument(xmlElements)
-    fd = open('opendict-add-ons.xml', 'w')
-    fd.write(doc.toxml())
+    # Human readable, with an explicit encoding declaration. Written as
+    # bytes so the file does not depend on the locale.
+    fd = open('opendict-add-ons.xml', 'wb')
+    fd.write(doc.toprettyxml(indent='  ', encoding='UTF-8'))
     fd.close()
     
 
