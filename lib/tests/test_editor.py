@@ -82,6 +82,23 @@ class TestEditor(unittest.TestCase):
         os.unlink("data/__output.dwa")
 
 
+    def test_save_content(self):
+        """Editor should write readable text (not bytes reprs) to disk"""
+
+        editor = dicteditor.Editor()
+        editor.load("data/sampledict.dwa")
+        editor.save("data/__output.dwa")
+
+        fd = open("data/__output.dwa", encoding='UTF-8')
+        content = fd.read()
+        fd.close()
+        os.unlink("data/__output.dwa")
+
+        self.assertTrue("b'" not in content)
+        self.assertTrue("vienas = one ;" in content)
+        self.assertTrue("\u017eirafa = giraphe // from africa ;" in content)
+
+
     def test_getUnit(self):
         """getUnit() should return desired Translation object"""
 

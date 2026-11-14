@@ -199,7 +199,7 @@ def parsePlainDictConfig(configPath):
     """Parse configuration file and return data dictionary"""
 
     parser = RegisterConfigParser()
-    fd = open(configPath)
+    fd = open(configPath, 'rb')
     xmlData = fd.read()
     fd.close()
     data = parser.parse(xmlData)
@@ -470,7 +470,7 @@ def parseMainConfig(configPath):
     """Parse configuration file and return data dictionary"""
 
     parser = MainConfigParser()
-    fd = open(configPath)
+    fd = open(configPath, 'rb')
     xmlData = fd.read()
     fd.close()
     data = parser.parse(xmlData)

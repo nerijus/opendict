@@ -52,9 +52,10 @@ class ActiveDictConfig(object):
         """Load list of active dictionaries."""
 
         try:
-            for line in open(self.filePath):
-                name = line.strip()
-                self.dicts.append(name)
+            with open(self.filePath, encoding='UTF-8') as fd:
+                for line in fd:
+                    name = line.strip()
+                    self.dicts.append(name)
         except IOError as e:
             pass
 
@@ -62,10 +63,9 @@ class ActiveDictConfig(object):
     def save(self):
         """Save list of active dictionaries."""
 
-        fd = open(self.filePath, 'w')
+        fd = open(self.filePath, 'w', encoding='UTF-8')
         for d in self.dicts:
-            name = d.encode('UTF-8')
-            print(name, file=fd)
+            print(d, file=fd)
         fd.close()
 
 

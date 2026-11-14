@@ -27,6 +27,7 @@ import wx
 _ = wx.GetTranslation
 
 import os
+import hashlib
 import threading
 import time
 import urllib.request, urllib.error, urllib.parse
@@ -87,7 +88,8 @@ def getMD5Sum(filePath):
     data = fd.read()
     fd.close()
 
-    generator = hashlib.md5.new(data)
+    # Only used to detect changed files, so FIPS-mode Pythons must allow it
+    generator = hashlib.md5(data, usedforsecurity=False)
 
     return generator.hexdigest()
 
@@ -158,7 +160,7 @@ class DownloadThread:
         self.percents = 0
         self.stopRequested = False
         self.done = False
-        self.buffer = ''
+        self.buffer = b''
 
 
     def start(self):
@@ -201,7 +203,7 @@ class DownloadThread:
         """Return buffered bytes and clear the buffer"""
 
         bytes = self.buffer
-        self.buffer = ''
+        self.buffer = b''
 
         return bytes
 
@@ -223,7 +225,7 @@ class DownloadThread:
             return
 
         try:
-            self.buffer += self.up.read().decode('utf-8')
+            self.buffer += self.up.read()
             self.up.close()
             self.done = True
             self.statusMessage = _("Done")

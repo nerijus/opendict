@@ -3,7 +3,7 @@
 import sys
 import os
 import zipfile
-import md5
+import hashlib
 import xml.dom.minidom
 
 #
@@ -246,8 +246,8 @@ def main():
 
         sz = os.stat(filePath)[6] / 1000
 
-        fd = open(filePath)
-        m = md5.new(fd.read())
+        fd = open(filePath, 'rb')
+        m = hashlib.md5(fd.read())
         fd.close()
         checksum = m.hexdigest()
 

@@ -62,10 +62,12 @@ class PrefsWindow(wx.Dialog):
 
       grid.Add(wx.StaticText(self, -1, _("Default encoding: ")),
                0, wx.ALIGN_CENTER_VERTICAL)
+      encNames = list(encodings.keys())
+      encValues = list(encodings.values())
       self.encChooser = wx.ComboBox(self, 1108,
-                                  encodings.keys()[encodings.values().index(self.app.config.get('encoding'))],
+                                  encNames[encValues.index(self.app.config.get('encoding'))],
                                   wx.Point(-1, -1),
-                                  wx.Size(-1, -1), encodings.keys(),
+                                  wx.Size(-1, -1), encNames,
                                   wx.TE_READONLY)
       grid.Add(self.encChooser, 0, wx.EXPAND | wx.ALIGN_RIGHT)
       

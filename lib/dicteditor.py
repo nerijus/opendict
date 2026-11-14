@@ -88,7 +88,7 @@ class Editor:
         self.units = []
 
         try:
-            fd = open(filePath)
+            fd = open(filePath, encoding=self.encoding)
 
             for line in fd:
                 word, end = line.split('=')
@@ -129,7 +129,7 @@ class Editor:
             filePath = self.filePath
 
         try:
-            fd = open(filePath, 'w')
+            fd = open(filePath, 'w', encoding=self.encoding)
 
             for unit in self.getUnits():
                 outstr = "%s = " % unit.getWord()
@@ -141,8 +141,9 @@ class Editor:
                     else:
                         chunks.append(trans)
                 outstr += u' ; '.join(chunks) + u' ;'
-                outstr = outstr.encode(self.encoding)
                 print(outstr, file=fd)
+
+            fd.close()
         except Exception as e:
             raise Exception("Unable to save dictionary: %s" % e)
 

@@ -65,7 +65,7 @@ class SlowoParser(plaindict.PlainDictionary):
       """Open file handle"""
 
       debugLog(DEBUG, "Opening file %s" % self.filePath)
-      self.fd = open(self.filePath)
+      self.fd = open(self.filePath, 'rb')
 
 
    def stop(self):
@@ -159,19 +159,19 @@ class SlowoParser(plaindict.PlainDictionary):
 
       _start = time.time()
 
-      word_lowered = word.lower()
+      # The word comes encoded in the dictionary's encoding. The dictionary
+      # file is read as bytes and each line is decoded with that same
+      # encoding, so everything below works on text (str).
+      encoding = self.getEncoding()
+      if isinstance(word, bytes):
+         word = word.decode(encoding)
 
-      encodedIndex = {}
-      for literal in self.index:
-         encodedIndex[literal.encode(self.getEncoding())] = \
-                      self.index.get(literal)
+      word_lowered = word.lower()
 
       #
       # Seek to the beginning of the block
       #
-      position = 0
-      if word_lowered[:2] in encodedIndex.keys():
-         position = encodedIndex[word_lowered[:2]]
+      position = self.index.get(word_lowered[:2], 0)
 
       debugLog(DEBUG, "Index: %s->%d" % (word_lowered[:2], position))
       debugLog(DEBUG, "SlowoParser: Seeking to %d" % position)
@@ -196,7 +196,10 @@ class SlowoParser(plaindict.PlainDictionary):
 
       for line in self.fd:
          _linesRead += 1
-         line = line.strip()
+         try:
+            line = line.decode(encoding).strip()
+         except UnicodeDecodeError:
+            continue
          try:
             orig = ""
             end = ""
@@ -307,7 +310,7 @@ class MovaParser(plaindict.PlainDictionary):
       """Open file handle"""
 
       debugLog(DEBUG, "Opening file %s" % self.filePath)
-      self.fd = open(self.filePath)
+      self.fd = open(self.filePath, 'rb')
       
 
    def stop(self):
@@ -406,19 +409,19 @@ class MovaParser(plaindict.PlainDictionary):
 
       _start = time.time()
 
-      word_lowered = word.lower()
+      # The word comes encoded in the dictionary's encoding. The dictionary
+      # file is read as bytes and each line is decoded with that same
+      # encoding, so everything below works on text (str).
+      encoding = self.getEncoding()
+      if isinstance(word, bytes):
+         word = word.decode(encoding)
 
-      encodedIndex = {}
-      for literal in self.index:
-         encodedIndex[literal.encode(self.getEncoding())] = \
-                      self.index.get(literal)
+      word_lowered = word.lower()
 
       #
       # Seek to the beginning of the block
       #
-      position = 0
-      if word_lowered[:2] in encodedIndex.keys():
-         position = encodedIndex[word_lowered[:2]]
+      position = self.index.get(word_lowered[:2], 0)
 
       debugLog(DEBUG, "Index: %s->%d" % (word_lowered[:2], position))
       debugLog(DEBUG, "MovaParser: Seeking to %d" % position)
@@ -442,7 +445,10 @@ class MovaParser(plaindict.PlainDictionary):
 
       for line in self.fd:
          _linesRead += 1
-         line = line.strip()
+         try:
+            line = line.decode(encoding).strip()
+         except UnicodeDecodeError:
+            continue
          try:
             orig, trans = line.split("  ", 1)
          except:
@@ -888,8 +894,13 @@ class DictConnection(meta.Dictionary):
 
       result = meta.SearchResult()
 
+      # The word comes encoded in the connection's encoding
+      if isinstance(word, bytes):
+         word = word.decode(self.getEncoding())
+
       try:
-         conn = dictclient.Connection(self.server, self.port)
+         conn = dictclient.Connection(self.server, self.port,
+                                      self.getEncoding())
       except:
          result.setError(errortype.CONNECTION_ERROR)
          return result

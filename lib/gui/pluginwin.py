@@ -535,7 +535,7 @@ class PluginManagerWindow(wx.Frame):
            systemLog(INFO, "Opening %s..." % \
                      self.app.config.get('repository-list'))
            downloader.start()
-           xmlData = ''
+           xmlData = b''
 
            while keepGoing and not downloader.finished():
                keepGoing = progressDialog.Update(downloader.getPercentage(),

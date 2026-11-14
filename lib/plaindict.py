@@ -367,7 +367,7 @@ def makeIndex(dictionary, currentlySetEncoding):
     """Index dictionary"""
 
     filePath = dictionary.getPath()
-    fd = open(filePath)
+    fd = open(filePath, 'rb')
 
     index = {}
     count = 0
@@ -398,6 +398,7 @@ def makeIndex(dictionary, currentlySetEncoding):
 
         count += len(line)
 
+    fd.close()
 
     fileName = os.path.basename(filePath)
 

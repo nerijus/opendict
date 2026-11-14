@@ -516,8 +516,8 @@ class MainWindow(wx.Frame):
       self.Bind(wx.EVT_BUTTON, self.onHideUnhide, id=152)
       self.Bind(wx.EVT_TEXT_ENTER, self.onSearch, id=153)
       self.Bind(wx.EVT_LISTBOX, self.onWordSelected, id=154)
-      self.Bind(wx.EVT_TIMER, self.onTimerSearch)
-      self.Bind(wx.EVT_TIMER, self.onTimerClipboard)
+      self.Bind(wx.EVT_TIMER, self.onTimerSearch, self.timerSearch)
+      self.Bind(wx.EVT_TIMER, self.onTimerClipboard, self.timerClipboard)
       self.Bind(wx.EVT_CLOSE, self.onCloseWindow)
 
       self.entry.Bind(wx.EVT_KEY_DOWN, self.onKeyDown)
@@ -638,8 +638,10 @@ class MainWindow(wx.Frame):
 
 
          try:
-            transUnicode = str(result.translation,
-                                   self.activeDictionary.getEncoding())
+            transUnicode = result.translation
+            if isinstance(transUnicode, bytes):
+               transUnicode = str(transUnicode,
+                                  self.activeDictionary.getEncoding())
          except Exception as e:
             systemLog(ERROR, "Unable to decode translation in %s (%s)" \
                       % (self.activeDictionary.getEncoding(),
@@ -664,8 +666,8 @@ class MainWindow(wx.Frame):
             if not self.__searchedBySelecting:
                self.wordList.Clear()
 
-               toUnicode = lambda s: str(s,
-                                             self.activeDictionary.getEncoding())
+               toUnicode = lambda s: s if isinstance(s, str) else \
+                           str(s, self.activeDictionary.getEncoding())
                wordsInUnicode = list(map(toUnicode, result.words))
  
                self.wordList.InsertItems(wordsInUnicode, 0)

@@ -101,12 +101,13 @@ class DictConnWindow(wx.Frame):
                      flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
                      row=3, col=0, border=1)
 
+      encNames = list(misc.encodings.keys())
+      encValues = list(misc.encodings.values())
       self.entryEncoding = wx.ComboBox(self, 1006,
-                              misc.encodings.keys()[
-                                misc.encodings.values().index(
+                              encNames[encValues.index(
                                     self.app.config.get('dict-server-encoding'))],
                               wx.Point(-1, -1),
-                              wx.Size(-1, -1), misc.encodings.keys(), 
+                              wx.Size(-1, -1), encNames,
                               wx.CB_DROPDOWN | wx.CB_READONLY)
 
       hboxServer.Add(self.entryEncoding, flag=wx.EXPAND, row=3, col=1, border=1)
@@ -153,8 +154,8 @@ class DictConnWindow(wx.Frame):
       self.Bind(wx.EVT_BUTTON, self.onUpdateStrats, id=1007)
       self.Bind(wx.EVT_BUTTON, self.onOK, id=1004)
       self.Bind(wx.EVT_BUTTON, self.onCancel, id=1005)
-      self.Bind(wx.EVT_TIMER, self.onTimerUpdateDB)
-      self.Bind(wx.EVT_TIMER, self.onTimerConnect)
+      self.Bind(wx.EVT_TIMER, self.onTimerUpdateDB, self.timerUpdateDB)
+      self.Bind(wx.EVT_TIMER, self.onTimerConnect, self.timerConnect)
 
 
    def onTimerUpdateDB(self, event):

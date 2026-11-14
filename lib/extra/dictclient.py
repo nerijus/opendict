@@ -42,11 +42,15 @@ class Connection:
     Instantiating it takes two optional arguments: a hostname (a string)
     and a port (an int).  The hostname defaults to localhost
     and the port to 2628, the port specified in RFC."""
-    def __init__(self, hostname = 'localhost', port = 2628):
+    def __init__(self, hostname = 'localhost', port = 2628,
+                 encoding = 'utf-8'):
+        # Text sent to and received from the server is encoded with
+        # 'encoding' (RFC 2229 says UTF-8, but older servers may differ)
+        self.encoding = encoding
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((hostname, port))
-        self.rfile = self.sock.makefile("rt")
-        self.wfile = self.sock.makefile("wt", 0)
+        self.rfile = self.sock.makefile("r", encoding=encoding,
+                                        errors="replace")
         self.saveconnectioninfo()
 
     def getresultcode(self):
@@ -163,7 +167,7 @@ class Connection:
     def sendcommand(self, command):
         """Takes a command, without a newline character, and sends it to
         the server."""
-        self.wfile.write(command + "\n")
+        self.sock.sendall((command + "\n").encode(self.encoding))
 
     def define(self, database, word):
         """Returns a list of Definition objects for each matching
